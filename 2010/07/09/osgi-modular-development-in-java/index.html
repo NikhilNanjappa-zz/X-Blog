@@ -10,7 +10,7 @@
 
     <title>Osgi Modular Development In Java - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2010/07/09/osgi-modular-development-in-java/">
+    <link rel="canonical" href="http://blog.xebia.in/2010/07/09/osgi-modular-development-in-java/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>OSGi - Modular Development in Java</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 4  minutes</h4>
+
+              <h1>OSGi - Modular Development in Java</h1>
 
 <p>OSGi is standard/framework which can provide modularity to any java application. Its believed that there is lack of modularized development support in Java and some points sort of justify it. I’ll list few of them: <strong>Low-level code visibility control</strong> Java has very low level code visibility controls like private, protected, package, public. If you want any code in one package to view any code in another package then it needs to be declared as public which might expose certain functionality at other unwanted places. You either keep everything in same package or expose it through  public methods but both has some trade offs. <strong>Not so intelligent class path concept</strong> Applications are generally composed of various versions of libraries and components. The class path does not deals with different versions in an intelligent way, it simply returns the first version that it finds. Even if it did pay attention, there is no way to explicitly specify dependencies.  <strong>Limited deployment and management support</strong> Java’s support for managing deployments is also not admirable. There is no easy way in Java to deploy the proper transitive set of versioned code dependencies and execute your application. There is no obvious way to evolve your the application and components.The only way to achieve such requests is to use class loaders, which are low level and error prone. <strong>Enough of cursing java. Now, lets see, what OSGi can provide.</strong></p>
 

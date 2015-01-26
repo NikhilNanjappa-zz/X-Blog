@@ -10,7 +10,7 @@
 
     <title>Error Code Handling In Svn Integration Via Svn - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2013/08/08/error-code-handling-in-svn-integration-via-svn/">
+    <link rel="canonical" href="http://blog.xebia.in/2013/08/08/error-code-handling-in-svn-integration-via-svn/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>Error Code Handling in SVN Integration via SVN</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 4  minutes</h4>
+
+              <h1>Error Code Handling in SVN Integration via SVN</h1>
 
 <p>Subversion is one of the most widely used Version Control System in IT industry. Many applications need to manage their project artifacts which can be easily addressed by use of a Version Control System. For integration with Subversion, I have used SVNKit ( <a href="http://svnkit.com">http://svnkit.com/</a>) in my application. It supports all standard operations of Version Control System (like Check -in, Check-out, copy etc.) and works over SVN, HTTP, HTTPS, SSH and File protocols. While working on integration with Subversion (SVN) via SVNKit, I had encountered various exception and error code that needs to be handled in application for successful implementation of Version Control Operations. Some of those exceptions and error codes had stumped me and I was left wondering on how to move forward with this implementation. But a little bit of research and deeper dive to Subversion implementation helped me to bail myself out of this tricky situation. Below are the error codes that I had handled in my application while performing various Version Control Operations.  Though the below described SVN error codes are few in number and doesn&#39;t cover all, but it covers the common error codes that you&#39;ll encounter during the integration and it will also give you a fair idea on how to handle them. Please note that all these error codes are instances of class &quot;org.tmatesoft.svn.core.SVNErrorCode&quot; which represents predefined error with description. It can be retrieved from instance of class &quot;org.tmatesoft.svn.core.SVNException&quot; in following manner: </p>
 <div class="highlight"><pre><code class="language-text" data-lang="text"> SVNErrorCode errorCode = ((SVNException) svne).getErrorMessage() .getErrorCode();  

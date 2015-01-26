@@ -10,7 +10,7 @@
 
     <title>Persisting Relationship Entities In Neo4j - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2012/01/24/persisting-relationship-entities-in-neo4j/">
+    <link rel="canonical" href="http://blog.xebia.in/2012/01/24/persisting-relationship-entities-in-neo4j/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>Persisting relationship entities in Neo4j</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 3  minutes</h4>
+
+              <h1>Persisting relationship entities in Neo4j</h1>
 
 <p><a href="http://neo4j.org/">Neo4j</a> is a high-performance, NOSQL graph database with all the features of a mature and robust database. In Neo4j data gets stored in nodes connected to each other by relationship entities that carry its own properties. These relationships are very important in graphs and helps to traverse the graph and make decisions. This blog discusses the two ways to persist a relationship between nodes and also the scenario&#39;s which suits their respective usage. <a href="http://neo4j.org/spring/">Spring-data-neo4j</a> by springsource gives us the flexibility of using the spring programming model when working with neo4j database. The code examples in this blog will be using spring-data-neo4j.  Let&#39;s consider a case where we have two NodeEntities Employee and Project. A Employee has a role in a project which is a relationship entity. Here is the code snippet for these entities and the relationship between them. [sourcecode lang=&quot;java&quot;] @NodeEntity public class Employee { @GraphId @Indexed private Long nodeId;</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">@Indexed

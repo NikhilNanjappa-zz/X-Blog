@@ -10,7 +10,7 @@
 
     <title>Liferay Accessing Cms Controlled Documents Within Jsp - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2012/11/04/liferay-accessing-cms-controlled-documents-within-jsp/">
+    <link rel="canonical" href="http://blog.xebia.in/2012/11/04/liferay-accessing-cms-controlled-documents-within-jsp/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>Liferay | Accessing CMS controlled documents within JSP</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 3  minutes</h4>
+
+              <h1>Liferay | Accessing CMS controlled documents within JSP</h1>
 
 <p><strong>Background</strong> I have been working with a Liferay project for quite sometime. Recently I was caught up in a quite common scenario where I needed to access a pdf stored in Liferay&#39;s Document Library. The problem was only for the dynamic jsp pages used in my portlet but not for the static Web Content. More specifically when I use the document library generated url in the static web content pages on development environment and export the .lar (Liferay Archive) file from development to any other environment the pdf link in the static page works. But when I do the same thing with jsp pages the link to pdf works on development environment only, but breaks on any other environment.  <strong>Whos the culprit?</strong> After a lot digging, I found that the url of the pdf stored in document library contains a <strong>group<em>id **information. Basically every document(any file) belongs to a community in Liferay. That community&#39;s id is the group</em>id for that document. So whenever we export a .lar file all the urls used in static web content containing</strong> &amp;group<em>id=some</em>random<em>grp</em>id** is converted to <strong>@group_id@</strong> and that is replced with actual <strong>group_id **when we</strong> import that lar**. But for JSP pages residing in your own portlet the urls remain same because .lar only exports static web content and thus a content not found error is shown when you try to access that url.</p>
 

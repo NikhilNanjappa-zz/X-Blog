@@ -10,7 +10,7 @@
 
     <title>Mongodb Replica Set On Openshift Flex - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2012/01/23/mongodb-replica-set-on-openshift-flex/">
+    <link rel="canonical" href="http://blog.xebia.in/2012/01/23/mongodb-replica-set-on-openshift-flex/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>MongoDB Replica Set on OpenShift Flex</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 4  minutes</h4>
+
+              <h1>MongoDB Replica Set on OpenShift Flex</h1>
 
 <p>As I am preparing for my JUDCon session on OpenShift one topic that I will be covering is setting up MongoDB Replica Set on OpenShift Flex. There are various reasons to setup MongoDB replication. The primary reason for replication is to ensure data survive single or multiple machine failures. The more replicas you have, the more likely is your data to survive one or more hardware crashes. With three replicas, you can afford to loose two nodes and still serve the data.Replication also helps to scale reads as you can distribute your read load accross multiple machines. There are two ways to support replication in MongoDB -- Master Slave and Replica Set. Replica Set is the recommended way to do replication and OpenShift only supports replica set.  OpenShift Flex MongoDB replica set is yet not polished so you might face issues in setting up. This blog will show steps to configure a working MongoDB replica set on OpenShift Flex. If you are not aware of MongoDB Replica Set you should first refer to the <a href="http://www.mongodb.org/display/DOCS/Replica+Set+Tutorial">MongoDB documentation</a>. Also you can refer to my blog on<a href="http://whyjava.wordpress.com/2011/12/12/using-mongodb-replica-set-with-spring-mongodb-1-0-0-rc1/"> how to use MongoDB replica set with Spring</a>.</p>
 

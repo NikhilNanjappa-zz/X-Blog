@@ -10,7 +10,7 @@
 
     <title>Simplified Wrapper And Interface Generator - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2012/06/15/simplified-wrapper-and-interface-generator/">
+    <link rel="canonical" href="http://blog.xebia.in/2012/06/15/simplified-wrapper-and-interface-generator/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>Simplified Wrapper and Interface Generator</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 4  minutes</h4>
+
+              <h1>Simplified Wrapper and Interface Generator</h1>
 
 <p>In this blog, I am going to share some insights on the software development tool called SWIG- Simplified Wrapper and Interface Generator. SWIG works as an interface compiler, through which you can use the C/C++ native libraries and code in your programming language. This tool has customized features, specific to almost every native, scripting or AI language, to allow C/C++ code to be called from it. It also supports cross language polymorphism. The question that irks is, why would we need it? Let us try and find it out by taking an example of one of the most popular choice of language among software developers - Java. Being one of the most robust and a rich development platform available at our disposal today, it still lacks some important features and has some limitations. Some of them are:  • Java does not expose the lower level system facilities to the programmers. The details of the underlying operating system and hardware devices are abstracted by the JVM. C/C++ provides you a convenient access to both of them. • The Date/Time API in Java. With every new release, the developers are hoping for a better and enhanced version of this library with better presentation, sensible semantics and manipulation capabilities. But, till now, it is disappointing. Though, there are some alternate libraries available, like Joda Time, but that also suffers from some limitations, especially while customizing a new time zone. The libraries in C and C++ are better structured. • Memory management. Because we do not have pointers arithmetic in Java, there is no direct way we can access or manipulate the memory location which is being assigned to the object being created. The destruction of objects cannot be governed by the code, it is entirely in the hands of garbage collector. • In some cases, templates in C++ are more powerful than Generics framework in Java. Example, template functions can accept default parameters, generic functions do not work with default parameters. • The operator overloading feature is very limited. It is not even close to the versatility of the same feature in C++ How to use SWIG in java? Simple! Just download and configure the SWIG plug-in in your editor. The dependency for the tool has to be included in the POM.</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">               org.apache.maven.plugins

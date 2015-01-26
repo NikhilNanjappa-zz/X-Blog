@@ -10,7 +10,7 @@
 
     <title>Alfresco Custom Field Search In Cmis Approach - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2014/11/20/alfresco-custom-field-search-in-cmis-approach/">
+    <link rel="canonical" href="http://blog.xebia.in/2014/11/20/alfresco-custom-field-search-in-cmis-approach/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>Alfresco custom field search in CMIS approach.</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 10  minutes</h4>
+
+              <h1>Alfresco custom field search in CMIS approach.</h1>
 
 <p>Before starting with alfresco custom field search in CMIS I like to tell you about few thing.</p>
 
@@ -130,30 +135,257 @@
 </ol>
 
 <p>myCustomFields-model.xml should contain following content:</p>
-
-<p><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; &lt;!-- Definition of Knowledge Base Model --&gt; &lt;model name=&quot;my:model&quot; xmlns=&quot;http://www.alfresco.org/model/dictionary/1.0&quot;&gt; &lt;!-- Optional meta-data about the model --&gt; &lt;description&gt;Knowledge Base Model&lt;/description&gt; &lt;author&gt;Will Abson&lt;/author&gt; &lt;version&gt;1.0&lt;/version&gt; &lt;!-- Imports are required to allow references to definitions in other models --&gt; &lt;imports&gt; &lt;!-- Import Alfresco Dictionary Definitions --&gt; &lt;import uri=&quot;http://www.alfresco.org/model/dictionary/1.0&quot; prefix=&quot;d&quot;/&gt; &lt;!-- Import Alfresco Content Domain Model Definitions --&gt; &lt;import uri=&quot;http://www.alfresco.org/model/content/1.0&quot; prefix=&quot;cm&quot;/&gt; &lt;/imports&gt; &lt;!-- Introduction of new namespaces defined by this model --&gt; &lt;namespaces&gt; &lt;namespace uri=&quot;my.model&quot; prefix=&quot;my&quot;/&gt; &lt;/namespaces&gt; &lt;aspects&gt; &lt;!-- Definition of new Content Aspect: Knowledge Base Document --&gt; &lt;aspect name=&quot;my:cutomfieldsdata&quot;&gt; &lt;title&gt;my custom model&lt;/title&gt; &lt;properties&gt; &lt;property name=&quot;my:metadata_custom_serial_number&quot;&gt; &lt;type&gt;d:text&lt;/type&gt; &lt;/property&gt; &lt;property name=&quot;my:metadata_custom_status&quot;&gt; &lt;type&gt;d:text&lt;/type&gt; &lt;/property&gt; &lt;property name=&quot;my:metadata_custom_id&quot;&gt; &lt;type&gt;d:text&lt;/type&gt; &lt;multiple&gt;true&lt;/multiple&gt; &lt;index enabled=&quot;true&quot;&gt; &lt;tokenised&gt;true&lt;/tokenised&gt; &lt;/index&gt; &lt;/property&gt; &lt;property name=&quot;my:metadata_custom_name&quot;&gt; &lt;type&gt;d:text&lt;/type&gt; &lt;multiple&gt;true&lt;/multiple&gt; &lt;index enabled=&quot;true&quot;&gt; &lt;tokenised&gt;true&lt;/tokenised&gt; &lt;/index&gt; &lt;/property&gt; &lt;property name=&quot;my:metadata_custom_code&quot;&gt; &lt;type&gt;d:text&lt;/type&gt; &lt;multiple&gt;true&lt;/multiple&gt; &lt;index enabled=&quot;true&quot;&gt; &lt;tokenised&gt;true&lt;/tokenised&gt; &lt;/index&gt; &lt;/property&gt; &lt;/properties&gt; &lt;/aspect&gt; &lt;/aspects&gt; &lt;/model&gt;</code> We used property <index enabled="true"> which make field searchable in full index search. Property <multiple>true</multiple> is used to contain multiple field within one field in comma separated form for now you can remove this.</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span> <span class="c">&lt;!-- Definition of Knowledge Base Model --&gt;</span>
+<span class="nt">&lt;model</span> <span class="na">name=</span><span class="s">&quot;my:model&quot;</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.alfresco.org/model/dictionary/1.0&quot;</span><span class="nt">&gt;</span> <span class="c">&lt;!-- Optional meta-data about the model --&gt;</span>
+  <span class="nt">&lt;description&gt;</span>Knowledge Base Model<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;author&gt;</span>Will Abson<span class="nt">&lt;/author&gt;</span>
+  <span class="nt">&lt;version&gt;</span>1.0<span class="nt">&lt;/version&gt;</span>
+  <span class="c">&lt;!-- Imports are required to allow references to definitions in other models --&gt;</span>
+  <span class="nt">&lt;imports&gt;</span> <span class="c">&lt;!-- Import Alfresco Dictionary Definitions --&gt;</span>
+    <span class="nt">&lt;import</span> <span class="na">uri=</span><span class="s">&quot;http://www.alfresco.org/model/dictionary/1.0&quot;</span> <span class="na">prefix=</span><span class="s">&quot;d&quot;</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- Import Alfresco Content Domain Model Definitions --&gt;</span>
+    <span class="nt">&lt;import</span> <span class="na">uri=</span><span class="s">&quot;http://www.alfresco.org/model/content/1.0&quot;</span> <span class="na">prefix=</span><span class="s">&quot;cm&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/imports&gt;</span>
+  <span class="c">&lt;!-- Introduction of new namespaces defined by this model --&gt;</span>
+  <span class="nt">&lt;namespaces&gt;</span>
+    <span class="nt">&lt;namespace</span> <span class="na">uri=</span><span class="s">&quot;my.model&quot;</span> <span class="na">prefix=</span><span class="s">&quot;my&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/namespaces&gt;</span>
+  <span class="nt">&lt;aspects&gt;</span> <span class="c">&lt;!-- Definition of new Content Aspect: Knowledge Base Document --&gt;</span>
+    <span class="nt">&lt;aspect</span> <span class="na">name=</span><span class="s">&quot;my:cutomfieldsdata&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;title&gt;</span>my custom model<span class="nt">&lt;/title&gt;</span>
+      <span class="nt">&lt;properties&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;my:metadata_custom_serial_number&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;type&gt;</span>d:text<span class="nt">&lt;/type&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;my:metadata_custom_status&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;type&gt;</span>d:text<span class="nt">&lt;/type&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;my:metadata_custom_id&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;type&gt;</span>d:text<span class="nt">&lt;/type&gt;</span>
+          <span class="nt">&lt;multiple&gt;</span>true<span class="nt">&lt;/multiple&gt;</span>
+          <span class="nt">&lt;index</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tokenised&gt;</span>true<span class="nt">&lt;/tokenised&gt;</span>
+          <span class="nt">&lt;/index&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;my:metadata_custom_name&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;type&gt;</span>d:text<span class="nt">&lt;/type&gt;</span>
+          <span class="nt">&lt;multiple&gt;</span>true<span class="nt">&lt;/multiple&gt;</span>
+          <span class="nt">&lt;index</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tokenised&gt;</span>true<span class="nt">&lt;/tokenised&gt;</span>
+          <span class="nt">&lt;/index&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;my:metadata_custom_code&quot;</span><span class="nt">&gt;</span>
+          <span class="nt">&lt;type&gt;</span>d:text<span class="nt">&lt;/type&gt;</span>
+          <span class="nt">&lt;multiple&gt;</span>true<span class="nt">&lt;/multiple&gt;</span>
+          <span class="nt">&lt;index</span> <span class="na">enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tokenised&gt;</span>true<span class="nt">&lt;/tokenised&gt;</span>
+          <span class="nt">&lt;/index&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+      <span class="nt">&lt;/properties&gt;</span>
+    <span class="nt">&lt;/aspect&gt;</span>
+  <span class="nt">&lt;/aspects&gt;</span>
+<span class="nt">&lt;/model&gt;</span>
+</code></pre></div>
+<p>We used property <index enabled="true"> which make field searchable in full index search. Property <multiple>true</multiple> is used to contain multiple field within one field in comma separated form for now you can remove this.</p>
 
 <p>myCustomFields-model-context.xml should contain following content:</p>
-
-<p><code>&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt; &lt;!DOCTYPE beans PUBLIC &#39;-//SPRING//DTD BEAN//EN&#39; &#39;http://www.springframework.org/dtd/spring-beans.dtd&#39;&gt; &lt;beans&gt; &lt;!-- Registration of new models --&gt; &lt;bean id=&quot;extension.kb.dictionaryBootstrap&quot; parent=&quot;dictionaryModelBootstrap&quot; depends-on=&quot;dictionaryBootstrap&quot;&gt; &lt;property name=&quot;models&quot;&gt; &lt;list&gt; &lt;value&gt;alfresco/extension/myCustomFields-model.xml&lt;/value&gt; &lt;/list&gt; &lt;/property&gt; &lt;/bean&gt; &lt;bean id=&quot;extension.kb.resourceBundle&quot; class=&quot;org.alfresco.i18n.ResourceBundleBootstrapComponent&quot;&gt; &lt;property name=&quot;resourceBundles&quot;&gt; &lt;list&gt; &lt;value&gt;alfresco.messages.myCustomFields&lt;/value&gt; &lt;/list&gt; &lt;/property&gt; &lt;/bean&gt; &lt;/beans&gt;</code></p>
-
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;</span> <span class="cp">&lt;!DOCTYPE beans PUBLIC &#39;-//SPRING//DTD BEAN//EN&#39;</span>
+<span class="cp">&#39;http://www.springframework.org/dtd/spring-beans.dtd&#39;&gt;</span>
+<span class="nt">&lt;beans&gt;</span> <span class="c">&lt;!-- Registration of new models --&gt;</span>
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;extension.kb.dictionaryBootstrap&quot;</span> <span class="na">parent=</span><span class="s">&quot;dictionaryModelBootstrap&quot;</span> <span class="na">depends-on=</span><span class="s">&quot;dictionaryBootstrap&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;models&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;list&gt;</span>
+        <span class="nt">&lt;value&gt;</span>alfresco/extension/myCustomFields-model.xml<span class="nt">&lt;/value&gt;</span>
+      <span class="nt">&lt;/list&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;extension.kb.resourceBundle&quot;</span> <span class="na">class=</span><span class="s">&quot;org.alfresco.i18n.ResourceBundleBootstrapComponent&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;resourceBundles&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;list&gt;</span>
+        <span class="nt">&lt;value&gt;</span>alfresco.messages.myCustomFields<span class="nt">&lt;/value&gt;</span>
+      <span class="nt">&lt;/list&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></div>
 <p>web-client-config-custom.xml should contain following content:</p>
-
-<p><code>&lt;alfresco-config&gt; &lt;config evaluator=&quot;string-compare&quot; condition=&quot;Advanced Search&quot;&gt; &lt;advanced-search&gt; &lt;content-types&gt; &lt;/content-types&gt; &lt;folder-types&gt; &lt;/folder-types&gt; &lt;custom-properties&gt; &lt;meta-data aspect=&quot;my:cutomfieldsdata&quot; property=&quot;my:metadata_custom_serial_number&quot; /&gt; &lt;meta-data aspect=&quot;my:cutomfieldsdata&quot; property=&quot;my:metadata_custom_status&quot; /&gt; &lt;meta-data aspect=&quot;my:cutomfieldsdata&quot; property=&quot;my:metadata_custom_id&quot; /&gt; &lt;meta-data aspect=&quot;my:cutomfieldsdata&quot; property=&quot;my:metadata_custom_name&quot; /&gt; &lt;meta-data aspect=&quot;my:cutomfieldsdata&quot; property=&quot;my:metadata_custom_code&quot; /&gt; &lt;/custom-properties&gt; &lt;/advanced-search&gt; &lt;/config&gt; &lt;/alfresco-config&gt;</code></p>
-
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;alfresco-config&gt;</span>
+  <span class="nt">&lt;config</span> <span class="na">evaluator=</span><span class="s">&quot;string-compare&quot;</span> <span class="na">condition=</span><span class="s">&quot;Advanced Search&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;advanced-search&gt;</span>
+      <span class="nt">&lt;content-types&gt;</span> <span class="nt">&lt;/content-types&gt;</span>
+      <span class="nt">&lt;folder-types&gt;</span> <span class="nt">&lt;/folder-types&gt;</span>
+      <span class="nt">&lt;custom-properties&gt;</span>
+        <span class="nt">&lt;meta-data</span> <span class="na">aspect=</span><span class="s">&quot;my:cutomfieldsdata&quot;</span> <span class="na">property=</span><span class="s">&quot;my:metadata_custom_serial_number&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;meta-data</span> <span class="na">aspect=</span><span class="s">&quot;my:cutomfieldsdata&quot;</span> <span class="na">property=</span><span class="s">&quot;my:metadata_custom_status&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;meta-data</span> <span class="na">aspect=</span><span class="s">&quot;my:cutomfieldsdata&quot;</span> <span class="na">property=</span><span class="s">&quot;my:metadata_custom_id&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;meta-data</span> <span class="na">aspect=</span><span class="s">&quot;my:cutomfieldsdata&quot;</span> <span class="na">property=</span><span class="s">&quot;my:metadata_custom_name&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;meta-data</span> <span class="na">aspect=</span><span class="s">&quot;my:cutomfieldsdata&quot;</span> <span class="na">property=</span><span class="s">&quot;my:metadata_custom_code&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/custom-properties&gt;</span>
+      <span class="nt">&lt;/advanced-search&gt;</span>
+     <span class="nt">&lt;/config&gt;</span>
+<span class="nt">&lt;/alfresco-config&gt;</span>
+</code></pre></div>
 <p>this file is use to make each field in model searchable can ne used in alfresco advanced search and cmis field search.</p>
 
 <p>myCustomFields.properties should contain following content:</p>
-
-<p><code>my_model.property.my_metadata_custom_serial_number.title=Serial Number my_model.property.my_metadata_custom_status.title=Status my_model.property.my_metadata_custom_id.title=Document ID my_model.property.my_metadata_custom_name.title=Name my_model.property.my_metadata_custom_code.title=Code</code></p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">my_model.property.my_metadata_custom_serial_number.title=Serial Number my_model.property.my_metadata_custom_status.title=Status my_model.property.my_metadata_custom_id.title=Document ID my_model.property.my_metadata_custom_name.title=Name my_model.property.my_metadata_custom_code.title=Code
+</code></pre></div>
 <p>custom-slingshot-application-context.xml should contain following content:</p>
-
-<p><code>&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt; &lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:hz=&quot;http://www.hazelcast.com/schema/config&quot; xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.hazelcast.com/schema/config http://www.hazelcast.com/schema/config/hazelcast-spring.xsd&quot;&gt; &lt;!-- Add Knowledge Base messages --&gt; &lt;bean id=&quot;webscripts.kb.resources&quot; class=&quot;org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent&quot;&gt; &lt;property name=&quot;resourceBundles&quot;&gt; &lt;list&gt; &lt;value&gt;alfresco.messages.myCustomFields&lt;/value&gt; &lt;/list&gt; &lt;/property&gt; &lt;/bean&gt; &lt;/beans&gt;</code></p>
-
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/beans&quot;</span> <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+  <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd&quot;</span><span class="nt">&gt;</span>
+  <span class="c">&lt;!-- Add Knowledge Base messages --&gt;</span>
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;webscripts.kb.resources&quot;</span>
+    <span class="na">class=</span><span class="s">&quot;org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;resourceBundles&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;list&gt;</span>
+        <span class="nt">&lt;value&gt;</span>alfresco.messages.myCustomFields<span class="nt">&lt;/value&gt;</span>
+      <span class="nt">&lt;/list&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></div>
 <p>This property file is to access field property title on alfresco share.</p>
 
-<p>share-config-custom.xml should contain following content: `<alfresco-config> &lt;!-- Repository Library config section --&gt;</p>
+<p>share-config-custom.xml should contain following content:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;alfresco-config&gt;</span>
+  <span class="c">&lt;!-- Repository Library config section --&gt;</span>
+  <span class="nt">&lt;config</span> <span class="na">evaluator=</span><span class="s">&quot;string-compare&quot;</span> <span class="na">condition=</span><span class="s">&quot;RepositoryLibrary&quot;</span> <span class="na">replace=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!--Whether the link to the Repository Library appears in the header component or not.--&gt;</span>
+    <span class="nt">&lt;visible&gt;</span>true<span class="nt">&lt;/visible&gt;</span>
+  <span class="nt">&lt;/config&gt;</span>
+  <span class="nt">&lt;config</span> <span class="na">evaluator=</span><span class="s">&quot;string-compare&quot;</span> <span class="na">condition=</span><span class="s">&quot;Remote&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;remote&gt;</span>
+      <span class="nt">&lt;endpoint&gt;</span>
+        <span class="nt">&lt;id&gt;</span>alfresco-noauth<span class="nt">&lt;/id&gt;</span>
+        <span class="nt">&lt;name&gt;</span>Alfresco - unauthenticated access<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;description&gt;</span>Access to Alfresco Repository WebScripts that do not require authentication<span class="nt">&lt;/description&gt;</span>
+        <span class="nt">&lt;connector-id&gt;</span>alfresco<span class="nt">&lt;/connector-id&gt;</span>
+        <span class="nt">&lt;endpoint-url&gt;</span>http://localhost:8080/alfresco/s<span class="nt">&lt;/endpoint-url&gt;</span>
+        <span class="nt">&lt;identity&gt;</span>none<span class="nt">&lt;/identity&gt;</span>
+      <span class="nt">&lt;/endpoint&gt;</span>
+      <span class="nt">&lt;endpoint&gt;</span>
+        <span class="nt">&lt;id&gt;</span>alfresco<span class="nt">&lt;/id&gt;</span>
+        <span class="nt">&lt;name&gt;</span>Alfresco - user access<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;description&gt;</span>Access to Alfresco Repository WebScripts that require user authentication<span class="nt">&lt;/description&gt;</span>
+        <span class="nt">&lt;connector-id&gt;</span>alfresco<span class="nt">&lt;/connector-id&gt;</span>
+        <span class="nt">&lt;endpoint-url&gt;</span>http://localhost:8080/alfresco/s<span class="nt">&lt;/endpoint-url&gt;</span>
+        <span class="nt">&lt;identity&gt;</span>user<span class="nt">&lt;/identity&gt;</span>
+      <span class="nt">&lt;/endpoint&gt;</span>
+      <span class="nt">&lt;endpoint&gt;</span>
+        <span class="nt">&lt;id&gt;</span>alfresco-feed<span class="nt">&lt;/id&gt;</span>
+        <span class="nt">&lt;name&gt;</span>Alfresco Feed<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;description&gt;</span>Alfresco Feed - supports basic HTTP authentication via the EndPointProxyServlet
+        <span class="nt">&lt;/description&gt;</span>
+        <span class="nt">&lt;connector-id&gt;</span>http<span class="nt">&lt;/connector-id&gt;</span>
+        <span class="nt">&lt;endpoint-url&gt;</span>http://localhost:8080/alfresco/s<span class="nt">&lt;/endpoint-url&gt;</span>
+        <span class="nt">&lt;basic-auth&gt;</span>true<span class="nt">&lt;/basic-auth&gt;</span>
+        <span class="nt">&lt;identity&gt;</span>user<span class="nt">&lt;/identity&gt;</span>
+      <span class="nt">&lt;/endpoint&gt;</span>
+      <span class="nt">&lt;endpoint&gt;</span>
+        <span class="nt">&lt;id&gt;</span>activiti-admin<span class="nt">&lt;/id&gt;</span>
+        <span class="nt">&lt;name&gt;</span>Activiti Admin UI - user access<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;description&gt;</span>Access to Activiti Admin UI, that requires user authentication<span class="nt">&lt;/description&gt;</span>
+        <span class="nt">&lt;connector-id&gt;</span>activiti-admin-connector<span class="nt">&lt;/connector-id&gt;</span>
+        <span class="nt">&lt;endpoint-url&gt;</span>http://localhost:8080/alfresco/activiti-admin<span class="nt">&lt;/endpoint-url&gt;</span>
+        <span class="nt">&lt;identity&gt;</span>user<span class="nt">&lt;/identity&gt;</span>
+      <span class="nt">&lt;/endpoint&gt;</span>
+    <span class="nt">&lt;/remote&gt;</span>
+  <span class="nt">&lt;/config&gt;</span>
+  <span class="c">&lt;!-- Document Library config section --&gt;</span>
+  <span class="nt">&lt;config</span> <span class="na">evaluator=</span><span class="s">&quot;string-compare&quot;</span> <span class="na">condition=</span><span class="s">&quot;DocumentLibrary&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!--Used by the &quot;Manage Aspects&quot; action For custom aspects, remember to also add the relevant i18n string(s) cm_myaspect=My Aspect--&gt;</span>
+    <span class="nt">&lt;aspects&gt;</span>
+      <span class="c">&lt;!-- Aspects that a user can see --&gt;</span>
+      <span class="nt">&lt;visible&gt;</span>
+      <span class="nt">&lt;aspect</span> <span class="na">name=</span><span class="s">&quot;cm:generalclassifiable&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;aspect</span> <span class="na">name=</span><span class="s">&quot;cm:complianceable&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;aspect</span> <span class="na">name=</span><span class="s">&quot;cm:dublincore&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;aspect</span> <span class="na">name=</span><span class="s">&quot;cm:effectivity&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;aspect</span> <span class="na">name=</span><span class="s">&quot;cm:summarizable&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;aspect</span> <span class="na">name=</span><span class="s">&quot;cm:versionable&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;aspect</span> <span class="na">name=</span><span class="s">&quot;cm:templatable&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;aspect</span> <span class="na">name=</span><span class="s">&quot;cm:emailed&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;aspect</span> <span class="na">name=</span><span class="s">&quot;emailserver:aliasable&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;aspect</span> <span class="na">name=</span><span class="s">&quot;cm:taggable&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;aspect</span> <span class="na">name=</span><span class="s">&quot;app:inlineeditable&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;aspect</span> <span class="na">name=</span><span class="s">&quot;my:cutomfieldsdata&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/visible&gt;</span>
+      <span class="err">&lt;</span>
+      <span class="c">&lt;!-- Aspects that a user can add. Same as &quot;visible&quot; if left empty --&gt;</span>
+      <span class="nt">&lt;addable&gt;</span>
+      <span class="nt">&lt;/addable&gt;</span>
+      <span class="c">&lt;!-- Aspects that a user can remove. Same as &quot;visible&quot; if left empty --&gt;</span>
+      <span class="nt">&lt;removeable&gt;</span>
+      <span class="nt">&lt;/removeable&gt;</span>
+      <span class="nt">&lt;/aspects&gt;</span>
+      <span class="nt">&lt;/config&gt;</span>
+      <span class="c">&lt;!-- cm:content type (existing nodes) --&gt;</span>
+      <span class="nt">&lt;config</span> <span class="na">evaluator=</span><span class="s">&quot;node-type&quot;</span> <span class="na">condition=</span><span class="s">&quot;cm:content&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;forms&gt;</span>
+      <span class="nt">&lt;form&gt;</span>
+      <span class="nt">&lt;field-visibility&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_serial_number&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_status&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_id&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_name&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_code&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/field-visibility&gt;</span>
+      <span class="nt">&lt;/form&gt;</span>
+      <span class="c">&lt;!-- Default form configuration used on the document details and edit metadata pages --&gt;</span>
+      <span class="nt">&lt;form</span> <span class="na">id=</span><span class="s">&quot;search&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;field-visibility&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_serial_number&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_status&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_id&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_name&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_code&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/field-visibility&gt;</span>
+      <span class="nt">&lt;/form&gt;</span>
+      <span class="c">&lt;!-- Document Library pop-up Edit Metadata form --&gt;</span>
+      <span class="nt">&lt;form</span> <span class="na">id=</span><span class="s">&quot;doclib-simple-metadata&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;field-visibility&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_serial_number&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_status&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_id&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_name&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_code&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/field-visibility&gt;</span>
+      <span class="nt">&lt;edit-form</span> <span class="na">template=</span><span class="s">&quot;../documentlibrary/forms/doclib-simple-metadata.ftl&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/form&gt;</span>
+      <span class="c">&lt;!-- Document Library Inline Edit form --&gt;</span>
+      <span class="nt">&lt;form</span> <span class="na">id=</span><span class="s">&quot;doclib-inline-edit&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;field-visibility&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_serial_number&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_status&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_id&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_name&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;show</span> <span class="na">id=</span><span class="s">&quot;my:metadata_custom_code&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/field-visibility&gt;</span>
+      <span class="nt">&lt;/form&gt;</span>
+      <span class="nt">&lt;/forms&gt;</span>
+      <span class="nt">&lt;/config&gt;</span>
+      <span class="nt">&lt;/alfresco-config&gt;</span>
+</code></pre></div>
+<p>we have created new aspect with name my:cutomfieldsdata for linking aspect dynamically with content.
+We have made these custom field searhable from alfresco share.
+We have made these custom field Inline editable on alfresco share.
+We have made these custom field editable on alfresco share.
+We have made these custom field visible on alfresco share.</p>
+
+<p><strong>4. How to make custom field searchable?</strong></p>
+
+<p>We have already done these filed searchable while creating new model within alfresco. We have created web-client-config-custom.xml file for searching custom field independently and use <index enabled="true"> in model file for searcing custom field in full index search.</p>
+
+<p><strong>5. How to search document in cmis using lucene query?</strong></p>
+
+<p>We are giving cmis query for searching document using full index search where index is the keyword to search. If you want to get full cmis code for creating session and searching document read our blog of Alfresco CMIS approach for building application within alfresco.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">queryForDocument</span> <span class="o">=</span> <span class="s">&quot;SELECT cmis:objectId FROM cmis:document WHERE cmis:createdBy &lt;&gt; &#39;System&#39; AND CONTAINS(&#39;&quot;</span> <span class="o">+</span> <span class="n">index</span> <span class="o">+</span> <span class="s">&quot;&#39;)&quot;</span><span class="o">;</span>
+</code></pre></div>
+<p>We are giving cmis query for searching document using Custom Alfresco Document Meta Data search where serial_number is the serial number of document to search. If you want to get full cmis code for creating session and searching document read our blog of Alfresco CMIS approach for building application within alfresco.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;SELECT d.cmis:objectId FROM cmis:document as d join my:cutomfieldsdata as m on d.cmis:objectId = m.cmis:objectId WHERE d.cmis:createdBy &lt;&gt; &#39;System&#39; m.my:metadata_custom_serial_number = &#39;&quot;</span> <span class="o">+</span> <span class="n">serial_number</span> <span class="o">+</span> <span class="s">&quot;&#39;&quot;</span><span class="o">;</span>
+</code></pre></div>
+<p>this query is to search for serial number only if you want to add more field to search you have to dynamically append it to the query string.</p>
 
 
                 <hr>

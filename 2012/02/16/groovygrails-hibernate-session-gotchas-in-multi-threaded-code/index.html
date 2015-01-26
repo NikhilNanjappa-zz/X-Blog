@@ -10,7 +10,7 @@
 
     <title>Groovygrails Hibernate Session Gotchas In Multi Threaded Code - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2012/02/16/groovygrails-hibernate-session-gotchas-in-multi-threaded-code/">
+    <link rel="canonical" href="http://blog.xebia.in/2012/02/16/groovygrails-hibernate-session-gotchas-in-multi-threaded-code/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>Groovy/Grails : Hibernate Session Gotchas in multi-threaded code</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 4  minutes</h4>
+
+              <h1>Groovy/Grails : Hibernate Session Gotchas in multi-threaded code</h1>
 
 <p>Recently I came across a situation where I had to delegate some portion of work from main thread to a new thread. I did not want user to keep waiting and hence returned response as soon as the desired work was completed and triggered supplementary work in new thread. However while doing so, I faced many challenges with respect to hibernate session in new thread. In this blog I will share my experiences with hibernate session in multi-threaded code and possible ways of handling it. Since currently I am working on Groovy/Grails, my example is modeled around it. But same concepts can be used in any framework.</p>
 

@@ -10,7 +10,7 @@
 
     <title>Facebook Album Explorer - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2014/01/23/facebook-album-explorer/">
+    <link rel="canonical" href="http://blog.xebia.in/2014/01/23/facebook-album-explorer/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>Facebook Album Explorer</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 3  minutes</h4>
+
+              <h1>Facebook Album Explorer</h1>
 
 <p>As a followup of my earlier blog <a href="http://xebee.xebia.in/index.php/2013/11/20/developing-application-on-facebook-facebook-basic-setup/" title="Developing Application on facebook : Facebook basic setup">Developing Application on facebook : Facebook basic setup</a>, I will show you, how you can explore the album of the logged in user. After Authorization, we can query for album data from Facebook.(Make sure you have taken <strong>user_photos</strong> permission while authorizing the app)Below is the code for querieng album data from Facebook: [sourcecode language=&quot;javascript&quot;] FB.api(&#39;me?fields=albums.fields(photos,name)&#39;, function(response) { if (response.albums) {//check if data is recieved //Process data as per your choice } else { alert(&quot;you have not authorized the app to view your images&quot;); } }); [/sourcecode] A sample response is given below: [sourcecode language=&quot;javascript&quot;] &quot;id&quot;:&quot;USER<em>ID&quot;, &quot;albums&quot;:{ &quot;data&quot;:[ { &quot;name&quot;:&quot;ALBUM</em>NAME&quot;, &quot;id&quot;:&quot;ALBUM<em>ID&quot;, &quot;created</em>time&quot;:&quot;2010-12-04T13:56:08+0000&quot;, &quot;photos&quot;:{ &quot;data&quot;:[ { &quot;id&quot;:&quot;PHOTO<em>ID&quot;, &quot;from&quot;:{ &quot;name&quot;:&quot;FROM</em>NAME&quot;, &quot;id&quot;:&quot;FROM<em>USER</em>ID&quot; }, &quot;name&quot;:&quot;NAME<em>OF</em>PHOTO&quot;, &quot;picture&quot;:&quot;http://photos-h.ak.fbcdn.net/hphotos-ak-prn2/t1/1455866<em>1020182615152894gf2</em>815648423<em>s.jpg&quot;, &quot;source&quot;:&quot;http://sphotos-h.ak.fbcdn.net/hphotos-ak-prn2/t1/s720x720/1455866</em>1020182gfgf6151528942<em>815648423</em>n.jpg&quot;, &quot;height&quot;:405, &quot;width&quot;:720, &quot;images&quot;:[ { &quot;height&quot;:540, &quot;width&quot;:960, &quot;source&quot;:&quot;http://sphotos-h.ak.fbcdn.net/hphotos-ak-prn2/t1/1455866<em>10201826vdf151528942</em>815648423<em>n.jpg&quot; }, { &quot;height&quot;:405, &quot;width&quot;:720, &quot;source&quot;:&quot;http://sphotos-h.ak.fbcdn.net/hphotos-ak-prn2/t1/q77/s720x720/1455df866</em>10201826151528942<em>815648423</em>n.jpg&quot; },] }]} [/sourcecode]</p>
 

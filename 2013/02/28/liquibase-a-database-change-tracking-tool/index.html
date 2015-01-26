@@ -10,7 +10,7 @@
 
     <title>Liquibase A Database Change Tracking Tool - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2013/02/28/liquibase-a-database-change-tracking-tool/">
+    <link rel="canonical" href="http://blog.xebia.in/2013/02/28/liquibase-a-database-change-tracking-tool/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>Liquibase - A database change tracking tool</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 4  minutes</h4>
+
+              <h1>Liquibase - A database change tracking tool</h1>
 
 <p>Currently database versioning  has some issues like database change tracking, branching and merging, flexibility to apply changes and database diff. Using schema versioning, we can track the database changes by incremental database version for any change and depending upon the version number apply the changes in database but there is a limitation to this approach. It fails while working with multiple developers as two developers can at the same time create change for the same database version. So we need some solution that can efficiently handle the versioning of database. Liquibase is the tool can be used for this purpose. It is a database changes management tool to track the changes in readable format. It is used to manage the production data and test data with extensive database change documentation feature. It can compare two databases and have a patch file generated to make the one equal to the other, or generate a patch file from an existing database schema. The patches are written in XML, meaning the liquiBase knows the context of your patches and can actually figure out the undo-version of the patch file by itself. This tool is really nifty, and having all patches in one big XML file means that merging patches is similar to merging source code.</p>
 

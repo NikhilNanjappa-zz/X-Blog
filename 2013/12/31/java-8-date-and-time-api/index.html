@@ -10,7 +10,7 @@
 
     <title>Java 8 Date And Time Api - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2013/12/31/java-8-date-and-time-api/">
+    <link rel="canonical" href="http://blog.xebia.in/2013/12/31/java-8-date-and-time-api/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>Java 8: Date and Time API</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 5  minutes</h4>
+
+              <h1>Java 8: Date and Time API</h1>
 
 <p>Date and Time manipulations is a day to day programming utility. This universally applies to all programming languages, and Java stays no exception. Java initially had the system&#39;s instance utility to serve the purpose. Then Java evolved to a formal Date API, which had many issues including inconsistent values on creation, precision issues, memory issues, timezones complexity, the Y2K and many more. Following the legacy Date we witnessed the Calendar API of Java. Despite of the efforts put in, the Calendar still had issues and was much much complex to use by &quot;Not so user friendly&quot; constants to set up values of the calendar instance. And by this time, the developer friendly Date API was more or less deprecated and we were left with no option to use other than Gregorian Calendar. To summarize we can say that the original Date API and Calender misbehaved in a lot of ways. In Java&#39;s upcoming version 8, they have completely rewritten the Date-Time API inspired by the JodaTime API and introduced a new package &quot;java.time&quot; with a handful of Classes to solve the programming needs. Some quickie details on the new API are follows: <em><strong>Lets Segregate the concerns:</strong></em> The Date is not a time instant and neither it can qualify into a human referable Date-Time. A Human would read a clock like &quot;five-thirty&quot; or a date like &quot;1st of November, 2013&quot;. Also a system identifies a date as a long value of milliseconds from the epoch time. This is easier in processing and calculations internally. Both are quite different in their representations and use. Considering the above stated difference, the new Java 8 Date-Time has two kinds of date representations: → Human referable Date-Time These are the classes of the new API which represent the Date/Time how humans represent the same. Some examples are LocalDate, LocalTime, LocalDateTime. They hold the specific details related to the date/time the same way humans do. output of <em>            System.out.println(localDate.toString());</em> will be 2013-11-01 This can further be formatted as per the requirement. → Machine referable Date-Time Machines have one view - a single, ever increasing number. For example an Instant represents a fixed point in time as an offset from the standard Java epoch (1st Jan 1970). The instant is stored to nanosecond resolution.</p>
 

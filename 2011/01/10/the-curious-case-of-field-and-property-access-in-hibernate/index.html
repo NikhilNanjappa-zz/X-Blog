@@ -10,7 +10,7 @@
 
     <title>The Curious Case Of Field And Property Access In Hibernate - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2011/01/10/the-curious-case-of-field-and-property-access-in-hibernate/">
+    <link rel="canonical" href="http://blog.xebia.in/2011/01/10/the-curious-case-of-field-and-property-access-in-hibernate/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>The Curious case of Field and Property Access in Hibernate</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 2  minutes</h4>
+
+              <h1>The Curious case of Field and Property Access in Hibernate</h1>
 
 <p>Have you ever wondered whether placing Hibernate annotations over both the fields and getters(properties) in an entity class would land you in trouble. Well as <a href="http://xebee.xebia.in/author/rajdeep/">Rajdeep</a> and I discovered, if you haven&#39;t tried it out, it will.  As shown in the following code, CustomerHotelBooking is an entity bean which acts as a link between Customer and Hotel. Ideally, this entity would be mapped by Hibernate, to a CustomerHotelBooking table having hotel_id as a foreign key with type as bigint. However, it does not happen this way. On the contrary the CustomerHotelBooking table has a column named hotel with type as tinyblob. Can you figure out why this happens? </p>
 

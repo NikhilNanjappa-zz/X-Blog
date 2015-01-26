@@ -3,10 +3,10 @@
   <channel>
     <title>Xebia Blog</title>
     <description>Thoughts on latest technologies</description>
-    <link>http://xebia.com/</link>
-    <atom:link href="http://xebia.com/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 26 Jan 2015 16:43:01 +0530</pubDate>
-    <lastBuildDate>Mon, 26 Jan 2015 16:43:01 +0530</lastBuildDate>
+    <link>http://blog.xebia.in/</link>
+    <atom:link href="http://blog.xebia.in/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Mon, 26 Jan 2015 17:58:52 +0530</pubDate>
+    <lastBuildDate>Mon, 26 Jan 2015 17:58:52 +0530</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -113,8 +113,8 @@
 &lt;p&gt;Widespread knowledge of SQL increases the usefulness of Phoenix and related tools like CQL (in case of Cassandra) and Phoenix(in case of Hbase)&lt;/p&gt;
 </description>
         <pubDate>Fri, 02 Jan 2015 00:00:00 +0530</pubDate>
-        <link>http://xebia.com/2015/01/02/sql-over-hbase-using-apache-pheonix/</link>
-        <guid isPermaLink="true">http://xebia.com/2015/01/02/sql-over-hbase-using-apache-pheonix/</guid>
+        <link>http://blog.xebia.in/2015/01/02/sql-over-hbase-using-apache-pheonix/</link>
+        <guid isPermaLink="true">http://blog.xebia.in/2015/01/02/sql-over-hbase-using-apache-pheonix/</guid>
         
         
       </item>
@@ -168,8 +168,8 @@
 &lt;p&gt;Interactively rebase and squashing your commits prior to creating PR can be very helpful to create clean commits and keep project history clean.  It also helps to get rid for merge commits.&lt;/p&gt;
 </description>
         <pubDate>Tue, 09 Dec 2014 00:00:00 +0530</pubDate>
-        <link>http://xebia.com/2014/12/09/useful-guidelines-for-contributing-to-a-project-managed-using-git/</link>
-        <guid isPermaLink="true">http://xebia.com/2014/12/09/useful-guidelines-for-contributing-to-a-project-managed-using-git/</guid>
+        <link>http://blog.xebia.in/2014/12/09/useful-guidelines-for-contributing-to-a-project-managed-using-git/</link>
+        <guid isPermaLink="true">http://blog.xebia.in/2014/12/09/useful-guidelines-for-contributing-to-a-project-managed-using-git/</guid>
         
         
       </item>
@@ -240,8 +240,8 @@ Option                                      
 &lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;** : **These tools are available in version 0.8 , not prior versions.&lt;/p&gt;
 </description>
         <pubDate>Thu, 04 Dec 2014 00:00:00 +0530</pubDate>
-        <link>http://xebia.com/2014/12/04/how-to-manage-and-balance-huge-data-load-for-big-kafka-clusters/</link>
-        <guid isPermaLink="true">http://xebia.com/2014/12/04/how-to-manage-and-balance-huge-data-load-for-big-kafka-clusters/</guid>
+        <link>http://blog.xebia.in/2014/12/04/how-to-manage-and-balance-huge-data-load-for-big-kafka-clusters/</link>
+        <guid isPermaLink="true">http://blog.xebia.in/2014/12/04/how-to-manage-and-balance-huge-data-load-for-big-kafka-clusters/</guid>
         
         
       </item>
@@ -342,8 +342,8 @@ $ cd kafka_2.9.2-0.8.1.1
 &lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; : You have to kill the consumer(^C) yourself , else it will keep running and waiting for the messages to be consumed. You can verify it by sending new messages if you have producer open in other terminal.&lt;/p&gt;
 </description>
         <pubDate>Wed, 03 Dec 2014 00:00:00 +0530</pubDate>
-        <link>http://xebia.com/2014/12/03/quick-steps-have-a-kafka-cluster-up-running-in-3-minutes/</link>
-        <guid isPermaLink="true">http://xebia.com/2014/12/03/quick-steps-have-a-kafka-cluster-up-running-in-3-minutes/</guid>
+        <link>http://blog.xebia.in/2014/12/03/quick-steps-have-a-kafka-cluster-up-running-in-3-minutes/</link>
+        <guid isPermaLink="true">http://blog.xebia.in/2014/12/03/quick-steps-have-a-kafka-cluster-up-running-in-3-minutes/</guid>
         
         
       </item>
@@ -438,8 +438,8 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
 &lt;p&gt;This will implicitly add date-picker and all the associated options.Also you need not to worry for the date format in every controller. Date format that will be displayed is dd-MM-yyyy and the output format will be yyyy-MM-dd. Similarly you can customize your other directives as well. Happy coding....&lt;/p&gt;
 </description>
         <pubDate>Wed, 26 Nov 2014 00:00:00 +0530</pubDate>
-        <link>http://xebia.com/2014/11/26/customizing-angular-directives/</link>
-        <guid isPermaLink="true">http://xebia.com/2014/11/26/customizing-angular-directives/</guid>
+        <link>http://blog.xebia.in/2014/11/26/customizing-angular-directives/</link>
+        <guid isPermaLink="true">http://blog.xebia.in/2014/11/26/customizing-angular-directives/</guid>
         
         
       </item>
@@ -503,8 +503,8 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
 &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://xebee.xebia.in/index.php/tag/alfresco/&quot;&gt;For more hacks about alfresco visit&lt;/a&gt;..................&lt;/strong&gt;&lt;/p&gt;
 </description>
         <pubDate>Wed, 26 Nov 2014 00:00:00 +0530</pubDate>
-        <link>http://xebia.com/2014/11/26/alfresco-working-with-aspects-in-cmis/</link>
-        <guid isPermaLink="true">http://xebia.com/2014/11/26/alfresco-working-with-aspects-in-cmis/</guid>
+        <link>http://blog.xebia.in/2014/11/26/alfresco-working-with-aspects-in-cmis/</link>
+        <guid isPermaLink="true">http://blog.xebia.in/2014/11/26/alfresco-working-with-aspects-in-cmis/</guid>
         
         
       </item>
@@ -553,34 +553,261 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
 &lt;/ol&gt;
 
 &lt;p&gt;myCustomFields-model.xml should contain following content:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt; &amp;lt;!-- Definition of Knowledge Base Model --&amp;gt; &amp;lt;model name=&amp;quot;my:model&amp;quot; xmlns=&amp;quot;http://www.alfresco.org/model/dictionary/1.0&amp;quot;&amp;gt; &amp;lt;!-- Optional meta-data about the model --&amp;gt; &amp;lt;description&amp;gt;Knowledge Base Model&amp;lt;/description&amp;gt; &amp;lt;author&amp;gt;Will Abson&amp;lt;/author&amp;gt; &amp;lt;version&amp;gt;1.0&amp;lt;/version&amp;gt; &amp;lt;!-- Imports are required to allow references to definitions in other models --&amp;gt; &amp;lt;imports&amp;gt; &amp;lt;!-- Import Alfresco Dictionary Definitions --&amp;gt; &amp;lt;import uri=&amp;quot;http://www.alfresco.org/model/dictionary/1.0&amp;quot; prefix=&amp;quot;d&amp;quot;/&amp;gt; &amp;lt;!-- Import Alfresco Content Domain Model Definitions --&amp;gt; &amp;lt;import uri=&amp;quot;http://www.alfresco.org/model/content/1.0&amp;quot; prefix=&amp;quot;cm&amp;quot;/&amp;gt; &amp;lt;/imports&amp;gt; &amp;lt;!-- Introduction of new namespaces defined by this model --&amp;gt; &amp;lt;namespaces&amp;gt; &amp;lt;namespace uri=&amp;quot;my.model&amp;quot; prefix=&amp;quot;my&amp;quot;/&amp;gt; &amp;lt;/namespaces&amp;gt; &amp;lt;aspects&amp;gt; &amp;lt;!-- Definition of new Content Aspect: Knowledge Base Document --&amp;gt; &amp;lt;aspect name=&amp;quot;my:cutomfieldsdata&amp;quot;&amp;gt; &amp;lt;title&amp;gt;my custom model&amp;lt;/title&amp;gt; &amp;lt;properties&amp;gt; &amp;lt;property name=&amp;quot;my:metadata_custom_serial_number&amp;quot;&amp;gt; &amp;lt;type&amp;gt;d:text&amp;lt;/type&amp;gt; &amp;lt;/property&amp;gt; &amp;lt;property name=&amp;quot;my:metadata_custom_status&amp;quot;&amp;gt; &amp;lt;type&amp;gt;d:text&amp;lt;/type&amp;gt; &amp;lt;/property&amp;gt; &amp;lt;property name=&amp;quot;my:metadata_custom_id&amp;quot;&amp;gt; &amp;lt;type&amp;gt;d:text&amp;lt;/type&amp;gt; &amp;lt;multiple&amp;gt;true&amp;lt;/multiple&amp;gt; &amp;lt;index enabled=&amp;quot;true&amp;quot;&amp;gt; &amp;lt;tokenised&amp;gt;true&amp;lt;/tokenised&amp;gt; &amp;lt;/index&amp;gt; &amp;lt;/property&amp;gt; &amp;lt;property name=&amp;quot;my:metadata_custom_name&amp;quot;&amp;gt; &amp;lt;type&amp;gt;d:text&amp;lt;/type&amp;gt; &amp;lt;multiple&amp;gt;true&amp;lt;/multiple&amp;gt; &amp;lt;index enabled=&amp;quot;true&amp;quot;&amp;gt; &amp;lt;tokenised&amp;gt;true&amp;lt;/tokenised&amp;gt; &amp;lt;/index&amp;gt; &amp;lt;/property&amp;gt; &amp;lt;property name=&amp;quot;my:metadata_custom_code&amp;quot;&amp;gt; &amp;lt;type&amp;gt;d:text&amp;lt;/type&amp;gt; &amp;lt;multiple&amp;gt;true&amp;lt;/multiple&amp;gt; &amp;lt;index enabled=&amp;quot;true&amp;quot;&amp;gt; &amp;lt;tokenised&amp;gt;true&amp;lt;/tokenised&amp;gt; &amp;lt;/index&amp;gt; &amp;lt;/property&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;/aspect&amp;gt; &amp;lt;/aspects&amp;gt; &amp;lt;/model&amp;gt;&lt;/code&gt; We used property &lt;index enabled=&quot;true&quot;&gt; which make field searchable in full index search. Property &lt;multiple&gt;true&lt;/multiple&gt; is used to contain multiple field within one field in comma separated form for now you can remove this.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Definition of Knowledge Base Model --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;model&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:model&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.alfresco.org/model/dictionary/1.0&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Optional meta-data about the model --&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;Knowledge Base Model&lt;span class=&quot;nt&quot;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;author&amp;gt;&lt;/span&gt;Will Abson&lt;span class=&quot;nt&quot;&gt;&amp;lt;/author&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.0&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Imports are required to allow references to definitions in other models --&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;imports&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Import Alfresco Dictionary Definitions --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;import&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;uri=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.alfresco.org/model/dictionary/1.0&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;prefix=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;d&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Import Alfresco Content Domain Model Definitions --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;import&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;uri=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.alfresco.org/model/content/1.0&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;prefix=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/imports&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Introduction of new namespaces defined by this model --&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;namespaces&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;namespace&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;uri=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my.model&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;prefix=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/namespaces&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspects&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Definition of new Content Aspect: Knowledge Base Document --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspect&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:cutomfieldsdata&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;my custom model&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;properties&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_serial_number&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;type&amp;gt;&lt;/span&gt;d:text&lt;span class=&quot;nt&quot;&gt;&amp;lt;/type&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_status&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;type&amp;gt;&lt;/span&gt;d:text&lt;span class=&quot;nt&quot;&gt;&amp;lt;/type&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_id&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;type&amp;gt;&lt;/span&gt;d:text&lt;span class=&quot;nt&quot;&gt;&amp;lt;/type&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;multiple&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/multiple&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;index&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;enabled=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;tokenised&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/tokenised&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;/index&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_name&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;type&amp;gt;&lt;/span&gt;d:text&lt;span class=&quot;nt&quot;&gt;&amp;lt;/type&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;multiple&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/multiple&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;index&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;enabled=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;tokenised&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/tokenised&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;/index&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_code&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;type&amp;gt;&lt;/span&gt;d:text&lt;span class=&quot;nt&quot;&gt;&amp;lt;/type&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;multiple&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/multiple&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;index&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;enabled=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;tokenised&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/tokenised&amp;gt;&lt;/span&gt;
+          &lt;span class=&quot;nt&quot;&gt;&amp;lt;/index&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/properties&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/aspect&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/aspects&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/model&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We used property &lt;index enabled=&quot;true&quot;&gt; which make field searchable in full index search. Property &lt;multiple&gt;true&lt;/multiple&gt; is used to contain multiple field within one field in comma separated form for now you can remove this.&lt;/p&gt;
 
 &lt;p&gt;myCustomFields-model-context.xml should contain following content:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;&amp;lt;?xml version=&amp;#39;1.0&amp;#39; encoding=&amp;#39;UTF-8&amp;#39;?&amp;gt; &amp;lt;!DOCTYPE beans PUBLIC &amp;#39;-//SPRING//DTD BEAN//EN&amp;#39; &amp;#39;http://www.springframework.org/dtd/spring-beans.dtd&amp;#39;&amp;gt; &amp;lt;beans&amp;gt; &amp;lt;!-- Registration of new models --&amp;gt; &amp;lt;bean id=&amp;quot;extension.kb.dictionaryBootstrap&amp;quot; parent=&amp;quot;dictionaryModelBootstrap&amp;quot; depends-on=&amp;quot;dictionaryBootstrap&amp;quot;&amp;gt; &amp;lt;property name=&amp;quot;models&amp;quot;&amp;gt; &amp;lt;list&amp;gt; &amp;lt;value&amp;gt;alfresco/extension/myCustomFields-model.xml&amp;lt;/value&amp;gt; &amp;lt;/list&amp;gt; &amp;lt;/property&amp;gt; &amp;lt;/bean&amp;gt; &amp;lt;bean id=&amp;quot;extension.kb.resourceBundle&amp;quot; class=&amp;quot;org.alfresco.i18n.ResourceBundleBootstrapComponent&amp;quot;&amp;gt; &amp;lt;property name=&amp;quot;resourceBundles&amp;quot;&amp;gt; &amp;lt;list&amp;gt; &amp;lt;value&amp;gt;alfresco.messages.myCustomFields&amp;lt;/value&amp;gt; &amp;lt;/list&amp;gt; &amp;lt;/property&amp;gt; &amp;lt;/bean&amp;gt; &amp;lt;/beans&amp;gt;&lt;/code&gt;&lt;/p&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;#39;1.0&amp;#39; encoding=&amp;#39;UTF-8&amp;#39;?&amp;gt;&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE beans PUBLIC &amp;#39;-//SPRING//DTD BEAN//EN&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;&amp;#39;http://www.springframework.org/dtd/spring-beans.dtd&amp;#39;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;beans&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Registration of new models --&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;extension.kb.dictionaryBootstrap&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parent=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;dictionaryModelBootstrap&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;depends-on=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;dictionaryBootstrap&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;models&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;list&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;alfresco/extension/myCustomFields-model.xml&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/list&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;extension.kb.resourceBundle&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.alfresco.i18n.ResourceBundleBootstrapComponent&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;resourceBundles&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;list&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;alfresco.messages.myCustomFields&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/list&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;web-client-config-custom.xml should contain following content:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;&amp;lt;alfresco-config&amp;gt; &amp;lt;config evaluator=&amp;quot;string-compare&amp;quot; condition=&amp;quot;Advanced Search&amp;quot;&amp;gt; &amp;lt;advanced-search&amp;gt; &amp;lt;content-types&amp;gt; &amp;lt;/content-types&amp;gt; &amp;lt;folder-types&amp;gt; &amp;lt;/folder-types&amp;gt; &amp;lt;custom-properties&amp;gt; &amp;lt;meta-data aspect=&amp;quot;my:cutomfieldsdata&amp;quot; property=&amp;quot;my:metadata_custom_serial_number&amp;quot; /&amp;gt; &amp;lt;meta-data aspect=&amp;quot;my:cutomfieldsdata&amp;quot; property=&amp;quot;my:metadata_custom_status&amp;quot; /&amp;gt; &amp;lt;meta-data aspect=&amp;quot;my:cutomfieldsdata&amp;quot; property=&amp;quot;my:metadata_custom_id&amp;quot; /&amp;gt; &amp;lt;meta-data aspect=&amp;quot;my:cutomfieldsdata&amp;quot; property=&amp;quot;my:metadata_custom_name&amp;quot; /&amp;gt; &amp;lt;meta-data aspect=&amp;quot;my:cutomfieldsdata&amp;quot; property=&amp;quot;my:metadata_custom_code&amp;quot; /&amp;gt; &amp;lt;/custom-properties&amp;gt; &amp;lt;/advanced-search&amp;gt; &amp;lt;/config&amp;gt; &amp;lt;/alfresco-config&amp;gt;&lt;/code&gt;&lt;/p&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;alfresco-config&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;config&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;evaluator=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;string-compare&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;condition=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Advanced Search&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;advanced-search&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;content-types&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;lt;/content-types&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;folder-types&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;lt;/folder-types&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;custom-properties&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta-data&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;aspect=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:cutomfieldsdata&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_serial_number&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta-data&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;aspect=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:cutomfieldsdata&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_status&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta-data&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;aspect=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:cutomfieldsdata&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_id&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta-data&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;aspect=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:cutomfieldsdata&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_name&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta-data&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;aspect=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:cutomfieldsdata&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_code&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/custom-properties&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/advanced-search&amp;gt;&lt;/span&gt;
+     &lt;span class=&quot;nt&quot;&gt;&amp;lt;/config&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/alfresco-config&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;this file is use to make each field in model searchable can ne used in alfresco advanced search and cmis field search.&lt;/p&gt;
 
 &lt;p&gt;myCustomFields.properties should contain following content:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;my_model.property.my_metadata_custom_serial_number.title=Serial Number my_model.property.my_metadata_custom_status.title=Status my_model.property.my_metadata_custom_id.title=Document ID my_model.property.my_metadata_custom_name.title=Name my_model.property.my_metadata_custom_code.title=Code&lt;/code&gt;&lt;/p&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;my_model.property.my_metadata_custom_serial_number.title=Serial Number my_model.property.my_metadata_custom_status.title=Status my_model.property.my_metadata_custom_id.title=Document ID my_model.property.my_metadata_custom_name.title=Name my_model.property.my_metadata_custom_code.title=Code
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;custom-slingshot-application-context.xml should contain following content:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;&amp;lt;?xml version=&amp;#39;1.0&amp;#39; encoding=&amp;#39;UTF-8&amp;#39;?&amp;gt; &amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot; xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot; xmlns:hz=&amp;quot;http://www.hazelcast.com/schema/config&amp;quot; xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.hazelcast.com/schema/config http://www.hazelcast.com/schema/config/hazelcast-spring.xsd&amp;quot;&amp;gt; &amp;lt;!-- Add Knowledge Base messages --&amp;gt; &amp;lt;bean id=&amp;quot;webscripts.kb.resources&amp;quot; class=&amp;quot;org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent&amp;quot;&amp;gt; &amp;lt;property name=&amp;quot;resourceBundles&amp;quot;&amp;gt; &amp;lt;list&amp;gt; &amp;lt;value&amp;gt;alfresco.messages.myCustomFields&amp;lt;/value&amp;gt; &amp;lt;/list&amp;gt; &amp;lt;/property&amp;gt; &amp;lt;/bean&amp;gt; &amp;lt;/beans&amp;gt;&lt;/code&gt;&lt;/p&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;#39;1.0&amp;#39; encoding=&amp;#39;UTF-8&amp;#39;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;beans&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.springframework.org/schema/beans&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Add Knowledge Base messages --&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;webscripts.kb.resources&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;resourceBundles&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;list&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;alfresco.messages.myCustomFields&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/list&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This property file is to access field property title on alfresco share.&lt;/p&gt;
 
-&lt;p&gt;share-config-custom.xml should contain following content: `&lt;alfresco-config&gt; &amp;lt;!-- Repository Library config section --&amp;gt;&lt;/p&gt;
+&lt;p&gt;share-config-custom.xml should contain following content:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;alfresco-config&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Repository Library config section --&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;config&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;evaluator=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;string-compare&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;condition=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;RepositoryLibrary&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;replace=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!--Whether the link to the Repository Library appears in the header component or not.--&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;visible&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/visible&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/config&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;config&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;evaluator=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;string-compare&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;condition=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Remote&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;remote&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;endpoint&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;id&amp;gt;&lt;/span&gt;alfresco-noauth&lt;span class=&quot;nt&quot;&gt;&amp;lt;/id&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;Alfresco - unauthenticated access&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;Access to Alfresco Repository WebScripts that do not require authentication&lt;span class=&quot;nt&quot;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;connector-id&amp;gt;&lt;/span&gt;alfresco&lt;span class=&quot;nt&quot;&gt;&amp;lt;/connector-id&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;endpoint-url&amp;gt;&lt;/span&gt;http://localhost:8080/alfresco/s&lt;span class=&quot;nt&quot;&gt;&amp;lt;/endpoint-url&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;identity&amp;gt;&lt;/span&gt;none&lt;span class=&quot;nt&quot;&gt;&amp;lt;/identity&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/endpoint&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;endpoint&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;id&amp;gt;&lt;/span&gt;alfresco&lt;span class=&quot;nt&quot;&gt;&amp;lt;/id&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;Alfresco - user access&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;Access to Alfresco Repository WebScripts that require user authentication&lt;span class=&quot;nt&quot;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;connector-id&amp;gt;&lt;/span&gt;alfresco&lt;span class=&quot;nt&quot;&gt;&amp;lt;/connector-id&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;endpoint-url&amp;gt;&lt;/span&gt;http://localhost:8080/alfresco/s&lt;span class=&quot;nt&quot;&gt;&amp;lt;/endpoint-url&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;identity&amp;gt;&lt;/span&gt;user&lt;span class=&quot;nt&quot;&gt;&amp;lt;/identity&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/endpoint&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;endpoint&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;id&amp;gt;&lt;/span&gt;alfresco-feed&lt;span class=&quot;nt&quot;&gt;&amp;lt;/id&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;Alfresco Feed&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;Alfresco Feed - supports basic HTTP authentication via the EndPointProxyServlet
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;connector-id&amp;gt;&lt;/span&gt;http&lt;span class=&quot;nt&quot;&gt;&amp;lt;/connector-id&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;endpoint-url&amp;gt;&lt;/span&gt;http://localhost:8080/alfresco/s&lt;span class=&quot;nt&quot;&gt;&amp;lt;/endpoint-url&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;basic-auth&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/basic-auth&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;identity&amp;gt;&lt;/span&gt;user&lt;span class=&quot;nt&quot;&gt;&amp;lt;/identity&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/endpoint&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;endpoint&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;id&amp;gt;&lt;/span&gt;activiti-admin&lt;span class=&quot;nt&quot;&gt;&amp;lt;/id&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;Activiti Admin UI - user access&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;Access to Activiti Admin UI, that requires user authentication&lt;span class=&quot;nt&quot;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;connector-id&amp;gt;&lt;/span&gt;activiti-admin-connector&lt;span class=&quot;nt&quot;&gt;&amp;lt;/connector-id&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;endpoint-url&amp;gt;&lt;/span&gt;http://localhost:8080/alfresco/activiti-admin&lt;span class=&quot;nt&quot;&gt;&amp;lt;/endpoint-url&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;identity&amp;gt;&lt;/span&gt;user&lt;span class=&quot;nt&quot;&gt;&amp;lt;/identity&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/endpoint&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/remote&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/config&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Document Library config section --&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;config&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;evaluator=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;string-compare&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;condition=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;DocumentLibrary&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!--Used by the &amp;quot;Manage Aspects&amp;quot; action For custom aspects, remember to also add the relevant i18n string(s) cm_myaspect=My Aspect--&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspects&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Aspects that a user can see --&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;visible&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspect&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm:generalclassifiable&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspect&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm:complianceable&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspect&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm:dublincore&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspect&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm:effectivity&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspect&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm:summarizable&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspect&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm:versionable&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspect&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm:templatable&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspect&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm:emailed&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspect&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;emailserver:aliasable&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspect&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm:taggable&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspect&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;app:inlineeditable&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;aspect&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:cutomfieldsdata&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/visible&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;
+      &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Aspects that a user can add. Same as &amp;quot;visible&amp;quot; if left empty --&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;addable&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/addable&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Aspects that a user can remove. Same as &amp;quot;visible&amp;quot; if left empty --&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;removeable&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/removeable&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/aspects&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/config&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- cm:content type (existing nodes) --&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;config&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;evaluator=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;node-type&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;condition=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm:content&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;forms&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;form&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;field-visibility&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_serial_number&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_status&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_id&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_name&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_code&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/field-visibility&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Default form configuration used on the document details and edit metadata pages --&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;search&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;field-visibility&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_serial_number&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_status&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_id&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_name&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_code&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/field-visibility&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Document Library pop-up Edit Metadata form --&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;doclib-simple-metadata&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;field-visibility&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_serial_number&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_status&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_id&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_name&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_code&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/field-visibility&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;edit-form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;template=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;../documentlibrary/forms/doclib-simple-metadata.ftl&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Document Library Inline Edit form --&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;doclib-inline-edit&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;field-visibility&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_serial_number&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_status&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_id&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_name&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;show&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;my:metadata_custom_code&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/field-visibility&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/forms&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/config&amp;gt;&lt;/span&gt;
+      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/alfresco-config&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;we have created new aspect with name my:cutomfieldsdata for linking aspect dynamically with content.
+We have made these custom field searhable from alfresco share.
+We have made these custom field Inline editable on alfresco share.
+We have made these custom field editable on alfresco share.
+We have made these custom field visible on alfresco share.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;4. How to make custom field searchable?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;We have already done these filed searchable while creating new model within alfresco. We have created web-client-config-custom.xml file for searching custom field independently and use &lt;index enabled=&quot;true&quot;&gt; in model file for searcing custom field in full index search.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;5. How to search document in cmis using lucene query?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;We are giving cmis query for searching document using full index search where index is the keyword to search. If you want to get full cmis code for creating session and searching document read our blog of Alfresco CMIS approach for building application within alfresco.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queryForDocument&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;SELECT cmis:objectId FROM cmis:document WHERE cmis:createdBy &amp;lt;&amp;gt; &amp;#39;System&amp;#39; AND CONTAINS(&amp;#39;&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;#39;)&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We are giving cmis query for searching document using Custom Alfresco Document Meta Data search where serial_number is the serial number of document to search. If you want to get full cmis code for creating session and searching document read our blog of Alfresco CMIS approach for building application within alfresco.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;SELECT d.cmis:objectId FROM cmis:document as d join my:cutomfieldsdata as m on d.cmis:objectId = m.cmis:objectId WHERE d.cmis:createdBy &amp;lt;&amp;gt; &amp;#39;System&amp;#39; m.my:metadata_custom_serial_number = &amp;#39;&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;serial_number&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;this query is to search for serial number only if you want to add more field to search you have to dynamically append it to the query string.&lt;/p&gt;
 </description>
         <pubDate>Thu, 20 Nov 2014 00:00:00 +0530</pubDate>
-        <link>http://xebia.com/2014/11/20/alfresco-custom-field-search-in-cmis-approach/</link>
-        <guid isPermaLink="true">http://xebia.com/2014/11/20/alfresco-custom-field-search-in-cmis-approach/</guid>
+        <link>http://blog.xebia.in/2014/11/20/alfresco-custom-field-search-in-cmis-approach/</link>
+        <guid isPermaLink="true">http://blog.xebia.in/2014/11/20/alfresco-custom-field-search-in-cmis-approach/</guid>
         
         
       </item>
@@ -654,8 +881,8 @@ So whats the Solution. Solution is to find a tool that can give us both of these
 &lt;p&gt;&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/PageObject1-300x269.png&quot; alt=&quot;PageObject1&quot;&gt; &lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/PageObject2-300x116.png&quot; alt=&quot;PageObject2&quot;&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 16 Nov 2014 00:00:00 +0530</pubDate>
-        <link>http://xebia.com/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</link>
-        <guid isPermaLink="true">http://xebia.com/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</guid>
+        <link>http://blog.xebia.in/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</link>
+        <guid isPermaLink="true">http://blog.xebia.in/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</guid>
         
         
       </item>
@@ -777,8 +1004,8 @@ So whats the Solution. Solution is to find a tool that can give us both of these
 &lt;/ul&gt;
 </description>
         <pubDate>Tue, 11 Nov 2014 00:00:00 +0530</pubDate>
-        <link>http://xebia.com/2014/11/11/robot-framework-ride/</link>
-        <guid isPermaLink="true">http://xebia.com/2014/11/11/robot-framework-ride/</guid>
+        <link>http://blog.xebia.in/2014/11/11/robot-framework-ride/</link>
+        <guid isPermaLink="true">http://blog.xebia.in/2014/11/11/robot-framework-ride/</guid>
         
         
       </item>
@@ -1017,8 +1244,8 @@ Might also have there compiled files too.&lt;/li&gt;
 Happy Testing!!&lt;/p&gt;
 </description>
         <pubDate>Tue, 11 Nov 2014 00:00:00 +0530</pubDate>
-        <link>http://xebia.com/2014/11/11/mongodb-integrate-robot-frameworkride/</link>
-        <guid isPermaLink="true">http://xebia.com/2014/11/11/mongodb-integrate-robot-frameworkride/</guid>
+        <link>http://blog.xebia.in/2014/11/11/mongodb-integrate-robot-frameworkride/</link>
+        <guid isPermaLink="true">http://blog.xebia.in/2014/11/11/mongodb-integrate-robot-frameworkride/</guid>
         
         
       </item>

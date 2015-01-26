@@ -10,7 +10,7 @@
 
     <title>Executing Seleniumwebdriver Tests Remotely Using Maven And Jenkins - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2012/03/01/executing-seleniumwebdriver-tests-remotely-using-maven-and-jenkins/">
+    <link rel="canonical" href="http://blog.xebia.in/2012/03/01/executing-seleniumwebdriver-tests-remotely-using-maven-and-jenkins/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>Executing Selenium/WebDriver tests remotely using Maven and Jenkins</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 4  minutes</h4>
+
+              <h1>Executing Selenium/WebDriver tests remotely using Maven and Jenkins</h1>
 
 <p>Recently our team created a nifty selenium test suite for testing a salesforce.com app we developed. We used <a href="http://testng.org/doc/index.html">TestNG </a> framework for writing tests along with the latest and greatest selenium available out there which is <a href="http://code.google.com/p/selenium/wiki/GettingStarted">WebDriver</a>. In case you want to know why we chose web driver over RC,read <a href="http://xebee.xebia.in/2012/02/07/selenium-web-driver-or-rc-decide-yourself/">this</a>. Since we planned to execute the tests on a remote windows machine triggered from our Jenkins machine (linux), we leveraged the capabilities of <a href="http://code.google.com/p/selenium/wiki/RemoteWebDriver">RemoteWebdriver</a>. Eventually we wanted to be able to run the tests with our Continuous Integration environment which meant that the tests are build on Jenkins (linux) with maven and executed on dedicated windows machine remotely.  Following are the key objectives that we identified to make it happen:</p>
 

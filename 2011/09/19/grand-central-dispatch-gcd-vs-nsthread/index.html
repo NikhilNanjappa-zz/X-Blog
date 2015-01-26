@@ -10,7 +10,7 @@
 
     <title>Grand Central Dispatch Gcd Vs Nsthread - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2011/09/19/grand-central-dispatch-gcd-vs-nsthread/">
+    <link rel="canonical" href="http://blog.xebia.in/2011/09/19/grand-central-dispatch-gcd-vs-nsthread/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>Grand Central Dispatch (GCD) vs NSThread</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 2  minutes</h4>
+
+              <h1>Grand Central Dispatch (GCD) vs NSThread</h1>
 
 <p>In this post I will talk about <a href="http://developer.apple.com/library/ios/#documentation/Performance/Reference/GCD_libdispatch_Ref/Reference/reference.html">Grand central dispatch</a>, how it is better than using <a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSThread_Class/Reference/Reference.html">NSThread</a>. But before that I would like to see how and where threads are used. There are n number of distinct reasons behind using threads based on the structure and complexity of the app, but the prime reason behind using threads is <strong>asynchronously working on a task</strong> and then (if required) notifying the main thread. The whole idea behind doing so is that we do not want to block the main thread while we are executing a task. So lets see how it is implemented. Here is the small code snippet where we use NSThread to start a task in a new thread, do some time consuming task and notify to the main thread when we are done so that it can update the UI (The main thread is/should be used to update the UI).  [sourcecode lang=&quot;javascript&quot;] -(void)doSomeTask{ [NSThread detachNewThreadSelector:@selector(handlerForTask) toTarget:self withObject:nil]; }</p>
 

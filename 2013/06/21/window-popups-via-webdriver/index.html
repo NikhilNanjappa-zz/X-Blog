@@ -10,7 +10,7 @@
 
     <title>Window Popups Via Webdriver - Xebia Blog</title>
 
-    <link rel="canonical" href="http://xebia.com/2013/06/21/window-popups-via-webdriver/">
+    <link rel="canonical" href="http://blog.xebia.in/2013/06/21/window-popups-via-webdriver/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -85,10 +85,15 @@
 <!-- Post Content -->
 <article>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-				<h1>Window Popups via Webdriver</h1>
+        <div class="row">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <h4>Reading time about 3  minutes</h4>
+
+              <h1>Window Popups via Webdriver</h1>
 
 <p>Recently I came across a situation where a browser window opens a new pop up window on clicking a button or a link on the page. So, this blog is regarding the handling of these scenario via webdriver. Usually, if we work on web application. It may have some browser popup windows on which we want to perform some action and come back to the main window using selenium webdriver. The trick is to find the handle. It then uses the new window handle and returns the original window handle to the caller, so the caller knows which handle to switch back to. There are many websites or html pages where we can find the popup windows but rather than searching for all those I created a <a href="http://www.w3.org/TR/REC-html40/">HTML</a> page.So, for testing the popup window I created a HTML page which has a button which opens a new pop up window when clicked. The html code for the same is as follows :-</p>
 
