@@ -99,8 +99,9 @@
 
 <p>Jquery already provides <a href="http://docs.jquery.com/Plugins/Autocomplete">auto suggest</a> functionality. The question here is making functionality generic so that next time we have to use that its a breeze to use. Lets create a tag which can add the necessary jquery code for a text field to have auto suggest capability.</p>
 
-<p><strong>HTML code :</strong> [sourcecode language=&quot;html&quot;] <g:textField name="city" id="city" value="" /> <g:autoSuggest autoCompleteForId="city" searchObject="com.xebia.Address" searchProperty="city"/> 
-```</p>
+<p><strong>HTML code :</strong> <code>
+ &lt;g:textField name=&quot;city&quot; id=&quot;city&quot; value=&quot;&quot; /&gt; &lt;g:autoSuggest autoCompleteForId=&quot;city&quot; searchObject=&quot;com.xebia.Address&quot; searchProperty=&quot;city&quot;/&gt; 
+</code></p>
 
 <p>For searchObject property we must give the fully qualified class name of the domain object. Here we have Address as the domain objects which has a property city in it. The above tag is handled by the following closure in the Taglibrary.</p>
 
@@ -179,7 +180,8 @@
 
 **[omarji](#359 &quot;2010-08-30 19:31:15&quot;):** Cool, I would be interested to know how to manage not writing the scripts and css more than once using importScriptsAndCSS() Note: you could use the elvis operator for the ternary ops. if you like :) def controllerName = attrs.controller ?: &#39;autocomplete&#39;
 
-**[Sunil Prakash Inteti](#858 &quot;2010-09-06 09:40:14&quot;):** omarji, Here is the way that you could use for importing css once. [sourcecode lang=&quot;java&quot;] private void importScriptsAndCSS(def out,String contextName,def pageScope ){ def executedOnceAutocomplete try { executedOnceAutocomplete = pageScope.executedOnceAutocomplete } catch(MissingPropertyException b) { //ignore } if(!executedOnceAutocomplete) { out &lt;&lt; &#39;&lt;link rel=\&quot;stylesheet\&quot; href=\&quot;&#39; out &lt;&lt; contextName out &lt;&lt; &#39;/css/autocomplete/autocomplete.css\&quot; /&gt; &#39; out &lt;&lt; &#39;&lt;script src=&quot;&#39; out &lt;&lt; contextName out &lt;&lt; &#39;/js/jquery/jquery.autocomplete.js&quot; &gt;&lt;/script&gt;&#39; pageScope.executedOnceAutocomplete = true; } } 
+**[Sunil Prakash Inteti](#858 &quot;2010-09-06 09:40:14&quot;):** omarji, Here is the way that you could use for importing css once. ```
+ private void importScriptsAndCSS(def out,String contextName,def pageScope ){ def executedOnceAutocomplete try { executedOnceAutocomplete = pageScope.executedOnceAutocomplete } catch(MissingPropertyException b) { //ignore } if(!executedOnceAutocomplete) { out &lt;&lt; &#39;&lt;link rel=\&quot;stylesheet\&quot; href=\&quot;&#39; out &lt;&lt; contextName out &lt;&lt; &#39;/css/autocomplete/autocomplete.css\&quot; /&gt; &#39; out &lt;&lt; &#39;&lt;script src=&quot;&#39; out &lt;&lt; contextName out &lt;&lt; &#39;/js/jquery/jquery.autocomplete.js&quot; &gt;&lt;/script&gt;&#39; pageScope.executedOnceAutocomplete = true; } } 
 </code></pre></div>
 
                 <hr>

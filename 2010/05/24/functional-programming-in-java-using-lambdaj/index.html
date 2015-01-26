@@ -109,7 +109,8 @@ The ones which I have been using are &lt;a href=&quot;http://code.google.com/p/
 
 &lt;em&gt;Using Java&lt;/em&gt;
 
-[sourcecode lang=&quot;java&quot;]
+```
+
 List&amp;lt;String&amp;gt; list = Arrays.asList(&amp;quot;invalid1&amp;quot;, &amp;quot;invalid2&amp;quot;);
 
 List&amp;lt;String&amp;gt; filteredList = new ArrayList&amp;lt;String&amp;gt;();
@@ -123,17 +124,20 @@ for(String string : list) {
 }
 return filteredList;
 </code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">    &lt;em&gt;Using lambdaj&lt;/em&gt;
-    [sourcecode lang=&quot;java&quot;]
+    ```
+
      List&amp;lt;String&amp;gt; list = Arrays.asList(&amp;quot;invalid1&amp;quot;, &amp;quot; invalid2&amp;quot;);
 
     return filter(startsWith(&amp;quot;inv&amp;quot;), list);
 </code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">&lt;em&gt;Using Enumerable&lt;/em&gt;
-[sourcecode lang=&quot;java&quot;]
+```
+
 List&amp;lt;/span&amp;gt; list = Arrays.asList(&amp;quot;invalid1&amp;quot;, &amp;quot; invalid2&amp;quot;);
 
 return Collect(list,fn(s,s.startsWith(&amp;quot;inv&amp;quot;));
 </code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">    Filter/Collect are static methods provided in the lambdaj/Enumerable library which do the actual filtering/collection on collection. &quot;&lt;strong&gt;startsWith&quot;&lt;/strong&gt; is expressed as a hamcrest matcher and the lambda expression fn(s,s.startsWith(&quot;inv&quot;)) will be converted to below , after you do the lambda expression weaving.
-    [sourcecode lang=&quot;java&quot;]
+    ```
+
     new Fn1() {
     public Object call(Object arg) {
     return (String) arg.startsWith(&amp;quot;inv&amp;quot;);
@@ -144,7 +148,8 @@ return Collect(list,fn(s,s.startsWith(&amp;quot;inv&amp;quot;));
 <div class="highlight"><pre><code class="language-text" data-lang="text">We have a scenario where you have search for an employee, compare its name with some pattern and if it matches, send the message. Now gradually you can have more criteria on which you want to match, you want a regex match or don’t want to use ignore case and many more.  For all those cases you will end up duplicating the sendMessage() method with different line instead of the one shown marked with dashes(-).
 
 &lt;em&gt;Using Java&lt;/em&gt;&lt;em&gt; &lt;/em&gt;
-[sourcecode lang=&quot;java&quot;]
+```
+
 public boolean  sendMessage(String pattern) {
 
     FinderService service = context.getService(&amp;quot;finderService&amp;quot;);
@@ -172,7 +177,8 @@ public boolean  sendMessage(String pattern) {
     return found;  
 }
 </code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">    &lt;em&gt;Using lambdaj&lt;/em&gt;&lt;em&gt; &lt;/em&gt;
-    [sourcecode lang=&quot;java&quot;]
+    ```
+
     public boolean sendMessageUsingIgnoreCase() {
 
         Closure2&amp;lt;Employee, String&amp;gt; ignoreCaseClosure  = closure(Employee.class, String.class);
@@ -248,7 +254,8 @@ public boolean  sendMessage(String pattern) {
 Consider this code snippet in java, which iterates though a collection and creates a concatenation string in the format &quot;key = Value &amp;amp; key = value &amp;amp;...&quot;.While processing it ignores the entries which have keys starting with &quot;graphType&quot; or &quot;type&quot;.
 
 &lt;em&gt;Using Java&lt;/em&gt;
-[sourcecode lang=&quot;java&quot;]
+```
+
 for (Entry&amp;lt;String, String&amp;gt; param : params.entries()) {
 
     if (!&amp;quot;graphPage&amp;quot;.equals(param.getKey()) &amp;amp;&amp;amp; !&amp;quot;type&amp;quot;.equals(param.getKey())) {
@@ -265,7 +272,8 @@ for (Entry&amp;lt;String, String&amp;gt; param : params.entries()) {
 
 sb.append(param.getKey()).append(&#39;=&#39;).append(param.getValue());
 </code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">    &lt;em&gt;Using lambdaj &lt;/em&gt;&lt;em&gt; &lt;/em&gt;
-    [sourcecode lang=&quot;java&quot;]
+    ```
+
     OrMatcher&amp;lt;String&amp;gt; toExclude = or(equalTo(&amp;quot;type&amp;quot;), equalTo(&amp;quot;graphPage&amp;quot;));
 
     List&amp;lt;Entry&amp;lt;String, String&amp;gt;&amp;gt; paramsList = select(params.entries(),  not(having(on(Entry.class).getKey(), toExclude)));

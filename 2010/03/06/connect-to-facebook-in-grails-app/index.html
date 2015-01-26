@@ -96,41 +96,29 @@
               <h1>Connect to Facebook in Grails App</h1>
 
 <p>Recently we integrated the Facebook connect plugin in our Grails project. In this post we will see how to connect to facebook  from our application. So that we can allow facebook users to use our Application.First step would be to get the facebook connect button on to our home page. The code for this is below. ** Getting the facebook connect button on our home page and its functionality **</p>
-
-<p>[sourcecode language=&quot;html&quot;] <fb:login-button onlogin="facebook_onlogin();"><a href="/fb:login-button">/fb:login-button</a> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;fb:login-button onlogin=&quot;facebook_onlogin();&quot;&gt;&lt;/fb:login-button&gt; 
+</code></pre></div>
 <p>Ofcourse we need to add the facebook namespace to our gsp/html page.</p>
-
-<p>[sourcecode language=&quot;html&quot;] xmlns:fb=&quot;http://www.facebook.com/2008/fbml&quot; 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> xmlns:fb=&quot;http://www.facebook.com/2008/fbml&quot; 
+</code></pre></div>
 <p>1) fb:login-button is an XFBML tag, we need some Facebook-specific JavaScript to actually render it. This line does the trick.</p>
-
-<p>[sourcecode lang=&quot;html&quot;]<script type="text/javascript" src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php"></script>
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;script type=&quot;text/javascript&quot; src=&quot;http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php&quot;&gt;&lt;/script&gt;
+</code></pre></div>
 <p>2) Create a cross domain receiver file, which is necessary for secure <a href="http://wiki.developers.facebook.com/index.php/Cross_Domain_Communication">cross-domain communication</a> with Facebook</p>
 
 <p>create a file with a name xd_receiver.htm and put the following contents into it.</p>
-
-<p>[sourcecode lang=&quot;html&quot;]&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt; <html xmlns="http://www.w3.org/1999/xhtml" > <body> <script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/XdCommReceiver.js" type="text/javascript"></script> </body> </html> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt; &lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; &gt; &lt;body&gt; &lt;script src=&quot;http://static.ak.connect.facebook.com/js/api_lib/v0.4/XdCommReceiver.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt; &lt;/body&gt; &lt;/html&gt; 
+</code></pre></div>
 <p>3) Every connect website is a facebook application and an API key is required. Fortunately we can easily generate an API key from<a href="http://www.facebook.com/developers/"> here</a> , fill in details and submit the application.</p>
 
 <p>4) We need to tell facebook about our API key. We need to put this code in the <body> tag.</p>
-
-<p>[sourcecode lang=&quot;html&quot;]<script type="text/javascript">FB.init(&quot;3f0ba1d70537bbf9381bca2bbb9f9a93&quot;,&quot;xd_receiver.htm&quot;);</script>
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;script type=&quot;text/javascript&quot;&gt;FB.init(&quot;3f0ba1d70537bbf9381bca2bbb9f9a93&quot;,&quot;xd_receiver.htm&quot;);&lt;/script&gt;
+</code></pre></div>
 <p>This tells the facebook about out API key and the location of the out cross domain receiver file. The above points are <a href="http://wiki.developers.facebook.com/index.php/Facebook_Connect_Tutorial1">here</a> in detail.</p>
 
 <p>By this piece of code we can get the fbConnect button on our home page. But when you click it nothing happens as we need to add a the functionality for the function <strong>facebook_onlogin()</strong></p>
-
-<p>[sourcecode lang=&quot;java&quot;] function facebook<em>onlogin() { var uid = FB.Facebook.apiClient.get</em>session().uid ; var sessionkey = FB.Facebook.apiClient.get<em>session().session</em>key;FB.Facebook.apiClient.users<em>getInfo(uid, new Array(&#39;first</em>name&#39;,&#39;last<em>name&#39;,&#39;email&#39;,&#39;pic</em>square<em>with</em>logo&#39;), function(result, ex) { var firstname = result[0][&#39;first_name&#39;] var lastname = result[0][&#39;last_name&#39;] var pic = result[0][&#39;pic<em>square</em>with_logo&#39;] document.location.href=&quot;${params.lang}/facebook/subscription?firstname=&quot;+firstname+&quot;&amp;lastname=&quot;+lastname+&quot;&amp;fbuid=&quot;+uid+&quot;&amp;sessionkey=&quot;+sessionkey+&quot;&amp;pic=&quot;+pic;}); }
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> function facebook_onlogin() { var uid = FB.Facebook.apiClient.get_session().uid ; var sessionkey = FB.Facebook.apiClient.get_session().session_key;FB.Facebook.apiClient.users_getInfo(uid, new Array(&#39;first_name&#39;,&#39;last_name&#39;,&#39;email&#39;,&#39;pic_square_with_logo&#39;), function(result, ex) { var firstname = result[0][&#39;first_name&#39;] var lastname = result[0][&#39;last_name&#39;] var pic = result[0][&#39;pic_square_with_logo&#39;] document.location.href=&quot;${params.lang}/facebook/subscription?firstname=&quot;+firstname+&quot;&amp;lastname=&quot;+lastname+&quot;&amp;fbuid=&quot;+uid+&quot;&amp;sessionkey=&quot;+sessionkey+&quot;&amp;pic=&quot;+pic;}); }
+</code></pre></div>
 <p>The code is self explainatory. To be brief, here we are using the javascript library *<em>FeatureLoader.js.php *</em>to contact the Facebook and get details of a facebook user like his first name, last name, his profile picture etc.</p>
 
 <p>We also get his facebook id using <strong>var uid = FB.Facebook.apiClient.get_session().uid ;</strong></p>
@@ -138,10 +126,8 @@
 <p>If the user doesnt have a facebook session already it prompts the popup to log on to facebook. *<em>If you want to know how it is done *</em>look through the sourcecode <a href="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php">here</a>. If he is logged in we can get the details of the facebook user like facebook id, first name, last name, email etc.</p>
 
 <p>The trick here is to pass on the details to our custom controller, lets name it FacebookController. More precisely this is the code that is doing that.</p>
-
-<p>[sourcecode lang=&quot;java&quot;]document.location.href=&quot;${params.lang}/facebook/subscription?firstname=&quot;+firstname+&quot;&amp;lastname=&quot;+lastname+&quot;&amp;fbuid=&quot;+uid+&quot;&amp;sessionkey=&quot;+sessionkey+&quot;&amp;pic=&quot;+pic;});
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">document.location.href=&quot;${params.lang}/facebook/subscription?firstname=&quot;+firstname+&quot;&amp;lastname=&quot;+lastname+&quot;&amp;fbuid=&quot;+uid+&quot;&amp;sessionkey=&quot;+sessionkey+&quot;&amp;pic=&quot;+pic;});
+</code></pre></div>
 <p>The action name in facebook controller is subscription and in here we can choose to authenticate him in to our application by connecting him to an existing user. This is to say, user doesn&#39;t need to log in to grails application by his username and password but rather use his facebook credentials. I will explain how this can be done in my next blog.</p>
 
 <h2>Comments</h2>

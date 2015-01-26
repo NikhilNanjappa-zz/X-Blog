@@ -104,70 +104,71 @@
 <p><strong>Problem Statement:</strong> I wanted to re-create the dijit.Tree whenever user performs create/update/delete action on that tree. I wanted to remove the whole tree and re-create it.</p>
 
 <p>Here what was my code looked like before:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;!-- HTML --&gt; &lt;div id=&quot;country-tree-container&quot;&gt;&lt;/div&gt; 
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text"> // Javascript require([&quot;dojo/data/ItemFileWriteStore&quot;, &quot;dijit/tree/ForestStoreModel&quot;, &quot;dijit/Tree&quot;], function(Store, Model, dijitTree){ //other piece of code self = this;
 
-<p>[sourcecode language=&quot;html&quot;] &lt;!-- HTML --&gt; <div id="country-tree-container"></div> 
-```</p>
 
-<p>[sourcecode language=&quot;javascript&quot;] // Javascript require([&quot;dojo/data/ItemFileWriteStore&quot;, &quot;dijit/tree/ForestStoreModel&quot;, &quot;dijit/Tree&quot;], function(Store, Model, dijitTree){ //other piece of code self = this;</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    populateTree = function(){
-        self.store = new Store({
-            data: self.store_data
-        });
-        self.treeModel = new Model({
-            store: self.store,
-            rootId: self.project_root,
-            query: {&amp;quot;type&amp;quot;: &amp;quot;country&amp;quot;},
-            childrenAttrs: [&amp;quot;children&amp;quot;]
-        });
-        self.tree = new dijitTree({
-            model: self.treeModel,
-            showRoot: false
-        }, &amp;quot;country-tree-container&amp;quot;);
-    }
-});
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">and here what it is now:
-
-[sourcecode language=&quot;html&quot;] &lt;!-- No Change --&gt; &lt;div id=&quot;country-tree-container&quot;&gt;&lt;/div&gt; 
-</code></pre></div>
-<p>[sourcecode language=&quot;javascript&quot;] //Javascript (changes in require and populateTree functions)</p>
-
-<p>require([&quot;dojo/dom-construct&quot;, &quot;dojo/data/ItemFileWriteStore&quot;, &quot;dijit/tree/ForestStoreModel&quot;, &quot;dijit/Tree&quot;], function(domConstruct, Store, Model, dijitTree){ //other piece of code self = this;</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    populateTree = function(){
-            var treeContainer = dijit.byId(&#39;tree-container&#39;);
-            if (treeContainer &amp;amp;&amp;amp; treeContainer instanceof dijitTree) {
-                 //Destroy this widget and it&#39;s descendants from the manager object
-                 treeContainer.destroyRecursive(false);
-            }
-            domConstruct.destroy(&amp;quot;tree-container&amp;quot;);
-            // create as child node of &#39;country-tree-container&#39; div
-            domConstruct.create(&#39;div&#39;,{
-                    id:&#39;tree-container&#39;
-            },
-            &#39;country-tree-container&#39;);
-
-            self.store = new Store({data: self.store_data   });
+        populateTree = function(){
+            self.store = new Store({
+                data: self.store_data
+            });
             self.treeModel = new Model({
-                    store: self.store,
-                    rootId: self.project_root,
-                    query: {&amp;quot;type&amp;quot;: &amp;quot;country&amp;quot;},
-                    childrenAttrs: [&amp;quot;children&amp;quot;]
+                store: self.store,
+                rootId: self.project_root,
+                query: {&amp;quot;type&amp;quot;: &amp;quot;country&amp;quot;},
+                childrenAttrs: [&amp;quot;children&amp;quot;]
             });
             self.tree = new dijitTree({
-                    model: self.treeModel,
-                    showRoot: false
-                    }, &amp;quot;tree-container&amp;quot;);
-    }
+                model: self.treeModel,
+                showRoot: false
+            }, &amp;quot;country-tree-container&amp;quot;);
+        }
     });
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">We added our tree in &#39;tree-container&#39; instead of &#39;country-tree-container&#39;.
-
-**Step 1 **: get the dijit.Tree **Step 2 **: check if that tree exists (null for the first time) **Step 3 **: if exists delete/unregister/kill the whole tree **Step 4 **: construct the &lt;div id=&#39;tree-container&#39;...&gt; with dom-construct as a child node of &#39;country-tree-container&#39; div
-
-The above solution worked perfectly for me. If you have any question for me or any suggestion please let me know.
-
-**Reference:** Thanks to Fabián Mandelbaum and [his solution][1].
-
-That&#39;s it folks...
 </code></pre></div>
+<p>and here what it is now:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;!-- No Change --&gt; &lt;div id=&quot;country-tree-container&quot;&gt;&lt;/div&gt; 
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text"> //Javascript (changes in require and populateTree functions)
+
+require([&quot;dojo/dom-construct&quot;, &quot;dojo/data/ItemFileWriteStore&quot;, &quot;dijit/tree/ForestStoreModel&quot;, &quot;dijit/Tree&quot;], function(domConstruct, Store, Model, dijitTree){ //other piece of code self = this;
+
+
+        populateTree = function(){
+                var treeContainer = dijit.byId(&#39;tree-container&#39;);
+                if (treeContainer &amp;amp;&amp;amp; treeContainer instanceof dijitTree) {
+                     //Destroy this widget and it&#39;s descendants from the manager object
+                     treeContainer.destroyRecursive(false);
+                }
+                domConstruct.destroy(&amp;quot;tree-container&amp;quot;);
+                // create as child node of &#39;country-tree-container&#39; div
+                domConstruct.create(&#39;div&#39;,{
+                        id:&#39;tree-container&#39;
+                },
+                &#39;country-tree-container&#39;);
+
+                self.store = new Store({data: self.store_data   });
+                self.treeModel = new Model({
+                        store: self.store,
+                        rootId: self.project_root,
+                        query: {&amp;quot;type&amp;quot;: &amp;quot;country&amp;quot;},
+                        childrenAttrs: [&amp;quot;children&amp;quot;]
+                });
+                self.tree = new dijitTree({
+                        model: self.treeModel,
+                        showRoot: false
+                        }, &amp;quot;tree-container&amp;quot;);
+        }
+        });
+</code></pre></div>
+<p>We added our tree in &#39;tree-container&#39; instead of &#39;country-tree-container&#39;.</p>
+
+<p>*<em>Step 1 *</em>: get the dijit.Tree *<em>Step 2 *</em>: check if that tree exists (null for the first time) *<em>Step 3 *</em>: if exists delete/unregister/kill the whole tree *<em>Step 4 *</em>: construct the <div id='tree-container'...> with dom-construct as a child node of &#39;country-tree-container&#39; div</p>
+
+<p>The above solution worked perfectly for me. If you have any question for me or any suggestion please let me know.</p>
+
+<p><strong>Reference:</strong> Thanks to Fabián Mandelbaum and <a href="http://mail.dojotoolkit.org/pipermail/dojo-interest/2009-October/040079.html">his solution</a>.</p>
+
+<p>That&#39;s it folks...</p>
+
 
                 <hr>
 

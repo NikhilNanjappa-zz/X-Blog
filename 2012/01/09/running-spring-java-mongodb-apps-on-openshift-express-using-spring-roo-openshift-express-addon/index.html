@@ -106,27 +106,34 @@
 <li><p>SSH keys. OpenShift uses ssh keys for authentication. Please refer to <a href="https://docs.redhat.com/docs/en-US/OpenShift_Express/1.0/html/User_Guide/sect-User_Guide-Authenticating_SSH_Keys.html#sect-User_Guide-Authenticating_SSH_Keys-Generating_new_SSH_keys">documentation for generating your ssh keys</a>.
 <strong>Lets Get Started</strong></p></li>
 <li><p>After you have installed Spring Roo on your machine fire the roo command to load the roo shell.</p></li>
-<li><p>Install the add-on by executing the following command. [sourcecode lang=&quot;text&quot;] osgi start --url http://spring-roo-openshift-express-addon.googlecode.com/files/org.xebia.roo.addon.openshift-0.1.RELEASE.jar 
-```</p></li>
+<li><p>Install the add-on by executing the following command. <code>
+osgi start --url http://spring-roo-openshift-express-addon.googlecode.com/files/org.xebia.roo.addon.openshift-0.1.RELEASE.jar 
+</code></p></li>
 </ol>
 
 <p>This command will take couple of seconds to execute as it has to download the jar.
-  3. Verify that add-on is active by viewing all the osgi process using osgi ps command. You will see output like as shown below that openshift add-on is Active. [sourcecode lang=&quot;text&quot;] [ 166] [Active ] [ 1] spring-roo-openshift-express-addon (0.1.0.RELEASE) 
-```
-  4. You can view all the available add-on command by typing help command as shown below. [sourcecode lang=&quot;text&quot;] roo&gt; help --command rhc _ rhc app destroy - Destroys the application _ rhc app restart - Restarts the deployed application _ rhc app start - Starts the deployed application _ rhc app status - Gives status of the deployed application _ rhc app stop - stops the deployed application _ rhc cartridge add - Adds a cartridge to the application _ rhc cartridge list - Lists all the avaliable embeddable cartridges _ rhc create jbossas7 app - Creates a new JBoss AS7 OpenShift Express Application _ rhc create jenkins app - Creates a new Jenkins OpenShift Express Application _ rhc deploy - Deploys code to OpenShift Express _ rhc pom - Adds OpenShift Profile to pom.xml _ rhc user info - Displays information about user&#39;s OpenShift Express applications</p>
+  3. Verify that add-on is active by viewing all the osgi process using osgi ps command. You will see output like as shown below that openshift add-on is Active. <code>
+ [ 166] [Active ] [ 1] spring-roo-openshift-express-addon (0.1.0.RELEASE) 
+</code>
+  4. You can view all the available add-on command by typing help command as shown below. ```
+ roo&gt; help --command rhc _ rhc app destroy - Destroys the application _ rhc app restart - Restarts the deployed application _ rhc app start - Starts the deployed application _ rhc app status - Gives status of the deployed application _ rhc app stop - stops the deployed application _ rhc cartridge add - Adds a cartridge to the application _ rhc cartridge list - Lists all the avaliable embeddable cartridges _ rhc create jbossas7 app - Creates a new JBoss AS7 OpenShift Express Application _ rhc create jenkins app - Creates a new Jenkins OpenShift Express Application _ rhc deploy - Deploys code to OpenShift Express _ rhc pom - Adds OpenShift Profile to pom.xml _ rhc user info - Displays information about user&#39;s OpenShift Express applications</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">You can also view commands by typing rhc and then pressing tab. As you can see from the commands you can do a lot of stuff with this add-on. You can create the application (both jboss and jenkins), do application management (start, stop, destroy, status), view user information, add cartridges (MySQL, MongoDB, Jenkins client, RockMongo client, PhpMyAdmin etc ) and adding OpenShift profile in pom.xml.
   5. Now that add-on has been successfully installed we can create the application. But before you can create the application you have to make sure that you have created the domain. Currently the add-on does not support creating domain but I will be adding support for creating domain in next release. In case you have not created domain please refer to the [documentation to create one][6]. The domain name should be unique. I have created domain name called xke which stands for Xebia Knowledge Exchange.
   6. You can view the information of the user like all the applications created by user using rhc user info command. This is same as rhc-user-info command.
-  7. Lets create a simple application  called bookshop which will be simple CRUD application for creating books.  The application will be using MongoDB as datastore. The Java applications created in Express are deployed on JBoss AS 7 server. To create the application type the command shown below. [sourcecode lang=&quot;text&quot;] rhc create jbossas7 app --applicationName bookshop --rhLogin &lt;rhlogin&gt; \--password &lt;please&gt; 
+  7. Lets create a simple application  called bookshop which will be simple CRUD application for creating books.  The application will be using MongoDB as datastore. The Java applications created in Express are deployed on JBoss AS 7 server. To create the application type the command shown below. ```
+ rhc create jbossas7 app --applicationName bookshop --rhLogin &lt;rhlogin&gt; \--password &lt;please&gt; 
 </code></pre></div>
 <p>Please type the email and password with which you registered for express. You will see output like as shown below. This command first create the default application, clone the git repository, and deploy the application on express. You can view the application at</p>
-
-<p>[sourcecode lang=&quot;text&quot;] Loaded OpenShift configuration from /home/shekhar/.openshift/express.conf Waiting for OpenShift to propagate DNS Trying to contact https://bookshop-xke.rhcloud.com/ (attempt 1 of 500) Git Clone Command : git clone ssh://b85866270d85472886c7f2611b7774ad@bookshop-xke.rhcloud.com/~/git/bookshop.git/ bookshop Initialized empty Git repository in /home/shekhar/dev/playground/bookshop/.git/ Application Path ./bookshop Cloned the git repository Application created and deployed to https://bookshop-xke.rhcloud.com/ 
-<code>
-  8. Quit the Roo shell and cd into bookshop directory and you will see that bookshop is a maven based project. Delete these files and commit using git as shown below. [sourcecode lang=&quot;text&quot;] git rm -rf src pom.xml git commit -m &quot;deleting default files&quot; 
+<div class="highlight"><pre><code class="language-text" data-lang="text"> Loaded OpenShift configuration from /home/shekhar/.openshift/express.conf Waiting for OpenShift to propagate DNS Trying to contact https://bookshop-xke.rhcloud.com/ (attempt 1 of 500) Git Clone Command : git clone ssh://b85866270d85472886c7f2611b7774ad@bookshop-xke.rhcloud.com/~/git/bookshop.git/ bookshop Initialized empty Git repository in /home/shekhar/dev/playground/bookshop/.git/ Application Path ./bookshop Cloned the git repository Application created and deployed to https://bookshop-xke.rhcloud.com/ 
+</code></pre></div>
+<ol>
+<li>Quit the Roo shell and cd into bookshop directory and you will see that bookshop is a maven based project. Delete these files and commit using git as shown below. <code>
+git rm -rf src pom.xml git commit -m &quot;deleting default files&quot; 
 </code>
-  9. Fire the roo command again. Make sure that you are in bookshop directory.
-  10. Add the MongoDB cartridge to your application using rhc cartridge add command as shown below. [sourcecode lang=&quot;text&quot;] roo&gt; rhc cartridge add --applicationName bookshop --rhLogin <email> --password <password> --cartridge MONGODB Loaded OpenShift configuration from /home/shekhar/.openshift/express.conf Embedded cartridge: mongodb-2.0</p>
+9. Fire the roo command again. Make sure that you are in bookshop directory.
+10. Add the MongoDB cartridge to your application using rhc cartridge add command as shown below. ```
+roo&gt; rhc cartridge add --applicationName bookshop --rhLogin <email> --password <password> --cartridge MONGODB Loaded OpenShift configuration from /home/shekhar/.openshift/express.conf Embedded cartridge: mongodb-2.0</li>
+</ol>
 
 <p>MongoDB 2.0 database added. Please make note of these credentials:</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">       Root User: admin
@@ -134,8 +141,8 @@
 <p>Root Password: j7eCdNsjANyY Database Name: bookshop Connection URL: mongodb://127.1.13.1:27017/</p>
 
 <p>You can manage your new MongoDB by also embedding rockmongo-1.1 
-```
-  11. Now that we have added the MongoDB cartridge to our application lets create a simple Spring MongoDB application using Spring Roo. Create the project using Spring Roo project command as shown below. [sourcecode lang=&quot;text&quot;]</p>
+<code>
+  11. Now that we have added the MongoDB cartridge to our application lets create a simple Spring MongoDB application using Spring Roo. Create the project using Spring Roo project command as shown below.</code></p>
 
 <h2>Comments</h2>
 

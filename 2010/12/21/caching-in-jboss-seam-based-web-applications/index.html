@@ -98,15 +98,11 @@
 <p>Caching is one important area where you can drastically improve the performance of your web application. The data that needs to be cached can be of two different types : Rendered data (like html snippet,xml or JSON) and Java objects. <a href="http://seamframework.org/">JBoss seam </a>provides few out of the box caching solutions for both types of data. As seam is component based framework, it provides these features through pre-configured application scoped components. You can easily switch between different cache provider like JBoss Tree caching and EHCaching. Here, I will take you through different steps to use caching features in seam in an effective manner.</p>
 
 <p>As I said above, in Seam everything is a component (You can get full details <a href="http://docs.jboss.org/seam/2.2.0.GA/reference/en-US/html/concepts.html">here</a>). So first lets configure this caching component in Seam by specifying it in components.xml as follows.</p>
-
-<p>[sourcecode language=&quot;xml&quot;] <components xmlns="http://jboss.com/products/seam/components" xmlns:cache="http://jboss.com/products/seam/cache" xsi:schemaLocation=" http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.2.xsd http://jboss.com/products/seam/cache http://jboss.com/products/seam/cache-2.2.xsd "> <cache:eh-cache-provider configuration="ehcache.xml" /> </components>
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;components xmlns=&quot;http://jboss.com/products/seam/components&quot; xmlns:cache=&quot;http://jboss.com/products/seam/cache&quot; xsi:schemaLocation=&quot; http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.2.xsd http://jboss.com/products/seam/cache http://jboss.com/products/seam/cache-2.2.xsd &quot;&gt; &lt;cache:eh-cache-provider configuration=&quot;ehcache.xml&quot; /&gt; &lt;/components&gt;
+</code></pre></div>
 <p>The caching configuration file provided above is optional and note that we are using ehache provider. So the configuration file format has no seam specific things. If you want you can switch your cache provider with tree cache just by replacing ehcache line with</p>
-
-<p>[sourcecode language=&quot;xml&quot;]<cache:jboss-cache-provider configuration="treecache.xml" /> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;cache:jboss-cache-provider configuration=&quot;treecache.xml&quot; /&gt; 
+</code></pre></div>
 <p>Irrespective of the provider, the following details will remain same.</p>
 
 <h4>Page fragment caching :</h4>
@@ -114,10 +110,8 @@
 <p>This feature provides a mechanism to cache the rendered data like html snippet (part of the html page). When I first heard about it, the first question that came to mind is <strong><em>&quot;Why not cache the page using web server?&quot;</em></strong>.  This is obviously the best option if you need to cache the whole page, but if you want to cache only a part of it, web server can not provide that. And another advantage you can have with page fragment caching is, programmatic control over caching.</p>
 
 <p>In seam, a part of html can be cached just by surrounding it with<a href="http://www.jsftoolbox.com/documentation/seam/09-TagReference/seam-cache.html"> s:cache</a> tag.</p>
-
-<p>[sourcecode language=&quot;html&quot;]<div> <span>I am not cached </span> <div> <s:cache> <div> <span>I am cached. No need to render every time </span> </div> <a href="/s:cache">/s:cache</a> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;div&gt; &lt;span&gt;I am not cached &lt;/span&gt; &lt;div&gt; &lt;s:cache&gt; &lt;div&gt; &lt;span&gt;I am cached. No need to render every time &lt;/span&gt; &lt;/div&gt; &lt;/s:cache&gt; 
+</code></pre></div>
 <p>So simple. Isn&#39;t it?  You can provide regions and keys like in any normal caching, as attributes to further control caching. </p>
 
 <h4>Object Caching :</h4>

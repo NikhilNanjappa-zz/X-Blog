@@ -116,22 +116,16 @@ Let us start by creating a new Objective-C class that inherits <em>NSObject</em>
 We will now create a shared instance for <em>ImageDownloadManager</em> (Objective-C Singleton Pattern) so that it is available across the application to coordinate image download operations.</p>
 
 <p>In order to do so, define a class method <em>instance</em> in <em>ImageDownloadManager.h</em>:</p>
-
-<p>[sourcecode lang=&quot;objc&quot;]<br /> #import &lt;foundation&gt;</p> <p>@interface ImageDownloadManager : NSObject</p> <p>+ (ImageDownloadManager _) instance;</p> <p>@end<br /> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;br /&gt; #import &amp;lt;foundation&amp;gt;&lt;/p&gt; &lt;p&gt;@interface ImageDownloadManager : NSObject&lt;/p&gt; &lt;p&gt;\+ (ImageDownloadManager _) instance;&lt;/p&gt; &lt;p&gt;@end&lt;br /&gt; 
+</code></pre></div>
 <p>In the implementation file i.e. in <em>ImageDownloadManager.m</em>, declare a static variable <em>singletonInstance</em> of type <em>ImageDownloadManager</em> and implement the instance method as:</p>
-
-<p>[sourcecode lang=&quot;objc&quot;]<br /> #import &quot;ImageDownloadManager.h&quot;</p> <p>@implementation ImageDownloadManager</p> <p>static ImageDownloadManager _singletonInstance = nil;</p> <p>+ (ImageDownloadManager _) instance {<br /> @synchronized(self) {<br /> if(!singletonInstance) {<br /> singletonInstance = [[ImageDownloadManager alloc] init];<br /> }<br /> }</p> <p> return singletonInstance;<br /> }</p> <p>@end<br /> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;br /&gt; #import &amp;quot;ImageDownloadManager.h&amp;quot;&lt;/p&gt; &lt;p&gt;@implementation ImageDownloadManager&lt;/p&gt; &lt;p&gt;static ImageDownloadManager _singletonInstance = nil;&lt;/p&gt; &lt;p&gt;\+ (ImageDownloadManager _) instance {&lt;br /&gt; @synchronized(self) {&lt;br /&gt; if(!singletonInstance) {&lt;br /&gt; singletonInstance = [[ImageDownloadManager alloc] init];&lt;br /&gt; }&lt;br /&gt; }&lt;/p&gt; &lt;p&gt; return singletonInstance;&lt;br /&gt; }&lt;/p&gt; &lt;p&gt;@end&lt;br /&gt; 
+</code></pre></div>
 <p><em>@synchronized()</em> directive locks a section of the code for use by a single thread. Other threads are blocked until the thread executes last statement in the <em>@synchronized()</em> block. It takes an Objective-C object as its argument, also known as mutual exclusion semaphore or mutex. Over here class object <em>self</em> is used as a semaphore to create a shared instance safely across threads.</p>
 
 <p>So we have now shared instance of <em>ImageDownloadManager</em> available throughout the application which is accessible by:</p>
-
-<p>[sourcecode lang=&quot;objc&quot;]<br /> ImageDownloadManager _imageDownloadManager = [ImageDownloadManager instance];<br /> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;br /&gt; ImageDownloadManager _imageDownloadManager = [ImageDownloadManager instance];&lt;br /&gt; 
+</code></pre></div>
 <hr>
 
 <p><strong>Asynchronous download using NSOperationQueue</strong><br>
@@ -146,15 +140,11 @@ Let us now move on to our first task i.e. download an image asynchronously from 
 <p>We will create <em>ImageDownloadOperation</em> class now which will download an image from the given URL. Create a new Objective-C class that extends from <em>NSOperation</em>. Add a read-only property <em>url</em> to it and define a method <em>initWithURL</em>. Also add the code in main method to download an image from the URL.</p>
 
 <p>With all changes, <em>ImageDownloadOperation.h</em> should look like:</p>
-
-<p>[sourcecode lang=&quot;objc&quot;]<br /> #import &lt;foundation&gt;</p> <p>@interface ImageDownloadOperation : NSOperation</p> <p>@property(readonly, copy) NSURL _url;</p> <p>- (id)initWithURL:(NSURL _)url;</p> <p>@end<br /> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;br /&gt; #import &amp;lt;foundation&amp;gt;&lt;/p&gt; &lt;p&gt;@interface ImageDownloadOperation : NSOperation&lt;/p&gt; &lt;p&gt;@property(readonly, copy) NSURL _url;&lt;/p&gt; &lt;p&gt;\- (id)initWithURL:(NSURL _)url;&lt;/p&gt; &lt;p&gt;@end&lt;br /&gt; 
+</code></pre></div>
 <p><em>ImageDownloadOperation.m</em> should look like:</p>
-
-<p>[sourcecode lang=&quot;objc&quot;]<br /> #import &quot;ImageDownloadOperation.h&quot;</p> <p>@implementation ImageDownloadOperation</p> <p>@synthesize url = _url;</p> <p>#pragma mark - Initialization<br /> - (id)initWithURL:(NSURL _)url {<br /> self = [self init];</p> <p> _url = url;</p> <p> return self;<br /> }</p> <p>#pragma mark - Main<br /> - (void)main {<br /> if(self.isCancelled == YES || self.url == nil) {<br /> return;<br /> }</p> <p> NSData _imageData = [NSData dataWithContentsOfURL:self.url];</p> <p> if(self.isCancelled == YES) {<br /> return;<br /> }</p> <p> UIImage *image;</p> <p> if(imageData != nil) {<br /> image = [UIImage imageWithData:imageData];<br /> }<br /> }</p> <p>@end<br /> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;br /&gt; #import &amp;quot;ImageDownloadOperation.h&amp;quot;&lt;/p&gt; &lt;p&gt;@implementation ImageDownloadOperation&lt;/p&gt; &lt;p&gt;@synthesize url = _url;&lt;/p&gt; &lt;p&gt;#pragma mark - Initialization&lt;br /&gt; \- (id)initWithURL:(NSURL _)url {&lt;br /&gt; self = [self init];&lt;/p&gt; &lt;p&gt; _url = url;&lt;/p&gt; &lt;p&gt; return self;&lt;br /&gt; }&lt;/p&gt; &lt;p&gt;#pragma mark - Main&lt;br /&gt; \- (void)main {&lt;br /&gt; if(self.isCancelled == YES || self.url == nil) {&lt;br /&gt; return;&lt;br /&gt; }&lt;/p&gt; &lt;p&gt; NSData _imageData = [NSData dataWithContentsOfURL:self.url];&lt;/p&gt; &lt;p&gt; if(self.isCancelled == YES) {&lt;br /&gt; return;&lt;br /&gt; }&lt;/p&gt; &lt;p&gt; UIImage *image;&lt;/p&gt; &lt;p&gt; if(imageData != nil) {&lt;br /&gt; image = [UIImage imageWithData:imageData];&lt;br /&gt; }&lt;br /&gt; }&lt;/p&gt; &lt;p&gt;@end&lt;br /&gt; 
+</code></pre></div>
 <p>The property <em>url</em> is read only and can only be set during initialization. In the <em>main</em> method, we download image data available at the given URL using _[NSData dataWithContentsOfURL</p>
 
 <h2>Comments</h2>

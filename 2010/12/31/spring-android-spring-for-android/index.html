@@ -91,7 +91,7 @@
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
 
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-              <h4>Reading time about 9  minutes</h4>
+              <h4>Reading time about 10  minutes</h4>
 
               <h1>Spring-Android: Spring for Android!!!</h1>
 
@@ -100,7 +100,7 @@
 <p>This blog is the result of my experience while using the Spring-Android framework in one of the android applications that I am currently working on.This post mainly focuses on the steps involved to get it working.</p>
 
 <p>The sample Webservice in this scenario has a method defined to handle GET requests that return all the Projects presently configured along with certain details and an array of issues. The class is as below:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> public class Project { private String name; private Integer id; private String owner; private Issue[] issues; … //getter and setters for all … } 
+<div class="highlight"><pre><code class="language-java" data-lang="java"> <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Project</span> <span class="o">{</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span> <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">owner</span><span class="o">;</span> <span class="kd">private</span> <span class="n">Issue</span><span class="o">[]</span> <span class="n">issues</span><span class="o">;</span> <span class="err">…</span> <span class="c1">//getter and setters for all … } </span>
 </code></pre></div>
 <p>On a Web-service <em>GET</em> request, the project data is retrieved in JSON representation. A request to get all projects configured in the system gets back with the response below: </p>
 <div class="highlight"><pre><code class="language-text" data-lang="text"> [{&quot;class&quot;:&quot;com.xyz.Project&quot;,&quot;id&quot;:1,&quot;issues&quot;:[],&quot;name&quot;:&quot;TestProject0&quot;,&quot;owner&quot;:&quot;Test0&quot;}, {&quot;class&quot;:&quot;com.xyz.Project&quot;,&quot;id&quot;:2,&quot;issues&quot;:[],&quot;name&quot;:&quot;TestProject1&quot;,&quot;owner&quot;:&quot;Test1&quot;}, {&quot;class&quot;:&quot;com.xyz.Project&quot;,&quot;id&quot;:3,&quot;issues&quot;:[],&quot;name&quot;:&quot;TestProject2&quot;,&quot;owner&quot;:&quot;Test2&quot;}] 
@@ -114,47 +114,52 @@
 <p>Please note that we have to <strong>include the Jars from the lib folder to the Project&#39;s class path</strong> for the Dex compilation process.</p>
 
 <p>Now, with the basic setup done, let&#39;s move over to our simple Android Activity that makes use of the Spring-Android&#39;s RestTemplate.</p>
-
-<p>[sourcecode language=&quot;java&quot; highlight=&quot;7,8,9,10&quot;] public class DefaultActivity extends Activity { /*_ Called when the activity is first created. _/ @Override public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState);</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">RestTemplate restTemplate = new RestTemplate();
-restTemplate.setRequestFactory(new CommonsClientHttpRequestFactory());
-String url = &amp;quot;http://192.168.1.146:8080/grailsRestWS/project/&amp;quot;;
-String data = restTemplate.getForObject(url, String.class);
-setContentView(R.layout.main);
-}
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">Let&#39;s try to understand the code given above
-
-**Line 7:** It creates a restTemplate object. The RestTemplate aides Restful communication with the HTTP servers.
-
-**Line 8:** The restTemplate is assigned a requestFactory. RequestFactory is used for creating HttpClientRequest representing a client side http request.
-
-**Line 9:** The url used is not localhost or the loop back address 127.0.0.1. You might have guessed it already. The application is deployed onto a device or an Android emulator. It is the device that takes the localhost IP not the development machine. To resolve this, I have used the IP address as per my machine&#39;s network configuration.
-
-**Line 10:** It is a rest call to the web-service url. Please notice that it is a HTTP GET request as indicated by the name getForObject(). I have specified the String.class as the second argument to the method which means the data returned is to be interpreted as String data.
-
-The method supported by the **RestTemplate** are listed below [code language=&quot;java&quot; light=&quot;true&quot;] HTTP RestTemplate DELETE delete(String, String...) GET getForObject(String, Class, String...) HEAD headForHeaders(String, String...) OPTIONS optionsForAllow(String, String...) POST postForLocation(String, Object, String...) PUT put(String, Object, String...) 
- ``` But, when I try to run this code I get an exception
-
-[sourcecode language=&quot;java&quot; light=&quot;true&quot;] no suitable HttpMessageConverter found for response type [com.xebia.android.Project] and content type [application/json] 
-``` That&#39;s because we are not dealing with text data here but JSON data type
-
-Making this work requires few changes to our activity class. Below are the changes to be made  public class DefaultActivity extends Activity { /*_ Called when the activity is first created. _/ @Override public void onCreate(Bundle savedInstanceState) { ... RestTemplate restTemplate = &lt;strong&gt;getRestTemplate()&lt;/strong&gt;; JSONData[] jsonData = restTemplate.getForObject(url,ProjectData[].class); ... }
+<div class="highlight"><pre><code class="language-java" data-lang="java"> <span class="kd">public</span> <span class="kd">class</span> <span class="nc">DefaultActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span> <span class="o">/*</span><span class="n">_</span> <span class="n">Called</span> <span class="n">when</span> <span class="n">the</span> <span class="n">activity</span> <span class="n">is</span> <span class="n">first</span> <span class="n">created</span><span class="o">.</span> <span class="n">_</span><span class="o">/</span> <span class="nd">@Override</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span> <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
 
 
-    private RestTemplate getRestTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setRequestFactory(new CommonsClientHttpRequestFactory());
-        &amp;lt;strong&amp;gt;MappingJacksonHttpMessageConverter jsonConverter = 
-                                new MappingJacksonHttpMessageConverter();
-        List&amp;lt;MediaType&amp;gt; supportedMediaTypes = new ArrayList&amp;lt;MediaType&amp;gt;();
-        supportedMediaTypes.add(new MediaType(&amp;quot;application&amp;quot;,&amp;quot;json&amp;quot;));
-        jsonConverter.setSupportedMediaTypes(supportedMediaTypes);&amp;lt;/strong&amp;gt;
+    <span class="n">RestTemplate</span> <span class="n">restTemplate</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">RestTemplate</span><span class="o">();</span>
+    <span class="n">restTemplate</span><span class="o">.</span><span class="na">setRequestFactory</span><span class="o">(</span><span class="k">new</span> <span class="nf">CommonsClientHttpRequestFactory</span><span class="o">());</span>
+    <span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">quot</span><span class="o">;</span><span class="nl">http:</span><span class="c1">//192.168.1.146:8080/grailsRestWS/project/&amp;quot;;</span>
+    <span class="n">String</span> <span class="n">data</span> <span class="o">=</span> <span class="n">restTemplate</span><span class="o">.</span><span class="na">getForObject</span><span class="o">(</span><span class="n">url</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">main</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div>
+<p>Let&#39;s try to understand the code given above</p>
 
-        List&amp;lt;HttpMessageConverter&amp;lt;?&amp;gt;&amp;gt; listHttpMessageConverters = restTemplate
-                .getMessageConverters();
-        restTemplate.setMessageConverters(listHttpMessageConverters);
-        return restTemplate;
-    }
+<p><strong>Line 7:</strong> It creates a restTemplate object. The RestTemplate aides Restful communication with the HTTP servers.</p>
+
+<p><strong>Line 8:</strong> The restTemplate is assigned a requestFactory. RequestFactory is used for creating HttpClientRequest representing a client side http request.</p>
+
+<p><strong>Line 9:</strong> The url used is not localhost or the loop back address 127.0.0.1. You might have guessed it already. The application is deployed onto a device or an Android emulator. It is the device that takes the localhost IP not the development machine. To resolve this, I have used the IP address as per my machine&#39;s network configuration.</p>
+
+<p><strong>Line 10:</strong> It is a rest call to the web-service url. Please notice that it is a HTTP GET request as indicated by the name getForObject(). I have specified the String.class as the second argument to the method which means the data returned is to be interpreted as String data.</p>
+
+<p>The method supported by the <strong>RestTemplate</strong> are listed below [code language=&quot;java&quot; light=&quot;true&quot;] HTTP RestTemplate DELETE delete(String, String...) GET getForObject(String, Class, String...) HEAD headForHeaders(String, String...) OPTIONS optionsForAllow(String, String...) POST postForLocation(String, Object, String...) PUT put(String, Object, String...) 
+ ``` </p>
+
+<p>But, when I try to run this code I get an exception</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">no suitable HttpMessageConverter found for response type [com.xebia.android.Project] and content type [application/json] 
+</code></pre></div>
+<p>That&#39;s because we are not dealing with text data here but JSON data type</p>
+
+<p>Making this work requires few changes to our activity class. Below are the changes to be made  </p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DefaultActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span> <span class="o">/*</span><span class="n">_</span> <span class="n">Called</span> <span class="n">when</span> <span class="n">the</span> <span class="n">activity</span> <span class="n">is</span> <span class="n">first</span> <span class="n">created</span><span class="o">.</span> <span class="n">_</span><span class="o">/</span> <span class="nd">@Override</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="n">RestTemplate</span> <span class="n">restTemplate</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">getRestTemplate</span><span class="o">()&lt;/</span><span class="n">strong</span><span class="o">&gt;;</span> <span class="n">JSONData</span><span class="o">[]</span> <span class="n">jsonData</span> <span class="o">=</span> <span class="n">restTemplate</span><span class="o">.</span><span class="na">getForObject</span><span class="o">(</span><span class="n">url</span><span class="o">,</span><span class="n">ProjectData</span><span class="o">[].</span><span class="na">class</span><span class="o">);</span> <span class="o">...</span> <span class="o">}</span>
+
+
+    <span class="kd">private</span> <span class="n">RestTemplate</span> <span class="nf">getRestTemplate</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">RestTemplate</span> <span class="n">restTemplate</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">RestTemplate</span><span class="o">();</span>
+        <span class="n">restTemplate</span><span class="o">.</span><span class="na">setRequestFactory</span><span class="o">(</span><span class="k">new</span> <span class="nf">CommonsClientHttpRequestFactory</span><span class="o">());</span>
+        <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">strong</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span><span class="n">MappingJacksonHttpMessageConverter</span> <span class="n">jsonConverter</span> <span class="o">=</span> 
+                                <span class="k">new</span> <span class="nf">MappingJacksonHttpMessageConverter</span><span class="o">();</span>
+        <span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">MediaType</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">supportedMediaTypes</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">MediaType</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;();</span>
+        <span class="n">supportedMediaTypes</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">MediaType</span><span class="o">(&amp;</span><span class="n">quot</span><span class="o">;</span><span class="n">application</span><span class="o">&amp;</span><span class="n">quot</span><span class="o">;,&amp;</span><span class="n">quot</span><span class="o">;</span><span class="n">json</span><span class="o">&amp;</span><span class="n">quot</span><span class="o">;));</span>
+        <span class="n">jsonConverter</span><span class="o">.</span><span class="na">setSupportedMediaTypes</span><span class="o">(</span><span class="n">supportedMediaTypes</span><span class="o">);&amp;</span><span class="n">lt</span><span class="o">;/</span><span class="n">strong</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span>
+
+        <span class="n">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">HttpMessageConverter</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">listHttpMessageConverters</span> <span class="o">=</span> <span class="n">restTemplate</span>
+                <span class="o">.</span><span class="na">getMessageConverters</span><span class="o">();</span>
+        <span class="n">restTemplate</span><span class="o">.</span><span class="na">setMessageConverters</span><span class="o">(</span><span class="n">listHttpMessageConverters</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">restTemplate</span><span class="o">;</span>
+    <span class="o">}</span>
 </code></pre></div>
 <p>To handle the JSON array data the response should be understandable by the restTemplate.</p>
 
@@ -165,10 +170,12 @@ Making this work requires few changes to our activity class. Below are the chang
 <p>You may have noticed that the second argument to the getForObject method in the code above is changed from String.class to ProjectData.class. This is because the messageCoverters for JSON and the mediaType which our converter can handle have been implemented. We can now safely state that the response from the web service is an array of ProjectData.</p>
 
 <p>Here&#39;s our *<em>Android client *</em>side class representing Project data</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> @JsonIgnoreProperties( {&quot;class&quot; }) public class JSONData { private String name; private Integer id; private String owner; private Issue[] issues; … //getter and setters for all … } 
+<div class="highlight"><pre><code class="language-java" data-lang="java"> <span class="nd">@JsonIgnoreProperties</span><span class="o">(</span> <span class="o">{</span><span class="s">&quot;class&quot;</span> <span class="o">})</span> <span class="kd">public</span> <span class="kd">class</span> <span class="nc">JSONData</span> <span class="o">{</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span> <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span> <span class="kd">private</span> <span class="n">String</span> <span class="n">owner</span><span class="o">;</span> <span class="kd">private</span> <span class="n">Issue</span><span class="o">[]</span> <span class="n">issues</span><span class="o">;</span> <span class="err">…</span> <span class="c1">//getter and setters for all … } </span>
 </code></pre></div>
-<p>here, JsonIgnoreProperties annotation conveys the JSON mapper that these are the properties to be excluded. The JSON response contains a class variable which I am ignoring in the code above.  {&quot;class&quot;:&quot;com.xyz.Project&quot;,&quot;id&quot;:1,&quot;issues&quot;:[],&quot;name&quot;:&quot;TestProject0&quot;,&quot;owner&quot;:&quot;Test0&quot;} 
-```</p>
+<p>here, JsonIgnoreProperties annotation conveys the JSON mapper that these are the properties to be excluded. The JSON response contains a class variable which I am ignoring in the code above.<br>
+<code>
+{&quot;class&quot;:&quot;com.xyz.Project&quot;,&quot;id&quot;:1,&quot;issues&quot;:[],&quot;name&quot;:&quot;TestProject0&quot;,&quot;owner&quot;:&quot;Test0&quot;} 
+</code></p>
 
 <p>Please note that issues property is declared as an array. This is because with JSON it&#39;s easier to work with arrays.</p>
 

@@ -108,58 +108,64 @@
 <p>An interesting alternative to both XML and direct annotations on bean classes is JavaConfig, a former separate project embedded into Spring itself since v3.0. It merges XML decoupling advantage with Java compile-time checks. JavaConfig can be seen as the XML file equivalent, only written in Java.</p>
 
 <p>You might have explored basic <strong>Spring Configuration</strong> with no xml, but today we will look how to configure <strong>Spring Security</strong> with zero xml. I am writing this blog assuming you have an idea for Spring basic configuration with no xml. We need to make the following entry in POM.xml file:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;dependency&gt; &lt;groupId&gt;org.springframework.security&lt;/groupId&gt; &lt;artifactId&gt;spring-security-web&lt;/artifactId&gt; &lt;version&gt;3.2.0.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.security&lt;/groupId&gt; &lt;artifactId&gt;spring-security-config&lt;/artifactId&gt; &lt;version&gt;3.2.0.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.security&lt;/groupId&gt; &lt;artifactId&gt;spring-security-taglibs&lt;/artifactId&gt; &lt;version&gt;3.2.0.RELEASE&lt;/version&gt; &lt;/dependency&gt; 
+``` **spring-security-taglibs** is used to use taglib in jsp files for gathering security related information.
 
-<p>[sourcecode language=&quot;xml&quot;] <dependency> <groupId>org.springframework.security</groupId> <artifactId>spring-security-web</artifactId> <version>3.2.0.RELEASE</version> </dependency> <dependency> <groupId>org.springframework.security</groupId> <artifactId>spring-security-config</artifactId> <version>3.2.0.RELEASE</version> </dependency> <dependency> <groupId>org.springframework.security</groupId> <artifactId>spring-security-taglibs</artifactId> <version>3.2.0.RELEASE</version> </dependency> 
-``` <strong>spring-security-taglibs</strong> is used to use taglib in jsp files for gathering security related information.</p>
+Next step would be Creating your Spring Security configuration, for this you need to create a class for configuring this:  @Configuration @EnableWebMvcSecurity @ComponentScan(&quot;com.priyank.sample&quot;) public class MultiHttpSecurityConfig extends WebSecurityConfigurerAdapter {
 
-<p>Next step would be Creating your Spring Security configuration, for this you need to create a class for configuring this:  @Configuration @EnableWebMvcSecurity @ComponentScan(&quot;com.priyank.sample&quot;) public class MultiHttpSecurityConfig extends WebSecurityConfigurerAdapter {</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">@Autowired
-private DataSource dataSource;
 
-@Autowired
-private LocalUserDetailService userDetailService;
+    @Autowired
+    private DataSource dataSource;
 
-@Autowired
-private PasswordEncoder passwordEncoder;
+    @Autowired
+    private LocalUserDetailService userDetailService;
 
-@Override
-protected void configure(AuthenticationManagerBuilder auth)
-        throws Exception {
-    auth.userDetailsService(userDetailService)
-            .passwordEncoder(passwordEncoder).and()
-            .inMemoryAuthentication().withUser(&amp;quot;admin&amp;quot;).password(&amp;quot;admin&amp;quot;)
-            .roles(&amp;quot;ADMIN&amp;quot;, &amp;quot;USER&amp;quot;);
-}
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-@Override
-protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests()
-            .antMatchers(&amp;quot;/resources/**&amp;quot;, &amp;quot;/signup&amp;quot;, &amp;quot;/logout&amp;quot;, &amp;quot;/login&amp;quot;)
-            .permitAll().antMatchers(&amp;quot;/admin/**&amp;quot;).hasRole(&amp;quot;ADMIN&amp;quot;)
-            .anyRequest().authenticated().and().formLogin()
-            .loginPage(&amp;quot;/login&amp;quot;).permitAll().and().logout()
-            .logoutSuccessUrl(&amp;quot;/login?logout=success&amp;quot;).logoutUrl(&amp;quot;/logout&amp;quot;);
-}
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth)
+            throws Exception {
+        auth.userDetailsService(userDetailService)
+                .passwordEncoder(passwordEncoder).and()
+                .inMemoryAuthentication().withUser(&amp;quot;admin&amp;quot;).password(&amp;quot;admin&amp;quot;)
+                .roles(&amp;quot;ADMIN&amp;quot;, &amp;quot;USER&amp;quot;);
+    }
 
-@Bean
-public BCryptPasswordEncoder getPasswordEncoder() {
-    return new BCryptPasswordEncoder();
-}
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers(&amp;quot;/resources/**&amp;quot;, &amp;quot;/signup&amp;quot;, &amp;quot;/logout&amp;quot;, &amp;quot;/login&amp;quot;)
+                .permitAll().antMatchers(&amp;quot;/admin/**&amp;quot;).hasRole(&amp;quot;ADMIN&amp;quot;)
+                .anyRequest().authenticated().and().formLogin()
+                .loginPage(&amp;quot;/login&amp;quot;).permitAll().and().logout()
+                .logoutSuccessUrl(&amp;quot;/login?logout=success&amp;quot;).logoutUrl(&amp;quot;/logout&amp;quot;);
+    }
 
-@Bean
-public AuthenticationManager getAuthenticationManager() throws Exception {
-    return super.authenticationManager();
+    @Bean
+    public BCryptPasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager getAuthenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
+
+
 }
 </code></pre></div>
-<p>}</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">  * The annotation **@EnableWebMvcSecurity** is added this to an @Configuration class to have the Spring Security configuration integrate with Spring MVC.
-  * We are using authentication by two means, first as database authentication and secondly in-memory authentication.
-  * The above configuration is done in **configure** method with **AuthenticationManagerBuilder** as parameter, we register our userDetailService and in-memory authentication with **AuthenticationManagerBuilder**.
-  * I have used **BCryptPasswordEncoder** just to show its functionality that how to integrate it with our authentication system.
-  * The **configure** method with **HttpSecurity** as a parameter is used to configure the authorization of request, same as **** tag used in security-context xml file.
+<ul>
+<li>The annotation <strong>@EnableWebMvcSecurity</strong> is added this to an @Configuration class to have the Spring Security configuration integrate with Spring MVC.</li>
+<li>We are using authentication by two means, first as database authentication and secondly in-memory authentication.</li>
+<li>The above configuration is done in <strong>configure</strong> method with <strong>AuthenticationManagerBuilder</strong> as parameter, we register our userDetailService and in-memory authentication with <strong>AuthenticationManagerBuilder</strong>.</li>
+<li>I have used <strong>BCryptPasswordEncoder</strong> just to show its functionality that how to integrate it with our authentication system.</li>
+<li>The <strong>configure</strong> method with <strong>HttpSecurity</strong> as a parameter is used to configure the authorization of request, same as **** tag used in security-context xml file.</li>
+</ul>
 
-Next step would be registering Spring Security with the war, to do this we need to create a Class that will extend **AbstractSecurityWebApplicationInitializer** and register our configuration file in the constructor by passing it to the super class constructor as :  public class SecurityWebApplicationInitializer extends AbstractSecurityWebApplicationInitializer { public SecurityWebApplicationInitializer() { super(MultiHttpSecurityConfig.class); } } 
-</code></pre></div>
+<p>Next step would be registering Spring Security with the war, to do this we need to create a Class that will extend <strong>AbstractSecurityWebApplicationInitializer</strong> and register our configuration file in the constructor by passing it to the super class constructor as :  public class SecurityWebApplicationInitializer extends AbstractSecurityWebApplicationInitializer { public SecurityWebApplicationInitializer() { super(MultiHttpSecurityConfig.class); } } 
+```</p>
+
 <p>This class will serve two purpose </p>
 
 <ul>

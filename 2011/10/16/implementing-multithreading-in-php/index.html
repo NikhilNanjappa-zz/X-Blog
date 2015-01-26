@@ -104,14 +104,12 @@
 <p>Gearman server comes in 3 flavours C, Java and Perl.</p>
 
 <p>I am using Gearman C implementation &#39;gearmand&#39; as Gearman server in this blog. You can download &amp; install gearmand from here <a href="http://gearman.org/index.php?id=getting_started">http://gearman.org/index.php?id=getting_started</a>. After installing it you will have to start the server by running this command:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> $ /usr/local/sbin gearmand -d
 
-<p>[sourcecode language=&quot;php&quot;] $ /usr/local/sbin gearmand -d</p>
+# or
 
-<h1>or</h1>
-
-<p>$ gearmand -d 
-```</p>
-
+$ gearmand -d 
+</code></pre></div>
 <p>If you are using windows or Mac, I would suggest you to use Java version of Gearman server. I have not tried that but I think Java version can easily be installed and run on Windows/Mac.</p>
 
 <p>Now when you have Gearman server in place and running you can install any of the PHP client to work with Gearman server. There are two solutions available officially to use Gearman for PHP: </p>
@@ -123,108 +121,95 @@ I am using PHP extension on my Ubuntu machine to run examples to explain Multi-t
 </ol>
 
 <p>Create worker php file worker.php or gearman-worker.php. A gearman worker is thread running as worker to perform a specific task requested by clients. Like in this example we are going to use string reverse method as worker task. Here is the code for worker:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;?php // following example code is taken from : http://www.php.net/manual/en/gearman.examples-reverse.php echo &quot;Starting\n&quot;;
 
-<p>[sourcecode language=&quot;php&quot;] &lt;?php // following example code is taken from : http://www.php.net/manual/en/gearman.examples-reverse.php echo &quot;Starting\n&quot;;</p>
+# Create our worker object.
 
-<h1>Create our worker object.</h1>
+$gmworker= new GearmanWorker();
 
-<p>$gmworker= new GearmanWorker();</p>
+# Add default server (localhost).
 
-<h1>Add default server (localhost).</h1>
+$gmclient-&gt;addServer();
 
-<p>$gmclient-&gt;addServer();</p>
+# Register function &quot;reverse&quot; with the server. Change the worker function to
 
-<h1>Register function &quot;reverse&quot; with the server. Change the worker function to</h1>
+# &quot;reverse_fn_fast&quot; for a faster worker with no output.
 
-<h1>&quot;reverse<em>fn</em>fast&quot; for a faster worker with no output.</h1>
+$gmworker-&gt;addFunction(&quot;reverse&quot;, &quot;reverse_fn&quot;);
 
-<p>$gmworker-&gt;addFunction(&quot;reverse&quot;, &quot;reverse_fn&quot;);</p>
+print &quot;Waiting for job...\n&quot;; while($gmworker-&gt;work()) { if ($gmworker-&gt;returnCode() != GEARMAN_SUCCESS) { echo &quot;return_code: &quot; . $gmworker-&gt;returnCode() . &quot;\n&quot;; break; } }
 
-<p>print &quot;Waiting for job...\n&quot;; while($gmworker-&gt;work()) { if ($gmworker-&gt;returnCode() != GEARMAN<em>SUCCESS) { echo &quot;return</em>code: &quot; . $gmworker-&gt;returnCode() . &quot;\n&quot;; break; } }</p>
+function reverse_fn($job) { echo &quot;Received job: &quot; . $job-&gt;handle() . &quot;\n&quot;;
 
-<p>function reverse_fn($job) { echo &quot;Received job: &quot; . $job-&gt;handle() . &quot;\n&quot;;</p>
+$workload = $job-&gt;workload(); $workload_size = $job-&gt;workloadSize();
 
-<p>$workload = $job-&gt;workload(); $workload_size = $job-&gt;workloadSize();</p>
+echo &quot;Workload: $workload ($workload_size)\n&quot;;
 
-<p>echo &quot;Workload: $workload ($workload_size)\n&quot;;</p>
+# This status loop is not needed, just showing how it works for ($x= 0; $x &lt; $workload_size; $x++) { echo &quot;Sending status: &quot; . ($x + 1) . &quot;/$workload_size complete\n&quot;; $job-&gt;sendStatus($x, $workload_size); sleep(1); }
 
-<h1>This status loop is not needed, just showing how it works for ($x= 0; $x &lt; $workload<em>size; $x++) { echo &quot;Sending status: &quot; . ($x + 1) . &quot;/$workload</em>size complete\n&quot;; $job-&gt;sendStatus($x, $workload_size); sleep(1); }</h1>
+$result= strrev($workload); echo &quot;Result: $result\n&quot;;
 
-<p>$result= strrev($workload); echo &quot;Result: $result\n&quot;;</p>
+# Return what we want to send back to the client. return $result; } 
+</code></pre></div>
+<p>The above code is creating a GearmanWorker and attaching it to the default Gearman server (local gearmand server process, you can pass server ip and port if your gearman server running on different machine)</p>
 
-<h1>Return what we want to send back to the client. return $result; }</h1>
-<div class="highlight"><pre><code class="language-text" data-lang="text">The above code is creating a GearmanWorker and attaching it to the default Gearman server (local gearmand server process, you can pass server ip and port if your gearman server running on different machine)
-
-To see if the above worker is running properly and producing expected results, you have to run the worker by using the following command:
-
-[sourcecode language=&quot;bash&quot;] $ php gearman-worker.php 
+<p>To see if the above worker is running properly and producing expected results, you have to run the worker by using the following command:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> $ php gearman-worker.php 
 </code></pre></div>
 <p>Now create a client to create Job for the worker. Here is the code for the client.php or gearman-client.php:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;?php // following example code is taken from : http://www.php.net/manual/en/gearman.examples-reverse.php
 
-<p>[sourcecode language=&quot;php&quot;] &lt;?php // following example code is taken from : http://www.php.net/manual/en/gearman.examples-reverse.php</p>
+# Create our client object.
 
-<h1>Create our client object.</h1>
+$gmclient= new GearmanClient();
 
-<p>$gmclient= new GearmanClient();</p>
+# Add default server (localhost).
 
-<h1>Add default server (localhost).</h1>
+$gmclient-&gt;addServer();
 
-<p>$gmclient-&gt;addServer();</p>
+echo &quot;Sending job\n&quot;;
 
-<p>echo &quot;Sending job\n&quot;;</p>
+# Send reverse job
 
-<h1>Send reverse job</h1>
+do { $result = $gmclient-&gt;do(&quot;reverse&quot;, &quot;Hello!&quot;);
 
-<p>do { $result = $gmclient-&gt;do(&quot;reverse&quot;, &quot;Hello!&quot;);</p>
+# Check for various return packets and errors. switch($gmclient-&gt;returnCode()) { case GEARMAN_WORK_DATA: echo &quot;Data: $result\n&quot;; break; case GEARMAN_WORK_STATUS: list($numerator, $denominator)= $gmclient-&gt;doStatus(); echo &quot;Status: $numerator/$denominator complete\n&quot;; break; case GEARMAN_WORK_FAIL: echo &quot;Failed\n&quot;; exit; case GEARMAN_SUCCESS: break; default: echo &quot;RET: &quot; . $gmclient-&gt;returnCode() . &quot;\n&quot;; exit; } } while($gmclient-&gt;returnCode() != GEARMAN_SUCCESS);
 
-<h1>Check for various return packets and errors. switch($gmclient-&gt;returnCode()) { case GEARMAN<em>WORK</em>DATA: echo &quot;Data: $result\n&quot;; break; case GEARMAN<em>WORK</em>STATUS: list($numerator, $denominator)= $gmclient-&gt;doStatus(); echo &quot;Status: $numerator/$denominator complete\n&quot;; break; case GEARMAN<em>WORK</em>FAIL: echo &quot;Failed\n&quot;; exit; case GEARMAN<em>SUCCESS: break; default: echo &quot;RET: &quot; . $gmclient-&gt;returnCode() . &quot;\n&quot;; exit; } } while($gmclient-&gt;returnCode() != GEARMAN</em>SUCCESS);</h1>
-
-<p>?&gt; 
-```</p>
-
+?&gt; 
+</code></pre></div>
 <p>Now when you run the above code by:</p>
-
-<p>[sourcecode language=&quot;bash&quot;] $ php gearman-client.php 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> $ php gearman-client.php 
+</code></pre></div>
 <p>It will generate a JOB for gearman worker(s) available on server (in our case, we created only one worker but you can run multiple workers for the same JOB). The above code is not running the reverse job in background or you can say not running in multi-threaded style. Like we have used:</p>
-
-<p>[sourcecode language=&quot;php&quot;] $result = $gmclient-&gt;do(&quot;reverse&quot;, &quot;Hello!&quot;); 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> $result = $gmclient-&gt;do(&quot;reverse&quot;, &quot;Hello!&quot;); 
+</code></pre></div>
 <p>Which will hold the code execution of the client until it gets the result or response from worker. To make it multi-threaded you have to modify your code a bit. For example see below:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;?php //http://docs.php.net/manual/en/gearman.examples-reverse-bg.php
 
-<p>[sourcecode language=&quot;php&quot;] &lt;?php //http://docs.php.net/manual/en/gearman.examples-reverse-bg.php</p>
+# create our client object
 
-<h1>create our client object</h1>
+$gmclient= new GearmanClient();
 
-<p>$gmclient= new GearmanClient();</p>
+# add the default server (localhost)
 
-<h1>add the default server (localhost)</h1>
+$gmclient-&gt;addServer();
 
-<p>$gmclient-&gt;addServer();</p>
+# run reverse client in the background
 
-<h1>run reverse client in the background</h1>
+$job_handle = $gmclient-&gt;doBackground(&quot;reverse&quot;, &quot;this is a test&quot;);
 
-<p>$job_handle = $gmclient-&gt;doBackground(&quot;reverse&quot;, &quot;this is a test&quot;);</p>
+if ($gmclient-&gt;returnCode() != GEARMAN_SUCCESS) { echo &quot;bad return code\n&quot;; exit; }
 
-<p>if ($gmclient-&gt;returnCode() != GEARMAN_SUCCESS) { echo &quot;bad return code\n&quot;; exit; }</p>
+echo &quot;done!\n&quot;;
 
-<p>echo &quot;done!\n&quot;;</p>
-
-<p>?&gt; 
-```</p>
-
+?&gt; 
+</code></pre></div>
 <p>Now just by making the call to worker as:</p>
-
-<p>[sourcecode language=&quot;php&quot;] $job_handle = $gmclient-&gt;doBackground(&quot;reverse&quot;, &quot;this is a test&quot;); 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> $job_handle = $gmclient-&gt;doBackground(&quot;reverse&quot;, &quot;this is a test&quot;); 
+</code></pre></div>
 <p>The code execution will not halt. doBackground() method is the method which is being used for creating a separate thread to perform a specific JOB. The above program will do:</p>
-
-<p>[sourcecode language=&quot;php&quot;] echo &quot;done!\n&quot;; 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> echo &quot;done!\n&quot;; 
+</code></pre></div>
 <p>and finish the execution as soon as the Job is sent to worker (as it has nothing more to do, you can make some more logic and then check the client status and response)</p>
 
 <p><strong>Conclusion</strong>: Multi-taskingin PHP is not supported in PHP natively, but you have several ways to achieve the same. Gearman server and client libraries is one of the ways you can choose to implement multi-processing in PHP very easily. You can user Gearman library for processing heavy application like: image processing, resizing or do bulk data manipulation, sending emails in bulk etc.</p>

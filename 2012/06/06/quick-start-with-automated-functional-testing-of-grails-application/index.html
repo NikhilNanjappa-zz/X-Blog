@@ -186,95 +186,100 @@
 <hr>
 
 <p><strong>Step 3: Create test class as test/functional/tests/LoginTest.groovy to paste exported test script.</strong></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> import org.junit._; import static org.junit.Assert._; import org.openqa.selenium.*; import org.openqa.selenium.firefox.FirefoxDriver; import org.openqa.selenium.support.ui.Select;
 
-<p>[sourcecode type=&quot;java&quot;] import org.junit.<em>; import static org.junit.Assert.</em>; import org.openqa.selenium.*; import org.openqa.selenium.firefox.FirefoxDriver; import org.openqa.selenium.support.ui.Select;</p>
+public class LoginTest {
 
-<p>public class LoginTest {</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">private WebDriver driver;
-private String baseUrl;
 
-@Before
- public void setUp() throws Exception {
+    private WebDriver driver;
+    private String baseUrl;
 
-    driver = new FirefoxDriver();
-    baseUrl = &amp;quot;http://localhost:8080/&amp;quot;;
-    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-}
+    @Before
+     public void setUp() throws Exception {
+
+        driver = new FirefoxDriver();
+        baseUrl = &amp;quot;http://localhost:8080/&amp;quot;;
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    }
+
+
+@Test public void testLogin() throws Exception {
+
+
+        driver.get(baseUrl + &amp;quot;/login/auth&amp;quot;);
+        assertEquals(&amp;quot;Test Application&amp;quot;, driver.getTitle());
+        driver.findElement(By.id(&amp;quot;username&amp;quot;)).clear();
+        driver.findElement(By.id(&amp;quot;username&amp;quot;)).sendKeys(&amp;quot;admin&amp;quot;);
+        driver.findElement(By.id(&amp;quot;password&amp;quot;)).clear();
+        driver.findElement(By.id(&amp;quot;password&amp;quot;)).sendKeys(&amp;quot;admin&amp;quot;);
+        driver.findElement(By.cssSelector(&amp;quot;button.cta_button&amp;quot;)).click();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+
+        driver.quit();
+    }
+
+
+} 
 </code></pre></div>
-<p>@Test public void testLogin() throws Exception {</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    driver.get(baseUrl + &amp;quot;/login/auth&amp;quot;);
-    assertEquals(&amp;quot;Test Application&amp;quot;, driver.getTitle());
-    driver.findElement(By.id(&amp;quot;username&amp;quot;)).clear();
-    driver.findElement(By.id(&amp;quot;username&amp;quot;)).sendKeys(&amp;quot;admin&amp;quot;);
-    driver.findElement(By.id(&amp;quot;password&amp;quot;)).clear();
-    driver.findElement(By.id(&amp;quot;password&amp;quot;)).sendKeys(&amp;quot;admin&amp;quot;);
-    driver.findElement(By.cssSelector(&amp;quot;button.cta_button&amp;quot;)).click();
-}
-
-@After
-public void tearDown() throws Exception {
-
-    driver.quit();
-}
-</code></pre></div>
-<p>} 
-```</p>
-
 <hr>
 
 <p><strong>Step4: Create Login Page Object class as test/functional/pages/LoginPage.groovy</strong></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> import org.openqa.selenium.* import org.codehaus.groovy.grails.plugins.webdriver.WebDriverHelper
 
-<p>[sourcecode type=&quot;java&quot;] import org.openqa.selenium.* import org.codehaus.groovy.grails.plugins.webdriver.WebDriverHelper</p>
+class LoginPage {
 
-<p>class LoginPage {</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">// Login Page constants
-final static String LOGIN_PAGE_URL = &amp;quot;/login/auth&amp;quot;;
-final static String LOGIN_BUTTON_CSS = &amp;quot;button.cta_button&amp;quot;;
-final static String USERNAME_ID = &amp;quot;username&amp;quot;;
-final static String PASSWORD_ID = &amp;quot;password&amp;quot;;
-final static String REMEMBER_ME_ID = &amp;quot;remember_me&amp;quot;;
-final static String LOGIN_BUTTON_TEXT = &amp;quot;Login&amp;quot;;
-final static String FORGOT_PASSWORD_TEXT = &amp;quot;Forgot Password&amp;quot;;
 
-String username;
-String password;
-WebDriver driver;
+    // Login Page constants
+    final static String LOGIN_PAGE_URL = &amp;quot;/login/auth&amp;quot;;
+    final static String LOGIN_BUTTON_CSS = &amp;quot;button.cta_button&amp;quot;;
+    final static String USERNAME_ID = &amp;quot;username&amp;quot;;
+    final static String PASSWORD_ID = &amp;quot;password&amp;quot;;
+    final static String REMEMBER_ME_ID = &amp;quot;remember_me&amp;quot;;
+    final static String LOGIN_BUTTON_TEXT = &amp;quot;Login&amp;quot;;
+    final static String FORGOT_PASSWORD_TEXT = &amp;quot;Forgot Password&amp;quot;;
 
-public LoginPage() {}
+    String username;
+    String password;
+    WebDriver driver;
 
-public LoginPage(String username, String password, WebDriver driver) {
+    public LoginPage() {}
 
-    this.username = username;
-this.password = password;
-    this.driver = driver;
-}
+    public LoginPage(String username, String password, WebDriver driver) {
 
-public void openLoginPage(WebDriverHelper webdriver) {
+        this.username = username;
+    this.password = password;
+        this.driver = driver;
+    }
 
-    webdriver.open(LOGIN_PAGE_URL);
-}
+    public void openLoginPage(WebDriverHelper webdriver) {
 
-public void login() {
+        webdriver.open(LOGIN_PAGE_URL);
+    }
 
-    enterLoginDetails();
-    loginButton();
-}
+    public void login() {
 
-public void enterLoginDetails() {
+        enterLoginDetails();
+        loginButton();
+    }
 
-    driver.findElement(By.id(USERNAME_ID)).clear();
-    driver.findElement(By.id(USERNAME_ID)).sendKeys(username, Keys.F11);
-    driver.findElement(By.id(PASSWORD_ID)).clear();
-driver.findElement(By.id(PASSWORD_ID)).sendKeys(password);
-}
+    public void enterLoginDetails() {
 
-public void loginButton() {
-    driver.findElement(By.cssSelector(LOGIN_BUTTON_CSS)).click();
-}
+        driver.findElement(By.id(USERNAME_ID)).clear();
+        driver.findElement(By.id(USERNAME_ID)).sendKeys(username, Keys.F11);
+        driver.findElement(By.id(PASSWORD_ID)).clear();
+    driver.findElement(By.id(PASSWORD_ID)).sendKeys(password);
+    }
+
+    public void loginButton() {
+        driver.findElement(By.cssSelector(LOGIN_BUTTON_CSS)).click();
+    }
+
+
+} 
 </code></pre></div>
-<p>} 
-```</p>
-
 <p> </p>
 
 <p>Here the LoginPage Class contains both actions implemented as methods (example enterLoginDetails(), login()) and web elements(like button, text fields, checkbox), which are themselves separate objects. Also If in future there is some change in the HTML of Login Page (for example, change the ID of an element, or add an extra div for example) we only have to modify a specific part of our LoginPage object and not every test that interacted with that element.</p>
@@ -282,15 +287,27 @@ public void loginButton() {
 <hr>
 
 <p><strong>Step5: Add assertions and modify test script:</strong> Look at the modified test script class “test/functional/tests/LoginTest.groovy “.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> import org.openqa.selenium.* import pages.LoginPage import utils.Constants import org.codehaus.groovy.grails.plugins.webdriver.WebDriverHelper import org.junit.Rule import org.openqa.selenium.support.ui.WebDriverWait
 
-<p>[sourcecode type=&quot;java&quot;] import org.openqa.selenium.* import pages.LoginPage import utils.Constants import org.codehaus.groovy.grails.plugins.webdriver.WebDriverHelper import org.junit.Rule import org.openqa.selenium.support.ui.WebDriverWait</p>
 
-<h2>Comments</h2>
 
-<p><strong><a href="#9183" title="2012-07-19 09:55:42">Simmi Singhal</a>:</strong> Hi Kanwalpreet, Thanks for your appreciation. Can you please elaborate more on what kind of text you want to fetch from a page after any CRUD operation. Is it a success message on top or... ?? Its not clear to me. But as per my understanding, you can use following driver&#39;s built-in function to get the text: String text = driver.findElement(By.xpath(&quot;XPath of the message text&quot;).getText(); You can use css Selector or Id or any of css locator with By. I hope this would serve your purpose.. :) Thanks :)</p>
 
-<p><strong><a href="#9180" title="2012-07-18 18:15:30">Kanwalpreet Singh</a>:</strong> Hi , Nice tutorial,helped me alot.I am not able to get the message text from a page after doing create/update.It will be greate if you help me sort it out. Thanks in advance.</p>
 
+
+
+
+
+
+
+
+
+
+## Comments
+
+**[Simmi Singhal](#9183 &quot;2012-07-19 09:55:42&quot;):** Hi Kanwalpreet, Thanks for your appreciation. Can you please elaborate more on what kind of text you want to fetch from a page after any CRUD operation. Is it a success message on top or... ?? Its not clear to me. But as per my understanding, you can use following driver&#39;s built-in function to get the text: String text = driver.findElement(By.xpath(&quot;XPath of the message text&quot;).getText(); You can use css Selector or Id or any of css locator with By. I hope this would serve your purpose.. :) Thanks :)
+
+**[Kanwalpreet Singh](#9180 &quot;2012-07-18 18:15:30&quot;):** Hi , Nice tutorial,helped me alot.I am not able to get the message text from a page after doing create/update.It will be greate if you help me sort it out. Thanks in advance.
+</code></pre></div>
 
                 <hr>
 

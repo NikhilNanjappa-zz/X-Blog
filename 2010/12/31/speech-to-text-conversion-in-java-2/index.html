@@ -100,23 +100,21 @@
 <p>Steps for Speech-to-text converter project setup: 1. Create a simple Maven project. 2. Add &quot;<strong>http://repository.opencastproject.org/nexus/content/groups/public/</strong>&quot; to your set of repositories in pom.xml 3. Add Sphinx-4 dependency in pom.xml of your project.</p>
 
 <p>Your pom.xml should look like the following:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt; &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
 
-<p>[sourcecode language=&quot;xml&quot;] <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> <modelVersion>4.0.0</modelVersion></p>
+&lt;groupId&gt;com.xebia&lt;/groupId&gt; &lt;artifactId&gt;speech-to-text-converter&lt;/artifactId&gt; &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt; &lt;packaging&gt;jar&lt;/packaging&gt;
 
-<p><groupId>com.xebia</groupId> <artifactId>speech-to-text-converter</artifactId> <version>0.0.1-SNAPSHOT</version> <packaging>jar</packaging></p>
+&lt;name&gt;speech-to-text-converter&lt;/name&gt; &lt;url&gt;http://maven.apache.org&lt;/url&gt;
 
-<p><name>speech-to-text-converter</name> <url>http://maven.apache.org</url></p>
+&lt;properties&gt; &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt; &lt;/properties&gt;
 
-<p><properties> <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> </properties></p>
+&lt;repositories&gt; &lt;repository&gt; &lt;id&gt;sphinx-repository&lt;/id&gt; &lt;name&gt;Nexus Repository&lt;/name&gt; &lt;url&gt;http://repository.opencastproject.org/nexus/content/groups/public/&lt;/url&gt; &lt;/repository&gt; &lt;/repositories&gt;
 
-<p><repositories> <repository> <id>sphinx-repository</id> <name>Nexus Repository</name> <url>http://repository.opencastproject.org/nexus/content/groups/public/</url> </repository> </repositories></p>
+&lt;dependencies&gt;   
+&lt;dependency&gt; &lt;groupId&gt;cmu.sphinx&lt;/groupId&gt; &lt;artifactId&gt;sphinx4&lt;/artifactId&gt; &lt;version&gt;4.0&lt;/version&gt; &lt;/dependency&gt; &lt;/dependencies&gt;
 
-<p><dependencies><br>
-<dependency> <groupId>cmu.sphinx</groupId> <artifactId>sphinx4</artifactId> <version>4.0</version> </dependency> </dependencies></p>
-
-<p></project> 
-```</p>
-
+&lt;/project&gt; 
+</code></pre></div>
 <p>We will first write the java code for the speech recognizer. Create a class and name it &quot;<strong>HelloWorld.java</strong>&quot;. Code it as:</p>
 
 <p>package com.xebia.speech-to-text-converter;</p>

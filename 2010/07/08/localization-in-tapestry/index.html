@@ -133,10 +133,8 @@
 <p>In the .tml files replace the strings that need to be localized with the following construct.</p>
 
 <p> </p>
-
-<p>[sourcecode language=&quot;xml&quot;] ${message:key.in.proprties.file} 
-``` </p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> ${message:key.in.proprties.file} 
+</code></pre></div>
 <p>Tapestry framework will take care of replacing the key with appropriate localized value.</p>
 
 <p> </p>
@@ -155,10 +153,8 @@
 </ol>
 
 <p> </p>
-
-<p>[sourcecode language=&quot;xml&quot;] app com.abc.xyz.lmnFilter 
-``` </p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> app com.abc.xyz.lmnFilter 
+</code></pre></div>
 <p> </p>
 
 <h5>How to create parameterized message key?</h5>
@@ -174,19 +170,15 @@
 <p>Entry in properties file</p>
 
 <p> </p>
-
-<p>[sourcecode language=&quot;xml&quot;] confirm.delete.key=You are about to delete entity &#39;%s&#39;. Are you sure ? 
-``` </p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> confirm.delete.key=You are about to delete entity &#39;%s&#39;. Are you sure ? 
+</code></pre></div>
 <p> </p>
 
 <p>Entry in the tml</p>
 
 <p> </p>
-
-<p>[sourcecode language=&quot;xml&quot;] ${format:confirm.delete.key=deleteEntityName} 
-``` </p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> ${format:confirm.delete.key=deleteEntityName} 
+</code></pre></div>
 <p> </p>
 
 <p>The above command will pull the value of the key from the message bundle and will call getDeleteEntityName() method of the tml&#39;s java file and then replace the &#39;%s&#39; in the message string with the value returned by the method.</p>

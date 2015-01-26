@@ -114,44 +114,42 @@
 <p>*<em>Proxies : *</em> Proxies can be used , When we cannot do a POST (Full Page / Ajax) to a CAS server because of network limitations (cross domain / others) , so we will make a Full page /ajax call to proxy at the server side with the username/credentials , which will call then CAS , Now here were don&#39;t have the loginticket/executionId/jsessionId . so we will have to use the restFul API of the CAS server. First step is to get the TGT ticket and then the service ticket. The java proxy code for both the steps can be downloaded from here <a href="https://wiki.jasig.org/display/CASUM/RESTful+API">download proxy code</a>. Now once you receive the response , pass it on as the ajax response/complete redirect and to the client side based on success/failure response from CAS. <em>Note</em> :- The only problem with the approach is we won&#39;t be able to achieve the single sign on , since we can&#39;t store the cookies on the browser side related to CAS via any means.</p>
 
 <p>*<em>iFrame : *</em> You can embed an iframe in your custom login page which is loading your CAS login page. This way it will generate the jsessionid and you will get lt and execution as the content of your iFrame. Now user will submit the iframe from the custom login page. 2 things will happen now. 1) Credentials didn&#39;t match , so user will see the same login page with error message. 2) Successful authentication , will result in a success page in iframe. In this case iframe will load the serviceURL page(please see the iframe code below) . We will have to put a check on &quot;src&quot; attribute of iframe using a javascript bind method and once we get to know about the successful authentication , we can do post/redirect/refresh as per the application requirement.</p>
-
-<p>[sourcecode language=&quot;xml&quot;] <div > <iframe id="iFrame" name="iFrame" src="https://CasHost:9443/cas/login?service=http://localhost:7080/mywebapp/protected/"> </iframe> </div> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;div &gt; &lt;iframe id=&quot;iFrame&quot; name=&quot;iFrame&quot; src=&quot;https://CasHost:9443/cas/login?service=http://localhost:7080/mywebapp/protected/&quot;&gt; &lt;/iframe&gt; &lt;/div&gt; 
+</code></pre></div>
 <p><em>Here service represents the url to which the CAS server will redirect after successful login.</em></p>
 
 <p>Limitations: 1) Some older versions of browsers may not render iframes properlly. So it can create some browser specific issues. 2) There can be some usability issues &lt;&lt;&gt;&gt;</p>
 
 <p>*<em>Javascript : *</em> The issues that we faced during implementation using iframe can be eliminated by slight modification in the CAS server code base. We can get lt and execution from the CAS server as a javascript parameters. jsessionid will get created when you hit the CAS server to get these attributes as javascript. Add following code to your custom login jsp.</p>
 
-<p>login.jsp: [sourcecode language=&quot;xml&quot;] &lt;script language=&quot;Javascript&quot; src=&quot;https://CasHost:9443/cas/login?</p>
+<p>login.jsp: ```
+ &lt;script language=&quot;Javascript&quot; src=&quot;https://CasHost:9443/cas/login?</p>
 
 <p>service=http://myhost:7080/mywebapp/protected/&amp;nonCASLogin=true&quot; /&gt; 
 ``` Also keep following hidden fields also in login.jsp:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;body onload=&quot;init()&quot;&gt; &lt;form id=&quot;fm1&quot; class=&quot;fm-v clearfix&quot; action=&quot;https://CasHost:9443/cas/login?nonCASLogin=true&quot; method=&quot;post&quot;&gt;
 
-<p>[sourcecode language=&quot;xml&quot;] <body onload="init()"> <form id="fm1" class="fm-v clearfix" action="https://CasHost:9443/cas/login?nonCASLogin=true" method="post"></p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;lt&amp;quot; id=&amp;quot;lt&amp;quot; value=&amp;quot;&amp;quot; /&amp;gt;
-    &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;execution&amp;quot; id=&amp;quot;execution&amp;quot; value=&amp;quot;&amp;quot; /&amp;gt;
-    &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;_eventId&amp;quot; value=&amp;quot;submit&amp;quot; /&amp;gt;
-    &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;authenticate&amp;quot; value=&amp;quot;true&amp;quot; /&amp;gt;
-    &amp;lt;input class=&amp;quot;btn-submit&amp;quot; name=&amp;quot;submit&amp;quot; accesskey=&amp;quot;l&amp;quot; value=&amp;quot;LOGIN&amp;quot; tabindex=&amp;quot;4&amp;quot; type=&amp;quot;submit&amp;quot; onclick = &amp;quot;submitForm()&amp;quot;/&amp;gt;
-    &amp;lt;input id=&amp;quot;username&amp;quot; name=&amp;quot;username&amp;quot;  type=&amp;quot;text&amp;quot;/&amp;gt;
-    &amp;lt;input id=&amp;quot;password&amp;quot; name=&amp;quot;password&amp;quot; type=&amp;quot;password&amp;quot;/&amp;gt;
-&amp;lt;/form&amp;gt;
+
+        &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;lt&amp;quot; id=&amp;quot;lt&amp;quot; value=&amp;quot;&amp;quot; /&amp;gt;
+        &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;execution&amp;quot; id=&amp;quot;execution&amp;quot; value=&amp;quot;&amp;quot; /&amp;gt;
+        &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;_eventId&amp;quot; value=&amp;quot;submit&amp;quot; /&amp;gt;
+        &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;authenticate&amp;quot; value=&amp;quot;true&amp;quot; /&amp;gt;
+        &amp;lt;input class=&amp;quot;btn-submit&amp;quot; name=&amp;quot;submit&amp;quot; accesskey=&amp;quot;l&amp;quot; value=&amp;quot;LOGIN&amp;quot; tabindex=&amp;quot;4&amp;quot; type=&amp;quot;submit&amp;quot; onclick = &amp;quot;submitForm()&amp;quot;/&amp;gt;
+        &amp;lt;input id=&amp;quot;username&amp;quot; name=&amp;quot;username&amp;quot;  type=&amp;quot;text&amp;quot;/&amp;gt;
+        &amp;lt;input id=&amp;quot;password&amp;quot; name=&amp;quot;password&amp;quot; type=&amp;quot;password&amp;quot;/&amp;gt;
+    &amp;lt;/form&amp;gt;
+
+
+&lt;/body&gt; 
 </code></pre></div>
-<p></body> 
-```</p>
-
 <p>Changes required at the CAS server:</p>
 
 <p>casLoginView.jsp:</p>
 
 <p>Add the following scriptlet at the top of casLoginView.jsp. This will check if the request is having nonCASLogin parameter which is true. If this condition is met then it will return lt and execution as a javascript variables.</p>
-
-<p>[sourcecode language=&quot;xml&quot;] <c:if test="${nonCASLogin eq 'true'}"> var lt=&quot;${loginTicket}&quot;; var execution=&quot;${flowExecutionKey}&quot;;<br>
-<a href="/c:if">/c:if</a> <c:if test="${nonCASLogin ne 'true'}"> Entire CAS login page will reside here. <a href="/c:if">/c:if</a> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;c:if test=&quot;${nonCASLogin eq &#39;true&#39;}&quot;&gt; var lt=&quot;${loginTicket}&quot;; var execution=&quot;${flowExecutionKey}&quot;;  
+&lt;/c:if&gt; &lt;c:if test=&quot;${nonCASLogin ne &#39;true&#39;}&quot;&gt; Entire CAS login page will reside here. &lt;/c:if&gt; 
+</code></pre></div>
 <p>*<em>Conclusion : *</em> Considering the requirements to be fulfilled by the SSO solution, we finally decided to proceed with the approach using javascript to hit CAS server. Using this approach we were able to implement Cross domain SSO using custom login page. As this requires a simple javascript include from CAS server url, there is no chances of any browser specific issues unlike iFrame. </p>
 
 <p>[2]: JOSSO - Java Open Single Sign-On Project Home - Atricore</p>

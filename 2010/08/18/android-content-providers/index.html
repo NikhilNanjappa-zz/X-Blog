@@ -138,10 +138,8 @@
 <p>The implementation of insert() and delete simply uses the db instantiated in onCreate() to insert/fetch the record. The insert() then notifies other users using the content provider about the insertion of a row in the table.</p>
 
 <p>This content provider resembles a service in Service Oriented Architecture(SOA). For this we need to change the AndroidManifest.xml. This is just like publishing an wsdl for web services. Add the content provider as a provider in AndroidManifest.xml.</p>
-
-<p>[sourcecode language=&quot;xml&quot;] <application android:icon="@drawable/icon" android:label="@string/app_name"> <activity android:name=".AddressProviderActivity" android:label="@string/app_name1"> ... </activity> <provider android:name="AddressProvider" android:authorities="com.example.AddressProvider" /> </application> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;application android:icon=&quot;@drawable/icon&quot; android:label=&quot;@string/app_name&quot;&gt; &lt;activity android:name=&quot;.AddressProviderActivity&quot; android:label=&quot;@string/app_name1&quot;&gt; ... &lt;/activity&gt; &lt;provider android:name=&quot;AddressProvider&quot; android:authorities=&quot;com.example.AddressProvider&quot; /&gt; &lt;/application&gt; 
+</code></pre></div>
 <p>Suppose any Activity wants to access the address db through this service provider. The Activity can use getContentResolver() method to get the handle to the provider. To insert a row from an activtiy we just need to call the insert() using getContentResolver().</p>
 
 <p>private void insert(AddressDAO addressDAO) { ContentValues values = new ContentValues(); values.put(&quot;city&quot;, &quot;Gurgaon&quot;); values.put(&quot;street&quot;, &quot;sector 14&quot;); values.put(&quot;country&quot;, &quot;India&quot;); getContentResolver().insert(AddressProvider.CONTENT_URI, values); } 

@@ -96,51 +96,53 @@
               <h1>The Curious case of Field and Property Access in Hibernate</h1>
 
 <p>Have you ever wondered whether placing Hibernate annotations over both the fields and getters(properties) in an entity class would land you in trouble. Well as <a href="http://xebee.xebia.in/author/rajdeep/">Rajdeep</a> and I discovered, if you haven&#39;t tried it out, it will.  As shown in the following code, CustomerHotelBooking is an entity bean which acts as a link between Customer and Hotel. Ideally, this entity would be mapped by Hibernate, to a CustomerHotelBooking table having hotel_id as a foreign key with type as bigint. However, it does not happen this way. On the contrary the CustomerHotelBooking table has a column named hotel with type as tinyblob. Can you figure out why this happens? </p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Entity</span> <span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerHotelBooking</span> <span class="o">{</span>
 
-<p>[sourcecode langauage=&quot;java&quot;] @Entity public class CustomerHotelBooking {</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    @Id
-    @GeneratedValue
-    private long id;
 
-    private Hotel hotel;
+        <span class="nd">@Id</span>
+        <span class="nd">@GeneratedValue</span>
+        <span class="kd">private</span> <span class="kt">long</span> <span class="n">id</span><span class="o">;</span>
 
-    private Customer customer ;
+        <span class="kd">private</span> <span class="n">Hotel</span> <span class="n">hotel</span><span class="o">;</span>
 
-    @ManyToOne
-    @Cascade(value = { CascadeType.ALL })
-    public Hotel getHotel() {
-            return hotel;
-    }
+        <span class="kd">private</span> <span class="n">Customer</span> <span class="n">customer</span> <span class="o">;</span>
+
+        <span class="nd">@ManyToOne</span>
+        <span class="nd">@Cascade</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="o">{</span> <span class="n">CascadeType</span><span class="o">.</span><span class="na">ALL</span> <span class="o">})</span>
+        <span class="kd">public</span> <span class="n">Hotel</span> <span class="nf">getHotel</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">hotel</span><span class="o">;</span>
+        <span class="o">}</span>
+
+
+<span class="o">...</span> 
 </code></pre></div>
-<p>... 
-```</p>
-
 <p>Well, this points to a classic rule of Hibernate Access types (the focus of this blog) ; &quot;<strong>Be consistent while placing your annotations or use @Access instead</strong>&quot;. By default if we don&#39;t use @Access, Hibernate looks for <strong>@Id</strong> or <strong>@EmbeddedId</strong> and then decides whether it should look for other annotations on the fields or on the getters(properties).Thus either place the annotations on the fields only or on the getters(properties) only. Mixing them and not using @Access will cause abnormal behaviour.</p>
 
 <p>So if you still want to play mix-n-match then do it the following way (using <strong>@Access(AccessType.PROPERTY) **or</strong> @Access(AccessType.FIELD)** )</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Entity</span> <span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerHotelBooking</span> <span class="o">{</span>
 
-<p>[sourcecode langauage=&quot;java&quot;] @Entity public class CustomerHotelBooking {</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    @Id
-    @GeneratedValue
-    private long id;
 
-    private Hotel hotel;
+        <span class="nd">@Id</span>
+        <span class="nd">@GeneratedValue</span>
+        <span class="kd">private</span> <span class="kt">long</span> <span class="n">id</span><span class="o">;</span>
 
-    private Customer customer ;
+        <span class="kd">private</span> <span class="n">Hotel</span> <span class="n">hotel</span><span class="o">;</span>
 
-    /**
-     * @return the hotel
-     */
-    @Access(AccessType.PROPERTY)
-    @ManyToOne
-    @Cascade(value = { CascadeType.ALL })
-    public Hotel getHotel() {
-            return hotel;
-    }
+        <span class="kd">private</span> <span class="n">Customer</span> <span class="n">customer</span> <span class="o">;</span>
+
+        <span class="cm">/**</span>
+<span class="cm">         * @return the hotel</span>
+<span class="cm">         */</span>
+        <span class="nd">@Access</span><span class="o">(</span><span class="n">AccessType</span><span class="o">.</span><span class="na">PROPERTY</span><span class="o">)</span>
+        <span class="nd">@ManyToOne</span>
+        <span class="nd">@Cascade</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="o">{</span> <span class="n">CascadeType</span><span class="o">.</span><span class="na">ALL</span> <span class="o">})</span>
+        <span class="kd">public</span> <span class="n">Hotel</span> <span class="nf">getHotel</span><span class="o">()</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">hotel</span><span class="o">;</span>
+        <span class="o">}</span>
+
+
+<span class="o">...</span> 
 </code></pre></div>
-<p>... 
-```</p>
-
 <p>You could also place the @Access(AccessType.PROPERTY) or @Access(AccessType.FIELD) annotation on the class instead to mark the properties or fields as the access types. Thats a personal preference that we leave to you, but for us Field access wins hands down for its clarity.</p>
 
 <h2>Comments</h2>

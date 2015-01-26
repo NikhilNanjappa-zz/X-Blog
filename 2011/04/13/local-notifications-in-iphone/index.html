@@ -98,80 +98,72 @@
 <p>Suppose we want to build an iPhone application that alerts the user at a particular point in time or at repeated intervals of time with some custom message, or that the application runs in the background and performs some task, and alerts the user when the task is complete. This can be accomplished in iPhone using <strong>local notifications,</strong> which were introduced in iOS 4.0. Once a local notification is scheduled by an application, iOS takes care of it and presents it at the appropriate time.</p>
 
 <p>This blog aims to show how to set local notifications in an iPhone application and then moves on to specific use cases where they have to be manipulated. We also talk about which methods are called when a notification is received, depending on the state of the application.  The following code shows how to set a local notification that will alert the user at 7:00 a.m. everyday.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// Create a fire date for the notification by using calendar components
 
-<p>[sourcecode lang=&quot;javascript&quot;]</p>
+NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar] ;
 
-<p>// Create a fire date for the notification by using calendar components</p>
+NSDateComponents *componentsForReferenceDate =
 
-<p>NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar] ;</p>
+[calendar components:(NSDayCalendarUnit | NSYearCalendarUnit | NSMonthCalendarUnit ) fromDate:[NSDate date]];
 
-<p>NSDateComponents *componentsForReferenceDate =</p>
+[componentsForReferenceDate setDay:1] ; [componentsForReferenceDate setMonth:1] ; [componentsForReferenceDate setYear:2011] ;
 
-<p>[calendar components:(NSDayCalendarUnit | NSYearCalendarUnit | NSMonthCalendarUnit ) fromDate:[NSDate date]];</p>
+NSDate *referenceDate = [calendar dateFromComponents:componentsForReferenceDate] ;
 
-<p>[componentsForReferenceDate setDay:1] ; [componentsForReferenceDate setMonth:1] ; [componentsForReferenceDate setYear:2011] ;</p>
+// set components for time 7:00 a.m.
 
-<p>NSDate *referenceDate = [calendar dateFromComponents:componentsForReferenceDate] ;</p>
+NSDateComponents *componentsForFireDate =
 
-<p>// set components for time 7:00 a.m.</p>
+[calendar components:(NSYearCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit| NSSecondCalendarUnit ) fromDate: referenceDate];
 
-<p>NSDateComponents *componentsForFireDate =</p>
+[componentsForFireDate setHour: 7] ; [componentsForFireDate setMinute:0] ; [componentsForFireDate setSecond:0] ;
 
-<p>[calendar components:(NSYearCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit| NSSecondCalendarUnit ) fromDate: referenceDate];</p>
+NSDate *fireDateOfNotification = [calendar dateFromComponents: componentsForFireDate];
 
-<p>[componentsForFireDate setHour: 7] ; [componentsForFireDate setMinute:0] ; [componentsForFireDate setSecond:0] ;</p>
+// Create the notification
 
-<p>NSDate *fireDateOfNotification = [calendar dateFromComponents: componentsForFireDate];</p>
+UILocalNotification *notification = [[UILocalNotification alloc]  init] ;
 
-<p>// Create the notification</p>
+notification.fireDate = fireDateOfNotification ; notification.timeZone = [NSTimeZone localTimeZone] ; notification.alertBody = [NSString stringWithFormat: @&quot;Wake up!&quot;] ; notification.userInfo= [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@&quot;Some information&quot;] forKey:@&quot;information&quot;]; notification.repeatInterval= NSDayCalendarUnit ; notification.soundName=UILocalNotificationDefaultSoundName;
 
-<p>UILocalNotification *notification = [[UILocalNotification alloc]  init] ;</p>
+[[UIApplication sharedApplication] scheduleLocalNotification:notification] ;
 
-<p>notification.fireDate = fireDateOfNotification ; notification.timeZone = [NSTimeZone localTimeZone] ; notification.alertBody = [NSString stringWithFormat: @&quot;Wake up!&quot;] ; notification.userInfo= [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@&quot;Some information&quot;] forKey:@&quot;information&quot;]; notification.repeatInterval= NSDayCalendarUnit ; notification.soundName=UILocalNotificationDefaultSoundName;</p>
-
-<p>[[UIApplication sharedApplication] scheduleLocalNotification:notification] ;</p>
-
-<p>[notification release]; 
-```</p>
-
+[notification release]; 
+</code></pre></div>
 <p>The point to be noted in this example is that the <strong>fireDate</strong> of the notification is 1/1/2011 at 7 a.m. . This means that the notification will first fire at 7 a.m. on January 1 . Moreover, the <strong>repeatInterval</strong> property of the notification is set to <strong>NSDayCalendarUnit</strong> (i.e. the notification will repeat after a time interval of one day). Thus the notification will also fire at 7 a.m. on January 2,January 3 and so on for each day. However, if we check the fireDate property of the notification on January 2, then it will still be 7 a.m. on 1/1/2011. However on January 2,  the &quot;<strong>next fire date</strong>&quot; will be 7 a.m. , 2/1/2011.  Unfortunately we cannot access this &quot;next fire date&quot; property.</p>
 
 <p>A classic example of a situation where this might have been of use, is say, when notifications which repeat daily (say two notifications to remind the user to get food items from the market) have been set with fireDate as January 1, and the user launches the application on January 2 and changes some parameter in the application (say, he indicates that today is a holiday and he can&#39;t get food items from the market), we need to delete the notifications for the current day (i.e. 2/1/2011). The ideal case would have been to isolate all notifications which would fire on January 2 and delete them only. This would mean that the notifications would still fire on January 3 .In this case we cannot use the fireDate property to isolate notifications that have to fire on January 2, since their fireDate is still set to 1/1/2011.</p>
 
 <p>To accomplish this task, we can use the userInfo property of UILocalNotification. We can set a key and corresponding value in the userInfo Dictionary of the notifications that we set.</p>
-
-<p>[sourcecode lang=&quot;javascript&quot;] notification.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@&quot;Get Food&quot;], @&quot;foodItem&quot;, nil] ; 
-```</p>
-
-<p>Then, we would first get all scheduled notifications by :</p>
-
-<p>[sourcecode lang=&quot;javascript&quot;] [[UIApplication sharedApplication] scheduledLocalNotifications] ; 
-```</p>
-
-<p>Now we could loop through this list of scheduled notifications and look for a match according to key. We can thus isolate the notifications and delete them.</p>
-
-<p>[sourcecode lang=&quot;javascript&quot;] NSArray *arrayOfLocalNotifications = [[UIApplication sharedApplication] scheduledLocalNotifications] ;</p>
-
-<p>for (UILocalNotification *localNotification in arrayOfLocalNotifications) {</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">if ([[localNotification.userInfo valueForKey:@&amp;quot;foodItem&amp;quot;] isEqualToString:@&amp;quot;Get Food&amp;quot;]) {
-    [[UIApplication sharedApplication] cancelLocalNotification:localNotification] ; // delete the notification from the system
-}
+<div class="highlight"><pre><code class="language-text" data-lang="text"> notification.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@&quot;Get Food&quot;], @&quot;foodItem&quot;, nil] ; 
 </code></pre></div>
-<p>} 
-```</p>
+<p>Then, we would first get all scheduled notifications by :</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> [[UIApplication sharedApplication] scheduledLocalNotifications] ; 
+</code></pre></div>
+<p>Now we could loop through this list of scheduled notifications and look for a match according to key. We can thus isolate the notifications and delete them.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> NSArray *arrayOfLocalNotifications = [[UIApplication sharedApplication] scheduledLocalNotifications] ;
 
+for (UILocalNotification *localNotification in arrayOfLocalNotifications) {
+
+
+    if ([[localNotification.userInfo valueForKey:@&amp;quot;foodItem&amp;quot;] isEqualToString:@&amp;quot;Get Food&amp;quot;]) {
+        [[UIApplication sharedApplication] cancelLocalNotification:localNotification] ; // delete the notification from the system
+    }
+
+
+} 
+</code></pre></div>
 <p>Further, the SDK also gives us methods to know whether a notification was received : </p>
 
 <ul>
-<li>When the user presses the action button on a notification that is received, if the application is running in the <strong>foreground</strong>, or in the <strong>background</strong>, the <strong>application:didReceiveLocalNotification</strong>: method of the application delegate is called.
-[sourcecode lang=&quot;javascript&quot;] - (void)application:(UIApplication _)application didReceiveLocalNotification:(UILocalNotification _)notification { //Do something with the notification or its data. } 
-``` </li>
-</ul>
-
-<ul>
-<li>However, if the <strong>application has been killed</strong> and then the user presses the action button on the  notification that is received, the <strong>application:didFinishLaunchingWithOptions</strong>: is called . Here we can access the notification by using the <strong>UIApplicationLaunchOptionsLocalNotificationKey</strong> key.
-[sourcecode lang=&quot;javascript&quot;] - (BOOL)application:(UIApplication _)application didFinishLaunchingWithOptions:(NSDictionary _)launchOptions { UILocalNotification *localNotification = [launchOptions valueForKey:@&quot;UIApplicationLaunchOptionsLocalNotificationKey&quot;] ; // Do something with the notification } 
-```</li>
+<li><p>When the user presses the action button on a notification that is received, if the application is running in the <strong>foreground</strong>, or in the <strong>background</strong>, the <strong>application:didReceiveLocalNotification</strong>: method of the application delegate is called.
+<code>
+\- (void)application:(UIApplication _)application didReceiveLocalNotification:(UILocalNotification _)notification { //Do something with the notification or its data. } 
+</code> </p></li>
+<li><p>However, if the <strong>application has been killed</strong> and then the user presses the action button on the  notification that is received, the <strong>application:didFinishLaunchingWithOptions</strong>: is called . Here we can access the notification by using the <strong>UIApplicationLaunchOptionsLocalNotificationKey</strong> key.
+<code>
+\- (BOOL)application:(UIApplication _)application didFinishLaunchingWithOptions:(NSDictionary _)launchOptions { UILocalNotification *localNotification = [launchOptions valueForKey:@&quot;UIApplicationLaunchOptionsLocalNotificationKey&quot;] ; // Do something with the notification } 
+</code></p></li>
 </ul>
 
 <h2>Comments</h2>

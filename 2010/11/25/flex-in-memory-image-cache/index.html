@@ -121,71 +121,74 @@ A better solution is to have an in-memory image data cache. This can optimize th
 <p>So, here is an implementation of CachedImage component which extends from Image component. The only difference is, for a given source URL, it will first make a lookup into ImageDataCache. If it finds an appropriate BitmapData, it will re-use it else it will load data from the URL and add it to the cache. So, we can easily replace all instances of Image component in our application by CachedImage and save a lot in terms of total memory usage and data transfer over the network.</p>
 
 <p>Here is the implementation for few important methods of CachedImage component. Declarative variable and function names along with code comments will help you understand the code better. Complete source code for both the components (CachedImage and ImageDataCache) is enclosed at the end.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> /** * Setter for source, it makes a lookup into the cache for existing image data. **/ override public function set source(value:Object):void {
 
-<p>[sourcecode language=&quot;actionscript3&quot;] /** * Setter for source, it makes a lookup into the cache for existing image data. **/ override public function set source(value:Object):void {</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">if(value is String) {
 
-    _imageId = value as String;
+    if(value is String) {
 
-    var hasImageData:int = _imageDataCache.hasImageData(_imageId);
+        _imageId = value as String;
 
-    if(hasImageData == ImageDataCache.IMAGE_DATA_PRESENT) {
+        var hasImageData:int = _imageDataCache.hasImageData(_imageId);
 
-        // the scenario when image data is already there in cache
+        if(hasImageData == ImageDataCache.IMAGE_DATA_PRESENT) {
 
-        var bitmapData:BitmapData = _imageDataCache.getImageData(_imageId);
+            // the scenario when image data is already there in cache
 
-        super.source = new Bitmap(bitmapData);
+            var bitmapData:BitmapData = _imageDataCache.getImageData(_imageId);
 
-    } else if(hasImageData == ImageDataCache.IMAGE_DATA_LOADING) {
+            super.source = new Bitmap(bitmapData);
 
-        // the scenario when image data is currently not in cache, however, load
+        } else if(hasImageData == ImageDataCache.IMAGE_DATA_LOADING) {
 
-        // request for it has already been started by some other CachedImage instance
+            // the scenario when image data is currently not in cache, however, load
 
-        _imageDataCache.addEventListener(ImageDataCacheEvent.IMAGE_DATA_ADDED,
+            // request for it has already been started by some other CachedImage instance
 
-            onImageDataAddedInCache, false, 0, true);
+            _imageDataCache.addEventListener(ImageDataCacheEvent.IMAGE_DATA_ADDED,
+
+                onImageDataAddedInCache, false, 0, true);
+
+        } else {
+
+            // the scenario when image data will be loaded into memory for this instance
+
+            addEventListener(Event.COMPLETE, onImageLoadComplete, false, 0, true);
+
+            _imageDataCache.markImageDataLoading(_imageId);
+
+            super.source = value;
+
+        }
 
     } else {
 
-        // the scenario when image data will be loaded into memory for this instance
-
-        addEventListener(Event.COMPLETE, onImageLoadComplete, false, 0, true);
-
-        _imageDataCache.markImageDataLoading(_imageId);
+        // the scenario when image data is embedded into the application at compile time
 
         super.source = value;
 
     }
 
-} else {
 
-    // the scenario when image data is embedded into the application at compile time
+}
 
-    super.source = value;
+/** _ onImageDataLoadComplete is the handler for image load complete event. _ * It puts loaded BitmapData into the cache if it is not there**/
+
+private function onImageDataLoadComplete(event:Event):void {
+
+
+    if(_imageDataCache.hasImageData(_imageId) != ImageDataCache.IMAGE_DATA_PRESENT) {
+
+        var bitmapData:BitmapData = (content as Bitmap).bitmapData;
+
+        _imageDataCache.putImageData(_imageId, bitmapData);
+
+    }
+
 
 }
 </code></pre></div>
-<p>}</p>
-
-<p>/** _ onImageDataLoadComplete is the handler for image load complete event. _ * It puts loaded BitmapData into the cache if it is not there**/</p>
-
-<p>private function onImageDataLoadComplete(event:Event):void {</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">if(_imageDataCache.hasImageData(_imageId) != ImageDataCache.IMAGE_DATA_PRESENT) {
-
-    var bitmapData:BitmapData = (content as Bitmap).bitmapData;
-
-    _imageDataCache.putImageData(_imageId, bitmapData);
-
-}
-</code></pre></div>
-<p>}</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">ImageDataCache implements following methods:
-
-[sourcecode language=&quot;actionscript3&quot;]
-
-function getImageData(imageId:String):BitmapData;
+<p>ImageDataCache implements following methods:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">function getImageData(imageId:String):BitmapData;
 
 function putImageData(imageId:String, imageData:BitmapData):void;
 

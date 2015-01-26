@@ -110,26 +110,20 @@
 <p>So, in order to find the top n trends in a given snapshot, we would need to: 1. Process all Tweets and parse out tokens with HashTags. 2. Count all the hashTags. 3. Find out top n hashtags by sorting them.</p>
 
 <p>So, the input data for our Mapper could be a flat file generated out of Values of the Key-Value of <twitterHandle,Tweet>. It would look something like this :</p>
-
-<p>[sourcecode language=&quot;java&quot;] I love #agileNCR. Attenindg sesssion on #hadoop. ..... .... 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> I love #agileNCR. Attenindg sesssion on #hadoop. ..... .... 
+</code></pre></div>
 <p>click <a href="https://github.com/anirudh83/xke_hadoop/blob/master/input/test.jpda">here </a>to see the sample input file.</p>
 
 <p>*<em>Assumption: *</em> As one tweet can be of maximum 140 characters we can store the data in such a format that each line is new tweet.</p>
 
 <p><strong>Step 1: Mapper</strong> Mapper while tokenising would collect only the tokens which start by #.</p>
-
-<p>[sourcecode language=&quot;java&quot;] @Override public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException { String line = value.toString(); StringTokenizer tokenizer = new StringTokenizer(line); while (tokenizer.hasMoreTokens()) { String token = tokenizer.nextToken(); if(token.startsWith(&quot;#&quot;)){ word.set(token.toLowerCase()); // Context here is like a multi set which allocates value &quot;one&quot; for key &quot;word&quot;. context.write(word, one); } } 
-``` </p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> @Override public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException { String line = value.toString(); StringTokenizer tokenizer = new StringTokenizer(line); while (tokenizer.hasMoreTokens()) { String token = tokenizer.nextToken(); if(token.startsWith(&quot;#&quot;)){ word.set(token.toLowerCase()); // Context here is like a multi set which allocates value &quot;one&quot; for key &quot;word&quot;. context.write(word, one); } } 
+</code></pre></div>
 <p><strong>Step 2: Combiner</strong> Combiner would combine all the same hashtags together.</p>
 
 <p><strong>Step3: Reducer</strong></p>
-
-<p>[sourcecode language=&quot;java&quot;] @Override protected void reduce(Text key, Iterable&lt;IntWritable&gt; values, Context context) throws IOException, InterruptedException { int sum = 0; for (IntWritable val : values) { sum += val.get(); } context.write(key, new IntWritable(sum)); } </pre> 
-``` </p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> @Override protected void reduce(Text key, Iterable&amp;lt;IntWritable&amp;gt; values, Context context) throws IOException, InterruptedException { int sum = 0; for (IntWritable val : values) { sum += val.get(); } context.write(key, new IntWritable(sum)); } &lt;/pre&gt; 
+</code></pre></div>
 <p>Reducer will generate the output something like this :</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text"># agileNCR 21
 
@@ -146,23 +140,24 @@
 <p>Hence : <strong>Step4: Mapper 2</strong></p>
 
 <p>Tokenise the input and put 2nd token(the number) as key and 1st token (hashtag) as value. While mapping it will shuffle and sort on the basis of key. However, the sorting of the keys by default is in ascending order and we would not get out desired list. So, we would need to use a Comparator. We would need to use LongWritable.ReverseComparator.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> @Override public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
-<p>[sourcecode language=&quot;java&quot;] @Override public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    String line = value.toString(); // agilencr 4
-    StringTokenizer tokenizer = new StringTokenizer(line);
-    while (tokenizer.hasMoreTokens()) {
 
-     String token = tokenizer.nextToken();
+        String line = value.toString(); // agilencr 4
+        StringTokenizer tokenizer = new StringTokenizer(line);
+        while (tokenizer.hasMoreTokens()) {
 
-    // Context here is like a multi set which allocates value &amp;quot;one&amp;quot; for key &amp;quot;word&amp;quot;.
+         String token = tokenizer.nextToken();
 
-     context.write(new LongWritable(Long.parseLong(tokenizer.nextToken().toString())), new Text(token));
+        // Context here is like a multi set which allocates value &amp;quot;one&amp;quot; for key &amp;quot;word&amp;quot;.
 
+         context.write(new LongWritable(Long.parseLong(tokenizer.nextToken().toString())), new Text(token));
+
+        }
     }
-}
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">**Step5: Reducer 2** In reducer we will swap back the result again.
-
-[sourcecode language=&quot;java&quot;] @Override public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+</code></pre></div>
+<p><strong>Step5: Reducer 2</strong> In reducer we will swap back the result again.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> @Override public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
 
         String line = value.toString(); // agilencr 4

@@ -131,56 +131,50 @@
 <li>Setup an Action Script project in FlexBuilder and add Papervision source or SWC library to your project.
 Now without further delay let’s look at the code sample:</li>
 </ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">package { import flash.display.Sprite; import flash.events.Event; import org.papervision3d.cameras.Camera3D; import org.papervision3d.materials.BitmapColorMaterial; import org.papervision3d.objects.primitives.Sphere; import org.papervision3d.render.BasicRenderEngine; import org.papervision3d.scenes.Scene3D; import org.papervision3d.view.Viewport3D;
 
-<p>[sourcecode language=&quot;actionscript3&quot;]</p>
+[SWF ( width = &#39;800&#39;, height = &#39;600&#39;, backgroundColor = &#39;#0000ff&#39;, frameRate = &#39;64&#39; ) ] public class PapervisionSample extends Sprite { private var viewport:Viewport3D; private var scene:Scene3D; private var camera:Camera3D; private var renderer:BasicRenderEngine; private var sphere:Sphere;
 
-<p>package { import flash.display.Sprite; import flash.events.Event; import org.papervision3d.cameras.Camera3D; import org.papervision3d.materials.BitmapColorMaterial; import org.papervision3d.objects.primitives.Sphere; import org.papervision3d.render.BasicRenderEngine; import org.papervision3d.scenes.Scene3D; import org.papervision3d.view.Viewport3D;</p>
+public function PapervisionSample() { initPapervision3D(); createSphere(); beginRender(); }
 
-<p>[SWF ( width = &#39;800&#39;, height = &#39;600&#39;, backgroundColor = &#39;#0000ff&#39;, frameRate = &#39;64&#39; ) ] public class PapervisionSample extends Sprite { private var viewport:Viewport3D; private var scene:Scene3D; private var camera:Camera3D; private var renderer:BasicRenderEngine; private var sphere:Sphere;</p>
+private function initPapervision3D():void { viewport = new Viewport3D(600, 480, true, true); addChild(viewport); scene = new Scene3D(); camera = new Camera3D(); renderer = new BasicRenderEngine(); }
 
-<p>public function PapervisionSample() { initPapervision3D(); createSphere(); beginRender(); }</p>
+private function createSphere():void { // creating the texture or material for our object var material:BitmapColorMaterial = new BitmapColorMaterial(); // creating the 3D object which is Sphere in our case sphere = new Sphere(material, 500);
 
-<p>private function initPapervision3D():void { viewport = new Viewport3D(600, 480, true, true); addChild(viewport); scene = new Scene3D(); camera = new Camera3D(); renderer = new BasicRenderEngine(); }</p>
 
-<p>private function createSphere():void { // creating the texture or material for our object var material:BitmapColorMaterial = new BitmapColorMaterial(); // creating the 3D object which is Sphere in our case sphere = new Sphere(material, 500);</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> scene.addChild(sphere);
+     scene.addChild(sphere);
+
+
+}
+
+private function beginRender():void { //calls the render function every frame addEventListener(Event.ENTER_FRAME, render); }
+
+private function render(e:Event):void { /_ Rotate the display object around the longitudinal axis _/ sphere.roll(10);
+
+
+     /* Takes the data from the scene, camera, and viewport,
+     renders it, then updates the viewport */
+     renderer.renderScene(scene, camera, viewport);
+
+
+} } } 
 </code></pre></div>
-<p>}</p>
-
-<p>private function beginRender():void { //calls the render function every frame addEventListener(Event.ENTER_FRAME, render); }</p>
-
-<p>private function render(e:Event):void { /_ Rotate the display object around the longitudinal axis _/ sphere.roll(10);</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> /* Takes the data from the scene, camera, and viewport,
- renders it, then updates the viewport */
- renderer.renderScene(scene, camera, viewport);
-</code></pre></div>
-<p>} } } 
-```</p>
-
 <p>Now let’s try to understand the code.</p>
-
-<p>[sourcecode language=&quot;actionscript3&quot;] private function initPapervision3D():void { viewport = new Viewport3D(600, 480, true, true); addChild(viewport); scene = new Scene3D(); camera = new Camera3D(); renderer = new BasicRenderEngine(); } 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> private function initPapervision3D():void { viewport = new Viewport3D(600, 480, true, true); addChild(viewport); scene = new Scene3D(); camera = new Camera3D(); renderer = new BasicRenderEngine(); } 
+</code></pre></div>
 <p>Let’s first analyse what’s happening at the initialization method. Basically we are creating Viewport, Scene3D, Camera3D and BasicRenderingEngine. Notice that after creating Viewport with the specific width and height we add it as a child to our Sprite. Thus, the Viewport will act as our window to the 3D scene and we can position the Viewport accordingly. Also notice that after this step our scene is created but it is like an empty space and we will have to add the objects in it.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> private function createSphere():void { // creating the texture or material for our object var material:BitmapColorMaterial = new BitmapColorMaterial(); // creating the 3D object which is Sphere in our case sphere = new Sphere(material, 500);
 
-<p>[sourcecode language=&quot;actionscript3&quot;] private function createSphere():void { // creating the texture or material for our object var material:BitmapColorMaterial = new BitmapColorMaterial(); // creating the 3D object which is Sphere in our case sphere = new Sphere(material, 500);</p>
-
-<p>scene.addChild(sphere); } 
-```</p>
-
+scene.addChild(sphere); } 
+</code></pre></div>
 <p>In the above code, we create a 3D object (Sphere in our case) and add it to the scene. One thing to note here is there are several primitive objects that are available in the PV3D API. For example Cube, Cylinder, Cone, Plane etc. I have chosen to create a Sphere with radius 500 and with a BitmapColorMaterial(with its default color). This material will add a color to the sphere. Now the scene is set and viewport and Camera are ready to roll but still we won&#39;t see anything, because we haven&#39;t started rendering the scene.</p>
-
-<p>[sourcecode language=&quot;actionscript3&quot;] private function beginRender():void { //calls the render function every frame addEventListener(Event.ENTER_FRAME, render); } 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> private function beginRender():void { //calls the render function every frame addEventListener(Event.ENTER_FRAME, render); } 
+</code></pre></div>
 <p>Now let&#39;s render the scene. The call to beginRender() which adds the event listener to listen to each occassion when a frame from the scene is rendered. Thus for each frame we call the render() method.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> private function render(e:Event):void { /_ Rotate the display object around the longitudinal axis _/ sphere.roll(10);
 
-<p>[sourcecode language=&quot;actionscript3&quot;] private function render(e:Event):void { /_ Rotate the display object around the longitudinal axis _/ sphere.roll(10);</p>
-
-<p>/_ Takes the data from the scene, camera, and viewport, renders it, then updates the viewport _/ renderer.renderScene(scene, camera, viewport); } 
-```</p>
-
+/_ Takes the data from the scene, camera, and viewport, renders it, then updates the viewport _/ renderer.renderScene(scene, camera, viewport); } 
+</code></pre></div>
 
                 <hr>
 

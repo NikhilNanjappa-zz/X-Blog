@@ -106,74 +106,70 @@
 <h3>HTML</h3>
 
 <p>Firstly, let&#39;s create a very simple HTML that would contain an error container, a registration form and a login form:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;div id=&#39;errors&#39;&gt;&lt;/div&gt; &lt;form name=&#39;register&#39; id=&#39;register-form&#39; method=&#39;POST&#39; action=&quot;/register/&quot;&gt; &lt;label for=&#39;remail&#39;&gt;Email&lt;/label&gt;&lt;input type=&#39;text&#39; value=&#39;&#39; name=&#39;email&#39; id=&#39;remail&#39;/&gt; &lt;label for=&#39;rpassword&#39;&gt;Password&lt;/label&gt;&lt;input type=&#39;password&#39; value=&#39;&#39; name=&#39;password&#39; id=&#39;rpassword&#39;/&gt; &lt;label for=&#39;rrepassword&#39;&gt;Re-type Password&lt;/label&gt;&lt;input type=&#39;password&#39; value=&#39;&#39; name=&#39;repassword&#39; id=&#39;rrepassword&#39;/&gt; &lt;input type=&#39;submit&#39; class=&#39;button&#39; id=&#39;submit-register&#39; value=&#39;Create my account&#39; /&gt; &lt;/form&gt; &lt;form name=&#39;login&#39; id=&#39;login-form&#39; method=&#39;POST&#39; action=&quot;/login/&quot;&gt; &lt;label for=&#39;lemail&#39;&gt;Email&lt;/label&gt;&lt;input type=&#39;text&#39; value=&#39;&#39; name=&#39;email&#39; id=&#39;lemail&#39;/&gt; &lt;label for=&#39;lpassword&#39;&gt;Password&lt;/label&gt;&lt;input type=&#39;password&#39; value=&#39;&#39; name=&#39;password&#39; id=&#39;lpassword&#39;/&gt; &lt;input type=&#39;submit&#39; class=&#39;button&#39; id=&#39;submit-login&#39; value=&#39;Login&#39; /&gt; &lt;/form&gt;
 
-<p>[sourcecode language=&quot;html&quot;] <div id='errors'></div> <form name='register' id='register-form' method='POST' action="/register/"> <label for='remail'>Email</label><input type='text' value='' name='email' id='remail'/> <label for='rpassword'>Password</label><input type='password' value='' name='password' id='rpassword'/> <label for='rrepassword'>Re-type Password</label><input type='password' value='' name='repassword' id='rrepassword'/> <input type='submit' class='button' id='submit-register' value='Create my account' /> </form> <form name='login' id='login-form' method='POST' action="/login/"> <label for='lemail'>Email</label><input type='text' value='' name='email' id='lemail'/> <label for='lpassword'>Password</label><input type='password' value='' name='password' id='lpassword'/> <input type='submit' class='button' id='submit-login' value='Login' /> </form></p>
-
-<p>&lt;!-- The contents of these two files are included at the end on this blog--&gt; <script type='text/javascript' src="app/resources/static/js/validateRegister.js'></script> <script type='text/javascript' src="app/resources/static/js/validateLogin.js'></script> 
-```</p>
-
+&lt;!-- The contents of these two files are included at the end on this blog--&gt; &lt;script type=&#39;text/javascript&#39; src=&quot;app/resources/static/js/validateRegister.js&#39;&gt;&lt;/script&gt; &lt;script type=&#39;text/javascript&#39; src=&quot;app/resources/static/js/validateLogin.js&#39;&gt;&lt;/script&gt; 
+</code></pre></div>
 <h3>Directory Structure</h3>
 
 <p>Next, create the following two modules in &#39;my&#39; package:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> static js/ dijit/ dojo/ dojox/ my/ error/ _base.js form/ _base.js helper.js error.js form.js util/
 
-<p>[sourcecode language=&quot;text&quot;] static js/ dijit/ dojo/ dojox/ my/ error/ _base.js form/ _base.js helper.js error.js form.js util/</p>
+form.js : is the actual module file form/ : contain files for the form module _base.js : a class to represent a form helper.js : a helper class that attaches the onsubmit event to the current scoped form and other helper functions to print out the error messages
 
-<p>form.js : is the actual module file form/ : contain files for the form module _base.js : a class to represent a form helper.js : a helper class that attaches the onsubmit event to the current scoped form and other helper functions to print out the error messages</p>
+error.js: is the actual module file error/ : contain files for the error module _base.js : a class to represent errors, provides a constructor and a function that prints out the form errors in the error container (which we provide during form set-up, more on this later)
+</code></pre></div>
+<p>It is completely up to you where you want to save your package or modules but you have to configure the Dojo loader to locate the modules correctly. The following shows how to enable you package so that the loader can locate your modules (read <a href="http://dojotoolkit.org/documentation/tutorials/1.7/dojo_config/">here</a> to find out more about dojoConfig):</p>
 
-<p>error.js: is the actual module file error/ : contain files for the error module _base.js : a class to represent errors, provides a constructor and a function that prints out the form errors in the error container (which we provide during form set-up, more on this later)</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">It is completely up to you where you want to save your package or modules but you have to configure the Dojo loader to locate the modules correctly. The following shows how to enable you package so that the loader can locate your modules (read [here][3] to find out more about dojoConfig):
-
-### Configure Package
-
-[sourcecode language=&quot;javascript&quot;] &lt;script&gt; var dojoConfig = { baseUrl: &quot;&#39;js/&quot;, tlmSiblingOfDojo: false, packages: [ { name: &quot;dojo&quot;, location: &quot;dojo&quot; }, { name: &quot;dijit&quot;, location: &quot;dijit&quot; }, { name: &quot;dojox&quot;, location: &quot;dojox&quot; }, { name: &quot;util&quot;, location: &quot;util&quot; }, { name: &quot;my&quot;, location: &quot;my&quot; } ], async: true, aliases: [ [&quot;ready&quot;, &quot;dojo/ready&quot;], [&quot;xvalidate&quot;, &quot;dojox/validate&quot;], [&quot;xcheck&quot;, &quot;dojox/validate/check&quot;], [&quot;xweb&quot;, &quot;dojox/validate/web&quot;], [&quot;dom&quot;,&quot;dojo/dom&quot;], [&quot;connect&quot;,&quot;dojo/_base/connect&quot;], [&quot;event&quot;,&quot;dojo/_base/event&quot;], [&quot;declare&quot;, &quot;dojo/_base/declare&quot;], [&quot;lang&quot;, &quot;dojo/_base/lang&quot;], [&quot;dom-class&quot;, &quot;dojo/dom-class&quot;], ] }; &lt;/script&gt; 
+<h3>Configure Package</h3>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;script&gt; var dojoConfig = { baseUrl: &quot;&#39;js/&quot;, tlmSiblingOfDojo: false, packages: [ { name: &quot;dojo&quot;, location: &quot;dojo&quot; }, { name: &quot;dijit&quot;, location: &quot;dijit&quot; }, { name: &quot;dojox&quot;, location: &quot;dojox&quot; }, { name: &quot;util&quot;, location: &quot;util&quot; }, { name: &quot;my&quot;, location: &quot;my&quot; } ], async: true, aliases: [ [&quot;ready&quot;, &quot;dojo/ready&quot;], [&quot;xvalidate&quot;, &quot;dojox/validate&quot;], [&quot;xcheck&quot;, &quot;dojox/validate/check&quot;], [&quot;xweb&quot;, &quot;dojox/validate/web&quot;], [&quot;dom&quot;,&quot;dojo/dom&quot;], [&quot;connect&quot;,&quot;dojo/_base/connect&quot;], [&quot;event&quot;,&quot;dojo/_base/event&quot;], [&quot;declare&quot;, &quot;dojo/_base/declare&quot;], [&quot;lang&quot;, &quot;dojo/_base/lang&quot;], [&quot;dom-class&quot;, &quot;dojo/dom-class&quot;], ] }; &lt;/script&gt; 
 </code></pre></div>
 <p>In the package array, the <strong>name</strong> could be anything you like and the <strong>location</strong> should be the actual path to you package (baseUrl/location). From now on all our modules wiould be accessible via &#39;my&#39;, Eg: require[&quot;my/form&quot;]..., dojo loader would look for form.js in the js/my/ directory. </p>
 
 <h3>Form Module</h3>
 
 <p>The <strong>my/form.js</strong> module file is a very simple file that just defines or loads the required form object ( define callback always return a value, unlike require ).</p>
-
-<p>[sourcecode language=&quot;javascript&quot;] define([&quot;./form/helper&quot;], function(form){ return form; }); 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> define([&quot;./form/helper&quot;], function(form){ return form; }); 
+</code></pre></div>
 <p>But the main juice lies within the helper.js file in the &quot;my/form/&quot; directory. The helper class is nothing but an interface to my/form/_base.js that also makes use of error module to print the errors in the error container when a form fails to get validated.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> define([&quot;lang&quot;, &quot;declare&quot;, &quot;./_base&quot;, &quot;dom&quot;, &quot;event&quot;, &quot;connect&quot;, &quot;../error/_base&quot;], function(lang, declare, BaseFormValidator, dom, event, connect, myError){ var FormValidator = declare(null, { form: null, profile: null, errorContainer: &#39;errors&#39;, baseFormValidator: null,
 
-<p>[sourcecode language=&quot;javascript&quot;] define([&quot;lang&quot;, &quot;declare&quot;, &quot;./<em>base&quot;, &quot;dom&quot;, &quot;event&quot;, &quot;connect&quot;, &quot;../error/</em>base&quot;], function(lang, declare, BaseFormValidator, dom, event, connect, myError){ var FormValidator = declare(null, { form: null, profile: null, errorContainer: &#39;errors&#39;, baseFormValidator: null,</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    constructor: function(/*Object*/ args){
-        declare.safeMixin(this, args);
-    },
 
-    getErrorsAsHTMLList : function(errors){
-        // print errors as list
-        var html = &amp;quot;&amp;quot;;
-        if (errors){
-            html = &amp;quot;&amp;lt;ul&amp;gt;&amp;quot;;
-            for(var key in errors){
-                html += &amp;quot;&amp;lt;li&amp;gt;&amp;quot;+errors[key]+&amp;quot;&amp;lt;/li&amp;gt;&amp;quot;;
+        constructor: function(/*Object*/ args){
+            declare.safeMixin(this, args);
+        },
+
+        getErrorsAsHTMLList : function(errors){
+            // print errors as list
+            var html = &amp;quot;&amp;quot;;
+            if (errors){
+                html = &amp;quot;&amp;lt;ul&amp;gt;&amp;quot;;
+                for(var key in errors){
+                    html += &amp;quot;&amp;lt;li&amp;gt;&amp;quot;+errors[key]+&amp;quot;&amp;lt;/li&amp;gt;&amp;quot;;
+                }
+                html += &amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;;
             }
-            html += &amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;;
+            return html;
+        },
+
+        submitOrPrintErrors: function() {
+            // validates form and if an error occurred then display the errors in the
+            // error container
+            var status = this.baseFormValidator.validateForm();
+            if (status) {
+                this.baseFormValidator.submitForm();
+            } else {
+                var html = this.getErrorsAsHTMLList(this.baseFormValidator.getErrors())
+                var eObj = new my.Error({errorContainer: this.errorContainer, errorHTML: html});
+                eObj.animateErrors();
+            }
         }
-        return html;
-    },
+    });
 
-    submitOrPrintErrors: function() {
-        // validates form and if an error occurred then display the errors in the
-        // error container
-        var status = this.baseFormValidator.validateForm();
-        if (status) {
-            this.baseFormValidator.submitForm();
-        } else {
-            var html = this.getErrorsAsHTMLList(this.baseFormValidator.getErrors())
-            var eObj = new my.Error({errorContainer: this.errorContainer, errorHTML: html});
-            eObj.animateErrors();
-        }
-    }
-});
+    var helper = lang.getObject(&amp;quot;my.form.helper&amp;quot;, true);
 
-var helper = lang.getObject(&amp;quot;my.form.helper&amp;quot;, true);
-
-helper.attachOnSubmitEvent = function(formId, profile, errorContainer){
-    var f = dom.byId(formId);
+    helper.attachOnSubmitEvent = function(formId, profile, errorContainer){
+        var f = dom.byId(formId);
 </code></pre></div>
 
                 <hr>

@@ -120,12 +120,10 @@
 <p>So you can create the above shown directory structure and save it in the webroot directory of the web server.</p>
 
 <p>Firstly, we will create our configuration file, in this file we will define the Consumer Key and Consumer Secret for the Twitter Application. So Copy the Consumer key and consumer secret from the application page on the twitter website and paste the same in the config file as shown below:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> /*_ * twoth/config/config.php * Configuration file. * Used for defining the Consumer key and Consumer Secret of Twitter * Application. _/
 
-<p>[sourcecode language=&quot;php&quot;] /*_ * twoth/config/config.php * Configuration file. * Used for defining the Consumer key and Consumer Secret of Twitter * Application. _/</p>
-
-<p>define(&#39;CONSUMER<em>KEY&#39;,&#39;**</em><em>_</em><strong><em>_</em>_</strong><strong><em>*</em></strong><strong>&#39;); define(&#39;CONSUMER_SECRET&#39;,&#39;</strong><em>*</em>*<strong><em>_</em>_</strong><strong><em>*</em></strong><strong><em>*</em></strong><strong><em>*</em></strong><strong><em>*</em></strong>***&#39;); 
-```</p>
-
+define(&#39;CONSUMER_KEY&#39;,&#39;**_*_****_*_****_*_****&#39;); define(&#39;CONSUMER_SECRET&#39;,&#39;**_*_****_*_****_*_****_*_****_*_****_*_*****&#39;); 
+</code></pre></div>
 <p>Lets move on to the index.php file. In this file we will import the following three files: </p>
 
 <ul>
@@ -135,72 +133,78 @@
 </ul>
 
 <p>The library file twitteroauth.php provides us a class TwitterOAuth which we will be using extensively to connect to Twitter. The source code for the index.php is shown below:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> require_once &#39;lib/twitteroauth/OAuth.php&#39;; require_once &#39;lib/twitteroauth/twitteroauth.php&#39;; require_once &#39;config/config.php&#39;;
 
-<p>[sourcecode language=&quot;php&quot;] require<em>once &#39;lib/twitteroauth/OAuth.php&#39;; require</em>once &#39;lib/twitteroauth/twitteroauth.php&#39;; require_once &#39;config/config.php&#39;;</p>
+session_start();
 
-<p>session_start();</p>
+/_ * Instantiating the TwitterOAuth class with the Consumer key and consumer * secret as defined in config.php file. _/ $twitterOAuth = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET);
 
-<p>/_ * Instantiating the TwitterOAuth class with the Consumer key and consumer * secret as defined in config.php file. <em>/ $twitterOAuth = new TwitterOAuth(CONSUMER</em>KEY, CONSUMER_SECRET);</p>
+/_ * calling getRequestToken() method to get the request token. * the request token will be used later to compare it with the token * returned from the Twitter again on the callback URL (as specified) * in the application settings. * In our case it is http://210.7.69.29/twoth/authenticate.php * As I have mentioned before, this callback url should be publicly accessible. _/ $requestToken = $twitterOAuth-&gt;getRequestToken();
 
-<p>/_ * calling getRequestToken() method to get the request token. * the request token will be used later to compare it with the token * returned from the Twitter again on the callback URL (as specified) * in the application settings. * In our case it is http://210.7.69.29/twoth/authenticate.php * As I have mentioned before, this callback url should be publicly accessible. _/ $requestToken = $twitterOAuth-&gt;getRequestToken();</p>
+/_ * saving the request token in the session for future use _/ $_SESSION[&#39;request_token&#39;] = $requestToken[&#39;oauth_token&#39;]; $_SESSION[&#39;request_token_secret&#39;] = $requestToken[&#39;oauth_token_secret&#39;];
 
-<p>/_ * saving the request token in the session for future use <em>/ $</em>SESSION[&#39;request<em>token&#39;] = $requestToken[&#39;oauth</em>token&#39;]; $<em>SESSION[&#39;request</em>token<em>secret&#39;] = $requestToken[&#39;oauth</em>token_secret&#39;];</p>
-
-<p>/_ * Redirecting the user to the Twitter Sign in page where he/she will * provide his/her user credentials. _/ header (&#39;Location: &#39; . $twitterOAuth-&gt;getAuthorizeURL($requestToken)); 
-```</p>
-
+/_ * Redirecting the user to the Twitter Sign in page where he/she will * provide his/her user credentials. _/ header (&#39;Location: &#39; . $twitterOAuth-&gt;getAuthorizeURL($requestToken)); 
+</code></pre></div>
 <p>Now if user has successfully entered his/her credentials, he will redirected to the callback url. Twitter will pass one parameter named &quot;oauth_token&quot; in the url itself. This parameter will be compared to the request token saved in the session, both of these parameters should be same.</p>
 
 <p>Below is the source code for the authenticate.php file:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> require_once &#39;lib/twitteroauth/OAuth.php&#39;; require_once &#39;lib/twitteroauth/twitteroauth.php&#39;; require_once &#39;config/config.php&#39;;
 
-<p>[sourcecode language=&quot;php&quot;] require<em>once &#39;lib/twitteroauth/OAuth.php&#39;; require</em>once &#39;lib/twitteroauth/twitteroauth.php&#39;; require_once &#39;config/config.php&#39;;</p>
+session_start();
 
-<p>session_start();</p>
+/_ * Comparing the request token with the token passed by the Twitter in the * url as the parameter named &quot;oauth_token&quot; _/
 
-<p>/_ * Comparing the request token with the token passed by the Twitter in the * url as the parameter named &quot;oauth_token&quot; _/</p>
+if($_SESSION[&#39;request_token&#39;] == $_GET[&#39;oauth_token&#39;]) {
 
-<p>if($<em>SESSION[&#39;request</em>token&#39;] == $<em>GET[&#39;oauth</em>token&#39;]) {</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">/*
- * Instanitiating the TwitterOAuth class with the consumer token and
- * the request token
- */
-$twitterOAuth = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET,
-$_SESSION[&#39;request_token&#39;],$_SESSION[&#39;request_token_secret&#39;]);
-
-/**
- * Getting the access token from the Twitter.
- * This access token will be used by our web application.
- * It is only this access token which enables us to use the 
- * Twitter account of the user (in limited way).
- * By this access token we can read tweets, friends&#39; tweets, post new
- * tweets etc. 
- */
-$accessToken = $twitterOAuth-&amp;gt;getAccessToken();
-if(isset($accessToken[&#39;user_id&#39;]) &amp;amp;&amp;amp; is_numeric($accessToken[&#39;user_id&#39;])){
-    /*
-     * Saving the access token in the session
-     */
-    $_SESSION[&#39;access_token&#39;] = $accessToken[&#39;oauth_token&#39;];
-    $_SESSION[&#39;access_token_secret&#39;] = $accessToken[&#39;oauth_token_secret&#39;];
 
     /*
-     * Redirect the user to the success.php where we will show his/her
-     * profile image and friends alongwith the tweets.
+     * Instanitiating the TwitterOAuth class with the consumer token and
+     * the request token
      */
-    header(&#39;Location: &#39; . &#39;/twoth/success.php&#39;);
-}
+    $twitterOAuth = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET,
+    $_SESSION[&#39;request_token&#39;],$_SESSION[&#39;request_token_secret&#39;]);
+
+    /**
+     * Getting the access token from the Twitter.
+     * This access token will be used by our web application.
+     * It is only this access token which enables us to use the 
+     * Twitter account of the user (in limited way).
+     * By this access token we can read tweets, friends&#39; tweets, post new
+     * tweets etc. 
+     */
+    $accessToken = $twitterOAuth-&amp;gt;getAccessToken();
+    if(isset($accessToken[&#39;user_id&#39;]) &amp;amp;&amp;amp; is_numeric($accessToken[&#39;user_id&#39;])){
+        /*
+         * Saving the access token in the session
+         */
+        $_SESSION[&#39;access_token&#39;] = $accessToken[&#39;oauth_token&#39;];
+        $_SESSION[&#39;access_token_secret&#39;] = $accessToken[&#39;oauth_token_secret&#39;];
+
+        /*
+         * Redirect the user to the success.php where we will show his/her
+         * profile image and friends alongwith the tweets.
+         */
+        header(&#39;Location: &#39; . &#39;/twoth/success.php&#39;);
+    }
+
+
+} else {
+
+
+    /*
+     *If token retured from the Twitter to the callback url doesn&#39;t
+     * match with the token which is saved already in the session, then
+
+
+
+
+
+## Comments
+
+**[Varun Jalandery](#8800 &quot;2012-05-16 13:51:13&quot;):** @SMile If we do that, then the user would have to pass his/her credentials on our website, which is just against the purpose of OAuth, OAuth is designed in such a way that user should pass his/her credentials on the original website to which his/her account belongs. So we never play with username and password with OAuth. But there is a way for accessing the Twitter account without logging in, but this works for the applcation owner (the developer who has created the Twitter App). You can simply copy the access tokens as shown in the App settings page on the Twitter Site and use it in the php code to access the Twitter account.
+
+**[smile](#8789 &quot;2012-05-14 22:10:24&quot;):** HI, Is it possible to pass the user credentials to the twitter url page through the php program itself , rather than prompting the user to enter it from index.php page and redirect to callback php. We are trying to modify this to meet our use case? Thanks SMile
 </code></pre></div>
-<p>} else {</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">/*
- *If token retured from the Twitter to the callback url doesn&#39;t
- * match with the token which is saved already in the session, then
-</code></pre></div>
-<h2>Comments</h2>
-
-<p><strong><a href="#8800" title="2012-05-16 13:51:13">Varun Jalandery</a>:</strong> @SMile If we do that, then the user would have to pass his/her credentials on our website, which is just against the purpose of OAuth, OAuth is designed in such a way that user should pass his/her credentials on the original website to which his/her account belongs. So we never play with username and password with OAuth. But there is a way for accessing the Twitter account without logging in, but this works for the applcation owner (the developer who has created the Twitter App). You can simply copy the access tokens as shown in the App settings page on the Twitter Site and use it in the php code to access the Twitter account.</p>
-
-<p><strong><a href="#8789" title="2012-05-14 22:10:24">smile</a>:</strong> HI, Is it possible to pass the user credentials to the twitter url page through the php program itself , rather than prompting the user to enter it from index.php page and redirect to callback php. We are trying to modify this to meet our use case? Thanks SMile</p>
-
 
                 <hr>
 

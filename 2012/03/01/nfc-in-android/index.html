@@ -120,34 +120,33 @@ Let&#39;s dig into the important API’s and technical details we can use to mak
 <li><strong>NdefRecord: *<em>Represents the records in NdefMessage. These records contain different fields to identify the required information about the data like format, type, ID and the actual payload. One of the field is *</em>Type Name Format (TNF)</strong> which is used to detect the MIME type or URI of the NdefMessage. When the data is transferred from target to receiver,the first NdefRecord is looked up for getting information about the whole NdefMessage. After that an Intent is created with action *<em>ACTION<em>NDEF</em>DISCOVERED *</em>and the MIME type and URI is attached to it.
 The appropriate application is chosen to do the job on the bases of intent and the data attached to it. The applications willing to handle the NFC tag detection declare intent filter in their manifest file:</li>
 </ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;intent-filter&gt;
 
-<p>[sourcecode language=&quot;xml&quot;]</p>
+&lt;action android:name=&quot;android.nfc.action.NDEF_DISCOVERED&quot;/&gt;
 
-<p><intent-filter></p>
+&lt;category android:name=&quot;android.intent.category.DEFAULT&quot;/&gt;
 
-<p><action android:name="android.nfc.action.NDEF_DISCOVERED"/></p>
+&lt;data android:scheme=&quot;http&quot;
 
-<p><category android:name="android.intent.category.DEFAULT"/></p>
+android:host=&quot;xebia.in&quot;
 
-<p>&lt;data android:scheme=&quot;http&quot;</p>
+android:pathPrefix=&quot;/company.html&quot; /&gt;
 
-<p>android:host=&quot;xebia.in&quot;</p>
-
-<p>android:pathPrefix=&quot;/company.html&quot; /&gt;</p>
-
-<p></intent-filter></p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">This Intent filter will filter intent generated on detecting a tag having a URI as data and will result in opening www.xebia.in/company.html in browser. 
-
-![][2]
-
-**Extracting required data from the NFC intent:**
-
-When the selected activity opens up after tag dispatch, required data is extracted from the incoming intent to proceed further. This data is contained in &quot;extras&quot; of the intent:
-
-1**.  EXTRA_TAG: **The extra for containing payload data and tag technology information bound into a  Tag object.
-
- Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG); 
+&lt;/intent-filter&gt;
 </code></pre></div>
+<p>This Intent filter will filter intent generated on detecting a tag having a URI as data and will result in opening www.xebia.in/company.html in browser. </p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2012/02/Tag_dispatching.png" alt="" title="Tag_dispatching"></p>
+
+<p><strong>Extracting required data from the NFC intent:</strong></p>
+
+<p>When the selected activity opens up after tag dispatch, required data is extracted from the incoming intent to proceed further. This data is contained in &quot;extras&quot; of the intent:</p>
+
+<p>1*<em>.  EXTRA_TAG: *</em>The extra for containing payload data and tag technology information bound into a  Tag object.</p>
+
+<p>Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG); 
+```</p>
+
 <p>2. *<em>EXTRA<em>NDEF</em>MESSAGES: *</em>The extra for containing all the NDEF messages in Tag object. These messages are obtained in an Array of Parcelable objects.</p>
 
 <p>public void onResume() { super.onResume(); Intent parentIntent = getIntent(); if (NfcAdapter.ACTION<em>NDEF</em>DISCOVERED.equals(parentIntent.getAction())){ Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA<em>NDEF</em>MESSAGES); if (rawMsgs != null) { msgs = new NdefMessage[rawMsgs.length]; for (int i = 0; i &lt; rawMsgs.length; i++){ msgs[i] = (NdefMessage) rawMsgs[i]; } } } } 

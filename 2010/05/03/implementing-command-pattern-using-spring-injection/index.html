@@ -147,10 +147,8 @@ public ValidationResult validate(input){
 ```</p>
 
 <p>In the application-context.xml I added following</p>
-
-<p>[sourcecode language=&quot;xml&quot;] <bean id="validator"> <property name="rules"> <list> <bean class="com.xebia.business.rules.Rule1"/> <bean class="com.xebia.business.rules.Rule2"/> <bean class="com.xebia.business.rules.Rule3"/> ----- ----- </list> </property> </bean> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;bean id=&quot;validator&quot;&gt; &lt;property name=&quot;rules&quot;&gt; &lt;list&gt; &lt;bean class=&quot;com.xebia.business.rules.Rule1&quot;/&gt; &lt;bean class=&quot;com.xebia.business.rules.Rule2&quot;/&gt; &lt;bean class=&quot;com.xebia.business.rules.Rule3&quot;/&gt; \----- \----- &lt;/list&gt; &lt;/property&gt; &lt;/bean&gt; 
+</code></pre></div>
 <p>I added unit test cases for all the rules as Rule1Test, Rule2Test e.g., independent of one another.</p>
 
 <p>Benefits that I see with this design are following</p>

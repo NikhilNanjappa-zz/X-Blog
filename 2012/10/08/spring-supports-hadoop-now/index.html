@@ -105,32 +105,34 @@
 <li>Declarative and programmatic support for Hadoop Tools, including FsShell and DistCp.
 Let us create simple and very common Hadoop&#39;s WordCount problem with Spring. I am assuming that readers are familiar with existing Hadoop jobs and have already installed Hadoop on their Systems. </li>
 <li>Create Simple maven project. add dependencies for Hadoop and spring in the pom.xml file of your project.
-[sourcecode lang=&quot;text&quot;] <dependency> <groupId>org.springframework.data</groupId> <artifactId>spring-data-hadoop</artifactId> <version>1.0.0.M2</version> </dependency> <dependency> <groupId>org.apache.hadoop</groupId> <artifactId>hadoop-core</artifactId> <version>1.0.3</version> </dependency> 
-<code>Spring Hadoop dependency is not available in maven repository so add below repository link to download this dependency. [sourcecode lang=&quot;text&quot;] &lt;repositories&gt; &lt;repository&gt; &lt;id&gt;spring-milestone&lt;/id&gt; &lt;name&gt;Spring Maven SNAPSHOT Repository&lt;/name&gt; &lt;url&gt;http://repo.springframework.org/milestone&lt;/url&gt; &lt;/repository&gt; &lt;/repositories&gt; 
-</code> 
-2. Map and Reduce program will remain same. Following are the Mappers and Reducers for WordCount Problem.
-<strong>Map.java</strong> [sourcecode lang=&quot;java&quot;] package com.xebia; import java.io.IOException; import org.apache.commons.lang.StringUtils; import org.apache.hadoop.io.IntWritable; import org.apache.hadoop.io.LongWritable; import org.apache.hadoop.io.Text; import org.apache.hadoop.mapreduce.Mapper; public class Map extends Mapper<LongWritable, Text, Text, IntWritable> { private static final IntWritable INITIALCOUNT = new IntWritable(1); private static final Text KEY = new Text(); protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException { for (String token : StringUtils.split(value.toString())) { KEY.set(token); context.write(KEY, INITIALCOUNT); } } } 
-<code>**Reduce.java** [sourcecode lang=&quot;java&quot;] package com.xebia; import java.io.IOException; import org.apache.hadoop.io.IntWritable; import org.apache.hadoop.io.Text; import org.apache.hadoop.mapreduce.Reducer; public class Reduce extends Reducer&lt;Text, IntWritable, Text, IntWritable&gt;{ public void reduce(Text key, Iterable&lt;IntWritable&gt; values, Context context) throws IOException, InterruptedException { int totalcount = 0; for (IntWritable count : values) { totalcount = totalcount + count.get(); } context.write(key, new IntWritable(totalcount)); } } 
-</code> map and reduce functions are very much obvious. Map split the line and set each word as key and &quot;1&quot; as value. Reducer sort the keys and reduce function calculates the sum for each key and prints as reducer output. 
-3. After writing MapReduce the remaining task is to configure Hadoop Job. This is the point where Spring help us in configuring the job. To configure the job we need to write spring context.xml file. [sourcecode lang=&quot;xml&quot;] &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; <beans xmlns="http://www.springframework.org/schema/beans"   
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
-xmlns:context="http://www.springframework.org/schema/context"   
-xmlns:hadoop="http://www.springframework.org/schema/hadoop"   
-xmlns:p="http://www.springframework.org/schema/p"   
-xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd   
+<code>
+&lt;dependency&gt; &lt;groupId&gt;org.springframework.data&lt;/groupId&gt; &lt;artifactId&gt;spring-data-hadoop&lt;/artifactId&gt; &lt;version&gt;1.0.0.M2&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt; &lt;artifactId&gt;hadoop-core&lt;/artifactId&gt; &lt;version&gt;1.0.3&lt;/version&gt; &lt;/dependency&gt; 
+</code> Spring Hadoop dependency is not available in maven repository so add below repository link to download this dependency. <code>
+&lt;repositories&gt; &lt;repository&gt; &lt;id&gt;spring-milestone&lt;/id&gt; &lt;name&gt;Spring Maven SNAPSHOT Repository&lt;/name&gt; &lt;url&gt;http://repo.springframework.org/milestone&lt;/url&gt; &lt;/repository&gt; &lt;/repositories&gt; 
+</code> </li>
+<li>Map and Reduce program will remain same. Following are the Mappers and Reducers for WordCount Problem.
+<strong>Map.java</strong> <code>
+package com.xebia; import java.io.IOException; import org.apache.commons.lang.StringUtils; import org.apache.hadoop.io.IntWritable; import org.apache.hadoop.io.LongWritable; import org.apache.hadoop.io.Text; import org.apache.hadoop.mapreduce.Mapper; public class Map extends Mapper&lt;LongWritable, Text, Text, IntWritable&gt; { private static final IntWritable INITIALCOUNT = new IntWritable(1); private static final Text KEY = new Text(); protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException { for (String token : StringUtils.split(value.toString())) { KEY.set(token); context.write(KEY, INITIALCOUNT); } } } 
+</code> <strong>Reduce.java</strong> <code>
+package com.xebia; import java.io.IOException; import org.apache.hadoop.io.IntWritable; import org.apache.hadoop.io.Text; import org.apache.hadoop.mapreduce.Reducer; public class Reduce extends Reducer&lt;Text, IntWritable, Text, IntWritable&gt;{ public void reduce(Text key, Iterable&lt;IntWritable&gt; values, Context context) throws IOException, InterruptedException { int totalcount = 0; for (IntWritable count : values) { totalcount = totalcount + count.get(); } context.write(key, new IntWritable(totalcount)); } } 
+</code> map and reduce functions are very much obvious. Map split the line and set each word as key and &quot;1&quot; as value. Reducer sort the keys and reduce function calculates the sum for each key and prints as reducer output. </li>
+<li>After writing MapReduce the remaining task is to configure Hadoop Job. This is the point where Spring help us in configuring the job. To configure the job we need to write spring context.xml file. <code>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; &lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;   
+xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;   
+xmlns:context=&quot;http://www.springframework.org/schema/context&quot;   
+xmlns:hadoop=&quot;http://www.springframework.org/schema/hadoop&quot;   
+xmlns:p=&quot;http://www.springframework.org/schema/p&quot;   
+xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd   
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd   
-http://www.springframework.org/schema/hadoop http://www.springframework.org/schema/hadoop/spring-hadoop.xsd"> <a href="hadoop:configuration">hadoop:configuration</a> fs.default.name=hdfs://localhost:54310 <a href="/hadoop:configuration">/hadoop:configuration</a> <hadoop:job id="wordcount" input-path="/input" output-path="/output"   
-mapper="com.xebia.Map" reducer="com.xebia.Reduce"/> </beans> 
-``` 
-
-<ol>
-<li>Line 5 declares Spring for Apache Hadoop namespace prefix. Which is hadoop and will be used in the entire file to refer hadoop specific tags.</li>
-<li>In order to use Hadoop we need to create Configuration object which helps in configuring Hadoop.It holds information about the job tracker, the input, output format and the various other parameters of the map reduce job.</li>
-<li>The one liner declaration <hadoop:configuration /> defines a Configuration bean (to be precise a factory bean of type ConfigurationFactoryBean) named, by default, hadoopConfiguration. The default name is used, by conventions, by the other elements that require a configuration - this leads to simple and very concise configurations as the main components can automatically wire themselves up without requiring any specific configuration.</li>
-<li>Here at line 11 I configured the &quot;fs.default.name&quot; property explicitly because I am using different port for hdfs file system then the default port (9001).</li>
-<li>Line 13 defines a Hadoop job with properties like input-path,output-path, mapper and reducer. This is very basic job we can here define properties like combiner, partitioner, input key, input value, output key, output value and many more.</li>
-<li>Oops! I haven&#39;t defined the input key/value and output key/value in job. Spring job definition is strong enough that it determine these key form the syntax of mapper and reducers. But as mentioned above there is a provision that we can explicitly set these values.</li>
-</ol></li>
+http://www.springframework.org/schema/hadoop http://www.springframework.org/schema/hadoop/spring-hadoop.xsd&quot;&gt; &lt;hadoop:configuration&gt; fs.default.name=hdfs://localhost:54310 &lt;/hadoop:configuration&gt; &lt;hadoop:job id=&quot;wordcount&quot; input-path=&quot;/input&quot; output-path=&quot;/output&quot;   
+mapper=&quot;com.xebia.Map&quot; reducer=&quot;com.xebia.Reduce&quot;/&gt; &lt;/beans&gt; 
+</code> 
+1. Line 5 declares Spring for Apache Hadoop namespace prefix. Which is hadoop and will be used in the entire file to refer hadoop specific tags.
+2. In order to use Hadoop we need to create Configuration object which helps in configuring Hadoop.It holds information about the job tracker, the input, output format and the various other parameters of the map reduce job.
+3. The one liner declaration <hadoop:configuration /> defines a Configuration bean (to be precise a factory bean of type ConfigurationFactoryBean) named, by default, hadoopConfiguration. The default name is used, by conventions, by the other elements that require a configuration - this leads to simple and very concise configurations as the main components can automatically wire themselves up without requiring any specific configuration.
+4. Here at line 11 I configured the &quot;fs.default.name&quot; property explicitly because I am using different port for hdfs file system then the default port (9001).
+5. Line 13 defines a Hadoop job with properties like input-path,output-path, mapper and reducer. This is very basic job we can here define properties like combiner, partitioner, input key, input value, output key, output value and many more.
+6. Oops! I haven&#39;t defined the input key/value and output key/value in job. Spring job definition is strong enough that it determine these key form the syntax of mapper and reducers. But as mentioned above there is a provision that we can explicitly set these values.</li>
 </ol>
 
 

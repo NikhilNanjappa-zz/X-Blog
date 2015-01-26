@@ -117,7 +117,8 @@ private String password;
 <p>} 
 ```</p>
 
-<p><strong>User Repository</strong> <code>
+<p><strong>User Repository</strong> 
+<code>
  package in.xebia.datarest.repository; public interface UserRepository extends JpaRepository&lt;User, Long&gt; { } 
 </code></p>
 
@@ -164,23 +165,32 @@ public Post findByTitle(@Param(&amp;quot;title&amp;quot;) String title);
 <p><strong>Response</strong> [code language=&quot;css&quot;] { &quot;links&quot; : [ { &quot;rel&quot; : &quot;post&quot;, &quot;href&quot; : &quot;http://localhost:8080/datarest/post&quot; }, { &quot;rel&quot; : &quot;user&quot;, &quot;href&quot; : &quot;http://localhost:8080/datarest/user&quot; } ], &quot;content&quot; : [ ] } 
  ``` The above response shows how many repositories are exposed and under which urls. </p>
 
-<p>Lets create a user. <strong>Request</strong> [sourcecode language=&quot;css&quot; wraplines=&quot;true&quot;] curl -v -d &#39;{&quot;userName&quot; : &quot;Vijay&quot;, &quot;password&quot;:&quot;123&quot;}&#39; -H &quot;Content-Type: application/json&quot; http://localhost:8080/datarest/user 
-```</p>
+<p>Lets create a user. <strong>Request</strong> 
+<code>
+$ curl -v -d &#39;{&quot;userName&quot; : &quot;Vijay&quot;, &quot;password&quot;:&quot;123&quot;}&#39; -H &quot;Content-Type: application/json&quot; http://localhost:8080/datarest/user 
+</code></p>
 
 <p>This will create a user with userName as Vijay and password as 123. Now lets see how a post can be created(<strong>Embedded Types</strong>).</p>
 
-<p><strong>Request</strong> [code language=&quot;css&quot;] curl -v -X POST -H &quot;Content-type: application/json&quot; -d &#39;{&quot;title&quot;:&quot;Spring Data Rest&quot;, &quot;content&quot;:&quot;Spring data rest is cool&quot;, &quot;user&quot;:{ &quot;rel&quot; : &quot;user.User&quot;, &quot;href&quot; : &quot;http://localhost:8080/datarest/user/1&quot; } }&#39; http://localhost:8080/datarest/post 
- ```</p>
-
-<p>And now if we request for [code language=&quot;css&quot;]http://localhost:8080/datarest/post
- <code>output will be [code language=&quot;css&quot;] { &quot;links&quot; : [ ], &quot;content&quot; : [ { &quot;links&quot; : [ { &quot;rel&quot; : &quot;self&quot;, &quot;href&quot; : &quot;http://localhost:8080/datarest/post/1&quot; }, { &quot;rel&quot; : &quot;post.Post.user&quot;, &quot;href&quot; : &quot;http://localhost:8080/datarest/post/1/user&quot; } ], &quot;content&quot; : &quot;Spring data rest is cool&quot;, &quot;title&quot; : &quot;Spring Data Rest&quot; } ], &quot;page&quot; : { &quot;size&quot; : 20, &quot;totalElements&quot; : 1, &quot;totalPages&quot; : 1, &quot;number&quot; : 1 } } 
+<p><strong>Request</strong> 
+<code>bash
+$ curl -v -X POST -H &quot;Content-type: application/json&quot; -d &#39;{&quot;title&quot;:&quot;Spring Data Rest&quot;, &quot;content&quot;:&quot;Spring data rest is cool&quot;, &quot;user&quot;:{ &quot;rel&quot; : &quot;user.User&quot;, &quot;href&quot; : &quot;http://localhost:8080/datarest/user/1&quot; } }&#39; http://localhost:8080/datarest/post 
 </code></p>
 
-<p>For querying on custom methods like <strong>findByUserUserName(String userName)</strong> defined in our postRepository. We can write a query like this: [code language=&quot;css&quot;] curl -v http://localhost:8080/datarest/post/search/findByUserUserName?userName=Vijay 
- ```</p>
+<p>And now if we request for <code>http://localhost:8080/datarest/post
+</code> output will be 
+<code>{ &quot;links&quot; : [ ], &quot;content&quot; : [ { &quot;links&quot; : [ { &quot;rel&quot; : &quot;self&quot;, &quot;href&quot; : &quot;http://localhost:8080/datarest/post/1&quot; }, { &quot;rel&quot; : &quot;post.Post.user&quot;, &quot;href&quot; : &quot;http://localhost:8080/datarest/post/1/user&quot; } ], &quot;content&quot; : &quot;Spring data rest is cool&quot;, &quot;title&quot; : &quot;Spring Data Rest&quot; } ], &quot;page&quot; : { &quot;size&quot; : 20, &quot;totalElements&quot; : 1, &quot;totalPages&quot; : 1, &quot;number&quot; : 1 } } 
+</code></p>
 
-<p>Finally deleting a post using the following request: [code language=&quot;css&quot;] curl -i -H -X DELETE http://localhost:8080/datarest/post/1 
- ``` This will delete the post with id equal to 1. </p>
+<p>For querying on custom methods like <strong>findByUserUserName(String userName)</strong> defined in our postRepository. We can write a query like this: 
+<code>curl -v http://localhost:8080/datarest/post/search/findByUserUserName?userName=Vijay 
+</code></p>
+
+<p>Finally deleting a post using the following request: 
+<code>
+curl -i -H -X DELETE http://localhost:8080/datarest/post/1 
+</code> 
+This will delete the post with id equal to 1. </p>
 
 <p>Thats it for now guys. Hope you like it. </p>
 

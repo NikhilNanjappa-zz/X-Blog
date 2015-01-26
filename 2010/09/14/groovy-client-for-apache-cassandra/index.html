@@ -108,54 +108,53 @@ Cassandra Java Client is too basic. Hector is a good option as it provides featu
 </ol>
 
 <p>I tried the Java thrift API and Hector but it looks too cumbersome and verbose if you wrote code in Groovy or another programming language. Following is the sample groovy test code compared to Thrift based <a href="http://wiki.apache.org/cassandra/ThriftExamples#Java" title="Java example">Java example.</a>.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">    void testSingleColumnGetAndSet() {
+        k[&amp;quot;User/a/user_id&amp;quot;] = &amp;quot;1&amp;quot;;
+        assert k[&amp;quot;User/a/user_id&amp;quot;] == &amp;quot;1&amp;quot;;
+    }
 
-<p>[sourcecode language=&quot;groovy&quot;]</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">void testSingleColumnGetAndSet() {
-    k[&amp;quot;User/a/user_id&amp;quot;] = &amp;quot;1&amp;quot;;
-    assert k[&amp;quot;User/a/user_id&amp;quot;] == &amp;quot;1&amp;quot;;
-}
+    void testSlice() {
+        k[&amp;quot;User/b/1&amp;quot;] = &amp;quot;1&amp;quot;;
+        k[&amp;quot;User/b/2&amp;quot;] = &amp;quot;2&amp;quot;;
+        k[&amp;quot;User/b/3&amp;quot;] = &amp;quot;3&amp;quot;;
 
-void testSlice() {
-    k[&amp;quot;User/b/1&amp;quot;] = &amp;quot;1&amp;quot;;
-    k[&amp;quot;User/b/2&amp;quot;] = &amp;quot;2&amp;quot;;
-    k[&amp;quot;User/b/3&amp;quot;] = &amp;quot;3&amp;quot;;
+        assert k[&amp;quot;User/b/[1,2,3]&amp;quot;] == [b:[&amp;quot;1&amp;quot;, &amp;quot;2&amp;quot;, &amp;quot;3&amp;quot;]];
+        assert k[&amp;quot;User/b/[1-2]&amp;quot;] == [b:[&amp;quot;1&amp;quot;, &amp;quot;2&amp;quot;]];
+        assert k[&amp;quot;User/b/[3]&amp;quot;] == [b:[&amp;quot;3&amp;quot;]];
+    }
 
-    assert k[&amp;quot;User/b/[1,2,3]&amp;quot;] == [b:[&amp;quot;1&amp;quot;, &amp;quot;2&amp;quot;, &amp;quot;3&amp;quot;]];
-    assert k[&amp;quot;User/b/[1-2]&amp;quot;] == [b:[&amp;quot;1&amp;quot;, &amp;quot;2&amp;quot;]];
-    assert k[&amp;quot;User/b/[3]&amp;quot;] == [b:[&amp;quot;3&amp;quot;]];
-}
+    void testRangeSlices() {
+        k[&amp;quot;User/d/1&amp;quot;] = &amp;quot;1&amp;quot;;
+        k[&amp;quot;User/d/2&amp;quot;] = &amp;quot;2&amp;quot;;
 
-void testRangeSlices() {
-    k[&amp;quot;User/d/1&amp;quot;] = &amp;quot;1&amp;quot;;
-    k[&amp;quot;User/d/2&amp;quot;] = &amp;quot;2&amp;quot;;
+        k[&amp;quot;User/e/1&amp;quot;] = &amp;quot;1&amp;quot;;
+        k[&amp;quot;User/e/2&amp;quot;] = &amp;quot;2&amp;quot;;
 
-    k[&amp;quot;User/e/1&amp;quot;] = &amp;quot;1&amp;quot;;
-    k[&amp;quot;User/e/2&amp;quot;] = &amp;quot;2&amp;quot;;
+        assert k[&amp;quot;User/[e-e]/[1,2,3]&amp;quot;] == [e:[&amp;quot;1&amp;quot;,&amp;quot;2&amp;quot;]];
+        assert k[&amp;quot;User/[d-e]/[1,2,3]&amp;quot;] == [d:[&amp;quot;1&amp;quot;,&amp;quot;2&amp;quot;],e:[&amp;quot;1&amp;quot;,&amp;quot;2&amp;quot;]];
+    }
+</code></pre></div>
+<p>object &#39;k&#39; is the keyspace wrapper, &#39;User&#39; the column family and keys and columns follow them in a &#39;/&#39; separated path.</p>
 
-    assert k[&amp;quot;User/[e-e]/[1,2,3]&amp;quot;] == [e:[&amp;quot;1&amp;quot;,&amp;quot;2&amp;quot;]];
-    assert k[&amp;quot;User/[d-e]/[1,2,3]&amp;quot;] == [d:[&amp;quot;1&amp;quot;,&amp;quot;2&amp;quot;],e:[&amp;quot;1&amp;quot;,&amp;quot;2&amp;quot;]];
-}
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">object &#39;k&#39; is the keyspace wrapper, &#39;User&#39; the column family and keys and columns follow them in a &#39;/&#39; separated path.
+<p>Cassandra data model is simple with only complication of a SuperColumn as explained in the <a href="http://arin.me/blog/wtf-is-a-supercolumn-cassandra-data-model">blog</a> (the title of the post should give you an idea). </p>
 
-Cassandra data model is simple with only complication of a SuperColumn as explained in the [blog][6] (the title of the post should give you an idea). 
+<ol>
+<li>Keyspace: like a database schema</li>
+<li>ColumnFamily: Individual data spaces (User,Tweets)</li>
+<li>Key: A key in the ColumnFamily</li>
+<li>Column: A name,value and timestamp combination</li>
+<li><p>SuperColumn: A Column that can contain multiple columns (in a ColumnFamily you cannot mix super and &#39;normal&#39; columns)
+Following diagram tries to explain the data model. </p>
 
-  1. Keyspace: like a database schema
-  2. ColumnFamily: Individual data spaces (User,Tweets)
-  3. Key: A key in the ColumnFamily
-  4. Column: A name,value and timestamp combination
-  5. SuperColumn: A Column that can contain multiple columns (in a ColumnFamily you cannot mix super and &#39;normal&#39; columns)
-Following diagram tries to explain the data model. 
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2010/09/DataModel2.png" alt="Cassandra DataModel" title="DataModel"></p></li>
+</ol>
 
+<p>Now lets have a look at the Groovy code that accesses Cassandra.</p>
 
-    ![Cassandra DataModel][7]
+<p><strong>How it works:</strong></p>
 
-Now lets have a look at the Groovy code that accesses Cassandra.
-
-**How it works:**
-
-This is simply achieved by providing getAt and putAt in the Keyspace object which is the Groovy way of operator overriding.
-
-[sourcecode language=&quot;groovy&quot;] def getAt(String key) { def ctx = Selector.readContext(key) ctx[&quot;ks&quot;] = ks; def ret = client.get( ctx); return ret }
+<p>This is simply achieved by providing getAt and putAt in the Keyspace object which is the Groovy way of operator overriding.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> def getAt(String key) { def ctx = Selector.readContext(key) ctx[&quot;ks&quot;] = ks; def ret = client.get( ctx); return ret }
 
 
     void putAt(String key, Object value) {
@@ -165,21 +164,22 @@ This is simply achieved by providing getAt and putAt in the Keyspace object whic
     }
 </code></pre></div>
 <p>The &#39;selectors&#39; (keys used in the subscript operator) are inspired from <a href="http://commons.apache.org/jxpath/" title="JXPath">JXPath</a> world and are used for simple range queries as well. Below is a sample of the type of selectors that could be used.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> void testIdentifySetRequest() { assert Selector.parse(&quot;cf/key/col&quot;, SelectorType.SET) == &quot;set_slice_col&quot;; }
 
-<p>[sourcecode language=&quot;groovy&quot;] void testIdentifySetRequest() { assert Selector.parse(&quot;cf/key/col&quot;, SelectorType.SET) == &quot;set<em>slice</em>col&quot;; }</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">void testIdentifyGetRequest() {
-    assert Selector.parse(&amp;quot;cf/key/col&amp;quot;, SelectorType.GET) == &amp;quot;get_col&amp;quot;;
 
-    assert Selector.parse(&amp;quot;cf/key/[col1,col2]&amp;quot;, SelectorType.GET) == &amp;quot;get_slice_col&amp;quot;; // key slice
-    assert Selector.parse(&amp;quot;cf/key/[col1-col2]&amp;quot;, SelectorType.GET) == &amp;quot;get_slice_col&amp;quot;;   // col range
-    assert Selector.parse(&amp;quot;cf/key/[col1-]&amp;quot;, SelectorType.GET) == &amp;quot;get_slice_col&amp;quot;; // start to end
-    assert Selector.parse(&amp;quot;cf/key/[*]&amp;quot;, SelectorType.GET) ==  &amp;quot;get_slice_col&amp;quot;; // all cols
+    void testIdentifyGetRequest() {
+        assert Selector.parse(&amp;quot;cf/key/col&amp;quot;, SelectorType.GET) == &amp;quot;get_col&amp;quot;;
 
-    assert Selector.parse(&amp;quot;cf/[key1-key2]/[col1-col2]&amp;quot;,SelectorType.GET) == &amp;quot;get_range_slice&amp;quot;; // range
-}
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">Selectors are implemented using regular expressions. Selectors parse the &#39;path&#39; expression and provide it as an input to client. Following is a code snippet of the expressions used.
+        assert Selector.parse(&amp;quot;cf/key/[col1,col2]&amp;quot;, SelectorType.GET) == &amp;quot;get_slice_col&amp;quot;; // key slice
+        assert Selector.parse(&amp;quot;cf/key/[col1-col2]&amp;quot;, SelectorType.GET) == &amp;quot;get_slice_col&amp;quot;;   // col range
+        assert Selector.parse(&amp;quot;cf/key/[col1-]&amp;quot;, SelectorType.GET) == &amp;quot;get_slice_col&amp;quot;; // start to end
+        assert Selector.parse(&amp;quot;cf/key/[*]&amp;quot;, SelectorType.GET) ==  &amp;quot;get_slice_col&amp;quot;; // all cols
 
-[sourcecode language=&quot;groovy&quot;] def static final SET_REGEX = [ set_slice_col: ~/(\w+)\/(\w+)\/(\w+)/ ];
+        assert Selector.parse(&amp;quot;cf/[key1-key2]/[col1-col2]&amp;quot;,SelectorType.GET) == &amp;quot;get_range_slice&amp;quot;; // range
+    }
+</code></pre></div>
+<p>Selectors are implemented using regular expressions. Selectors parse the &#39;path&#39; expression and provide it as an input to client. Following is a code snippet of the expressions used.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> def static final SET_REGEX = [ set_slice_col: ~/(\w+)\/(\w+)\/(\w+)/ ];
 
 
     def static final GET_REGEX = [
@@ -190,39 +190,41 @@ This is simply achieved by providing getAt and putAt in the Keyspace object whic
     ] as LinkedHashMap;
 </code></pre></div>
 <p>Below is the client code (GHector?) and Category code that takes out the reusable Cassandra specific code.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> def put(ctx,value) { execute { Cassandra.Client client -&gt; use (CassandraCategory) { client.insert ctx.ks, ctx.key, cpath(ctx), value.serialize(), timestamp, defConLevel } } }
 
-<p>[sourcecode language=&quot;groovy&quot;] def put(ctx,value) { execute { Cassandra.Client client -&gt; use (CassandraCategory) { client.insert ctx.ks, ctx.key, cpath(ctx), value.serialize(), timestamp, defConLevel } } }</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">def execute(cmd) {
-    TTransport tt = new TSocket(server, port);
-    TProtocol tp =  new TBinaryProtocol(tt);
-    Cassandra.Client c = new Cassandra.Client(tp);
-    try {
-        tt.open();
-        cmd(c);
-    } finally {
-        tt.close();
+
+    def execute(cmd) {
+        TTransport tt = new TSocket(server, port);
+        TProtocol tp =  new TBinaryProtocol(tt);
+        Cassandra.Client c = new Cassandra.Client(tp);
+        try {
+            tt.open();
+            cmd(c);
+        } finally {
+            tt.close();
+        }
     }
-}
-...
-}
-// Category code
-class CassandraCategory {
+    ...
+    }
+    // Category code
+    class CassandraCategory {
 
-static cpath(ks, args) {
-    ColumnPath cp = new ColumnPath(args[&amp;quot;cf&amp;quot;]);
-    cp.setColumn(args[&amp;quot;col&amp;quot;].bytes);
-    return cp;
-}
+    static cpath(ks, args) {
+        ColumnPath cp = new ColumnPath(args[&amp;quot;cf&amp;quot;]);
+        cp.setColumn(args[&amp;quot;col&amp;quot;].bytes);
+        return cp;
+    }
 
-static serialize(String s) {
-    return s.getBytes(&amp;quot;UTF-8&amp;quot;);
-}
-...
-}
-</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">This approach could be useful for applications where we have fixed queries so the selectors could be cached. An application selecting large number of columns/keys dynamically would need an alternate approach (some sort of query API with filters).
-
-This is still a work in progress (like results could have column names as keys as well... wait a second , it looks like JSON). In future I will be trying to implement the client using Hector instead of the raw Thrift API. Your comments are appreciated on how to make this better.
+    static serialize(String s) {
+        return s.getBytes(&amp;quot;UTF-8&amp;quot;);
+    }
+    ...
+    }
 </code></pre></div>
+<p>This approach could be useful for applications where we have fixed queries so the selectors could be cached. An application selecting large number of columns/keys dynamically would need an alternate approach (some sort of query API with filters).</p>
+
+<p>This is still a work in progress (like results could have column names as keys as well... wait a second , it looks like JSON). In future I will be trying to implement the client using Hector instead of the raw Thrift API. Your comments are appreciated on how to make this better.</p>
+
 
                 <hr>
 

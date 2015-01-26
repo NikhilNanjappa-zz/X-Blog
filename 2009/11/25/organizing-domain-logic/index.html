@@ -123,10 +123,8 @@ In this blog, we will discuss various patterns of organizing domain logic and sp
 <p>As you can see from the above, most of the above code is procedural. Here, the services act on the entities. A typical example would be an interaction between session bean and entity bean. Another similar pattern not mentioned in the PoEEA is <a href="http://martinfowler.com/bliki/AnemicDomainModel.html">Anemic Domain Model</a> (ADM) which works on the same principle where domain objects have attributes and relationships but does not have behaviour. Behaviour is provided by the services. The different between TS and ADM is that in former we do not have domain objects but rather have something which Fowler describe as <a href="http://martinfowler.com/eaaCatalog/tableDataGateway.html">Table Data Gateway</a>, which essentially is a wrapper for SQL queries.</p>
 
 <p><strong>Domain Model (DM)</strong> In domain model approach, both behaviour and data are encapsulated inside the domain objects. Domain model looks different from the database design and utilizes inheritance, strategies, and other design patterns to create complex webs of small interconnected objects. A typical domain model code might look like</p>
-
-<p>[sourcecode lang=&quot;java&quot;]class Bar { private BarAdmissionPolicy = new BarAdmissionPolicy(); public void admit(Person person) { if (BarAdmissionPolicy.isAllowed(person)) { this.add(person) } } } public class BarAdmissionPolicy { public boolean isAllowed(Person person) { if (person.age &gt; 18) { return true; } return false; } }
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">class Bar { private BarAdmissionPolicy = new BarAdmissionPolicy(); public void admit(Person person) { if (BarAdmissionPolicy.isAllowed(person)) { this.add(person) } } } public class BarAdmissionPolicy { public boolean isAllowed(Person person) { if (person.age &gt; 18) { return true; } return false; } }
+</code></pre></div>
 <p>A well designed domain model provides an abstraction of the domain logic. It encapsulates complex business logic as interactions between domain objects.</p>
 
 <p><strong>Table Module (TM)</strong> It is essentially a singleton instance that handles the business logic for all the rows in a database table. There is no concept of identity in a Table Module. It is designed to operate on entire table data. A typical domain might look like</p>

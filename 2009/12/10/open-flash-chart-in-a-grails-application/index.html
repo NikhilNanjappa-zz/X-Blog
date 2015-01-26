@@ -105,10 +105,8 @@
 <p>Now we have created a tag library which we can use in view pages to insert the OFC chart . I will expain the attributes in the closure a little later.(rather i feel it is self explainatory ;) )</p>
 
 <p>This is the piece of code that we should put in the view to show a OFC chart.</p>
-
-<p>[sourcecode language=&quot;html&quot;] <grailsOfc:chart name="barChart" url="${createLink(controller:'stats',action: 'bar_graph')}" width="${chartWidth}" height="174" /> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;grailsOfc:chart name=&quot;barChart&quot; url=&quot;${createLink(controller:&#39;stats&#39;,action: &#39;bar_graph&#39;)}&quot; width=&quot;${chartWidth}&quot; height=&quot;174&quot; /&gt; 
+</code></pre></div>
 <p>So when this page is rendered grails looks for the Taglibrary with namespace <strong>grailsOfc</strong>. In this Taglibrary it looks for the chart closure, and puts the code for the swf object in the view. The *<em>open-flash-chart.swf *</em> looks for the data-file in the url</p>
 
 <p>${createLink(controller:&#39;stats&#39;,action: &#39;bar_graph&#39;)}

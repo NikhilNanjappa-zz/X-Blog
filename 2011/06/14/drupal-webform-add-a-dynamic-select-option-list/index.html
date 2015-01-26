@@ -91,7 +91,7 @@
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
 
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-              <h4>Reading time about 3  minutes</h4>
+              <h4>Reading time about 2  minutes</h4>
 
               <h1>Drupal Webform : Add a dynamic select option list</h1>
 
@@ -112,39 +112,38 @@
 <ol>
 <li>Create a custom Webform module ( webform_custom ) with the following files.</li>
 <li><strong>webform_custom.info</strong> – as the name suggest contains the info of the module
-[sourcecode language=&quot;php&quot;] name = Webform Custom description = Provides custom functionality for the Webform core = 6.x project = &quot;webform<em>custom&quot; package = Other 
-``` 
-* **webform</em>custom.module** – this file will contain the code that will generate our dynamic options list, for now just keep this file empty
-1. Active you custom module from <em><strong>Administer → Site building → Modules</strong></em></li>
+<code>
+name = Webform Custom description = Provides custom functionality for the Webform core = 6.x project = &quot;webform_custom&quot; package = Other 
+</code> </li>
+<li><strong>webform_custom.module</strong> – this file will contain the code that will generate our dynamic options list, for now just keep this file empty</li>
+<li><p>Active you custom module from <em><strong>Administer → Site building → Modules</strong></em></p></li>
+<li><p>The following hook adds another item for “Load a pre-built option list” menu in Webform&#39;s select form component. This hook will go into the module file:</p></li>
 </ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> function webform_custom_webform_select_options_info()
 
-<ol>
-<li>The following hook adds another item for “Load a pre-built option list” menu in Webform&#39;s select form component. This hook will go into the module file:</li>
-</ol>
+{
 
-<p>[sourcecode language=&quot;php&quot;] function webform<em>custom</em>webform<em>select</em>options_info()</p>
 
-<p>{</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> $items = array();
+     $items = array();
 
- if (function_exists(&#39;_webform_get_dates&#39;))
- {
+     if (function_exists(&#39;_webform_get_dates&#39;))
+     {
 
-      $items[&#39;training_dates&#39;] = array(
+          $items[&#39;training_dates&#39;] = array(
 
-   &#39;title&#39; =&amp;gt; t(&#39;Training class dates&#39;),
+       &#39;title&#39; =&amp;gt; t(&#39;Training class dates&#39;),
 
-    &#39;options callback&#39; =&amp;gt; &#39;_webform_get_dates&#39;,
+        &#39;options callback&#39; =&amp;gt; &#39;_webform_get_dates&#39;,
 
-    );
+        );
+
+
+}
+
+return $items;
+
+} 
 </code></pre></div>
-<p>}</p>
-
-<p>return $items;</p>
-
-<p>} 
-```</p>
-
 <p>The result of the above function will add the following item in the select form component drop-down: </p>
 
 <p><img src="http://xebee.xebia.in/wp-content/uploads/2011/06/prebuilt-option-list1.png" alt="" title="prebuilt-option-list"></p>
@@ -152,39 +151,40 @@
 <p>As you have noted already we still do not have the data yet. No worries!!</p>
 
 <p>The following code fetches the data from the database and returns a list of all dates for a particular node/training class but you can return whatever you want as long as its an array:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> function _webform_get_dates()
 
-<p>[sourcecode language=&quot;php&quot;] function <em>webform</em>get_dates()</p>
+{
 
-<p>{</p>
+$dates = array();
 
-<p>$dates = array();</p>
+$node_id = arg(1);
 
-<p>$node_id = arg(1);</p>
+$select = db_query(db_rewrite_sql(&quot;
 
-<p>$select = db<em>query(db</em>rewrite_sql(&quot;</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">          SELECT t.nid, t.field_training_date_value as tdate
 
-          FROM {content_type_training_class} c, {node} n
+              SELECT t.nid, t.field_training_date_value as tdate
 
-          WHERE c.nid=&#39;$node_id&#39;
+              FROM {content_type_training_class} c, {node} n
 
-          and c.nid=n.nid
+              WHERE c.nid=&#39;$node_id&#39;
 
-          ORDER BY field_training_date_value&amp;quot;));
+              and c.nid=n.nid
 
-while ($date = db_fetch_object($select)) {
+              ORDER BY field_training_date_value&amp;quot;));
 
- $td = $date-&amp;gt;tdate;
+    while ($date = db_fetch_object($select)) {
 
- $dates[$td] = $td;
+     $td = $date-&amp;gt;tdate;
+
+     $dates[$td] = $td;
+
+
+}
+
+return $dates;
+
+} 
 </code></pre></div>
-<p>}</p>
-
-<p>return $dates;</p>
-
-<p>} 
-```</p>
-
 <ol>
 <li>Now go back to the Webform select form component and choose the &#39;Training class dates&#39; option from the “Load a pre-built option list” dropdown and save the field.</li>
 </ol>

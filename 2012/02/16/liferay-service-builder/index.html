@@ -113,25 +113,26 @@
 <p>*<em>Email Example *</em> Lets say we need an entity of “Email” which has attributes such as from , to , cc, body, date and text.</p>
 
 <p><strong>Configuration</strong> Create a service.xml file in your portlet as location - &quot;portlet/docroot/WEB-INF/service.xml&quot;.  service.xml should stick to <a href="http://www.liferay.com/dtd/liferay-service-builder_5_2_0.dtd%20">this</a> schema definitions. Add entry for Email entity in service.xml.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &lt;entity name=&quot;Email&quot; local-service=&quot;true&quot; remote-service=&quot;false&quot; table=&quot;Email&quot;&gt; &lt;column name=&quot;id&quot; type=&quot;long&quot; primary=&quot;true&quot;&gt; &lt;column name=&quot;to&quot; type=&quot;String&quot;&gt; &lt;column name=&quot;from&quot; type=&quot;String&quot;&gt; &lt;column name=&quot;subject&quot; type=&quot;String&quot;&gt; &lt;column name=&quot;content&quot; type=&quot;String&quot;&gt; &lt;column name=&quot;date&quot; type=&quot;Date&quot;&gt;
 
-<p>[sourcecode language=&quot;xml&quot;] <entity name="Email" local-service="true" remote-service="false" table="Email"> <column name="id" type="long" primary="true"> <column name="to" type="String"> <column name="from" type="String"> <column name="subject" type="String"> <column name="content" type="String"> <column name="date" type="Date"></p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> &amp;lt;!--  Finders --&amp;gt;
- &amp;lt;finder name=&amp;quot;To&amp;quot; return-type=&amp;quot;Collection&amp;quot;&amp;gt;
-     &amp;lt;finder-column name=&amp;quot;to&amp;quot;&amp;gt;&amp;lt;/finder-column&amp;gt;
-      &amp;lt;/finder&amp;gt;
- &amp;lt;finder name=&amp;quot;From&amp;quot; return-type=&amp;quot;Collection&amp;quot;&amp;gt;
-     &amp;lt;finder-column name=&amp;quot;from&amp;quot;&amp;gt;&amp;lt;/finder-column&amp;gt;
-     &amp;lt;/finder&amp;gt;
- &amp;lt;finder name=&amp;quot;Subject&amp;quot; return-type=&amp;quot;Collection&amp;quot;&amp;gt;
-     &amp;lt;finder-column name=&amp;quot;subject&amp;quot;&amp;gt;&amp;lt;/finder-column&amp;gt;
-     &amp;lt;/finder&amp;gt;
-&amp;lt;finder name=&amp;quot;Date&amp;quot; return-type=&amp;quot;Collection&amp;quot;&amp;gt;
-     &amp;lt;finder-column name=&amp;quot;date&amp;quot;&amp;gt;&amp;lt;/finder-column&amp;gt;
-     &amp;lt;/finder&amp;gt;
+
+     &amp;lt;!--  Finders --&amp;gt;
+     &amp;lt;finder name=&amp;quot;To&amp;quot; return-type=&amp;quot;Collection&amp;quot;&amp;gt;
+         &amp;lt;finder-column name=&amp;quot;to&amp;quot;&amp;gt;&amp;lt;/finder-column&amp;gt;
+          &amp;lt;/finder&amp;gt;
+     &amp;lt;finder name=&amp;quot;From&amp;quot; return-type=&amp;quot;Collection&amp;quot;&amp;gt;
+         &amp;lt;finder-column name=&amp;quot;from&amp;quot;&amp;gt;&amp;lt;/finder-column&amp;gt;
+         &amp;lt;/finder&amp;gt;
+     &amp;lt;finder name=&amp;quot;Subject&amp;quot; return-type=&amp;quot;Collection&amp;quot;&amp;gt;
+         &amp;lt;finder-column name=&amp;quot;subject&amp;quot;&amp;gt;&amp;lt;/finder-column&amp;gt;
+         &amp;lt;/finder&amp;gt;
+    &amp;lt;finder name=&amp;quot;Date&amp;quot; return-type=&amp;quot;Collection&amp;quot;&amp;gt;
+         &amp;lt;finder-column name=&amp;quot;date&amp;quot;&amp;gt;&amp;lt;/finder-column&amp;gt;
+         &amp;lt;/finder&amp;gt;
+
+
+&lt;/entity&gt; 
 </code></pre></div>
-<p></entity> 
-``` </p>
-
 <ul>
 <li>entity refers to a new model which we want to create</li>
 <li>name attribute refers to the name of the entity</li>

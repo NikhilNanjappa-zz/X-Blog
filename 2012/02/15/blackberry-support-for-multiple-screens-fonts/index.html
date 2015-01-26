@@ -116,13 +116,16 @@
 
 <p><strong>Ui.UNITS_pt</strong> Blackberry automatically scales fonts which are specified in points. So make sure, in your application, fonts for all texts are specified in points rather than pixels. Fonts specified in pixels may look smaller or larger depending on the pixel density of the device. However, those specified in points will appear almost similar on all devices.</p>
 
-<p>For example you can set default font for your application by: [sourcecode lang=&quot;java&quot;] Font font = FontFamily.forName(&quot;BBGlobal Sans&quot;).getFont(Styles.APPLICATION<em>FONT</em>STYLE, Styles.APPLICATION<em>FONT</em>SIZE, Ui.UNITS_pt); FontManager.getInstance().setApplicationFont(font); 
-```</p>
+<p>For example you can set default font for your application by: <code>
+ Font font = FontFamily.forName(&quot;BBGlobal Sans&quot;).getFont(Styles.APPLICATION_FONT_STYLE, Styles.APPLICATION_FONT_SIZE, Ui.UNITS_pt); FontManager.getInstance().setApplicationFont(font); 
+</code></p>
 
-<p>where Styles is a custom class to consolidate all styles at one place. Similarily, you can change font of a RichTextField by: [sourcecode lang=&quot;java&quot;] titleRTF.setFont(Font.getDefault().derive(Styles.TITLE<em>FONT</em>STYLE, Styles.TITLE<em>FONT</em>SIZE, Ui.UNITS_pt)); 
-``` <strong>Run-time Validation</strong> Automatic scaling of fonts (specified in points) is good and will resolve most of the issues related to text scaling. However, still there might be some areas where scaling has not happened as desired. For example, on a specific device, there can be a button whose label is now getting truncated or at other place text has become larger then its specified container and does not fit in any more etc etc.</p>
+<p>where Styles is a custom class to consolidate all styles at one place. Similarily, you can change font of a RichTextField by: <code>
+ titleRTF.setFont(Font.getDefault().derive(Styles.TITLE_FONT_STYLE, Styles.TITLE_FONT_SIZE, Ui.UNITS_pt)); 
+</code> <strong>Run-time Validation</strong> Automatic scaling of fonts (specified in points) is good and will resolve most of the issues related to text scaling. However, still there might be some areas where scaling has not happened as desired. For example, on a specific device, there can be a button whose label is now getting truncated or at other place text has become larger then its specified container and does not fit in any more etc etc.</p>
 
-<p>For such boundry cases, you can make a runtime check and adjust the font size accordingly, ofcourse, in agreement with UI Designer and the Product Owner. You can do that by: [sourcecode lang=&quot;java&quot;] ButtonField customButton = new ButtonField(&quot;Continue&quot;) { public int getPreferredWidth() { return Display.getWidth() / 4; } };</p>
+<p>For such boundry cases, you can make a runtime check and adjust the font size accordingly, ofcourse, in agreement with UI Designer and the Product Owner. You can do that by: ```
+ ButtonField customButton = new ButtonField(&quot;Continue&quot;) { public int getPreferredWidth() { return Display.getWidth() / 4; } };</p>
 
 <p>Font customFont = Font.getDefault().derive(Styles.BUTTON<em>FONT</em>STYLE, Styles.BUTTON<em>FONT</em>SIZE, Ui.UNITS_pt);</p>
 

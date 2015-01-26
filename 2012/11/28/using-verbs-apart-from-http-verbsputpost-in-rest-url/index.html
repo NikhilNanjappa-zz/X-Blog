@@ -98,10 +98,8 @@
 <p>As per REST, the URLs should make use of HTTP verbs to expose their REST based services via HTTP. (i.e GET/PUT/POST/DELETE) </p>
 
 <p>So, a resource would be something like </p>
-
-<p>[sourcecode language=&quot;java&quot;] GET ../foods/1 would get you the food with id 1. PUT ../foods/2 would update the food with id 2. POST ../foods will add a new food. DELETE ../foods/1 will delete the food resource with id 1.</span> 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> GET ../foods/1 would get you the food with id 1. PUT ../foods/2 would update the food with id 2. POST ../foods will add a new food. DELETE ../foods/1 will delete the food resource with id 1.&lt;/span&gt; 
+</code></pre></div>
 <p>But in a real life complex application, we are faced with exposing many services such as approve, reject where it becomes inevitable to add verbs to the URL. What should we do? Should we just have the URLs like ../foods/1/approve ? </p>
 
 <p>What would go wrong if we use verbs in REST URL. Whether there is some rationale behind it or it just REST dogma.. ** Apparently, there is** :</p>

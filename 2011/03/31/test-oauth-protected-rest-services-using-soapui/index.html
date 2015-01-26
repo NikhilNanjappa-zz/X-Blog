@@ -141,10 +141,8 @@ Please note that the first four parameters are static for a particular consumer 
 </ul>
 
 <p>This is a sample base string which is formatted for better readability.</p>
-
-<p>[sourcecode language=&quot;xml&quot;] GET&amp;http%3A%2F%2Flocalhost%3A8080%2Fabc.com6%2Frest%2Fusers%2Fget&amp;%3D %26oauth<em>callback%3Doob %26oauth</em>consumer<em>key%3DconsumerKey %26oauth</em>nonce%3D175942032 %26oauth<em>signature</em>method%3DHMAC-SHA1 %26oauth<em>timestamp%3D1301554858 %26oauth</em>token%3Df285bed1-c57c-42db-8438-3ec33fd6c4be %26oauth<em>version%3D1.0 %26user</em>name%3Ddemouser 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> GET&amp;amp;http%3A%2F%2Flocalhost%3A8080%2Fabc.com6%2Frest%2Fusers%2Fget&amp;amp;%3D %26oauth_callback%3Doob %26oauth_consumer_key%3DconsumerKey %26oauth_nonce%3D175942032 %26oauth_signature_method%3DHMAC-SHA1 %26oauth_timestamp%3D1301554858 %26oauth_token%3Df285bed1-c57c-42db-8438-3ec33fd6c4be %26oauth_version%3D1.0 %26user_name%3Ddemouser 
+</code></pre></div>
 <p>On close inspection it is easy to understand that the base string consists of 
     * HTTP method.
     * Full path to resource.
@@ -155,15 +153,11 @@ Please note that in the URL the parameters appear in the ascending order of the 
 <p>Let us see the groovy script that gets the OAuth parameters from project level properties, and the API specific properties from the test case properties</p>
 
 <p><strong>OAuth Specific parameters</strong></p>
-
-<p>[sourcecode language=&quot;xml&quot;] def oauth<em>version = context.expand( &#39;${#Project#oauth</em>version}&#39; ) def oauth<em>consumer</em>key = context.expand( &#39;${#Project#oauth<em>consumer</em>key}&#39; ) def oauth<em>callback = context.expand( &#39;${#Project#oauth</em>callback}&#39; ) def oauth<em>signature</em>method = context.expand( &#39;${#Project#oauth<em>signature</em>method}&#39; ) def oauth<em>token = context.expand( &#39;${#Project#oauth</em>token}&#39; ) def token<em>secret = context.expand( &#39;${#Project#token</em>secret}&#39; ) 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> def oauth_version = context.expand( &#39;${#Project#oauth_version}&#39; ) def oauth_consumer_key = context.expand( &#39;${#Project#oauth_consumer_key}&#39; ) def oauth_callback = context.expand( &#39;${#Project#oauth_callback}&#39; ) def oauth_signature_method = context.expand( &#39;${#Project#oauth_signature_method}&#39; ) def oauth_token = context.expand( &#39;${#Project#oauth_token}&#39; ) def token_secret = context.expand( &#39;${#Project#token_secret}&#39; ) 
+</code></pre></div>
 <p><strong>API specific parameters</strong></p>
-
-<p>[sourcecode language=&quot;xml&quot;] def user<em>name = context.expand( &#39;${Properties#user</em>name}&#39; ) 
-```</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> def user_name = context.expand( &#39;${Properties#user_name}&#39; ) 
+</code></pre></div>
 <p>Please note that if you want to make the script generic then in that case the api specific properties and their values will have to be passed dynamically to the script.Once all the parameters are available they will have to be sorted in the alphabetic order of names of parameters, for that we will take following steps</p>
 
 <p>(i) <strong>Put the parameters in a Map</strong></p>
