@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Setting Session Bean Property In Seamtest - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2009/04/17/setting-session-bean-property-in-seamtest/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Setting Session Bean Property In Seamtest</h1>
+                    
+                    <span class="meta">Posted by sunil.inteti on April 17, 2009</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Setting session bean property in SeamTest</h1>
+
+<p>SeamTest is a class we extend for the tests we write in our Seam application. It provides the seam environment in tests something analogous to WicketTester in Wicket Application. I want to share some information on setting the property of Session bean, i came to know while using the SeamTest. </p>
+
+<p>Let us look at the following code.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">@Stateless
+@Scope(ScopeType.SESSION)
+@Name(&quot;Something&quot;)
+public class SomethingBean implements Something {
+    @Logger
+    private Log log;
+    @In
+    StatusMessages statusMessages;
+    @In
+    User user;
+    @In
+    public String test;
+    @Out
+    boolean invoked = false;
+    @Out
+    String userName = &quot;No name&quot;;
+    public String something() {
+        log.info(&quot;Something.something() action called&quot;);
+        statusMessages.add(&quot;something&quot;);
+        invoked = true;
+        userName = user.getName();
+        return test;
+    }
+}
+</code></pre></div>
+<p>And the testClass : </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public class SomethingTest extends SeamTest {
+    @Test
+    public void test_something() throws Exception {
+        new FacesRequest() {
+            @Override
+            protected void invokeApplication() {
+                setValue(&quot;#{user.name}&quot;, &quot;user&quot;);
+                setValue(&quot;#{Something.test}&quot;, &quot;testValue&quot;);
+        //      Contexts.getSessionContext().set(&quot;test&quot;, &quot;testValue&quot;);
+                Object result = invokeMethod(&quot;#{Something.something}&quot;);
+                Object object = Contexts.getSessionContext().get(&quot;invoked&quot;);
+                Assert.assertTrue((Boolean) object);
+                    Assert.assertEquals(Contexts.getSessionContext().get(&quot;userName&quot;), &quot;user&quot;);
+                Assert.assertEquals(result, &quot;testValue&quot;);
+            }
+        }.run();
+    }
+}
+</code></pre></div>
+<p>Using the setValue() method of the SeamTest, we can set the property on Entity bean User. BUT when I tried to use the SetValue() method to set the &#39;test&#39; property on &#39;Something&#39; (Session bean ) I get the following stack trace.</p>
+
+<p>*<em>java.lang.AssertionError: javax.el.PropertyNotFoundException: The class &#39;org.javassist.tmp.java.lang.Object<em>$$</em>javassist_1&#39; does not have the property &#39;test&#39;. at org.jboss.seam.mock.AbstractSeamTest$Request.onException(AbstractSeamTest.java:455) *</em></p>
+
+<p>Clearly Seam is trying to find the &#39;test&#39; property on some other class &quot;org.javassist.tmp.java.lang.Object<em>$$</em>javassist_1&quot;. This is the proxy class generated by Seam framework. The proxy class has the same interface as the the Session bean &#39;Something&#39;. It doesn&#39;t have the property &#39;test&#39;, since the interface doesn&#39;t declare the getter and setter.</p>
+
+<p>The Entity bean &#39;user&#39; is handled differently by the Seam framework: No proxy is created, thus the property can be set using </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> setValue(&quot;#{user.name}&quot;, &quot;user&quot;); 
+</code></pre></div>
+<p>So if in test we cannot set the property like this for session bean, how does Seam set this in production?</p>
+
+<p>Seam looks for the @In property in the corresponding Context if the property is not not specified. and if it is there in the context, it is set.</p>
+
+<p>The solution is to set the property value to corresponding Context. For example in your Seam Test you could use, </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Contexts.getSessionContext().set(&quot;test&quot;, &quot;testValue&quot;).
+</code></pre></div>
+<p>The other option can be to have the getter and setter for the property in the @Local Interface implemented by the Session bean. This way the getter and setter of the property is there in the proxy class generated and we can use , setValue(Something.test, &quot;testValue&quot;) to set the property from test. But this would break the injection of the property. The property wont be looked up in the context and we get the error &quot;@In attribute requires non-null value: Something.test&quot;</p>
+
+<p>In some scenarios where property is not annotated with @In, then we can go for the previous option.</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2009/04/07/web-20-expo-2009-san-francisco/" data-toggle="tooltip" data-placement="top" title="Web 20 Expo 2009 San Francisco">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2009/04/19/inter-portlet-coordination-with-jsr-286/" data-toggle="tooltip" data-placement="top" title="Inter Portlet Coordination With Jsr 286">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

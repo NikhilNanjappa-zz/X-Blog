@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Cas Cross Domain Sso With Custom Login Page - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2012/05/09/cas-cross-domain-sso-with-custom-login-page/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Cas Cross Domain Sso With Custom Login Page</h1>
+                    
+                    <span class="meta">Posted by cgoel on May 9, 2012</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>CAS cross domain SSO with custom login page.</h1>
+
+<p>As part of &quot;Improve the Usability&quot; drive, we decided to get away with the multiple logins for the user when user hops from one application to another, basically have SSO in place for different cross domain sites. After analyzing the existing architecture/applications we required the following things to be in place to implement the SSO functionality.</p>
+
+<p>1) Have SSO across the various applications (including cross domain). 2) Have Customized login (In UI Terms) pages on CAS server for different applications. We needed this as the existing applications also have different login pages but uses the same database. 3) Ability to post login data over HTTP by using the embedded login page which customises the CAS login page. (User won&#39;t be redirected to CAS login page in this case).</p>
+
+<p>Given above requirements me and my colleague <a href="http://xebee.xebia.in/author/pgarg/">Pratik</a> did spikes on these frameworks [Josso][2] , <a href="http://www.forgerock.com/openam.html">OpenAM</a> and <a href="http://www.jasig.org/cas">CAS</a> and at end of the day we decided to go with CAS. </p>
+
+<p>To implement SSO using CAS is a straight forward thing.All steps are well documented. The problem occurs when we have to customize the login jsp as per the individual site theme. This blog aims to address this issue and to show a way to customise the login.jsp for every individual site.</p>
+
+<p>The first requirement is straightforward (you need little configurations except OpenAM, which is a very cumbersome tool to understand and we will never recommend it). Second requirement requires little modification on SSO server but the challenge on the way was third requirement. Let&#39;s discuss the different approaches that can be taken to handle that.</p>
+
+<p><strong>CAS Overview</strong> Not going into too much details, we require below 5 fields to successfully login into CAS using HTTP POST , and it will not matter whether you come from CAS login page or you custom login/embedded page.</p>
+
+<p>1) username - user will enter 2) password - user will enter 3) lt (login ticket) - should come from CAS 4) execution (webflow id) - should come from CAS 5) jsessionid (cookie for cas server) - between browser and CAS server.</p>
+
+<p>CAS server generated the login ticket and execution id when browser requests the CAS login page and sends them as hidden fields. CAS expects to receive them back along with the username/password. Also it sends the jsessionid as a cookie to the browser and all these three fields are tied together. So the trick now is to get handle of all these three fields , if you are going to use your own login page.</p>
+
+<p>*<em>Proxies : *</em> Proxies can be used , When we cannot do a POST (Full Page / Ajax) to a CAS server because of network limitations (cross domain / others) , so we will make a Full page /ajax call to proxy at the server side with the username/credentials , which will call then CAS , Now here were don&#39;t have the loginticket/executionId/jsessionId . so we will have to use the restFul API of the CAS server. First step is to get the TGT ticket and then the service ticket. The java proxy code for both the steps can be downloaded from here <a href="https://wiki.jasig.org/display/CASUM/RESTful+API">download proxy code</a>. Now once you receive the response , pass it on as the ajax response/complete redirect and to the client side based on success/failure response from CAS. <em>Note</em> :- The only problem with the approach is we won&#39;t be able to achieve the single sign on , since we can&#39;t store the cookies on the browser side related to CAS via any means.</p>
+
+<p>*<em>iFrame : *</em> You can embed an iframe in your custom login page which is loading your CAS login page. This way it will generate the jsessionid and you will get lt and execution as the content of your iFrame. Now user will submit the iframe from the custom login page. 2 things will happen now. 1) Credentials didn&#39;t match , so user will see the same login page with error message. 2) Successful authentication , will result in a success page in iframe. In this case iframe will load the serviceURL page(please see the iframe code below) . We will have to put a check on &quot;src&quot; attribute of iframe using a javascript bind method and once we get to know about the successful authentication , we can do post/redirect/refresh as per the application requirement.</p>
+
+<p>[sourcecode language=&quot;xml&quot;] <div > <iframe id="iFrame" name="iFrame" src="https://CasHost:9443/cas/login?service=http://localhost:7080/mywebapp/protected/"> </iframe> </div> [/sourcecode]</p>
+
+<p><em>Here service represents the url to which the CAS server will redirect after successful login.</em></p>
+
+<p>Limitations: 1) Some older versions of browsers may not render iframes properlly. So it can create some browser specific issues. 2) There can be some usability issues &lt;&lt;&gt;&gt;</p>
+
+<p>*<em>Javascript : *</em> The issues that we faced during implementation using iframe can be eliminated by slight modification in the CAS server code base. We can get lt and execution from the CAS server as a javascript parameters. jsessionid will get created when you hit the CAS server to get these attributes as javascript. Add following code to your custom login jsp.</p>
+
+<p>login.jsp: [sourcecode language=&quot;xml&quot;] &lt;script language=&quot;Javascript&quot; src=&quot;https://CasHost:9443/cas/login?</p>
+
+<p>service=http://myhost:7080/mywebapp/protected/&amp;nonCASLogin=true&quot; /&gt; [/sourcecode] Also keep following hidden fields also in login.jsp:</p>
+
+<p>[sourcecode language=&quot;xml&quot;] <body onload="init()"> <form id="fm1" class="fm-v clearfix" action="https://CasHost:9443/cas/login?nonCASLogin=true" method="post"></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">    &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;lt&amp;quot; id=&amp;quot;lt&amp;quot; value=&amp;quot;&amp;quot; /&amp;gt;
+    &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;execution&amp;quot; id=&amp;quot;execution&amp;quot; value=&amp;quot;&amp;quot; /&amp;gt;
+    &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;_eventId&amp;quot; value=&amp;quot;submit&amp;quot; /&amp;gt;
+    &amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;authenticate&amp;quot; value=&amp;quot;true&amp;quot; /&amp;gt;
+    &amp;lt;input class=&amp;quot;btn-submit&amp;quot; name=&amp;quot;submit&amp;quot; accesskey=&amp;quot;l&amp;quot; value=&amp;quot;LOGIN&amp;quot; tabindex=&amp;quot;4&amp;quot; type=&amp;quot;submit&amp;quot; onclick = &amp;quot;submitForm()&amp;quot;/&amp;gt;
+    &amp;lt;input id=&amp;quot;username&amp;quot; name=&amp;quot;username&amp;quot;  type=&amp;quot;text&amp;quot;/&amp;gt;
+    &amp;lt;input id=&amp;quot;password&amp;quot; name=&amp;quot;password&amp;quot; type=&amp;quot;password&amp;quot;/&amp;gt;
+&amp;lt;/form&amp;gt;
+</code></pre></div>
+<p></body> [/sourcecode]</p>
+
+<p>Changes required at the CAS server:</p>
+
+<p>casLoginView.jsp:</p>
+
+<p>Add the following scriptlet at the top of casLoginView.jsp. This will check if the request is having nonCASLogin parameter which is true. If this condition is met then it will return lt and execution as a javascript variables.</p>
+
+<p>[sourcecode language=&quot;xml&quot;] <c:if test="${nonCASLogin eq 'true'}"> var lt=&quot;${loginTicket}&quot;; var execution=&quot;${flowExecutionKey}&quot;;<br>
+<a href="/c:if">/c:if</a> <c:if test="${nonCASLogin ne 'true'}"> Entire CAS login page will reside here. <a href="/c:if">/c:if</a> [/sourcecode]</p>
+
+<p>*<em>Conclusion : *</em> Considering the requirements to be fulfilled by the SSO solution, we finally decided to proceed with the approach using javascript to hit CAS server. Using this approach we were able to implement Cross domain SSO using custom login page. As this requires a simple javascript include from CAS server url, there is no chances of any browser specific issues unlike iFrame. </p>
+
+<p>[2]: JOSSO - Java Open Single Sign-On Project Home - Atricore</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#9311" title="2013-01-29 10:09:28">jaycverg</a>:</strong> Hi, I just want to ask how did you handle credential errors here? Are we just letting it go through the actual CAS login page and display the errors there?</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2012/05/07/using-mongodb-with-php/" data-toggle="tooltip" data-placement="top" title="Using Mongodb With Php">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2012/05/11/call-to-action-cta-user-experience/" data-toggle="tooltip" data-placement="top" title="Call To Action Cta User Experience">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

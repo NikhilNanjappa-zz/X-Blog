@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Introduction To Virtualization And Container Based Deployment - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2013/11/30/introduction-to-virtualization-and-container-based-deployment/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Introduction To Virtualization And Container Based Deployment</h1>
+                    
+                    <span class="meta">Posted by ankit0rastogi on November 30, 2013</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Introduction to virtualization and container based deployment</h1>
+
+<p>Virtualization refers to technologies designed to provide a layer of abstraction between computer hardware systems and the software running on them. By providing a logical view of computing resources, rather than a physical view, virtualization solutions make it possible to do a couple of very useful things.</p>
+
+<p>Before starting with container based deployment let me define some of the key concepts &amp; terminologies used in this context.</p>
+
+<p>In server virtualization the physical server is called the <strong>host</strong>. The virtual servers are called <strong>guests</strong>.</p>
+
+<p>Hypervisor is a program which manages multiple operating systems on a single computer system.</p>
+
+<p>It manages system&#39;s processor, memory, and other resources to allocate what each operating system requires. They vary from one processor architectures to another. On a broader picture there are two types of <strong>hypervisors</strong>.</p>
+
+<p>Type 1 hypervisors: Also known as bare metal hypervisors. These hypervisors directly run on the host’s hardware and manages guest operating systems. Example: XenServer.</p>
+
+<p>Type 2 hypervisors: Also know as hosted hypervisors. These hypervisors requires a host operating system for guest operating systems management. Example: Virtualbox, VMware WorkStation .</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2013/11/Virtualization-Hypervisor-Types-300x187.png" alt="Virtualization-Hypervisor-Types"></p>
+
+<p>In three ways we can create virtual servers</p>
+
+<ol>
+<li><p>Full Virtualization</p></li>
+<li><p>Para-Virtualization</p></li>
+<li><p>OS-level Virtualization.</p></li>
+</ol>
+
+<p><strong>Full virtualization</strong> uses bare metal type hypervisors. Due to this each virtual server is completely independent and unaware of the other virtual servers running on the physical machine. We can have different OS on each guest.</p>
+
+<p>In <strong>para-virtualization</strong> a software hypervisor is installed on a physical server and a guest OS is installed into the environment. The guest servers are aware of one another. Since guest OS needs to “know” that it is virtualized to take advantage of the functions, Operating systems require extensions to make API calls to the hypervisor.</p>
+
+<p><strong>OS-level virtualization</strong> approach doesn&#39;t use a hypervisor at all. Virtualization capability is part of the host OS, which performs all the functions of a fully virtualized hypervisor. The biggest limitation of this approach is that all the guest servers must run the same OS. Each virtual server remains independent from all the others, but you can&#39;t mix and match operating systems among them.</p>
+
+<p>Because OS level virtual partitions can be much smaller than virtual machine partitions, many more can run in the same hardware configuration. OS level virtualization is also known as containers virtualization. Linux Containers (lxc) is an example of OS-level virtualization.</p>
+
+<p><strong>Container based deployment</strong> is a deployment technique in which the whole application and its dependencies are packaged as light weight portable containers. It differs from the traditional VM’s in the sense that it doesn’t contain any entire Guest operating system. Docker is an example of this technique.</p>
+
+<p><strong>Docker</strong> is an open-source engine that automates the deployment of any application as a lightweight, portable, self-sufficient container that will run virtually anywhere.</p>
+
+<p>Docker leverages lxc &amp; aufs to provide containers based deployment and is available for all major linux distributions.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2013/11/docker_vm-300x167.jpg" alt="docker_vm"></p>
+
+<p>It provides</p>
+
+<p><strong>Portable deployment</strong> across machines by defining a format for bundling an application and all its dependencies into a single object which can be transferred to any docker-enabled machine, and executed there with the guarantee that the execution environment exposed to the application will be the same.</p>
+
+<p><strong>Automatic build</strong> to automatically assemble a container from their source code, with full control over application dependencies, build tools, packaging etc.</p>
+
+<p><strong>Versioning capabilities</strong> for tracking successive versions of a container, inspecting the diff between versions, committing new versions, rolling back etc.</p>
+
+<p><strong>Component re-use</strong> so that any container can be used as a &quot;base image&quot; to create more specialized components.</p>
+
+<p>Due to the above mentioned capabilities it is of great use for the devOps community.</p>
+
+<p>Red Hat along with Rackspace, Puppet Labs, and Linode, all of which already make use of Docker for existing solutions, has become partner of Docker inc., the company behind the Docker project.</p>
+
+<p>To know more about Xebia&#39;s offerings on continuous delivery, <a href="http://www.xebia.in/continuous-delivery.html">Click here</a></p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/11/29/vagrant-a-swiss-army-knife-for-every-developer/" data-toggle="tooltip" data-placement="top" title="Vagrant A Swiss Army Knife For Every Developer">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/12/05/apache-blur-a-distributed-search-engine/" data-toggle="tooltip" data-placement="top" title="Apache Blur A Distributed Search Engine">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

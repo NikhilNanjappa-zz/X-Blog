@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Build Your Own Recommendation Engine - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2013/08/25/build-your-own-recommendation-engine/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Build Your Own Recommendation Engine</h1>
+                    
+                    <span class="meta">Posted by Gagan on August 25, 2013</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Build your own Recommendation Engine</h1>
+
+<p>Recommendation engine is a demand of every e-commerce and social website. A lot of work has already been done in this direction. In this blog we would try to understand the need of Recommendation Engine, concept behind computing recommendations and how to integrate developed recommendation engine with the existing application architecture. We will be using Hadoop based recommendation engine to cater big data volume as well.  Let&#39;s have an example of a typical e-commerce website where user can purchase items and technically application is using typical RDBMS to store user purchases and items. Now let&#39;s see how can we fit our recommendation engine to the existing system.</p>
+
+<p>What is Recommendation?</p>
+
+<p>Recommendation involves the prediction of what new items a user would like or dislike based on his purchase history. For example</p>
+
+<p>A user, John , likes the following books </p>
+
+<ol>
+<li>Computer Basic.</li>
+<li>Fundamentals of Computers &amp; Programming in C.</li>
+<li>Internet &amp; Java Programming.
+Recommendation engine will predict which new books John, may like </li>
+<li>Programming Language Pragmatics.</li>
+<li>Object Oriented Programming Concept &amp; Implementations.
+How Recommendation engine computed these results we will see in some time.</li>
+</ol>
+
+<p>Amazon gave the concept of Item-to-Item collaborative-filtering. let&#39;s understand what it is? and How it works?</p>
+
+<p>Collaborative filtering is a method of making predictions (filtering) about the interests of a user by collecting preferences or taste information from many users (collaborating).</p>
+
+<p>Collaborative filtering works on the assumption that if a person A has the same opinion as a person B on an issue, A is more likely to have B&#39;s opinion on a different issue x than to have the opinion on x of a person chosen randomly.</p>
+
+<p><strong>Item-to-Item Collaborative filtering.</strong></p>
+
+<p>Below diagram depicts the user and their purchases made for certain items.</p>
+
+<p>[caption id=&quot;attachment_17055&quot; align=&quot;aligncenter&quot; width=&quot;300&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2013/08/pic_blog1-300x276.jpg" alt="Item based filtering"> Item based filtering[/caption]</p>
+
+<p>In the above diagram user1 purchased grapes, watermelon and orange, user2 purchased grapes and watermelon and user3 purchases watermelon only. So if we need to recommend some item to user3, we can simply calculate that using the fact that the in our database users who purchased watermelon have also purchased grapes in common so simply we can recommend grapes to user3. We can visualize these calculations in the following diagram.</p>
+
+<p>[caption id=&quot;attachment_17056&quot; align=&quot;aligncenter&quot; width=&quot;300&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2013/08/pic_blog2-300x160.jpg" alt="Similarity Matrix"> Similarity Matrix[/caption]</p>
+
+<p><strong>Similarity Matrix.</strong> The above similarity matrix depicts that how many times two items purchased (in combination like how many times user purchased item1 and item3) together by some user. Like grapes (item1) and watermelon(item3) are purchased by two users (i.e. user1 and user2) so there is 2 value for item1 and item3 cell. Similarly Item1 has also been purchased by two users so there is 2 value in item1, item1 cell. This is symmetric matrix (rows and columns are same) this property helps a lot in doing calculations in hadoop job. So to maintain this property we keep calculations for same item (like how many times item1 purchased) as well which is shown along with the diagonal of the matrix. We can neglect these items in the result because there is no point in recommending the same item which user has already purchased.</p>
+
+<p><strong>User purchase history.</strong> This is very clear and showing 1 value only for the item which user has purchased.</p>
+
+<p><strong>Recommendation Matrix.</strong> Recommendation matrix is calculated simply by doing the dot product of above described two matrices and result is Item1. We should ignore item3 because user has already purchased this.</p>
+
+<p><strong>Technical Solution.</strong></p>
+
+<p>Many implementations for above described recommendation engine are already available. One of those implementations are Mahout based RecommenderJob, which provides both hadoop and non hadoop based implementation. This job simply accepts a input file in format (userId, itemId, rating) as we are using purchased history where user is not providing the product ratings so we can pass 1 here for all the records or just ignore. After processing Mahout based RecommenderJob provides the output in format (User id : [item1, item2, ..]).</p>
+
+<p><strong>Application Architecture.</strong></p>
+
+<ol>
+<li>We can fit hadoop based recommendation engine to the existing typical e-commerce application. We need to perform following steps.</li>
+<li>Get data out of RDBMS where user purchase history is stored and keep it in HDFS from where hadoop based Mahout RecommenderJob will pick data and process. Sqoop is a tool which is available to help us here. Sqoop job can be written easily to get data out of RDBMS and put it in HDFS. Process Data using Mahout RecommenderJob.</li>
+<li>Put recommendation results back to the RDBMS. Again Sqoop can help us here.
+[caption id=&quot;attachment_17057&quot; align=&quot;aligncenter&quot; width=&quot;250&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2013/08/pic_blog3-250x300.jpg" alt="Architecture"> Architecture[/caption]</li>
+</ol>
+
+<p><strong>Conclusion.</strong> Amazon claims that this kind of recommendation system works well for them but some new websites which don&#39;t have big database like Amazon claims this is not so useful for them. This is static and batch job based recommendation system but today people need Real-time systems where recommendation can be manipulated on the fly based on user current behaviour on the website. We will discuss how Real time system works in the next blog so stay tuned.</p>
+
+<p>**The objective of this blog is to just discuss how recommendation works and how easily can be fit to the existing application architecture. The Objective is not to provide code and working recommendation engine.</p>
+
+<p>References : <a href="http://mahout.apache.org/" title="Apache Mahout">Apache Mahout</a> <a href="http://sqoop.apache.org/" title="Apache Sqoop">Apache Sqoop</a></p>
+
+<p>See Xebia&#39;s offering in Big Data <a href="http://www.xebia.in/big-data-solutions.html" title="Big Data Solutions">here</a>.</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#9438" title="2013-09-03 10:00:28">Gagan Agrawal</a>:</strong> Nice Post Gagan J. It does explain the recommendation process very well. However one thing I was interested to know is how will incremental updates be taken care of? After recommendation results have been pushed back to RDBMS and now users have further bought new items, will the whole process be repeated for new recommendations? If so, most likely the entire data set needs to be re-processed and hence will keep Hadoop nodes busy. Is it possible to do just process the incremental updates and not the entire data set at every run? This is something that can be done with Reco4j (Graph based recommender engine) + Hadoop to handle real time updates. But I wonder if this can be done with RDBMS and Hadoop?</p>
+
+<p><strong><a href="#9439" title="2013-09-03 10:17:10">Gagan Juneja</a>:</strong> Very valid question Gagan A. This is not possible to achieve real time recommendations with RDBMS + Hadoop setup. But people are running hadoop jobs every hour or so to achieve this. The kind of setup I talked about, there generally Hadoop job is scheduled nightly to process entire data not only the incremental updates. There are other tools available Impala, Spark, Graph dbs like you mentioned to achieve real time behavior with Hadoop. Simple setup of Hadoop + Hive can also do that. Thanks!</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/08/24/neo4j-vs-rdbms-handling-access-control-in-document-management-system/" data-toggle="tooltip" data-placement="top" title="Neo4j Vs Rdbms Handling Access Control In Document Management System">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/08/26/17073/" data-toggle="tooltip" data-placement="top" title="17073">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

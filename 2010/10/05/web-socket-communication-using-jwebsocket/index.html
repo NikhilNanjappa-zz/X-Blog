@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Web Socket Communication Using Jwebsocket - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2010/10/05/web-socket-communication-using-jwebsocket/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Web Socket Communication Using Jwebsocket</h1>
+                    
+                    <span class="meta">Posted by sprasadjha on October 5, 2010</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Web Socket Communication using jWebSocket</h1>
+
+<p>Web Socket has been introduced in HTML5 to enable  full duplex communication with minimum network traffic and latency. I was working on a PoC on HTMl5 Web Socket. In this blog I am sharing my experience about working with jWebSocket to get the basic WebSocket communication running. jWebSocket is pure Java/JavaScript based implementation for implementing Web Socket communication.  After reading this blog the readers should be able to send asynchronous request from client through Web Socket and get response from the server. This blog assumes that readers have basic knowledge of HTML5 Web Sockets</p>
+
+<p>HTML 5 Web Socket specification defines an API that enables full duplex communication over one (TCP) socket. Before web sockets the server could respond only on receiving a request from a web client. To overcome this limitation the common workarounds are polling, long polling and comet based solutions. HTML 5 Web Sockets comes as an inbuilt support for bi-directional communication which promises to be highly scalable due to reduced network traffic and latency. </p>
+
+<p>In this blog I have used  jWebSocket the Web Socket implementation for Java/JS. The first step is to download the required distribution files from <a href="http://jwebsocket.org/" title="http://jwebsocket.org/">jWebSocket.org </a> and follow the steps for configuration.</p>
+
+<p>To get the Web Socket communication running both client and server side coding efforts are involved. I will deal with both of them.  Let us start with the client side code</p>
+
+<p>The jWebSocket distribution comes with jWebSocket.js which needs to be included in your view file. Basically the jWebSocket.js exposes the JS implementation for WebSocket. The following steps are to be followed to make the client interact with the server through Web Sockets. </p>
+
+<ol>
+<li>Create an instance of jWebSocketJSONClient.</li>
+<li>Create a WebSocket connection.</li>
+<li>Send/Receive tokens.
+Step 1: Create an instance of jWebSocketJSONClient: jWebSocket exposes clients like jWebSocketJSONClient, jWebSocketCSVClient, jWebSocketXMLClient. For our example we will use jWebSocketJSONClient. As a first step I have written initWebSocket function which checks if  the browser supports HTML5&#39;s WebSocket and only then creates an instance of the jWebSocketJsonClient.</li>
+</ol>
+
+<p>[sourcecode language=&quot;xml&quot;] var jWebSocketClient = null; function initWebSocket(){ if( jws.browserSupportsWebSockets() ) { jWebSocketClient = new jws.jWebSocketJSONClient(); } else { var lMsg = jws.MSG<em>WS</em>NOT_SUPPORTED; } } [/sourcecode]</p>
+
+<p>Step 2: Create a WebSocket connection - Once it is ascertained that the browser supports Web Sockets and the jWebSocketClient is created then logon() function of the client can be invoked to create a physical WebSocket connection between the client and the server. The function takes the url, username, password and the callback functions as the argument. </p>
+
+<ol>
+<li>url -  represents the end-point to which you wish to connect. Please note that the url starts with ws:// and not http:// as the Web Socket connection is established using the Web Socket protocol. Web Socket protocol is an upgrade over HTTP protocol using the same underlying TCP/IP connection. ws:// and wss:// prefix are proposed to indicate a WebSocket and a secure WebSocket connection, respectively.</li>
+<li>username / password - The user details can be configured in jWebSocket.xml which is packages in conf folder of the jWebSocket server deployment directory. All the authentication details by default will be validated against this file.</li>
+<li>callback functions -  <a href="http://dev.w3.org/html5/websockets/#websocket" title="http://dev.w3.org/html5/websockets/#websocket">WebSocket interface</a> has attribute functions onOpen, onClose, onError and onMessage. Whenever we create a Web Socket connection we can provide callbacks for the Web Socket connection open and close events, an error event and a message receive event. When ever any of these events occur the corresponding call backs will get called allowing you to handle the situation.
+[sourcecode language=&quot;xml&quot;] function logon(){ var lRes = jWebSocketClient.logon( &quot;ws://hostname|localhost:8787&quot;, &quot;username&quot;, &quot;password&quot;, { // OnOpen callback OnOpen: function( aEvent ) { log( &quot;jWebSocket connection established.&quot; ); }, // OnMessage callback OnMessage: function( aEvent, aToken ) { log( &quot;jWebSocket &#39;&quot; + aToken.type + &quot;&#39; token received, full message: &#39;&quot; + aEvent.data); }, // OnClose callback OnClose: function( aEvent ) { log( &quot;jWebSocket connection closed.&quot; ); } }); } [/sourcecode]</li>
+</ol>
+
+<p>Step 3: Send/Receive tokens - Once the connection request is authenticated and the socket connection is established both the client and server can send information to each other whenever they want.  To send token from the client  just create a token with namespace and type. Remember that the client being used  to send data is JSON client and therefore the token should follow the JSON format. Once the token is ready, invoke the send method of  the JSON client which takes token and the callback function (which will be invoked if the server sends some response) as arguments.</p>
+
+<p>[sourcecode language=&quot;xml&quot;] function sampleListener() { if( jWebSocketClient.isConnected() ) { log(&quot;sending message to jwebsocket&quot;); var lToken = { ns: &quot;my.namespace&quot;, type: &quot;getInfo&quot; }; jWebSocketClient.sendToken( lToken, { OnResponse: function( aToken ) { log(&quot;Server responded: &quot; + &quot;vendor: &quot; + aToken.vendor + &quot;, version: &quot; + aToken.version ); } }); } else { log( &quot;Not connected.&quot; ); } } [/sourcecode]</p>
+
+<p>Let us look into the server side code, all the requests related to Web Sockets are handled by Web Socket server. The following steps are required to be followed to make the server Web Socket enabled </p>
+
+<ol>
+<li>Start the jWebSocket server and register a JWebSocketTokenServerListener with the jWebSocketServer</li>
+<li>Create a Listener implementation of JWebSocketTokenServerListener and provide the implementation (this is the listener which was registered with the server int the previous step)
+Step 1 : Start the jWebSocket server and register a JWebSocketTokenServerListener with the jWebSocketServer :  When the application starts up in the application server it has to be ensured that the jWebSocket server also starts up. To ensure this a listener of type ServletContextListener can be configured in web.xml. I have created a JWSContextListener and configured the listener in web.xml as below.</li>
+</ol>
+
+<p>[sourcecode language=&quot;xml&quot;] <listener> <description>ServletContextListener</description> <listener-class>com.checkList.web.contextUtils.JWSContextListener</listener-class> </listener> [/sourcecode]</p>
+
+<p>jWebSocketServer is started in the <em>contextInitialized</em> method of JWSContextListener. To be able to receive tokens and resopond to certain events in the jWebSocketServer a listener_ JWebSocketListener_ is registered to the token server. The listener registered to the server will listen to the events occurring in the sever and the corresponding methods will get called. In jWebSocket.xml in conf folder of the jWebSocket server deployment you can specify the server types to be instantiated for jWebSocket. Each server type has a unique id. By default _ token server_ and_ custom server_ are defined with ids as ts0 and cs0 respectively. That is why there is reference to ts0 in &quot;<em>TokenServer tokenServer = (TokenServer)JWebSocketFactory.getServer(&quot;ts0&quot;)</em>;.&quot;</p>
+
+<p>[sourcecode language=&quot;java&quot;] <pre>public class JWSContextListener implements ServletContextListener { @Override public void contextInitialized(ServletContextEvent sce) { // start the jWebSocket server sub system JWebSocketFactory.start(&quot;&quot;); TokenServer tokenServer = (TokenServer)JWebSocketFactory.getServer(&quot;ts0&quot;); if(tokenServer !=null){ tokenServer.addListener(new JWebSocketListener()); } } @Override</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#6995" title="2012-01-17 16:04:46">Happy</a>:</strong> Can you post .zip file of example.</p>
+
+<p><strong><a href="#8724" title="2012-05-07 09:49:25">Duy Nguyen</a>:</strong> Hello, nice tutorial indeed. Appreciate if you upload whole sample project for more reference. Thanks in advance.</p>
+
+<p><strong><a href="#8350" title="2012-04-06 04:01:59">Vic Hargrave</a>:</strong> Nice article and very helpful. Unfortunately I&#39;m stuck with jWebSocket at a very basic stage. I can&#39;t get the sample clients to work when I load from the same system on which I&#39;m running my jWebSocket server The server keesp dropping the connections indicating that there is a problem with the connection handshaking. When I inquired about this with the jWebSocket dev team I was told it most likely had to do with the domain not be set up properly, yet I see statements in my jWebSocket.xml config file for 127.0.0.1. There is no documentation that I could find on the jWebSocket website showing how to configure the jWebsocket.xml file properly. Do you have any suggestions? Thanks in advance. -- vic</p>
+
+<p><strong><a href="#9274" title="2012-07-30 14:56:04">Manish</a>:</strong> Hi, Is there any API in jWebSocket that will help to connect the tomcat websocket from java stand alone client.</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2010/09/17/creating-and-styling-resizable-buttons/" data-toggle="tooltip" data-placement="top" title="Creating And Styling Resizable Buttons">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2010/10/08/flex-visualizer-kaplabs/" data-toggle="tooltip" data-placement="top" title="Flex Visualizer Kaplabs">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

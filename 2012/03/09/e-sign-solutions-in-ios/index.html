@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>E Sign Solutions In Ios - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2012/03/09/e-sign-solutions-in-ios/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>E Sign Solutions In Ios</h1>
+                    
+                    <span class="meta">Posted by Rajdeep on March 9, 2012</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>E-sign solutions in iOS</h1>
+
+<p>Enterprise applications may have a requirement of e-signing a document before sending it to some third party receiver, for instance if a user is disbursing some bills he may have to sign it. Similarly a surveyor may have to sign a survey to prove his authenticity. On the other hand one should keep in mind this whole process is germane to enterprise applications, one should not force such signings on normal lifestyle applications. So if you are in a need of such a solution, then continue reading. </p>
+
+<p>The upmost challenge in creating a <strong>e-sign solution is smoothening the curves of the lines that are drawn by the user</strong>. If you need not to worry about overcoming this challenge and considering that you have the budget, then you can check this <a href="http://tenonedesign.com/t1autograph.php">link</a>. They also have an app on <a href="http://itunes.apple.com/us/app/autograph/id339423436?mt=8">app store</a> which you can try out. Having said this I wanted to have something open source, so I tried some solutions/API&#39;s to build a e-sign component which can be used to sign, save and send signature to third parties. In any of the solutions the <strong>entry points</strong> are the following touch related methods that are used to detect user interaction with the device. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">- (void) touchesBegan:(NSSet _)touches withEvent:(UIEvent _)event ;
+- (void) touchesMoved:(NSSet _)touches withEvent:(UIEvent _)event ;
+- (void)touchesEnded:(NSSet _)touches withEvent:(UIEvent _)event;
+</code></pre></div>
+<p>Here are few of them. </p>
+
+<p><strong>1. Core graphics</strong> The hurdle of smoothening the curves can be overcome by using <a href="http://en.wikipedia.org/wiki/B%C3%A9zier_curve">Beizer curves</a>. We can use cubic curves to achieve our goal. For that we need to supply four points (say p1,p2,p3,p4) and two control points (c1,c2t). The points p1 and p4 act as previous and the next point respectively. We try to move from point p2 to p3 and draw the path between them. The control points (c1,c2) can be driven from the four points. Once we get the control points we need to use the below code to move to the point and draw Beizer curve. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">CG_EXTERN void CGContextMoveToPoint(CGContextRef c, CGFloat x, CGFloat y);
+CG_EXTERN void CGContextAddCurveToPoint(CGContextRef c, CGFloat cp1x,CGFloat cp1y,
+                          CGFloat cp2x, CGFloat cp2y, CGFloat x, CGFloat y);
+</code></pre></div>
+<p>Here <strong>CGContext is being used as we do not want to redraw the whole screen every time when the user touches the screen</strong>, instead we save the previous paths traversed in a context and only draw what is needed. For more info you can check this detailed <a href="http://blog.effectiveui.com/?p=8105">blog</a>.</p>
+
+<p><strong>2. UIBezierPath</strong> <a href="https://developer.apple.com/library/ios/#DOCUMENTATION/UIKit/Reference/UIBezierPath_class/Reference/Reference.html">UIBezierPath</a> is a wrapper over core graphics that facilitates in drawing different shapes, lines. The entire concept of drawing remains the same as described above but it provides some additional and useful features. Using UIBezierPath you need not to handle context, you can simply initiate a UIBezierPath instance and start adding to this path as the user moves the touches. Here are the methods for the same. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">- (void)moveToPoint:(CGPoint)point;
+- (void)addLineToPoint:(CGPoint)point;
+- (void)addCurveToPoint:(CGPoint)endPoint controlPoint1:(CGPoint)controlPoint1 controlPoint2:
+(CGPoint)controlPoint2;
+</code></pre></div>
+<p>Some additional feature that can be had using this method are: </p>
+
+<ul>
+<li>Pattern lines (although may not be needed for e-sign use case)</li>
+<li>Add a clipping region</li>
+<li><strong>Undo/Redo operations</strong></li>
+</ul>
+
+<p><strong>3. Open GL</strong> The major drawback with the above problems is that there is a <strong>latency in drawing lines on screen</strong> and the user experience can be quite bad if the line smoothening algo&#39;s are not properly used. Also the lines are not as smooth as compared to the method being discussed ahead. In this method a brush texture is created from an image by first drawing the image into a Core Graphics bitmap context. It then uses the bitmap data for the texture drawing. You can see it in action in <a href="https://developer.apple.com/library/ios/#samplecode/GLPaint/Introduction/Intro.html">this</a> Apple example. The drawing is uber smooth as it is being drawn directly in a EAGLContext. I have used this method by using a custom image for the brush texture which gives an feel of a pen rather than a brush.</p>
+
+<p>I hope this blog will give an idea about what can be used for e-sign component. I will soon upload the component that I have created. </p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2012/03/07/ajax-toolkit-capabilities-salesforce-home-page-component-finally-a-workaround/" data-toggle="tooltip" data-placement="top" title="Ajax Toolkit Capabilities Salesforce Home Page Component Finally A Workaround">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2012/03/09/ios-flex-frameworks/" data-toggle="tooltip" data-placement="top" title="Ios Flex Frameworks">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

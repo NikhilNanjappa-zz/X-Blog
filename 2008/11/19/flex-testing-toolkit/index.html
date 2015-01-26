@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Flex Testing Toolkit - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2008/11/19/flex-testing-toolkit/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Flex Testing Toolkit</h1>
+                    
+                    <span class="meta">Posted by aagrawal on November 19, 2008</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Flex Testing Toolkit</h1>
+
+<p>My recent assignment at *<em>Albumprinter *</em>gave an opportunity to play with flex testing tools available out there. Coming back to serious flex development after more than a year was a pleasant surprise. The state of flex when I last did something on it was for sure not “mature”. There weren’t many frameworks around.</p>
+
+<p>But things have changed a great deal since then. Not only do we have frameworks implementing MVC (<strong>Cairngorm</strong>) but also some standard extensions (<strong>UM extensions</strong>) to those frameworks, we also have spring like IOC frameworks (<strong>Prana</strong>) for Flex.  Maybe I will keep the discussion about these frameworks out for now, as they each deserve a dedicated blog. Here I would like to share my surprise with the testing tools available for flex:<br>
+<strong><a href="http://opensource.adobe.com/wiki/display/flexunit/FlexUnit;jsessionid=EA83719A76E96A6E06573D20920CF0EE">FlexUnit</a></strong> – As the name suggests, this is a sibling to XUnit frameworks, and doesn’t really has any learning curve for anyone coming from JUnit or CUnit genre.</p>
+
+<p>A typical test would look like:</p>
+
+<blockquote>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public function testDeposit():void {
+    var bankAccount:BankAccount=new BankAccount();
+    bankAccount.deposit(50);
+    assertTrue(&quot;Balance on a new account after 50 deposit is 50&quot;,
+                            bankAccount.getBalance() == 50);
+    bankAccount.deposit(25);
+    assertEquals(&quot;Balance after 50 deposit and another 25 deposit is 75&quot;,
+                          75,bankAccount.getBalance());
+  }
+
+public function testWithdraw():void {
+    var bankAccount:BankAccount=new BankAccount();
+    bankAccount.deposit(100);
+    bankAccount.withdraw(50);
+    assertTrue(&quot;Balance on a new account after 100 deposit and a 50 withdraw is 50&quot;,
+                          bankAccount.getBalance() == 50);
+  }
+</code></pre></div></blockquote>
+
+<p>And then we add a testrunner (similar to JUint Runner plugin of eclipse) to the main mxml:</p>
+
+<blockquote>
+<p><code>&lt;flexunit:TestRunnerBase id=&quot;testRunner&quot; width=&quot;100%&quot; height=&quot;100%&quot; /&gt;</code></p>
+</blockquote>
+
+<p>We add the test suite to the above test runner like this:</p>
+
+<blockquote>
+<div class="highlight"><pre><code class="language-text" data-lang="text">private function onCreationComplete():void
+{
+    testRunner.test = createSuite();
+    testRunner.startTest();
+}
+
+// Creates the test suite to run
+private function createSuite():TestSuite {
+    var testSuite:TestSuite = new TestSuite();
+
+    testSuite.addTestSuite( BankAccountTest );
+
+    return testSuite;
+}   
+</code></pre></div></blockquote>
+
+<p>On running, this might look like this:</p>
+
+<p>![][2]</p>
+
+<p><strong><a href="http://code.google.com/p/dpuint/">dpUInt/fluint</a></strong> Though FlexUnit is a great advance for serious unit testing of presentation layer, it lacked some features like easy support of asynchronous tests. This becomes a limitation, given that flex finds application in many event-driven asynchronous paradigms. Although there is support for async operations in FlexUnit, they need some work. To resolve this bottleneck “<strong>digital primates</strong>” introduced dpUInt – The Digital Primate Unit and Integration testing frameworjk and with their first official release renamed it to fluint. This looks very similar to FlexUnit in use, but is not an extension of the same.</p>
+
+<p><strong><a href="http://code.google.com/p/flexmonkey/">Flex Monkey</a></strong> FlexMonkey is a unit testing framework for Flex apps that provides for automating the testing of Flex UI functionality. If you are already in love with Selenium, you can think of FlexMonkey as “Selenium for Flex”. FlexMonkey can record and play back Flex UI interactions, and generates ActionScript-based testing scripts that can easily be included within a continuous integration process. It uses the Flex Automation API and was created by adapting Adobe&#39;s sample application, AutoQuick.</p>
+
+<p>FlexMonkey has been donated to the Flex community by <a href="http://www.gorillalogic.com/">Gorilla Logic</a>, who developed FlexMonkey because of their belief that only a monkey would develop code without being able to automate their unit testing. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Essentially you use it in 3 modes:
+
+
+
+
+
+
+  1. Record user interactions and play them back as required.
+
+
+  2. Write unit tests to test UI functionality and play them programmatically.
+
+
+  3. Probably the most interesting aspect is to combine the above two: Manually do the user interactions and record it.
+This automatically generates test case in action script!
+Just use this generated code in your testing environment and adapt it as required!
+</code></pre></div>
+<p>Additionally it has a “<strong>flex spy</strong>” tool that helps investigate the container hierarchy. This comes handy when you start anew on an already-developed product. This tool helps to quickly understand the code and the flex components used. It’s not just simple but also exciting to look at, when its in action. I started with this more as a flex toy to play around, but pretty soon, I realized its worth – A Monkey Test I had implemented to demonstrate a new feature broke after a week. It immediately indicated that the new features under development were affecting the existing ones. Monkey helped us to “fail early”, as is the spirit of Agile, and thus saved some time and resource for later-on “hot fixes” As much as its nice to look monkey-in-action, its also difficult to capture it in snapshots. But hereunder, I try to give a sample run of a Monkey test having two test cases:</p>
+
+<p>![][6]</p>
+
+<p><strong><a href="http://code.google.com/p/flexcover/">Flex Cover</a></strong> This is a test coverage tool. It not only gives the percentage coverage of lines and branches of code, but also updates itself on-the-fly at run time – as the test cases run, it updates its percent figures. It also marks the code that was not covered. Additionally, unlike clover test reports it specifically gives the number of times each branch was executed. For example, while clover indicates that a particular “if” statement is RED as it was called 2 times but one of the branches was not called even once - it doesn’t really indicates exactly which branch (if-branch or else-branch) was not executed. (As per my limited knowledge of clover, may be this is configurable; in that case; excuse me for my limited exposure to clover). The Flex Cover in above example explicitly mentions the number of times each branch was executed.</p>
+
+<p>It incorporates a modified version of the AS3 compiler which inserts extra function calls in the code within the SWF or SWC output file. At runtime, these function calls send information on the application&#39;s code coverage to a separate tool; The modified compiler also emits a separate &quot;coverage metadata&quot; file that describes all the possible packages, classes, functions, code blocks and lines in the code, as well as the names of the associated source code files.</p>
+
+<p>![][8]</p>
+
+<p>For sure, its early days and I have been using these tools only for about a week now. But definitely its exciting times in flex world, and I’ll look forward to exploring more. Will keep you guys posted!</p>
+
+<p>Abhishek.</p>
+
+<p>[2]: http://xebee.xebia.in/wp-content/uploads/2008/11/flexunit.jpg ()</p>
+
+<p>[6]: http://xebee.xebia.in/wp-content/uploads/2008/11/flexmonkey.jpg ()</p>
+
+<p>[8]: http://xebee.xebia.in/wp-content/uploads/2008/11/flexcover.jpg ()</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2008/11/16/productive-tools-on-top-of-flex-builder-3/" data-toggle="tooltip" data-placement="top" title="Productive Tools On Top Of Flex Builder 3">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2008/11/20/a-blog-aint-an-article/" data-toggle="tooltip" data-placement="top" title="A Blog Aint An Article">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

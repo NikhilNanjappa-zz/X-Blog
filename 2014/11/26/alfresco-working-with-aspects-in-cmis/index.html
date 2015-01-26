@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Alfresco Working With Aspects In Cmis - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2014/11/26/alfresco-working-with-aspects-in-cmis/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Alfresco Working With Aspects In Cmis</h1>
+                    
+                    <span class="meta">Posted by SOURABH AGGARWAL on November 26, 2014</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Alfresco working with aspects in CMIS</h1>
+
+<p>Alfresco is one of the most popular and widely used open source content management system.</p>
+
+<p>Alfresco comes in both enterprise and community version. At the time of writing this blog latest version for <strong>Enterprise</strong> edition is <strong>4.2.3.1</strong>. At the time of writing this blog latest version for <strong>Community</strong> edition is <strong>5.0.b</strong>.</p>
+
+<p>Before starting with this blog all should be familiar with CMIS and how to use CMIS along with alfresco. For getting started with CMIS with alfresco and other content repository you must first read our blog on<strong><a href="http://xebee.xebia.in/?p=19243&amp;preview=true"> Alfresco working with CMIS (File, Folder and Search operation)</a>. </strong></p>
+
+<p><strong>First of all what is aspects?</strong></p>
+
+<ul>
+<li>Aspects most likely related to content modeling in Alfresco which itself is one of the biggest feature of the alfresco system. Aspects as the like the additional information that we can dynamically attach to any content within the alfresco repository. Aspects scan be linked to the content individually to add aspect properties to the content or can be called within or used within the types in alfresco content model to add the properties that aspect is holding.</li>
+<li>Alfresco comes with many aspects by default we can create our own aspects as per requirement.</li>
+</ul>
+
+<p><strong>Why aspects are used?</strong></p>
+
+<p>Aspects basically used to add dynamicity to the content modelling in alfresco means aspects can be dynamically added and removed from the content or folder within the alfresco repository. Aspects are much like the super class in java which are used by its sub classes to add all the functionality that super class holding. </p>
+
+<p>Before starting how to use aspects in alfresco using CMIS we must be aware about how to create aspects in alfresco this we have already done in our previous blog *<em><strong>[Alfresco</strong> custom field search in CMIS approach**]<a href="http://xebee.xebia.in/index.php/2014/11/20/alfresco-custom-field-search-in-cmis-approach/">2</a>.</em>* **</p>
+
+<p>For using alfresco aspects in CMIS we have to use alfresco-opencmis-extension-0.3.jar along with CMIS library for content repository access.</p>
+
+<p>First we have to create session that can be used to access aspects and apply aspects to the new content if not already having that aspect.</p>
+
+<p><strong>1. Creating alfresco session CMIS : </strong></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// default factory implementation SessionFactory factory = SessionFactoryImpl.newInstance(); // map to contain connection parameter any cmis repository using atom pub Map&lt;String, String&gt; parameter = new HashMap&lt;String, String&gt;(); parameter.put(SessionParameter.USER, &quot;admin&quot;); parameter.put(SessionParameter.PASSWORD, &quot;admin&quot;); parameter.put(SessionParameter.ATOMPUB_URL, &quot;http://localhost:9090/alfresco/service/cmis&quot;); parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value()); parameter.put(SessionParameter.REPOSITORY_ID, &quot;6fc907f9-6790-46b5-9c25-d6855ff8ff5c&quot;); parameter.put(SessionParameter.OBJECT_FACTORY_CLASS, &quot;org.alfresco.cmis.client.impl.AlfrescoObjectFactoryImpl&quot;); // getting Instance from User Credential try { // create session Session session = factory.createSession(parameter); } catch (Exception e) { e.printStackTrace(); } } 
+</code></pre></div>
+<p>Here we have passed one more parameter in parameter map during session creation</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">parameter.put(SessionParameter.OBJECT_FACTORY_CLASS, &quot;org.alfresco.cmis.client.impl.AlfrescoObjectFactoryImpl&quot;);
+</code></pre></div>
+<p>to deal with aspects, alfrescoDocument or AlfrescoFolder etc.</p>
+
+<p><strong>2. Get the existing folder object it can be AlfrescoFolder or cmis Folder object.</strong></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">try{ OperationContext context = session.createOperationContext(); context.setRenditionFilterString(&quot;cmis:thumbnail&quot;); Folder cmisFolder = (Folder) session.getObjectByPath(&quot;/&quot;, context); }catch (Exception e){ e.printStackTrace(); } 
+</code></pre></div>
+<p>Now you can either create the new folder and create new document within that folder or use existing folder for document creation. But make sure that user creating document must have access to that particular folder.</p>
+
+<p><strong>3. Creating document in the existing folder.</strong></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// Setting properties for new document to be created within repository Map&lt;String, Object&gt; propertiesDocument = new HashMap&lt;String, Object&gt;(); propertiesDocument.put(PropertyIds.NAME, &quot;test_Aspect.pdf&quot;); propertiesDocument.put(PropertyIds.OBJECT_TYPE_ID, &quot;cmis:document&quot;); FileInputStream oInputStream = new FileInputStream(&quot;/home/sourabh/Desktop/test_aspects.pdf&quot;); // Reading the content in Bytes stream and Writing it to new file in ContentStream contentStream = new ContentStreamImpl(&quot;test_Aspect.pdf&quot;, null, &quot;application/pdf&quot;, oInputStream); // creating document with name title and description Document document = folder.createDocument(propertiesDocument, contentStream, VersioningState.MAJOR); 
+</code></pre></div>
+<p>Now new document is uploaded with name test_aspects.pdf in the root directory. You  can get complete detail for the document uploaded from the document object.</p>
+
+<p><strong>4. Check for aspect whether applied to new document or not if no apply custom aspect to document created.</strong></p>
+
+<p>For this we have to first convert CMIS Document to AlfrescoDocument object then we have add aspect for that document.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// converting cmis document to alfresco document AlfrescoDocument alfrescoDocument = (AlfrescoDocument) document; if (!alfrescoDocument.hasAspect(&quot;P:my:cutomfieldsdata&quot;)) { // adding custom meta data type aspect to document alfrescoDocument.addAspect(&quot;P:my:cutomfieldsdata&quot;); // Setting properties for new document to be created within repository Map&lt;String, Object&gt; customPropertiesDocument = new HashMap&lt;String, Object&gt;(); // Set agreement serial number customPropertiesDocument.put(&quot;my:metadata_custom_serial_number&quot;, &quot;serial number&quot;); customPropertiesDocument.put(&quot;my:metadata_custom_status&quot;, &quot;status&quot;); customPropertiesDocument.put(&quot;my:metadata_custom_id&quot;, &quot;id&quot;); customPropertiesDocument.put(&quot;my:metadata_custom_name&quot;, &quot;name&quot;); customPropertiesDocument.put(&quot;my:metadata_custom_code&quot;, &quot;code&quot;);
+
+// updating the document with the new meta data fields CmisObject updatedDoucment = alfrescoDocument.updateProperties(customPropertiesDocument); System.out.println(&quot;document&quot; + updatedDoucment.getName() + &quot; successfully updated&quot;); } else{ System.out.println(&quot;document already updated&quot;); }
+</code></pre></div>
+<p>Document is updated with our custom aspect we can add already defined aspects also to the document.</p>
+
+<p>In this we have checked whether our custom aspects is already linked with document or not if not then add custom aspect to document and then update custom properties for document.</p>
+
+<p><strong><a href="http://xebee.xebia.in/index.php/tag/alfresco/">For more hacks about alfresco visit</a>..................</strong></p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2014/11/20/alfresco-custom-field-search-in-cmis-approach/" data-toggle="tooltip" data-placement="top" title="Alfresco Custom Field Search In Cmis Approach">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2014/11/26/customizing-angular-directives/" data-toggle="tooltip" data-placement="top" title="Customizing Angular Directives">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

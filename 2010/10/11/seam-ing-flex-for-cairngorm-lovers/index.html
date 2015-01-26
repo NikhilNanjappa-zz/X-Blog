@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Seam Ing Flex For Cairngorm Lovers - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2010/10/11/seam-ing-flex-for-cairngorm-lovers/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Seam Ing Flex For Cairngorm Lovers</h1>
+                    
+                    <span class="meta">Posted by GauravS on October 11, 2010</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Seam-ing Flex for Cairngorm Lovers</h1>
+
+<p>Seam, Flex, Flamingo, Cairngorm - Looking for a combination of these techie stuff. In this blog, i will talk about how to write Flamingo-specific code using Cairngorm. Talking about these four technologies individually –</p>
+
+<p><a href="http://www.adobe.com/products/flex/?sdid=GXZOB">Flex</a> – SDK released by Adobe Systems for the development and deployment of cross-platform RIA.</p>
+
+<p><a href="http://seamframework.org/">Seam</a> – Web application framework developed by JBoss.</p>
+
+<p><a href="http://www.exadel.com/web/portal/flamingo">Flamingo</a> – Integration library and framework for building Flex/JavaFX based user interfaces for your JBoss Seam/Spring Framework applications.</p>
+
+<p><a href="http://opensource.adobe.com/wiki/display/cairngorm/Cairngorm">Cairngorm</a> – Open source framework for application architecture in Adobe Flex.</p>
+
+<p>Writing code in Flex as per Cairngorm would not be an alarming task, unless it includes Flamingo&#39;s API. Flamingo allows your Flex application to interact with Seam. We use RemoteObject class in Flex to call JAVA methods on the server-side. Giving it a proper destination allows a Flex application to talk to Java methods (that obviously requires some more configurations). Unfortunately routine RemoteObject is not a good option to choose while talking to Seam. Before presenting the &#39;good&#39; option lets try to understand why we need something more that a RemoteObject. Seam based applications are not just simple Java files, but they have a concept of Session-based objects.</p>
+
+<p>__Flamingo actually extends RemoteObject, and make it&#39;s own – &#39;SeamRemoteObject&#39;. Lets have a look at it:</p>
+
+<p>[java] public dynamic class SeamRemoteObject extends RemoteObject {</p>
+
+<p>public override function getOperation(name:String):AbstractOperation { var o:Object = _operations[name]; var op:AbstractOperation = (o is AbstractOperation) ? AbstractOperation(o) : null; if (op == null) { op = new SeamOperation(this, name); _operations[name] = op; op.asyncRequest = asyncRequest; } return op; } } [/java]</p>
+
+<p>If you look at &#39;getOperation&#39;, you can sense what Flamingo does. Flamingo override this method and make the simple operation as a &#39;SeamOperation&#39;. Now here comes the advantage. SeamOperation overrides the &#39;invoke&#39; method and returns a seam-specific IMessage and AsyncToken object.</p>
+
+<p>[java] mx<em>internal override function invoke(msg:IMessage, token:AsyncToken=null):AsyncToken { msg.headers[CONVERSATION</em>TAG] = SeamRemoteObject.getConversationId(); return super.invoke(msg, token); } [/java]</p>
+
+<p>As we can see, &#39;msg&#39; stores the conversation id through SeamRemoteObject. Also, inside the constructor of the same class, they add an listener for handling the Result:</p>
+
+<p>Inside the result handler, SeamRemoteObject then call it&#39;s static method, &#39;setConversationId()&#39; -</p>
+
+<p>[java] SeamRemoteObject.setConversationId(event.message.headers[CONVERSATION<em>TAG] != null ? event.message.headers[CONVERSATION</em>TAG] : &quot;&quot;); [/java]</p>
+
+<p>Getting back to Flex – The main classes that we need to focus upon are Services and Delegate. As per Cairngorm, &#39;service&#39; class should contain the server side calls. While using Flamingo, instead of Flex&#39;s RemoteObject, we would use SeamRemoteObject to make the call. So the code would be -</p>
+
+<p>[java] <flamingo:SeamRemoteObject id="seamRemoteObject" destination="destination"/> [/java]</p>
+
+<p>Don&#39;t forget to include the namespace for flamingo.</p>
+
+<p>That&#39;s all you need to do in Services class, now coming to Delegate class – As usual, you would have a public method inside, where you would call the Java method. We can have a variable of type RemoteObject, and instantiate it in the constructor. Writing the next step as a part of cairngorm-routine,</p>
+
+<p>[java] this.service = ServiceLocator.getInstance().getRemoteObject(&quot;seamRemoteObject&quot;); [/java]</p>
+
+<p>Now if you look carefully at the above line, ServiceLocator.getInstance().getRemoteObject() would return a value of type SeamRemoteObject, but our variable &#39;service&#39; is of type RemoteObject. To avoid the &#39;known&#39; error, we just need to typecast the return value of type RemoteObject. The code would be -</p>
+
+<p>[java] this.service = RemoteObject(ServiceLocator.getInstance().getRemoteObject(&quot;seamRemoteObject&quot;)); [/java]</p>
+
+<p>You can then call the Java method through the &#39;service&#39; variable -</p>
+
+<p>[java] var token:AsyncToken = service.javaMethod(); token.addResponder(responder); [/java]</p>
+
+<p>After this, you can carry with the normal Cairngorm procedure, i.e. control would reach either the result/fault inside the Command class.</p>
+
+<p>I know it&#39;s a vast topic to discuss, so feel free to pour in your comments.</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2010/10/11/flex-modular-application-development-using-cairngorm-architecture/" data-toggle="tooltip" data-placement="top" title="Flex Modular Application Development Using Cairngorm Architecture">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2010/10/12/flex-increase-your-productivity-while-working-on-a-bigger-application/" data-toggle="tooltip" data-placement="top" title="Flex Increase Your Productivity While Working On A Bigger Application">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

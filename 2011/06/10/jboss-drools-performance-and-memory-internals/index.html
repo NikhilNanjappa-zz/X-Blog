@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Jboss Drools Performance And Memory Internals - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2011/06/10/jboss-drools-performance-and-memory-internals/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Jboss Drools Performance And Memory Internals</h1>
+                    
+                    <span class="meta">Posted by pranjan on June 10, 2011</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>JBoss Drools - Performance and Memory Internals</h1>
+
+<p>The application I am working on nowadays extensively uses JBoss Drools. The application deals with lots of objects on which complex logic is applied in sequence. This part has been developed using JBoss Drools. The keywords here are &quot;lots of objects&quot; and &quot;complex logic in sequence&quot;.</p>
+
+<p>These two keywords, when found together, often cause menace for developers.</p>
+
+<p>However, few days back, when I profiled the application, I was a bit amazed to see that &quot;complex logic&quot; on &quot;lots of objects&quot; was not taking that much time. And trust me, this is not what I was expecting. Before profiling, I was almost sure that this &quot;logic on lots of objects&quot; thing is the bottleneck in application&#39;s performance. So, the discovery of it being efficient was a bit shocking.</p>
+
+<p>Ok, I accept it. Its fast. The profiler can not be wrong. But how is it that fast?</p>
+
+<p>To get an answer to this question, I explored JBoss Drools internals. How JBoss Drools actually works? What&#39;s the thing that brings in this efficiency in JBoss Drools? I got few answers when I explored how it works. I will share my understanding of its architecture which, I think, makes it memory and performance efficient.</p>
+
+<p>JBoss Drools uses Rete&#39;s Algorithm to execute rules. Rete&#39;s algorithm is an efficient pattern matching algorithm.</p>
+
+<p>JBoss Drools has its own implementation of Rete&#39;s Algorithm. A rule in Drools is represented by a Rete tree. A Rete tree consists of nodes. These nodes are mostly conditional evaluations. Everything in a Drools rule is represented by a Rete tree node. Apart from conditional nodes, the Rete tree also consists of AND nodes, OR nodes and start/end nodes ( and few other types of nodes as well).</p>
+
+<p>The main part of the algorithm is the creation of the Rete tree. Whenever a fact(object) is inserted in the Drools engine, a Rete tree is created. The creation of this Rete tree is done by some intelligent algorithm. The Rete tree, once created executes in almost no time over the facts(objects) and gives the result. Most of the time is went into creating the Rete tree rather than executing it.</p>
+
+<p>This is something that I have also experienced during debugging. Whenever a fact is inserted into the Drools session, it takes a bit of time. However, the firing of rules is almost instantaneous.</p>
+
+<p>So, the way this Rete Algorithm has been implemented inside Drools accounts for its efficiency. But, the million dollar question is (a million is too much, but its just a quote), what will happen to the JBoss Drools efficient Rete Algorithm when &quot;LOTS OF OBJECTS&quot; will come into picture?</p>
+
+<p>The answer, I think, lies in two techniques that Drools uses to store nodes. Node Sharing and Node Indexing.</p>
+
+<p>Drools caches nodes while building Rete’s tree which is known as Node Sharing. Whenever a new node is created, its checked whether there is an equivalend node already present in the cache. If an equivalent node is found in the cache, the cached node is used instead and the new node is discarded. This makes Drools memory efficient.</p>
+
+<p>Drools keeps a hashtable of the object properties and Rete Tree Nodes .It is known as Node Indexing and is used to avoid evaluating same conditions multiple times. Node Indexing speeds up the propagation of nodes in the Rete Network which accounts for high performance of  the Drools engine.</p>
+
+<p>The in depth analysis of Rete Tree creation and node propagation in the Rete Network tells that the way rules are written might also effect the performance, as it directly impacts the propagation in Rete Tree. Rules, written in intelligent way can drastically reduce the number of nodes in the Rete Tree, thus, further increasing the performance.</p>
+
+<p>So, these techniques helps Drools to process large number of objects efficiently. What I have seen, is that, increasing number of objects in Drools hardly effects the total time taken to execute it.</p>
+
+<p>I still need to explore how to write efficient rules, however, it looked very logical and impressive when I saw how it is done. I will try to come out with one more post which explains efficient Rule writing.</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#5647" title="2011-06-27 22:34:45">Kuldeep Gulati</a>:</strong> Wen, As you are getting into the Implementation , on the top of my head, you need to take care about the grouping ( OR and AND ) condition as drools does not behave as you expect it to be. So, its better to Group your conditions together logically . For Ex: ( A or B) and C. ( this will not work as you would like it to : A or B and C ). Also,retreating the duplicate rules from the memory will be something you need to take care of as same different set of conditions in Rules may lead to firing of same rule in memory ( read about insertLogical() etc ). Cheers</p>
+
+<p><strong><a href="#5617" title="2011-06-10 19:07:03">Kuldeep Gulati</a>:</strong> Hello, Its good to know the kind of Analysis you have done on internals of drools. Being an open source I liked that&#39;s its API&#39;s are open and one can develop something on the top of these API&#39;s. I came around a scenario where we build the Rules using the API&#39;s of the drools, the hurdle we faced were that no supporting documentation was available for the API&#39;s but it was exciting to develop the rules using the rules API&#39;s without any support and fixing the drools drl helper class as well. Thanks for sharing your knowledge. Thanks Kuldeep</p>
+
+<p><strong><a href="#5616" title="2011-06-10 07:49:41">Ganesh Gembali</a>:</strong> Good to know about internals of drools. Thanks for the nice post Paritosh.</p>
+
+<p><strong><a href="#5619" title="2011-06-10 23:12:33">Edson</a>:</strong> @Paritosh Nice post! @Keldeep, You may want to check this out then: https://github.com/droolsjbpm/drools/tree/master/drools-compiler/src/main/java/org/drools/lang/api Here a few unit tests: https://github.com/droolsjbpm/drools/blob/master/drools-compiler/src/test/java/org/drools/lang/api/DescrBuilderTest.java It is work in progress, but hopefully will make your life a lot easier. Edson</p>
+
+<p><strong><a href="#5621" title="2011-06-11 14:09:07">srba</a>:</strong> Hi, I expected some numbers too see in this post :) We had few problems with Drools. One of them is that it is single-threaded. You can not use two different threads to insert facts. There is experimental feature to fix this, but they said it might never be production ready and you have to know how to partition your data.</p>
+
+<p><strong><a href="#5622" title="2011-06-11 14:36:39">Miles Wen</a>:</strong> Hi, I&#39;m using drools5 too.I built a DSL for &#39;risk control&#39; business in my project.This DSL is first translated to drools RDL syntax and then added to knowledge base; And the knowledge base is refreshed every 5 minutes if any rule is modified. Now I want to compile my DSL directly to drools rete tree implementation , not by translated to drools RDL first...I feel its troublesome to do , because I have to hack into drools&#39; implementation... The design and implementation docs of drools is rare species. could you give me some advices on this? I&#39;m also expecting your posts on efficient rule writing.</p>
+
+<p><strong><a href="#7682" title="2012-02-21 10:36:18">ivan</a>:</strong> Nice post, I wonder is there a way to control the sequence of the facts inserted to the working memory ? I have a sorted list of objects (sorted by some condition) in my java application. I insert them as facts to the working memory in the same order, but obviously the rule engine does not get the facts &#39;one-by-one&#39; and fire matching rules... What I need is a way to guarantee that the objects (facts) are processed in the order they are sorted. Is there some way to do so ? Thanks in advance</p>
+
+<p><strong><a href="#7683" title="2012-02-21 10:43:33">Paritosh Ranjan</a>:</strong> I have also faced the same problem earlier and was not able to find any solution. Maybe multithreading is on by default ( for better performance ) which disturbs the ordering, I don&#39;t see any other sensible reason to do this. I can advice to search for this multithreaded stuff ( if it exists ) and switch it off. This might make it sequential.</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2011/05/21/accessing-crowd-with-python-and-enabling-sso/" data-toggle="tooltip" data-placement="top" title="Accessing Crowd With Python And Enabling Sso">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2011/06/14/drupal-webform-add-a-dynamic-select-option-list/" data-toggle="tooltip" data-placement="top" title="Drupal Webform Add A Dynamic Select Option List">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

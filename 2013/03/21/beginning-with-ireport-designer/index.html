@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Beginning With Ireport Designer - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2013/03/21/beginning-with-ireport-designer/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Beginning With Ireport Designer</h1>
+                    
+                    <span class="meta">Posted by shelley nanda on March 21, 2013</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Beginning with iReport Designer</h1>
+
+<p>iReport is the free, open source report designer for JasperReports and JasperReports Server.iReport Designer and JasperReport APIs go hand in hand as the former allows you to design reports, the latter allows to execute them and generate output in a Java application .When you design a report using iReport Designer you are creating a JRXML file, which is an XML document that contains the definition of the report layout.</p>
+
+<p>The designer provides a comfortable User interface comprising of a report inspector which gives you the detailed view of the report design categorised under headers like style,parameters,fields,variables along with the different bands like page header,page footer etc which constitute the report.</p>
+
+<p>A Jasper Report is divided into the following display sections, which you can choose to have or not to have in your report:<img src="http://xebee.xebia.in/wp-includes/js/tinymce/plugins/wordpress/img/trans.gif" alt="" title="More..."></p>
+
+<ol>
+<li><p>Title: Contains the report title. It is generated only once and appears only at the very start of the report.</p></li>
+<li><p>Page Header: This section appears at the top of each page and can be used for dates, page numbers, etc.</p></li>
+<li><p>Column Header: This section is placed top of each column.</p></li>
+<li><p>Detail: This is where the information for each record entry is placed.</p></li>
+<li><p>Column Footer: This section is placed at bottom of each column.</p></li>
+<li><p>Page Footer: This section appears at the bottom of each page.</p></li>
+<li><p>Last Page Footer: This section goes at the bottom of the last page.</p></li>
+<li><p>Summary: This section appears right at the end of the report, just after the last record.</p></li>
+</ol>
+
+<p>Below is one screen shot summarizing the iReport User Interface discussed above</p>
+
+<p>[caption id=&quot;attachment_16145&quot; align=&quot;aligncenter&quot; width=&quot;300&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2013/03/iReportUserInterface-300x168.png" alt="iReport User Interface"> iReport User Interface[/caption]</p>
+
+<p>The palette on right under the header Report Elements is the visual offering of all the elements that can be dragged into various report bands.</p>
+
+<p>The properties of currently selected component are shown in the properties section where you can choose to edit corresponding properties of the selected component .</p>
+
+<p>The Reports Problem window at the bottom is like any normal editor console displaying the issues with report compilation and running</p>
+
+<p>As JasperReports is a records-based engine; to print a report, you have to provide a set of records. When the report runs,JasperReports will iterate on this record set, creating and filling the bands according to the report definition. This is why JasperReports defines only one query per report. Multiple queries/data sources can be used when inserting SubReports or defining SubDatasets, each one with their own own query (or data source), fields, parameters, variables, and so on. SubDatasets are only used to feed a crosstab or a chart.</p>
+
+<p>Here is a list of the data sources provided by iReport for JasperReports: </p>
+
+<ul>
+<li>JDBC connection</li>
+<li>JavaBean collection data source</li>
+<li>XML data source</li>
+<li>CSV data source</li>
+<li>Hibernate connection</li>
+<li>Spring-loaded Hibernate connection</li>
+<li>JRDataSourceProvider </li>
+<li>Custom data source</li>
+<li>Mondrian OLAP connection</li>
+<li>XMLA connection</li>
+<li>EJBQL connection</li>
+<li>Empty data source
+JRDataSource interface represents the abstract representation of a JasperReports data source. All data source types must implement this interface.</li>
+</ul>
+
+<p>If you ask me about difference between using a query inside a report and providing data using a JRDataSource from a java application, the reply will be no difference. In fact, what happens behind the scenes when iReport uses a query instead of a JRDataSource is that JasperReports executes the query using a built-in or user-defined query executor that will produce a JRDataSource</p>
+
+<p>In a report, there are three groups of objects that can store values:</p>
+
+<p><img src="http://xebee.xebia.in/wp-includes/js/tinymce/plugins/wordpress/img/trans.gif" alt="" title="More..."></p>
+
+<ul>
+<li>Parameters are simple input to reports.</li>
+<li>Fields are instance variables of the data source object that are passed in to the report .If input data source is java bean then the field names of the bean and if input is sql table then columns of the result set will be the field objects.</li>
+<li>Variables are another kind of variables that live within Report, they are not inputs. One can perform many predefined calculation functions on the Fields using Variables.
+These objects are used in expressions, they can change their values during print progression, and they are typed, that is, all these objects have a type that corresponds to a Java class such as String or Double.</li>
+</ul>
+
+<p>To start with iReport lets try creating a JDBC data source and generate a report based on query results fetching dataset from the data source rather than data being fed from Java application. Next to the data source drop down on the top left click the report datasource icon and after clicking on the new button on the pop up appearing choose the data source type .As we start by choosing a database JDBC connection below shows the required configuration for the same</p>
+
+<p>[caption id=&quot;attachment_16147&quot; align=&quot;aligncenter&quot; width=&quot;300&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2013/03/Connection-300x168.png" alt="Database Connection"> Database Connection[/caption]</p>
+
+<p>With the database connection in place we can populate a report with a report query created as below.You can choose the query language from the drop down .The editor can automatically reads fields for you from the table.The filter expression and sort options tab help you enhance further your query.Say the sort tab helps you add fields on whose basis data should be sorted in the asc/desc orders.</p>
+
+<p>[caption id=&quot;attachment_16399&quot; align=&quot;aligncenter&quot; width=&quot;300&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2013/03/ReportQuery1-300x168.png" alt="Repor tQuery"> Report Query[/caption]</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/03/20/jmeter-postprocessor-regexp-extractor/" data-toggle="tooltip" data-placement="top" title="Jmeter Postprocessor Regexp Extractor">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/03/21/contract-coverage-report-using-soap-ui/" data-toggle="tooltip" data-placement="top" title="Contract Coverage Report Using Soap Ui">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

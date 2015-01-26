@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Form Validation With Custom Modules In Dojo 1 7 - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2012/05/03/form-validation-with-custom-modules-in-dojo-1-7/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Form Validation With Custom Modules In Dojo 1 7</h1>
+                    
+                    <span class="meta">Posted by anubhava on May 3, 2012</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Form Validation With Custom Modules In Dojo 1.7</h1>
+
+<p>In the last blog, <a href="http://xebee.xebia.in/2012/04/24/dojox-form-validation-with-custom-error-messages/">DojoX form validation with custom error messages</a>, I tried to explain how to validate a form with custom error messages using dojox.validate, but the drawback with that approach was that <strong>it was not modular</strong>. This blog is just an attempt to create your own custom <strong>form</strong> and <strong>error</strong> modules and use them to validate your form(s) without re-writing the validation code and doing things in Dojo way. </p>
+
+<h2>Overview</h2>
+
+<p>Defining modules in Asynchronous Module Definition (AMD) format helps the developers to develop the code and debug easily. The syntax for module identifier has changed in Dojo 1.7 from my.firstmodule.Rocks to my/firstmodule/Rocks, which also looks like actual paths too. Another thing to note is that a package contain modules so in our case &#39;my&#39; is a package and firstmodule is a module. For detailed information, look &quot;<a href="http://dojotoolkit.org/documentation/tutorials/1.7/modules/">Dojo 1.7 Defining Modules</a>&quot;, while you are at it please also look at the difference between <em>Requiring Modules</em> and <em>Defining Modules</em>.</p>
+
+<h2><em>Create custom form validation module</em></h2>
+
+<h3>HTML</h3>
+
+<p>Firstly, let&#39;s create a very simple HTML that would contain an error container, a registration form and a login form:</p>
+
+<p>[sourcecode language=&quot;html&quot;] <div id='errors'></div> <form name='register' id='register-form' method='POST' action="/register/"> <label for='remail'>Email</label><input type='text' value='' name='email' id='remail'/> <label for='rpassword'>Password</label><input type='password' value='' name='password' id='rpassword'/> <label for='rrepassword'>Re-type Password</label><input type='password' value='' name='repassword' id='rrepassword'/> <input type='submit' class='button' id='submit-register' value='Create my account' /> </form> <form name='login' id='login-form' method='POST' action="/login/"> <label for='lemail'>Email</label><input type='text' value='' name='email' id='lemail'/> <label for='lpassword'>Password</label><input type='password' value='' name='password' id='lpassword'/> <input type='submit' class='button' id='submit-login' value='Login' /> </form></p>
+
+<p>&lt;!-- The contents of these two files are included at the end on this blog--&gt; <script type='text/javascript' src="app/resources/static/js/validateRegister.js'></script> <script type='text/javascript' src="app/resources/static/js/validateLogin.js'></script> [/sourcecode]</p>
+
+<h3>Directory Structure</h3>
+
+<p>Next, create the following two modules in &#39;my&#39; package:</p>
+
+<p>[sourcecode language=&quot;text&quot;] static js/ dijit/ dojo/ dojox/ my/ error/ _base.js form/ _base.js helper.js error.js form.js util/</p>
+
+<p>form.js : is the actual module file form/ : contain files for the form module _base.js : a class to represent a form helper.js : a helper class that attaches the onsubmit event to the current scoped form and other helper functions to print out the error messages</p>
+
+<p>error.js: is the actual module file error/ : contain files for the error module _base.js : a class to represent errors, provides a constructor and a function that prints out the form errors in the error container (which we provide during form set-up, more on this later)</p>
+
+<p>[/sourcecode]</p>
+
+<p>It is completely up to you where you want to save your package or modules but you have to configure the Dojo loader to locate the modules correctly. The following shows how to enable you package so that the loader can locate your modules (read <a href="http://dojotoolkit.org/documentation/tutorials/1.7/dojo_config/">here</a> to find out more about dojoConfig):</p>
+
+<h3>Configure Package</h3>
+
+<p>[sourcecode language=&quot;javascript&quot;] <script> var dojoConfig = { baseUrl: &quot;&#39;js/&quot;, tlmSiblingOfDojo: false, packages: [ { name: &quot;dojo&quot;, location: &quot;dojo&quot; }, { name: &quot;dijit&quot;, location: &quot;dijit&quot; }, { name: &quot;dojox&quot;, location: &quot;dojox&quot; }, { name: &quot;util&quot;, location: &quot;util&quot; }, { name: &quot;my&quot;, location: &quot;my&quot; } ], async: true, aliases: [ [&quot;ready&quot;, &quot;dojo/ready&quot;], [&quot;xvalidate&quot;, &quot;dojox/validate&quot;], [&quot;xcheck&quot;, &quot;dojox/validate/check&quot;], [&quot;xweb&quot;, &quot;dojox/validate/web&quot;], [&quot;dom&quot;,&quot;dojo/dom&quot;], [&quot;connect&quot;,&quot;dojo/<em>base/connect&quot;], [&quot;event&quot;,&quot;dojo/</em>base/event&quot;], [&quot;declare&quot;, &quot;dojo/<em>base/declare&quot;], [&quot;lang&quot;, &quot;dojo/</em>base/lang&quot;], [&quot;dom-class&quot;, &quot;dojo/dom-class&quot;], ] }; </script> [/sourcecode]</p>
+
+<p>In the package array, the <strong>name</strong> could be anything you like and the <strong>location</strong> should be the actual path to you package (baseUrl/location). From now on all our modules wiould be accessible via &#39;my&#39;, Eg: require[&quot;my/form&quot;]..., dojo loader would look for form.js in the js/my/ directory. </p>
+
+<h3>Form Module</h3>
+
+<p>The <strong>my/form.js</strong> module file is a very simple file that just defines or loads the required form object ( define callback always return a value, unlike require ).</p>
+
+<p>[sourcecode language=&quot;javascript&quot;] define([&quot;./form/helper&quot;], function(form){ return form; }); [/sourcecode]</p>
+
+<p>But the main juice lies within the helper.js file in the &quot;my/form/&quot; directory. The helper class is nothing but an interface to my/form/_base.js that also makes use of error module to print the errors in the error container when a form fails to get validated.</p>
+
+<p>[sourcecode language=&quot;javascript&quot;] define([&quot;lang&quot;, &quot;declare&quot;, &quot;./<em>base&quot;, &quot;dom&quot;, &quot;event&quot;, &quot;connect&quot;, &quot;../error/</em>base&quot;], function(lang, declare, BaseFormValidator, dom, event, connect, myError){ var FormValidator = declare(null, { form: null, profile: null, errorContainer: &#39;errors&#39;, baseFormValidator: null,</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">    constructor: function(/*Object*/ args){
+        declare.safeMixin(this, args);
+    },
+
+    getErrorsAsHTMLList : function(errors){
+        // print errors as list
+        var html = &amp;quot;&amp;quot;;
+        if (errors){
+            html = &amp;quot;&amp;lt;ul&amp;gt;&amp;quot;;
+            for(var key in errors){
+                html += &amp;quot;&amp;lt;li&amp;gt;&amp;quot;+errors[key]+&amp;quot;&amp;lt;/li&amp;gt;&amp;quot;;
+            }
+            html += &amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;;
+        }
+        return html;
+    },
+
+    submitOrPrintErrors: function() {
+        // validates form and if an error occurred then display the errors in the
+        // error container
+        var status = this.baseFormValidator.validateForm();
+        if (status) {
+            this.baseFormValidator.submitForm();
+        } else {
+            var html = this.getErrorsAsHTMLList(this.baseFormValidator.getErrors())
+            var eObj = new my.Error({errorContainer: this.errorContainer, errorHTML: html});
+            eObj.animateErrors();
+        }
+    }
+});
+
+var helper = lang.getObject(&amp;quot;my.form.helper&amp;quot;, true);
+
+helper.attachOnSubmitEvent = function(formId, profile, errorContainer){
+    var f = dom.byId(formId);
+</code></pre></div>
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2012/04/30/ldap-authentication-using-spring-security/" data-toggle="tooltip" data-placement="top" title="Ldap Authentication Using Spring Security">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2012/05/04/viewing-the-complete-source-code-and-stealing-passwords-from-websites-with-php-cgi-based-setups/" data-toggle="tooltip" data-placement="top" title="Viewing The Complete Source Code And Stealing Passwords From Websites With Php Cgi Based Setups">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

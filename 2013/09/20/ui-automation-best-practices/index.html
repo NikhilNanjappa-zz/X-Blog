@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Ui Automation Best Practices - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2013/09/20/ui-automation-best-practices/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Ui Automation Best Practices</h1>
+                    
+                    <span class="meta">Posted by jgupta on September 20, 2013</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>UI Automation Best Practices</h1>
+
+<p>Automated software testing saves a lot of time and money. Every time source code is modified, software tests should be executed to make sure application works as expected. </p>
+
+<p>Tests should be written at unit, integration and acceptance level. Acceptance tests are mostly UI tests which test the application from user perspective and mirror the user stories. But UI tests can be difficult to manage and should be carefully designed. Below are some of best practices which I have gained through experience. These can be used to make acceptance tests more stable and robust with some of very popular tools like selenium. </p>
+
+<ul>
+<li>Ensure the test pyramid is correctly followed. Majority of tests should be written at unit level, few integrations tests and <strong>minimal set of acceptance tests.</strong> Acceptance tests are generally slow to execute, expensive and require more maintenance. User workflow related tests should be covered in acceptance but do not try to cover all negative scenarios. Acceptance tests target should be to ensure that key pieces of business functionality are intact.</li>
+<li><strong>Carefully select element locaters</strong>. Always try to use ID attribute of html elements instead of name, class or xpath for faster test execution in browsers. If you don’t have IDs, prefer name over class, class over xpath and relative path over absolute path.</li>
+<li><strong>Never hardcode sleep</strong> in test code. There is always performance variance in different environments, so instead of using hardcoded sleep, use specific wait methods like Wait.until { ... }, object.when<em>present.set, object.wait</em>until<em>present, object.wait</em>while_present etc.</li>
+<li><strong>Never rely on external dependencies</strong> (For e.g. WebServices, Database) . Use stubbing and setup your own test data.</li>
+<li><strong>Make sure tests are independent</strong> and states should not be shared between tests. Always ensure to delete cookies before tests. Avoid using any global variables. </li>
+<li><strong>Use Headless browser</strong> in Continuous Integration which should speed up test execution time.</li>
+<li>Before performing any action on elements, <strong>wait for element to appear</strong> on page. </li>
+<li><strong>Use Page Object Design pattern</strong> which provides better maintainability and readability. Also, if UI changes for a page, tests themselves don’t need to change. Only the code in page objects needs to be modified. </li>
+<li><strong>Use relative URLs</strong> for pages, if possible and try to use deep linking for pages in tests.</li>
+<li><strong>Externalize test data</strong> to text/csv file so that it could be modified with out having to modify source code and perform data driven testing.</li>
+<li><strong>Avoid Using Key Press</strong> functions unless you are testing short cuts. If you are using key press for clicking on alerts etc, it might fail if focus is not on that page.</li>
+<li><strong>Use Object repository</strong> for centralized data-store for all your elements locators. Follow DRY (do not repeat yourself).
+For more information about Xebia&#39;s offerings on Agile Testing Services , Click here (link it to <a href="http://www.xebia.in/application-testing.html">http://www.xebia.in/application-testing.html</a>)</li>
+</ul>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#9448" title="2013-10-04 13:51:36">Nicky</a>:</strong> Very good list. Especially first point where teams makes mistakes of creating too many ui tests whereas many tests could have been covered with unit/integration tests. Also a vary valid point of using stubbed data. I have seen teams making mistakes of testing with live data of external dependencies and dealing with timeouts, service failures, etc.</p>
+
+<p><strong><a href="#9446" title="2013-09-24 04:05:37">daluu</a>:</strong> Good suggestions. Here are some other thoughts on UI automation best practices with respect to page objects, ATDD/TDD with Selenium, and test data management: http://autumnator.wordpress.com/2013/07/11/developing-selenium-tests-with-proper-abstraction/ http://autumnator.wordpress.com/2013/08/02/pseudo-test-driven-development-with-selenium-and-page-object-model-for-developers-and-qa/ http://autumnator.wordpress.com/2013/07/12/avoid-creating-unnecessary-test-data/</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/09/16/17129/" data-toggle="tooltip" data-placement="top" title="17129">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/09/27/common-ui-issues-on-ios7/" data-toggle="tooltip" data-placement="top" title="Common Ui Issues On Ios7">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Android Enterprise Application Development 2 - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2011/10/06/android-enterprise-application-development-2/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Android Enterprise Application Development 2</h1>
+                    
+                    <span class="meta">Posted by psingh on October 6, 2011</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Android Enterprise Application Development</h1>
+
+<p>For past two years, Android has evolved from an immature mobile OS to a popular choice for users as well as device manufacturers.  Google is continuously updating Android and adding features to make it more and more powerful and competent with other mobile OS mainly iPhone and Blackberry.</p>
+
+<p>One major thing which Android was lacking from its competitors was: Enterprise solutions. Now it’s no more a weakness for Android.  <strong><em>What are Enterprise applications:</em></strong> Enterprise applications enable an organization&#39;s employees to have access to important organization information/data through mobile applications anywhere, anytime. On the same time, organizations can enforce security policies on every device to control the communication, restrict the flow of data and protect the device from loss or theft.</p>
+
+<p><strong><em>Why they are important:</em></strong> Mobile phones and tablet computers have had a significant impact on the way people think, communicate or work. Organizations are making enterprise applications for mobile phones to improve productivity and communication. &quot;Anywhere and anytime access to information&quot; can be a powerful tool for organization to enhance productivity and reduce cost.</p>
+
+<p><strong>_How other mobile platforms do it: _</strong>In Blackberry, enterprise solutions are provided by Blackberry enterprise server setup directly. In iPhone, enterprise applications are supported by Apple to some extent. Organization can develop and distribute in-house iPhone applications. For developing and testing these applications, Apple also provides code level technical support with a fee of US $299 per year.</p>
+
+<p><strong><em>How Android is doing it :</em></strong></p>
+
+<p>On the release of Android OS version 2.2(froyo), Google added new API called “Android Device Administration”. By using this API, developers can create &quot;security aware&quot; enterprise applications through which an organization can enforce its own “settings” on their employees’ devices. These applications will be loaded with following features:</p>
+
+<p><strong>_Data Sharing: _</strong><em>Users can have access to sensitive system information and organization data.</em></p>
+
+<p><strong><em>Security:</em></strong></p>
+
+<p><strong><em>When organizations allow sensitive data to be accessed remotely, one thing which is most important is security. Android device administrator can enforce security policies that can be either hard-coded into the app, or the application can dynamically fetch policies from a third-party server.</em></strong></p>
+
+<ol>
+<li><strong>Password policies</strong>:  Administrator can enforce a password policy. The password policy can be set using terms like minimum password length, alphanumeric password, minimum letters required, minimum lowercase letters, password expiration timeout, maximum inactivity time lock and other various conditions.</li>
+<li>*<em>Remote lock: *</em>The device can be immediately locked remotely by the administrator if required in case of theft or loss.</li>
+<li><strong>Encryption of data:</strong> Android apps can use SSL tunnels through which data can be transported. However, the data stored on the device (phone memory and SD) is up to the applications. Prior to honeycomb (Android 3.0) there is no support for turning on encryption on the device.
+If a user fails to comply with the policies (for example, if a user sets a password that violates the guidelines), it is up to the application to decide how to handle this. However, typically this will result in the user not being able to sync data.</li>
+</ol>
+
+<p>Consider a use case where a device attempts to connect to a server (which belongs to an enterprise) that requires policies which are not supported in the Device Administration API, the connection will not be allowed.</p>
+
+<p><strong><em>Device control /Device management:</em></strong></p>
+
+<p><strong><em>Remote wipe: Facility for controlling administration to remotely wipe the device (to restore factory settings) in case the device is lost or stolen.</em></strong></p>
+
+<ol>
+<li><strong>Two way benefits</strong>: System admin can implement the security policies and the device user can have access to the sensitive system and data and may be able to sync data.</li>
+<li>*<em>Provisioning: mass deployment of application: *</em>Though  Android does not have an automated provisioning solution, a system admin can distribute the application by following ways:</li>
+<li>Uploading the application in Android Market.</li>
+<li>Enabling non-market installation.</li>
+<li>Distributing the application through email or website.
+3*<em>. Wipe the device remotely: *</em>The administrator can wipe the device data remotely and restore the factory settings.</li>
+</ol>
+
+<p><strong><em>To uninstall an existing device admin application, users need to first unregister the application as an administrator</em></strong>.</p>
+
+<p>Developers can create robust enterprise application using the Device Administration API. I am working on a small demo application using this API, will post code snippets in next blog.</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#6005" title="2011-10-11 11:01:49">Rajni</a>:</strong> Nice and useful document. Thanks for sharing it.</p>
+
+<p><strong><a href="#6004" title="2011-10-10 15:03:34">Sumeet kumar</a>:</strong> Hi param, thats g8 discussion</p>
+
+<p><strong><a href="#5987" title="2011-10-06 21:10:05">Yogesh Kumar</a>:</strong> Good One! Would like to know more about &quot;Wipe the device remotely:&quot;</p>
+
+<p><strong><a href="#6020" title="2011-10-13 17:53:23">Paramvir Singh</a>:</strong> The remote wipe of data is the facility using which the administrator or controller can reset the device to default factory settings. This may be useful in a case where device is lost. On code level, you can do remote wipe using remote wipeData() of DevicePolicyManager class. e.g. <code>DevicePolicyManager policyManager; policyManager.wipeData(0);</code></p>
+
+<p><strong><a href="#7614" title="2012-02-18 13:48:50">Swati</a>:</strong> Interesting feature &quot;Wipe the data remotely&quot; and now want to know more about it.</p>
+
+<p><strong><a href="#8113" title="2012-03-29 11:05:08">Faisal Wahab</a>:</strong> Is there any solution to prevent our application from uninstalling. i am developing an enterprise type application and want to control that user cannot uninstall my application... on uninstall user must have to give ID, password. ???</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2011/10/03/why-agile-is-awesomeeee-a-freshers-perspective/" data-toggle="tooltip" data-placement="top" title="Why Agile Is Awesomeeee A Freshers Perspective">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2011/10/06/orchestrating-jboss-esb-services-from-intalio-business-processes-part-2/" data-toggle="tooltip" data-placement="top" title="Orchestrating Jboss Esb Services From Intalio Business Processes Part 2">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

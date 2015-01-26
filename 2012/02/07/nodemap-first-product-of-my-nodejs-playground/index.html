@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Nodemap First Product Of My Nodejs Playground - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2012/02/07/nodemap-first-product-of-my-nodejs-playground/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Nodemap First Product Of My Nodejs Playground</h1>
+                    
+                    <span class="meta">Posted by vrawat on February 7, 2012</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Nodemap - First product of my Nodejs playground</h1>
+
+<p>I started learning Nodejs few weeks back and fell in love with the way it eases the development of real-time web applications. In general, when I start learning a new technology I try to make an app out of that learning. In that process, the most challenging task is &quot;What to develop?&quot; rather than How to develop? Finally an interesting app idea came into my mind and I was able to turn that idea into an application. So here I am explaining the app and its code in detail.</p>
+
+<p><a href="http://nodemap.no.de">NodeMap</a> : A realtime Nodejs application with Express, Nowjs, Ejs, Google Maps, Mongodb hosted on Joyent SmartMachines. What does this app do? It simply shows real-time messages on the world map from different users around the world in an awesome way. <strong>[Click Here To See Working App</strong>]<a href="http://nodemap.no.de">1</a> First things first, the technology aspect : </p>
+
+<ul>
+<li><strong>Why Nodejs?</strong> Because its awesome and amazingly fast server side javascript.(For more info refer <a href="http://nodejs.org" title="Nodejs Homepage">Nodejs Homepage</a>).</li>
+<li><strong>Why Express?</strong> Because I wanted a Web-MVC and this one is the best out there, with community support.(For more info refer <a href="http://expressjs.com/" title="Expressjs Web MVC">Expressjs Web MVC</a>)</li>
+<li><strong>Why Nowjs?</strong> Because it allows me to &quot;Call client functions from the server and server functions from client&quot;.(It internally uses socket.io, for more info refer <a href="http://nowjs.com/" title="Nowjs">Nowjs</a>)</li>
+<li><strong>Why ejs?</strong> Because this template engine is very similar to html. So it was easy to grasp.(low learning curve For more info refer <a href="https://github.com/visionmedia/ejs" title="EJS">EJS</a>)</li>
+<li><strong>Why Google Maps?</strong> Because I wanted to show some maps in my app. (For more info refer <a href="http://code.google.com/apis/maps/documentation/javascript/" title="Google Maps API v3">Google Maps API v3</a>)</li>
+<li><strong>Why Mongodb?</strong> Because I wanted a light-weight NoSQL database which can easily run on Joyent SmartMachines.(For more info refer <a href="http://www.mongodb.org/" title="Mongodb">Mongodb</a>)
+Lets deep dive into the application code, here is the link to <a href="https://github.com/vijayrawatsan/nodemap" title="Nodemap">Github Repository</a>.</li>
+</ul>
+
+<p>In a real-time web application both server side and client side code plays vital role in the proper functioning of the applicaiton. So I will switch between server-side code and client-side code while explaining the code.</p>
+
+<p>Lets start with the server side snippet below :</p>
+
+<p>[sourcecode lang=&quot;javascript&quot;] //Module dependencies. var express = require(&#39;express&#39;), nowjs = require(&#39;now&#39;), mongojs = require(&#39;mongojs&#39;); //starting server var app = express.createServer().listen(80); //Server configuration app.configure(function(){ app.set(&#39;views&#39;, <strong>dirname + &#39;/views&#39;); app.set(&#39;view engine&#39;, &#39;ejs&#39;); app.use(express.bodyParser()); app.use(express.methodOverride()); app.use(express.static(</strong>dirname + &#39;/public&#39;)); }); //Initialize mongojs to connect with mongodb var db = mongojs.connect(&#39;nodemapdb&#39;, [&#39;mycollection&#39;]); //Initialize nowjs for real-time client-to-server and server-to-client calls var everyone = nowjs.initialize(app, {socketio: {transports: [&#39;xhr-polling&#39;, &#39;jsonp-polling&#39;]}}); [/sourcecode]</p>
+
+<p>Server side code starts with including the required dependencies( which are expressjs, nowjs and mongojs) and configuring them appropriately. Lets have a look at each one of them : <strong>Express</strong> Line 4 creates a HttpServer to listen on port 80. Line 6 starts with configuration of the server. Line 7 sets the views directory path. Line 8 sets the view engine to ejs (if we don&#39;t set it the default jade view engine will be used). bodyParser() parses the request body and populates req.body methodOverride() checks req.body.method for the HTTP method override(i.e override to GET/POST/PUT etc.) Line 11 sets the static resource directory which will serve the static resources to the client. Thats all with express(for more info. please refer <a href="http://expressjs.com/guide.html">Express Guide</a>)</p>
+
+<p> </p>
+
+<p><strong>Mongojs</strong> Line 14 initializes mongojs and configures it to connect with database &#39;nodemapdb&#39; and collection &#39;mycollection&#39;. For more configuration options refer : <a href="https://github.com/gett/mongojs/blob/master/README.md">Mongojs Read Me</a></p>
+
+<p><strong>Nowjs</strong> Line 16 initializes nowjs to work with the current HttpServer and explicitly set the socket.io transport to xhr or json polling. The second parameter is optional and by default uses websockets as first priority. I have explicitly set it because my application host does not support websockets on free accounts.</p>
+
+<p>Now lets see how the request to home page is handled :</p>
+
+<p>[sourcecode lang=&quot;javascript&quot;] app.get(&#39;/&#39;, function(req, res){ var dataArray=[]; db.mycollection.find({},{_id:0}).forEach(function(err, doc) { if (!doc) { // we visited all docs in the collection res.render(&#39;index&#39;, { title: &#39;NodeMap : Using Nodejs,Nowjs,Mongodb &amp; Google Maps &#39; , messages : JSON.stringify(dataArray)}); return; } dataArray.push(doc); }); }); [/sourcecode]</p>
+
+<p>Whenever a person hits <a href="http://nodemap.no.de">http://nodemap.no.de</a> the above app.get(&quot;/&quot;,...) method will be called. What I am doing here is, simply getting all the documents stored in the database(without the &quot;_id&quot; field). And for each document found, it is pushed in &quot;dataArray&quot; and finally a call to <strong>res.render</strong> which will render the <strong>index.ejs</strong> in the views directory, and, since I haven&#39;t set <strong>&quot;layout : false&quot;</strong> while configuring the server, the contents of <a href="https://github.com/vijayrawatsan/nodemap/blob/master/views/index.ejs">index.ejs</a> will be rendered as &quot;body&quot; of <a href="https://github.com/vijayrawatsan/nodemap/blob/master/views/layout.ejs">layout.ejs</a>(the concept of layouts in express is similar to concept of master-pages).</p>
+
+<p> </p>
+
+<p>Now lets see how the initial markers are set on the map(client-side code):</p>
+
+<p>[sourcecode lang=&quot;javascript&quot; highlight=&quot;15&quot;] <body onload="initialize();"> <div id="map_canvas" ></div> <div id="form-wrapper" style="z-index: 1000002; position: absolute; right: 0px; bottom: 0px; "> <div id="form1"> Name : <input id="owner" type="text" /><br/> Message : <input id="message" type="text" /><br/> <input id="locationCheck" type="checkbox" >Use my location</input><br/> <div id="cord" style="display:none;"> Latitude : <input id="latitude" type="text" /><br/> Longitude : <input id="longitude" type="text" /> </div> <input type="button" value="Submit" onclick="getGeoLocation();"/> </div> </div> <div id="messages" style="display:none;">&lt;%=messages%&gt;</div> </body></p>
+
+<p><script> function initialize() { var mapOptions = { maxZoom: 9, minZoom:2, zoom: 2, center: new google.maps.LatLng(27, 30), mapTypeControl: false, streetViewControl: false }; var mapType = new google.maps.StyledMapType([ { featureType: &quot;all&quot;, elementType: &quot;all&quot;, stylers: [ { visibility: &quot;off&quot; }, // Hide everything { lightness: 100 } // Makes the land white ] }, { featureType: &quot;water&quot;, elementType: &quot;geometry&quot;, stylers: [ { visibility: &quot;on&quot; }, // Show water, but no labels { lightness: -9 }, // Must be &lt; 0 to compensate for the &quot;all&quot; lightness</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#8014" title="2012-03-23 18:26:13">professional photographer</a>:</strong> <strong>Recent Blogroll Additions…...</strong> [...]usually posts some very interesting stuff like this. If you’re new to this site[...]......</p>
+
+<p><strong><a href="#8682" title="2012-05-04 08:39:49">Vijay Rawat</a>:</strong> Hi Rajendra, This seems to be a installation problem.. Please have a look at : http://stackoverflow.com/questions/7754799/error-cannot-find-module-ejs</p>
+
+<p><strong><a href="#8684" title="2012-05-04 10:21:25">Rajendra</a>:</strong> Thanx for the reply.. yes there as an installation problem with ejs. can we extend this code to share the map as well (i mean share the map with zoom out &amp; zoom in features. If one user zooms in, it should be emitted to other users as well).</p>
+
+<p><strong><a href="#8685" title="2012-05-04 10:36:39">Vijay Rawat</a>:</strong> Well I haven&#39;t tried that. You might need to check Google Maps API for that. :)</p>
+
+<p><strong><a href="#7454" title="2012-02-07 23:12:57">Shekhar Gulati</a>:</strong> Very cool application. Liked it a lot. Will look forward to learn node.js from you. Thanks Shekhar</p>
+
+<p><strong><a href="#7460" title="2012-02-08 09:01:26">Vijay Rawat</a>:</strong> Hi Shekhar, I will be giving an XKE on Nodejs very soon. Thanks Vijay</p>
+
+<p><strong><a href="#8489" title="2012-04-19 02:35:39">Kamal</a>:</strong> Qalqi@Devadatta:~/Projects/JavaScript/nodeJS/vijayrawatsan-nodemap-6a26624$ node server.js Express server listening on port 80 { [Error: listen EACCES] code: &#39;EACCES&#39;, errno: &#39;EACCES&#39;, syscall: &#39;listen&#39; } Error: listen EACCES at errnoException (net.js:670:11) at Array.1 (net.js:756:28) at EventEmitter._tickCallback (node.js:192:40) While running the server code I was getting this error. Would you please have alook at it,Vijay.</p>
+
+<p><strong><a href="#8494" title="2012-04-19 09:41:35">Vijay Rawat</a>:</strong> This seems to be an access error. Assuming you are running on you personal machine. Try running on a different port(like 8000). It should work. If same error comes try running as a root.</p>
+
+<p><strong><a href="#8674" title="2012-05-03 23:22:11">Rajendra</a>:</strong> I getting following error. node server.js Express server listening on port 80 warn - error raised: Error: listen EACCES can you pls help me to run this code vijay.</p>
+
+<p><strong><a href="#8675" title="2012-05-03 23:28:07">Rajendra</a>:</strong> now i am able to run it on port 8000, still getting error related to express. Express 500 Error: Cannot find module &#39;ejs&#39; at Function.<em>resolveFilename (module.js:334:11) at Function.</em>load (module.js:279:25) at Module.require (module.js:357:17) at require (module.js:368:17) at View.templateEngine (/Users/rmudale/nodetest/node<em>modules/express/lib/view/view.js:134:38) at Function.compile (/Users/rmudale/nodetest/node</em>modules/express/lib/view.js:68:17) at ServerResponse.<em>render (/Users/rmudale/nodetest/node</em>modules/express/lib/view.js:417:18) at ServerResponse.render (/Users/rmudale/nodetest/node<em>modules/express/lib/view.js:318:17) at /Users/rmudale/nodetest/server.js:46:8 at /Users/rmudale/nodetest/node</em>modules/mongojs/node_modules/common/index.js:100:4</p>
+
+<p><strong><a href="#7500" title="2012-02-09 08:20:38">Anand George</a>:</strong> Cool. Works like a charm. Thanks.</p>
+
+<p><strong><a href="#9240" title="2012-07-26 18:34:01">Kris</a>:</strong> I see your code on github. Can you explain how you set layout page. I am not found them working when I am using Ejs</p>
+
+<p><strong><a href="#9248" title="2012-07-27 11:03:54">Vijay Rawat</a>:</strong> Hi Kris, In layout.ejs the tag &quot; &lt;%- body %&gt; &quot; would be populated by contents of index.ejs Thanks</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2012/02/02/opportunities-and-challenges-in-social-web-data-mining/" data-toggle="tooltip" data-placement="top" title="Opportunities And Challenges In Social Web Data Mining">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2012/02/07/selenium-web-driver-or-rc-decide-yourself/" data-toggle="tooltip" data-placement="top" title="Selenium Web Driver Or Rc Decide Yourself">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Test Oauth Protected Rest Services Using Soapui - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2011/03/31/test-oauth-protected-rest-services-using-soapui/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Test Oauth Protected Rest Services Using Soapui</h1>
+                    
+                    <span class="meta">Posted by sprasadjha on March 31, 2011</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Test OAuth protected REST services using soapUI</h1>
+
+<p>soapUI is one of the best tools for testing the REST services. It can very efficiently help to check and ensure that the services return just what is expected. Due to these promising reasons we tried to use soapUI for testing the REST based services of our application. But we found a serious road block. The REST services in our application is secured by OAuth 1.0, and as of now soapUI has out of the box support for basic authentication only.</p>
+
+<p>OAuth enables users to share their data lying with their providers with third party consumers. This is a complex use case and involves complex authentication cycles before the actual data can be accessed by consumers from the providers. Since soapUI does not provide out of box support for the authentication logic for OAuth as it does for basic authentication, we were left with two options, either create the support for OAuth authentication or use some other tool. To get around this issue we decided to add support for OAuth authorization in soapUI using the option of adding Groovy library in saopUI. I have used Soap UI 3.5.1 for evaluation.</p>
+
+<p>In this blog I will explain the Groovy script required to send request to the API after the access token is already generated. The previous steps involved in the generation of access token will be dealt in my next blog post.</p>
+
+<p>For OAuth 1.0, when you want to access the resource secured by OAuth the HTTP request should have following parameters for the request to get authenticated </p>
+
+<ol>
+<li>oauth<em>consumer</em>key</li>
+<li>oauth<em>signature</em>method</li>
+<li>oauth_token</li>
+<li>oauth_version</li>
+<li>oauth_timestamp</li>
+<li>oauth_nonce</li>
+<li>oauth_signature
+Please note that the first four parameters are static for a particular consumer and access token. But the last three parameters are dynamic and need to be generated before every call to the resource. We will deal each parameter one by one and see how these can be dynamically generated by using Groovy script.</li>
+</ol>
+
+<p><strong>oauth_timestamp</strong></p>
+
+<p>Please note that the time is to be in seconds<strong>.</strong></p>
+
+<hr>
+
+<hr>
+
+<p>[sourcecode language=&quot;java&quot;] int time = (System.currentTimeMillis()/1000); String timeString = String.valueOf(time); groovyUtils.setPropertyValue(&quot;Properties&quot;, &quot;timeString&quot;, timeString); [/sourcecode]</p>
+
+<p><strong>oauth_nonce</strong></p>
+
+<p>[sourcecode language=&quot;java&quot;] long timeStampResult =Long.valueOf(timeString); String nonce =String.valueOf(timeStampResult + new Random().nextInt()); groovyUtils.setPropertyValue(&quot;Properties&quot;, &quot;nonce&quot;, nonce); [/sourcecode]</p>
+
+<p><strong>oauth_signature</strong></p>
+
+<p>The generation of signature is the trickiest part. I will break the script in smaller parts and give a brief idea about the &#39;why&#39; before I explain the how. This would help understand the script better. People already aware about the signature generation can jump to script.</p>
+
+<p>For creating the signature you will need (i) base string, (ii) the consumer key and (iii) the access_token secret </p>
+
+<ul>
+<li>#### The Base String</li>
+</ul>
+
+<p>This is a sample base string which is formatted for better readability.</p>
+
+<p>[sourcecode language=&quot;xml&quot;] GET&amp;http%3A%2F%2Flocalhost%3A8080%2Fabc.com6%2Frest%2Fusers%2Fget&amp;%3D %26oauth<em>callback%3Doob %26oauth</em>consumer<em>key%3DconsumerKey %26oauth</em>nonce%3D175942032 %26oauth<em>signature</em>method%3DHMAC-SHA1 %26oauth<em>timestamp%3D1301554858 %26oauth</em>token%3Df285bed1-c57c-42db-8438-3ec33fd6c4be %26oauth<em>version%3D1.0 %26user</em>name%3Ddemouser [/sourcecode]</p>
+
+<p>On close inspection it is easy to understand that the base string consists of 
+    * HTTP method.
+    * Full path to resource.
+    * All OAuth related parameters.
+    * All parameters required for accessing the resource.
+Please note that in the URL the parameters appear in the ascending order of the names of the parameters. And after creating a string from the above parameters the string is encoded as per the URL encoding rules.</p>
+
+<p>Let us see the groovy script that gets the OAuth parameters from project level properties, and the API specific properties from the test case properties</p>
+
+<p><strong>OAuth Specific parameters</strong></p>
+
+<p>[sourcecode language=&quot;xml&quot;] def oauth<em>version = context.expand( &#39;${#Project#oauth</em>version}&#39; ) def oauth<em>consumer</em>key = context.expand( &#39;${#Project#oauth<em>consumer</em>key}&#39; ) def oauth<em>callback = context.expand( &#39;${#Project#oauth</em>callback}&#39; ) def oauth<em>signature</em>method = context.expand( &#39;${#Project#oauth<em>signature</em>method}&#39; ) def oauth<em>token = context.expand( &#39;${#Project#oauth</em>token}&#39; ) def token<em>secret = context.expand( &#39;${#Project#token</em>secret}&#39; ) [/sourcecode]</p>
+
+<p><strong>API specific parameters</strong></p>
+
+<p>[sourcecode language=&quot;xml&quot;] def user<em>name = context.expand( &#39;${Properties#user</em>name}&#39; ) [/sourcecode]</p>
+
+<p>Please note that if you want to make the script generic then in that case the api specific properties and their values will have to be passed dynamically to the script.Once all the parameters are available they will have to be sorted in the alphabetic order of names of parameters, for that we will take following steps</p>
+
+<p>(i) <strong>Put the parameters in a Map</strong></p>
+
+<p>[sourcecode language=&quot;java&quot;] Map parameterMap = new HashMap(); parameterMap.put(&quot;oauth<em>version&quot;, oauth</em>version); parameterMap.put(&quot;oauth<em>consumer</em>key&quot;, oauth<em>consumer</em>key); ............ parameterMap.put(&quot;oauth<em>timestamp&quot;, timeString); parameterMap.put(&quot;user</em>name&quot; , user_name); [/sourcecode]</p>
+
+<p>(ii)<strong>Sort the parameter</strong></p>
+
+<p>[sourcecode language=&quot;java&quot;] Map sorted = new LinkedHashMap(); List keys = new ArrayList(map.keySet()); Collections.sort(keys); for (String key : keys){ sorted.put(key, map.get(key)); } [/sourcecode]</p>
+
+<p>Once the parameter are sorted, a string has to be generated in the query string format, to be appended to the encoded string generated from end point</p>
+
+<p><strong>Create a encoded parameter string</strong></p>
+
+<p>[sourcecode language=&quot;java&quot;] StringBuffer encodedString = new StringBuffer(map.size() * 20); for (String key : map.keySet()) { if(encodedString.length() &gt; 0){ encodedString.append(&#39;&amp;&#39;); } encodedString.append(percentEncode(key)).append(&#39;=&#39;).append(percentEncode(map.get(key))); } def encodedParamString = encodedString.toString(); [/sourcecode]</p>
+
+<p>The url to the REST resource has to be encoded.</p>
+
+<p>*<em>Encode the endpoint url string *</em></p>
+
+<p>[sourcecode language=&quot;java&quot;] String encodedURL = URLUtils.percentEncode(endpoint); [/sourcecode]</p>
+
+<p>Now create the base string using the encoded url, encoded string generated from parameters and the HTTP method.</p>
+
+<p>[sourcecode language=&quot;java&quot;] def basicString= String.format( &quot;%s&amp;%s&amp;%s&quot;, &quot;GET&quot;, encodedURL, encodedParamString ); [/sourcecode]</p>
+
+<p><strong>Generate cryptographic function and signature</strong></p>
+
+<p>[sourcecode language=&quot;java&quot;] SecretKeySpec key = new SecretKeySpec((&quot;consumerKey&amp;&quot;+token_secret).getBytes(&quot;UTF-8&quot;), &quot;HmacSHA1&quot;); Mac mac = Mac.getInstance(&quot;HmacSHA1&quot;); mac.init(key); byte[] bytes = mac.doFinal(basicString.getBytes(&quot;UTF-8&quot;)); def signature = new String(Base64.encodeBase64(bytes)).replace(&quot;\r\n&quot;, &quot;&quot;); groovyUtils.setPropertyValue(&quot;Properties&quot;, &quot;signature&quot;, signature); [/sourcecode]</p>
+
+<p>Now transfer these properties set in the testcase properties to the request parameters. That&#39;s all one needs to do to call rest based services protected by OAuth 1.0.
+Reference: <a href="http://vimeo.com/api/docs/oauth">http://vimeo.com/api/docs/oauth</a></p>
+
+<p><a href="https://github.com/fernandezpablo85/scribe-java">https://github.com/fernandezpablo85/scribe-java</a></p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#5375" title="2011-03-31 23:17:00">Ganesh Gembali</a>:</strong> Hi Shankar, Nice investigation you have done there. But why you want to test your web services with authentication. While testing you can anyway disable authentication and test the service. And that too OAuth doesn&#39;t sounds to like an authorization system, so it must not have any effect on execution of your webservice. May be it is a better idea to create two profiles in your app : one with security (for releasing) and another with out security (for testing and some times development as well, as it might be irritating to authenticate everytime). As it is a third party framework it anyway doesn&#39;t make sense to test whether it is working or not. Or I may be missing some specific requirements here.</p>
+
+<p><strong><a href="#5385" title="2011-04-01 09:29:16">Shankar Jha</a>:</strong> Hi Ganesh, You have raised a very good question. Probably you are talking about unit testing. At some point we also want to do integration testing. Please note that OAuth is a token based authentication framework. Tokens like request token, access token and keys like consumey key, consumer secret etc. While authentication all these tokens and keys are generated by our application. Some of these tokens are also persisted with expiry period etc. Now there is a substantial amount of logic and few token exchanges required before the actual resource can be accessed. This logic also needs to be tested. One point which probably needs to be understood is that OAuth only stipulates the flow but the creation of tokens and logic for invalidating them lies with the implementor. If the app is really serious about the privacy of the data they cannot but test it along with OAuth to ensure fool proof system.</p>
+
+<p><strong><a href="#6846" title="2012-01-12 04:16:45">avi</a>:</strong> What about the second part of this post where you explain how to generate the access token? That would be appreciated a lot!</p>
+
+<p><strong><a href="#8747" title="2012-05-10 15:47:36">Sam Vo</a>:</strong> Hi Shankar, Your topic is exactly what I&#39;m looking for in the last couple of days. I&#39;m new to soapUI and I wish to use soapUI to test a RESTful API with HMAC-SHA1. My problem is exactly what you described in your topic. But I still don&#39;t understand it clearly. It would be great if you can share the source code of the Groovy script and I&#39;m looking for the second part &quot;The generation of access token&quot;. Looking forward to hearing from you. Regards, Sam Vo</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2011/03/29/flex-creating-complex-charts-using-multiple-categories/" data-toggle="tooltip" data-placement="top" title="Flex Creating Complex Charts Using Multiple Categories">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2011/04/06/junit-tests-the-myths-around-it/" data-toggle="tooltip" data-placement="top" title="Junit Tests The Myths Around It">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

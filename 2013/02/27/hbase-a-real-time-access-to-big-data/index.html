@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Hbase A Real Time Access To Big Data - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2013/02/27/hbase-a-real-time-access-to-big-data/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Hbase A Real Time Access To Big Data</h1>
+                    
+                    <span class="meta">Posted by Gagan on February 27, 2013</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>HBase – A real time access to Big Data</h1>
+
+<p>The term Hadoop comes with a feeling of batch processing. Many applications/use cases have demand of real time processing on Big Data. No worries, Apache HBase a versioned, column oriented data store is there to help us in real time processing on Big Data.</p>
+
+<p>Apache HBase is modeled based on Google&#39;s paper on <a href="http://research.google.com/archive/bigtable.html" title="Google Big Table">BigTable</a>. HBase is built on Hadoop and HDFS.</p>
+
+<p>HBase provides two basic features. </p>
+
+<ol>
+<li>It provides us access to Hadoop from database prospective.</li>
+<li>It provides us transactional (real time) platform to work on multi cluster environment.
+<strong>Is HBase replacement on RDBMS?</strong> In my opinion HBase can be treated as replacement for RDBMS in only case when we have enough data like millions/billions of records. Otherwise RDBMS should be of our choice.</li>
+</ol>
+
+<p>Let&#39;s see the basic terminology of HBase </p>
+
+<ol>
+<li>Table HBase stores data in tables. Table has a row columns structure. There is a concept of Row key (Primary Key in RDBMS) and column values in HBase Table. Any thing which can be converted into byte array can be used as a Row key. Columns are categorized into column families. Column value for each row (a cell in table) is version-ed based on time stamp by default but we can customize this. Let&#39;s look at table structure for clear understanding. </li>
+</ol>
+
+<p>Row Key
+Version
+ColumnFamily personal
+ColumnFamily official</p>
+
+<p>10001
+T3
+personal:first_name = “firstName”</p>
+
+<p>10001
+T2
+Personal:last_name = “lastName”</p>
+
+<p>10001
+T1
+Official:company_name= “Xebia”
+In rdbms database we would be storing this record like (10001, firstName, lastName, Xebia). But here we have stored multiple rows for single Row Key. This is the reason that we can add any number of columns to a column family and that is not the case with rdbms table because at runtime we can not add columns to rdbms table. Here we can specify the version in query if we don&#39;t want to fetch the latest value for some column. By default latest value is returned by HBase.
+  2. Column Family Like columns are fixed in rdbms table means we can not add column on runtime but later we can use DDL Alter table and add columns. In HBase as well we define column families while during schema definition and we can not add column families on runtime. Alter statements are provided by HBase to add column families but on runtime this is not possible. Column names are delimited from column family using colon(:). Tuning and storage specifications are performed at column family level and that will be applied to all the columns present under certain column family.
+  3. Regions As soon as data grows beyond the capacity of one node HBase automatically partition the table into regions. Regions are represented with table name, start row (inclusive) and end row (exclusive).
+<strong>HBase Architecture</strong></p>
+
+<p>HBase works on the theme of master and slave like HDFS or Map Reduce. Here master is known as HBase Master and slaves as Region Servers. HBase Master keeps information about all the region servers, it assigns regions to region servers and help in recovery of region server failures.</p>
+
+<p>Region server may have zero or more regions and handle client read/write requests as region is the place where we store the tables.</p>
+
+<p>How HBase stores Data? HBase maintains two internal tables call it as Catalog tables. </p>
+
+<ol>
+<li>-ROOT- -ROOT- table keeps track of the .META. table. Key : .META. Region key values info : regioninfo (serialized instance of .META.) info : server (server:port of Region Server process holding .META.) info : serverstartcode (start-time of Region Server process holding .META.)</li>
+<li>.META. .META. Table keeps track of all the regions in the system. Key : Region key which is comprises of (table name, region start key, region id) values info : regioninfo (serialized instance of region) info : server (server:port of Region Server process holding region) info : serverstartcode (start-time of Region Server process containing region)
+<strong>What is Compaction?</strong> When we write some data to regions it first appended to the commit log and the added to the memstore (in memory). When memstore fills and threshold limit crossed then data is flushed to the file system. This process is called Compaction. Compaction serves the physical deletion for the delete requests as well. This memstore helps HBase in providing real time flavor because finally the data is going to store in HDFS only.</li>
+</ol>
+
+<p>Let us try some hands on HBase. </p>
+
+<ol>
+<li>To install HBase please refer to this <a href="http://hbase.apache.org/book/quickstart.html" title="HBase Installation">link</a>.</li>
+<li>Start Habse using ./start-hbase.sh</li>
+<li>Start Hbase shell using command “hbase shell”</li>
+<li>Let&#39;s create one table with name &#39;my<em>table&#39; and column family name &#39;my</em>cf1&#39;. <code>
+create &#39;my_table&#39;, &#39;my_cf1&#39; 
+</code></li>
+</ol>
+
+<p>We can list all tables in Hbase using list command.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> list hbase(main):013:0&gt; list TABLE my_table 1 row(s) in 0.0090 seconds 
+</code></pre></div>
+<p>Here Table is the default table of HBase that we discussed above and my<em>table is the one that we created in this example.
+  5. Let&#39;s put some data in newly created table. ``` 
+ put &#39;my</em>table&#39;, &#39;row1&#39;, &#39;my<em>cf1:column1&#39;, &#39;value11&#39;,1 put &#39;my</em>table&#39;, &#39;row1&#39;, &#39;my<em>cf1:column2&#39;, &#39;value12&#39;,2 put &#39;my</em>table&#39;, &#39;row2&#39;, &#39;my<em>cf1:column1&#39;, &#39;value21&#39;,3 put &#39;my</em>table&#39;, &#39;row2&#39;, &#39;my<em>cf1:column2&#39;, &#39;value22&#39;,4 put &#39;my</em>table&#39;, &#39;row1&#39;, &#39;my_cf1:column1&#39;, &#39;value13&#39;,5 
+ ```</p>
+
+<p>Here first parameter is table name, second is row key, third is column of particular column family, fourth is value for that column and finally the time stamp. In case we don&#39;t pass the time stamp system will take default values.
+  6. We can see the content of table using scan command. ``` 
+ scan &#39;my_table&#39;</p>
+
+<p>Output is:</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/02/27/design-thinking-and-software-development/" data-toggle="tooltip" data-placement="top" title="Design Thinking And Software Development">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/02/27/strategize-object-locators-in-selenium/" data-toggle="tooltip" data-placement="top" title="Strategize Object Locators In Selenium">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

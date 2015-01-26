@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Sql Server Performance Tuning For Product Support - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2014/07/03/sql-server-performance-tuning-for-product-support/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Sql Server Performance Tuning For Product Support</h1>
+                    
+                    <span class="meta">Posted by PGarg on July 3, 2014</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>SQL Server Performance Tuning for Product Support</h1>
+
+<p><strong>Overview</strong> For last few months I have been working with a client for developing a product based on Java landscape. As a product it needs to support couple of databases at the back end depending upon the client&#39;s customers requirement and by support I mean database should meet certain benchmarks in terms of time performance and space usage. So I along with couple of more folks have been working on this implementation. Team did not had much expertise in database so issues took bit longer than usual to fade away. In this blog I would like to share some problems that we faced and how we resolved them.</p>
+
+<p><strong>Overview of Application</strong> Application is a pipeline of steps/phases, where first phase takes input as a file (.txt | .csv)  having 1 to mn records, stores them in the database and then the next subsequent steps do processing over that stored dataand final step produces a new file containing with transformed records. The transformations performed on the data interesting only in terms of business, so not going into those details. Some of the phases make heavy use of Multithreading to process non overlapped data to increase the performance and better utilize the CPU Cores. The application already supports <strong>DB2</strong> database and the complete processing finishes with in a given time and space.</p>
+
+<p><strong>Technologies Used in Application</strong></p>
+
+<ul>
+<li>Java &amp; Apache Camel for the pipeline described above.</li>
+<li>Apache MetaModel (Incubator) as ORM
+<strong>Performance Tuning</strong> Team had least exposure to this database and the reason being this database rarely finds its place in the Java world but anyways we had to support it.  <strong>Initial Test</strong> So starting with few records pushed to the pipeline. There were some errors in processing but mostly due to the SQL syntax errors or datatype mismatch but nonetheless the complete processing did happen successfully.</li>
+</ul>
+
+<p><strong>First Blocker</strong> Next step was to run the pipeline with a bigger data set. The processing got suspended in one of the phases. Fired the below query to see queries blocking each other. <code>SELECT sqltext.TEXT,req.session_id,req.status, req.command,req.cpu_time,req.total_elapsed_time, sqlplan.query_plan,W.* FROM sys.dm_exec_requests req CROSS APPLY sys.dm_exec_sql_text(sql_handle) AS sqltext CROSS APPLY sys.dm_exec_query_plan(plan_handle) AS sqlplan left join sys.dm_os_waiting_tasks W on W.session_id = req.session_id</code></p>
+
+<p>Figured out that a long running SELECT Query on TABLE A is blocking the smaller UPDATE queries on the same TABLE A . The SELECT query (a long running transaction) is an iterator over records to fetch X records each time from the database and then those X fetched records were divided and processed separately by threads which fire UPDATE query on the same table. This results in the suspension of UPDATE query.</p>
+
+<p><strong>Solution</strong> *<em>So changing the transaction level to READ<em>COMMITTED</em>SNAPSHOT ON  to resolve this issue. *</em>More details about this issue can be found here <a href="http://msdn.microsoft.com/en-us/library/tcbchxcb(v=vs.110).aspx">http://msdn.microsoft.com/en-us/library/tcbchxcb(v=vs.110).aspx</a></p>
+
+<p><strong>Second Blocker</strong> Some of the phases in the execution pipeline were really slow. So first thing that comes to mind is about the indexes not being correctly implemented. To verify that we need to see the explain plan of queries. SQL server comes with an Activity Monitor Tool. This tool gives quite useful information separated across sections . Please see snapshot below</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2014/07/Screenshot-from-2014-07-02-200601.png" alt="Screenshot from 2014-07-02 20:06:01"></p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2014/07/Stats.jpg" alt="Stats"></p>
+
+<p>Select the query from the long running transactions and see the execution plan by right clicking on it. Now the execution plan doesn&#39;t tells much about the slowness of the query though it will give the relative percentages of the execution time. So to actually see how much this query is taking time. Select the same query from the <strong>processes section</strong> and right click to analyse in profiler. There we can find out the quantified time for the query. The profiler showed us that each query is taking .5 sec to 1 sec to execute which is way too slow than expected.  Again looked at  index scripts and found out that both the clustered and non clustered indexes were more or less applied correctly as per the guidelines mentioned. Below are some of those guidelines</p>
+
+<p><strong>Clustered Index :-</strong> This Index defines how the data is stored and sorted in the table based on a particular key. Can be only one per table. Generally created using Primary Key or Candidate Keys. Also please note the <strong>FILLFACTOR=80</strong>. This setting may end up taking more space but will speed up the index operations. <code>CREATE UNIQUE CLUSTERED INDEX [IDX] ON [DBO].[TABLE] ( [COL1] ASC, [COL2] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = OFF, FILLFACTOR=80) ON [PRIMARY];</code> *<em>Non Clustered Index :- *</em>Can be more than one in the table, Should be created on the columns which appear in the queries and also use composite index on all the keys of the same table that appear in a query. <code>CREATE NONCLUSTERED INDEX [IDX] ON [DBO].[TABLE] ( [Col1] ASC, [Col2] ASC, [Col3] ASC )WITH (SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF,ALLOW_PAGE_LOCKS = OFF, ALLOW_ROW_LOCKS= ON) ON [PRIMARY]</code> So even after loads of permutation and combination for indexes we got no performance improvement. Which probably means indexes were already correct. We let the processing run with whatever time its taking.</p>
+
+<p><strong>Third Blocker</strong> Next we ran into deadlock issues in of the phases. This phases involved multiple threads from the application adding/updating/deleting rows across the <strong>same and different tables</strong> but none of the threads overlaps with the rows to be updated in the tables. So it appeared that the queries are taking table level locks on indexes/tables. To avoid that we updated the tables and indexes with below settings. With these setting we still got the deadlock so apparently the issue was something else.</p>
+
+<p><code>ALTER INDEX ... WITH (ALLOW_PAGE_LOCKS = OFF, ALLOW_ROW_LOCKS = ON); ALTER TABLE SET LOCK_ESCALATION OFF</code></p>
+
+<p>Also profiled the queries (<strong>Go to Tool -&gt; SQL Server Profile -&gt; Start New Trace -&gt; Show All Events -&gt; Select All Deadlock Events</strong>). Though there were deadlock Events but no lock escalation.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2014/07/m7AKT.png" alt="m7AKT"></p>
+
+<p>*<em>Solution *</em></p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2014/06/28/fabricating-web-automation-more-classic-with-helium/" data-toggle="tooltip" data-placement="top" title="Fabricating Web Automation More Classic With Helium">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2014/07/06/oracle-performance-tuning-for-product-support/" data-toggle="tooltip" data-placement="top" title="Oracle Performance Tuning For Product Support">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

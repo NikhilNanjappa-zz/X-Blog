@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Take Aways From Dr Venkats Session On Test First Development - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2011/04/26/take-aways-from-dr-venkats-session-on-test-first-development/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Take Aways From Dr Venkats Session On Test First Development</h1>
+                    
+                    <span class="meta">Posted by pranjan on April 26, 2011</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Take Aways from Dr. Venkat&#39;s Session on Test First Development</h1>
+
+<p>This Sunday (24th April) Xebia organized a session on Test First Development by Dr. Venkat. He is a well known personality in Agile and Extreme Programming field. He has authored several books and has conducted numerous workshops on several areas of Agile.</p>
+
+<p>The session consisted of three parts, first a question answer round, then an interactive TDD workshop and then an open discussion.</p>
+
+<p>Several topics were discussed throughout the day and Dr. Venkat as well as the audience shared their thoughts on them. To begin with, the discussion started with the importance of creating an environment to make people do the right thing than to force them to do it. Dr. Venkat gave huge emphasis on creating a healthy environment which can motivate people. He said that forcing people to do things without letting them know &quot;why&quot; are we doing this, never works in longer run. People will start doing it, then slowly lose enthusiasm as they do not know the reason behind it, and after some time, they would not do it anymore. However, when we create an environment where it looks very natural to do certain things, really helps. He cited examples from his life, where he used it and it worked. The right environment can be created through leading by example and assertive communication, to name a few.</p>
+
+<p>Then, the topic of scaling up an organization was discussed.  The problem mentioned was that, when the organization needs to scale up (grow in size by hiring more people) rapidly, it is very tough to align the new joiners with the organizations principles and ethics. When we need to grow at a great pace, we might not get people who can easily fit into the organization and we might end up hiring some unfits for the organization. Even after providing ample training to the people, sometimes they simply do not fit in. Dr. Venkat proposed two solutions to this problem by citing two different examples. He talked about organizations who simply refuse to grow until they find the best suitable people for their organization. But, they grow at very slow rate. However, there are different organizations also, which hire people who need some training/learning etc before they fit it, and, they ask these people to work in different departments of the organization and to learn and adapt how things work. He cited companies where new joiners are on probation for two years before becoming a permanent employee. So, there are pros and cons of both things and the organization will have to decide which way it wants to go.</p>
+
+<p>Then he started the workshop on Test First Development. The project was to create a TicTacToe game. Before starting the workshop, he talked about the strategic design and the tactical design of a system. He said that the strategic design is the high level design of any system telling about the major components doing certain things and the interaction between them. However, the strategic design does not go into the details of the implementation. On the other hand, the tactical design would be to know how exactly the component is going to work. The tactical  design contains each and every minute detail of that component. Comparing it with a real world example, he told that strategic design could be locating a restaurant in Delhi, and the strategic design can say that it is located in the South-West of Delhi. However, the tactical design will tell about each and every road, street, corner, turn and landmarks describing exactly how to reach there.</p>
+
+<p>Talking about test driven development, he said the strategic design can be done on a whiteboard or a piece of paper. However, the tactical design is done while developing the application through tests. He said that the TDD is of no use if you can not think of the evolving design sideways. And there came the question on design patterns. On which, he said that generally the patterns make the design complex. So, never try to insert a design into the application. Rather create a simple design first and try to see any design pattern evolving in it, insert a design pattern only if you can see it while developing it. Never try to force a design pattern into the code.</p>
+
+<p>There were questions about asserting void methods for which he proposed to create an internal method just for test purposes. When people objected on it by citing examples from oops principles. People also objected on the thought of changing code just for testing. To answer this question, he gave a magnificent example by citing a movie &quot;A Few Good Men&quot;. He told that during an argument inside the court in the movie, someone quoted a rule. And then, Tom Cruise came with the rule book in his hand asking the other person to show him rules for each and everything that he did ( &quot;You eat 3 times a day, can you show it in the rule book. Oh God, How can you eat 3 times a day when its not written in the rule book&quot;). This was a great example and the best take away from the day. Dr. Venkat told to look around, experience thing, see people doing things and see what works and what does not instead of sticking to a rule book.</p>
+
+<p>The main take away of the Test First Development workshop was to always keep the mindset of developing what is needed now. Even though the audience was not a beginner one, most of them were old time TDD practitioners. Even though, the main bottleneck during workshop was found to be people thinking beyond what was needed.</p>
+
+<p>After the TDD workshop ended, the open discussion begun. The discussion started with mocking. People said that the Mocking code consumes a lot of code and thus decreases the readability. So, after the discussion finished, it was found that mock was not the problem, the problem was the design where Single Responsibility principle was not applied to its best.</p>
+
+<p>After that, the question came that the rule book says that every instance variable should be private with setters and getters. But it might not be needed and the instance variables can be simply made public. It can have to benefits, one, get rid of the extra code and make the classes shorter and more readable, two, the junit coverage increases as testing setters and getters is just foolish. He then opened up his laptop and gave a live demo of Groovy in which if a setter or getter is present, the code uses it, other wise, the variable is accessed directly. So, by citing this example, he told, that the new languages are thinking on the same lines of thoughts of developers.</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#5504" title="2011-04-26 05:47:10">Anurag</a>:</strong> Keeping people on two year probation sounds like an unworkable idea. Let&#39;s not forget that people join organization for job security and money too. While most organizations have right to let non-performers go and they also excecise this option when appropriate, having people on long probation would only discourage good people from joining the company. Good blog. Very interesting to read.</p>
+
+<p><strong><a href="#5510" title="2011-04-27 07:12:19">ShriKant Vashishtha</a>:</strong> Good gist of the session. It shows how valuable session was for those who missed it ;-). I will be explaining the key concepts in the XKE today. Nice post Paritosh!</p>
+
+<p><strong><a href="#5506" title="2011-04-26 10:31:41">Sourabh</a>:</strong> nice post! Thanks Paritosh for sharing insights of the session in depth.</p>
+
+<p><strong><a href="#5507" title="2011-04-26 11:14:53">Karan</a>:</strong> I am not an HR guy but would like to share my views on this. Usually when a firm needs to scale up in a short span of time, the drive is more customer centric. You are doing so in order to meet a customer&#39;s demand and so really need to be prompt on this or else the customer might drift towards your competitors. There might be cases where you need to choose between the options at hand and select a resource to be intimated to the customer. In such a scenario, first filter the resources based upon the bare minimum prerequisites that you definitely expect the resource to possess. Once you have the filtered set at hand, apply the Richard Branson principle.... &#39;Hire for attitude, train for skills&#39;</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2011/04/18/memory-leaks-ios/" data-toggle="tooltip" data-placement="top" title="Memory Leaks Ios">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2011/04/30/comparing-amcharts-with-flex-charts/" data-toggle="tooltip" data-placement="top" title="Comparing Amcharts With Flex Charts">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

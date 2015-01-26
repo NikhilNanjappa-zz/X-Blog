@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Spring Integration Configuring Mail Replier Adapter - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2010/12/31/spring-integration-configuring-mail-replier-adapter/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Spring Integration Configuring Mail Replier Adapter</h1>
+                    
+                    <span class="meta">Posted by nkhattar on December 31, 2010</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Spring Integration : Configuring Mail Replier Adapter</h1>
+
+<p>On 17th &amp; 18th November, 2010 in Xebia India we had an in-house training on basics of <a href="http://www.springsource.org/spring-integration">Spring Integration</a> by the Spring Integration Guru - Iwein Fuld, himself. The training had an exclusive emphasis on the hands on practice of the basics of spring integration including Message Channels, Message Endpoints , Core Messaging Framework and few Integration Adapters like File Adapter, Mail Adapter and Twitter Adapter.</p>
+
+<p>I got to be a part of the team which was exploring the <strong>Mail Support Adapter</strong>. We worked on features that include reading a message through a channel and sending it within a mail, parsing the message for a url link and enriching the content with the data on that web page and finally replying via a mail in response to a mail received.</p>
+
+<p>The last feature although appeared as quite easier to implement but I somehow faced few problems in configuring the Mail Replier. So in this blog I will elaborate on some common problems in configuring the mail replier and possible ways to solve them as well.</p>
+
+<p>A <strong>Mail Replier</strong> consists of two basic steps: </p>
+
+<ol>
+<li>Configuring Mail Inbound Channel Adapter to be able to access and read a received mail.</li>
+<li>Generating a Reply Message and sending it back to the original sender.
+For the first step, we used <strong>IMAP Adapter</strong> as the Inbound Channel Adapter out of the two available options of IMAP &amp; POP3 Mail Receiver. Within IMAP Adapter we used Polling option rather than Event-Driven because we used Gmail Server which doesn’t supports IMAP IDLE and therefore doesn’t supports Event-Driven. For the correct syntax you can refer to the <a href="http://static.springsource.org/spring-integration/docs/2.0.0.RELEASE/reference/htmlsingle/#mail-inbound">Spring Integration Manual</a>.</li>
+</ol>
+
+<p>This blog revolves more around the second step of the Mail Replier. So once the configuration of the IMAP Adapter is successfully completed, the received message can thereby be accessed. The received message is of the type of <strong>MimeMessage</strong>. Mime Message has a predefined <strong>reply</strong> function with a “<strong>reply-to-all</strong>” Boolean flag that returns a message of type <strong>Message</strong>. The new message will have its attributes and headers set up appropriately. The &quot;Subject&quot; field is filled in with the original subject prefixed with &quot;Re:&quot; . It will not have any content, which can then be added using various predefined functions.</p>
+
+<p>So finally a call is made to a function of a service-activator that accepts the received MimeMessage and in turn returns a reply of type Message. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public Message sendMessage(MimeMessage mimeMessage) throws MessagingException {
+    Message replyMessage = mimeMessage.reply(false);
+    replyMessage.setText(&quot;MimeMessage Reply&quot;);
+    return replyMessage;
+}
+</code></pre></div>
+<p>The reply message is then passed to the Mail-Outbound-Adapter which using the mail-sender (for eg. JavaMailSenderImpl ) is expected to send this message to its marked destination.</p>
+
+<p>[sourcecode language=&quot;xml&quot;] <i:service-activator input-channel="imapChannel" ref="mailReplier" method="sendMessage" output-channel="mailReply"/> <i:channel id="mailReply" /> <bean id="mailReplier" class="com.xebia.nuse.mail.ImapReplyActivator" /> <mail:outbound-channel-adapter channel="mailReply" mail-sender="mailSender" /> <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> <property name="host" value="${mail.host}" /> <property name="username" value="${mail.username}" /> <property name="password" value="${mail.password}" /> <property name="javaMailProperties"> <props> <prop key="mail.smtp.auth">true</prop> <prop key="mail.smtp.starttls.enable">true</prop> </props> </property> </bean> [/sourcecode]</p>
+
+<p>Oops….an exception occurs when we try to run the application</p>
+
+<p>_ SEVERE: org.springframework.integration.MessageHandlingException: Unable to create MailMessage from payload type [javax.mail.internet.MimeMessage], expected byte array or String. at org.springframework.integration.mail.MailSendingMessageHandler.convertMessageToMailMessage (MailSendingMessageHandler.java:98) org.springframework.integration.mail.MailSendingMessageHandler.handleMessageInternal (MailSendingMessageHandler.java:71) org.springframework.integration.handler.AbstractMessageHandler.handleMessage (AbstractMessageHandler.java:78) org.springframework.integration.dispatcher.UnicastingDispatcher.doDispatch (UnicastingDispatcher.java:110) org.springframework.integration.dispatcher.UnicastingDispatcher.dispatch (UnicastingDispatcher.java:97) org.springframework.integration.channel.AbstractSubscribableChannel.doSend (AbstractSubscribableChannel.java:44) org.springframework.integration.channel.AbstractMessageChannel.send (AbstractMessageChannel.java:157) org.springframework.integration.channel.AbstractMessageChannel.send (AbstractMessageChannel.java:128) org.springframework.integration.core.MessagingTemplate.doSend (MessagingTemplate.java:288) org.springframework.integration.core.MessagingTemplate.send (MessagingTemplate.java:149) … _</p>
+
+<p>As you can see when mail-outbound-adapter tries to send this reply with payload of type MimeMessage, it throws MessageHandlingException.</p>
+
+<p>So in order to solve this problem I came across two plausible solutions:</p>
+
+<p>** Solution 1: Modify the received MimeMessage ** This includes changing the subject of the received message explicitly and replacing the recipient’s address with that of sender’s address. Now if we return this modified MimeMessage to the mail-outbound-Adapter, we will get the same exception again. So in order to avoid this, we need to inject <strong>JavaMailSender</strong> into the corresponding service-activator which in turn uses its predefined <strong>send</strong> function to send the MimeMessage. This also avoids the need for the use of mail-outbound-adapter. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">private JavaMailSender mailSender;
+public void setMailSender(JavaMailSender mailSender) {
+    this.mailSender = mailSender;
+}
+.
+.
+.
+final Address[] senderAddresses = mimeMessage.getFrom();
+mimeMessage.setSubject(&quot;Reply::&quot;+mimeMessage.getSubject());
+mimeMessage.setRecipient(RecipientType.TO, senderAddresses[0]);
+mailSender.send(mimeMessage);
+}
+</code></pre></div>
+<p>** Solution 2: Create a new SimpleMailMessage** This includes creating a new reply message altogether, i.e. using a *<em>SimpleMailMessage *</em>which models a simple mail message, including data such as the from, to, cc, subject, and text fields and it lacks various sophisticated features like attachment, special character encodings, etc but there is very less need of such features in an auto-reply. And one more thing to note is that we need not to inject JavaMailSender into the service-activator and can continue to use the mail-outbound-adapter for sending the reply. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Address[] senderAddresses = mimeMessage.getFrom();
+MailMessage mailMessage = new SimpleMailMessage();
+mailMessage.setSubject(&quot;Reply: &quot;+ mimeMessage.getSubject());
+mailMessage.setTo(senderAddresses[0].toString());
+mailMessage.setText(&quot;Thanks for sending the mail&quot;);
+return mailMessage;
+}
+</code></pre></div>
+<p>In this way the problem of configuring the Mail Replier was hence-forth solved. The <strong>Integration Graph</strong> of the xml file we created for exploring Spring Integration Mail Support is as follows: <img src="http://xebee.xebia.in/wp-content/uploads/2011/01/spring-integration-mail.bmp" alt="Spring Integration Mail Support"></p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2010/12/31/spring-android-spring-for-android/" data-toggle="tooltip" data-placement="top" title="Spring Android Spring For Android">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2011/01/03/my-first-pair-programming-experience-it-takes-two-to-tango/" data-toggle="tooltip" data-placement="top" title="My First Pair Programming Experience It Takes Two To Tango">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

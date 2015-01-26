@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Liquibase A Database Change Tracking Tool - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2013/02/28/liquibase-a-database-change-tracking-tool/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Liquibase A Database Change Tracking Tool</h1>
+                    
+                    <span class="meta">Posted by bsingh on February 28, 2013</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Liquibase - A database change tracking tool</h1>
+
+<p>Currently database versioning  has some issues like database change tracking, branching and merging, flexibility to apply changes and database diff. Using schema versioning, we can track the database changes by incremental database version for any change and depending upon the version number apply the changes in database but there is a limitation to this approach. It fails while working with multiple developers as two developers can at the same time create change for the same database version. So we need some solution that can efficiently handle the versioning of database. Liquibase is the tool can be used for this purpose. It is a database changes management tool to track the changes in readable format. It is used to manage the production data and test data with extensive database change documentation feature. It can compare two databases and have a patch file generated to make the one equal to the other, or generate a patch file from an existing database schema. The patches are written in XML, meaning the liquiBase knows the context of your patches and can actually figure out the undo-version of the patch file by itself. This tool is really nifty, and having all patches in one big XML file means that merging patches is similar to merging source code.</p>
+
+<p>Liquibase creates databasechangelog table to maintain the executed changeset for database changes and another table databasechangeloglock to control concurrency.</p>
+
+<p>In this blog, I will setup liquibase using maven and will make some database changes.</p>
+
+<p><strong>Step 1</strong>- Add liquibase maven plugin to pom.xml</p>
+
+<p>pom.xml </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;properties&gt;
+&lt;liquibase.contexts&gt;all&lt;/liquibase.contexts&gt;
+&lt;/properties&gt;
+
+
+
+
+&lt;build&gt;
+&lt;resources&gt;
+&lt;resource&gt;
+&lt;directory&gt;src/main/resources&lt;/directory&gt;
+&lt;filtering&gt;true&lt;/filtering&gt;
+&lt;/resource&gt;
+&lt;/resources&gt;
+&lt;plugins&gt;
+&lt;plugin&gt;
+&lt;groupId&gt;org.liquibase&lt;/groupId&gt;
+&lt;artifactId&gt;liquibase-maven-plugin&lt;/artifactId&gt;
+&lt;configuration&gt; 
+&lt;propertyFileWillOverride&gt;true&lt;/propertyFileWillOverride&gt;
+&lt;propertyFile&gt;src/main/resources/liquibase.properties&lt;/propertyFile&gt;
+&lt;/configuration&gt;
+&lt;/plugin&gt;
+&lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre></div>
+<p><strong>Step 2</strong> - Create a liquibase.properties file that is configured in liquibase plugin in propertyFile.</p>
+
+<p>This file contains database specifications. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">contexts=${liquibase.contexts}
+changeLogFile=src/main/resources/changesets/db.changelog.xml
+driver=com.mysql.jdbc.Driver
+url=jdbc:mysql://localhost:3306/liquibaseDB
+username=root
+password=mysql
+verbose=true
+dropFirst=false
+</code></pre></div>
+<p><strong>Step 3</strong> - Create db.changelog.xml that is configured in liquibase.properties.</p>
+
+<p>This file contains the database changes. Using include tag we can define multiple changelog files. In this file we are including all the files from the test folder. These files are used for test context. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;databaseChangeLog
+xmlns=&quot;http://www.liquibase.org/xml/ns/dbchangelog&quot;
+xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+xsi:schemaLocation=&quot;http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd&quot;&gt;
+
+
+
+
+&lt;include file=&quot;core/core-model.changelog.xml&quot; relativeToChangelogFile=&quot;true&quot;/&gt;
+
+
+
+
+&lt;!--Test Context ChangeLogs --&gt;
+&lt;includeAll path=&quot;test/&quot; relativeToChangelogFile=&quot;true&quot;/&gt;
+
+
+
+
+&lt;/databaseChangeLog&gt;
+</code></pre></div>
+<p><strong>Step 4</strong> - Create a changelog file for core module changes. This file contains multiple changeSet tag. Each changeSet tag is uniquely identified by the combination of the &#39;id&#39; tag, the &#39;author&#39; tag, and the changelog file classpath name. The id tag is only used as an identifier, it does not direct the order that changes are run and does not even have to be an integer. As LiquiBase executes the databaseChangeLog, it reads the changeSets in order and, for each one, checks the &#39;databasechangelog&#39; table to see if the combination of id/author/filepath has been run. If it has been run, the changeSet will be skipped unless there is a true &#39;runAlways&#39; tag. After all the changes in the changeSet are run, LiquiBase will insert a new row with the id/author/filepath along with an MD5Sum of the changeSet in the &#39;databasechangelog&#39;. In preConditions tag, we specify the database on which we want to run all the changeSets defined in databaseChangeLog </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;databaseChangeLog xmlns=&quot;http://www.liquibase.org/xml/ns/dbchangelog&quot;
+xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+xsi:schemaLocation=&quot;http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd&quot;&gt;
+
+
+
+
+&lt;preConditions&gt;
+&lt;dbms type=&quot;mysql&quot; /&gt;
+&lt;/preConditions&gt;
+
+
+
+
+&lt;changeSet author=&quot;balendra&quot; id=&quot;liquibase-common-1&quot;
+runOnChange=&quot;true&quot;&gt;
+&lt;createTable tableName=&quot;user&quot;&gt;
+&lt;column name=&quot;id&quot; type=&quot;bigint(40)&quot;&gt;
+&lt;constraints primaryKey=&quot;true&quot; nullable=&quot;false&quot; /&gt;
+&lt;/column&gt;
+&lt;column name=&quot;username&quot; type=&quot;varchar(100)&quot;&gt;
+&lt;constraints nullable=&quot;false&quot; /&gt;
+&lt;/column&gt;
+&lt;column name=&quot;password&quot; type=&quot;varchar(100)&quot;&gt;
+&lt;constraints nullable=&quot;false&quot; /&gt;
+&lt;/column&gt;
+&lt;/createTable&gt;
+&lt;/changeSet&gt;
+&lt;/databaseChangeLog&gt;
+</code></pre></div>
+<p><strong>Step 5</strong> - Create a test changeset file to insert the test data in the database. In this file we using a context tag. Contexts in liquiBase are tags you can add to changeSets to control which will be executed in any particular migration run. Any string can be used for the context name and they are checked case-insensitively. When you run the migrator though any of the available methods, you can pass in a set of contexts to run. Only changeSets marked with the passed contexts will be run. If you don&#39;t assign a context to a changeSet, it will run all the time, regardless of what contexts you pass in to the migrator. If you do not specify a context when you run the migrator, ALL contexts will be run.</p>
+
+<p>test-data-changeset.xml </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;databaseChangeLog
+xmlns=&quot;http://www.liquibase.org/xml/ns/dbchangelog&quot;
+xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+xsi:schemaLocation=&quot;http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd&quot;&gt;
+
+
+
+
+&lt;changeSet id=&quot;liquibase-common-1&quot; author=&quot;balendra&quot; context=&quot;test&quot;&gt;
+&lt;preConditions onFail=&quot;MARK_RAN&quot;&gt;
+&lt;and&gt;
+&lt;sqlCheck expectedResult=&quot;0&quot;&gt;select count(*) from user&lt;/sqlCheck&gt;
+&lt;/and&gt;
+&lt;/preConditions&gt;
+&lt;comment&gt;Insert user test data&lt;/comment&gt;
+&lt;insert tableName=&quot;user&quot;&gt;
+&lt;column name=&quot;id&quot; value=&quot;1&quot;/&gt;
+&lt;column name=&quot;username&quot; value=&quot;Balendra&quot;/&gt;
+&lt;column name=&quot;password&quot; value=&quot;liquibase&quot;/&gt;
+&lt;/insert&gt;
+&lt;/changeSet&gt;
+&lt;/databaseChangeLog&gt;
+</code></pre></div>
+<p><strong>Step 6</strong> - Update Database</p>
+
+<p>Run the following maven command to update database. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">mvn liquibase:update
+</code></pre></div>
+<p><strong>Rollback</strong></p>
+
+<p>Liquibase provides rollback feature using which we can undo the changes in the database. There are multiple ways to undo the changes -</p>
+
+<p><strong>a</strong>. Some changes do not require to add the rollback tag as these changeset can automatically rollback statements as following . </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;changeSet id=&quot;liquibase-common-1&quot; author=&quot;balendra&quot;&gt;
+&lt;createTable tableName=&quot;company&quot;&gt;
+&lt;column name=&quot;id&quot; type=&quot;int&quot;/&gt;
+&lt;/createTable&gt;
+&lt;/changeSet&gt;
+</code></pre></div>
+<p><strong>b</strong>. In rollback tag, we can define some other change tag. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;changeSet id=&quot;changeRollback&quot; author=&quot;balendra&quot;&gt;
+&lt;createTable tableName=&quot;changeRollback1&quot;&gt;
+&lt;column name=&quot;id&quot; type=&quot;int&quot;/&gt;
+&lt;/createTable&gt;
+&lt;rollback&gt;
+</code></pre></div>
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/02/27/strategize-object-locators-in-selenium/" data-toggle="tooltip" data-placement="top" title="Strategize Object Locators In Selenium">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/02/28/webdriver-no-http-response-headers/" data-toggle="tooltip" data-placement="top" title="Webdriver No Http Response Headers">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

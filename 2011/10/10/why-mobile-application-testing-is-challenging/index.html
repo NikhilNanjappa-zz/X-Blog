@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Why Mobile Application Testing Is Challenging - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2011/10/10/why-mobile-application-testing-is-challenging/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Why Mobile Application Testing Is Challenging</h1>
+                    
+                    <span class="meta">Posted by Priyanka on October 10, 2011</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Why mobile application testing is challenging?</h1>
+
+<p>During the last decade, there has been tremendous growth in the number of mobile users and mobile devices. Total number of mobile users have grown more than 852 million in India and 2.6 billion worldwide. This tremendous growth of mobile users has opened up a new market which is flooded with various mobile platforms and devices like Blackberry, iPhone, Android devices, other smart phones and tablets, and thousands of applications to run on them. Gradually, businesses are shifting focus towards mobile because users are more interested in browsing the web on their pocket size devices which are more portable. This is the reason why mobile applications and websites are becoming increasingly important for enterprises and they are progressively looking towards mobile while looking to extend their business solutions to reach a wider audience.</p>
+
+<p>The diversity of mobile environment, small size of mobile devices and complexity of mobile hardware and software bring in several challenges in quality assurance which demand advanced testing strategies. Below are some points which explain in brief that what the real challenges are in mobile testing, and why such challenges arise?</p>
+
+<p><strong>1) Diversity in Mobile Device platforms:-</strong></p>
+
+<p>Android, Blackberry, Nokia’s Symbian and Apple’s iPhone have together grabbed a large part of the Smartphone market, but these are not the only mobile platforms; there are many other mobile platforms that are in use like BREW, BREWMP, Windows 7, etc. While testing any multiplatform mobile application, it would be required to test it on each platform while carrying out  UI testing, functionality testing,etc. It is bit difficult and challenging because there might be chances of inconsistency in terms of functionality or UI across multiple platforms as there are thousands of mobile platforms in market and every platform may have some limitations.It is simply not possible to test mobile app exhaustively on each type device available in market.</p>
+
+<p>In addition, there are few other testing areas that needs to be taken care for each and every platform. I am explaining few additional testing aspects for some commonly used platforms below:-</p>
+
+<p><em><strong>Apple:-</strong></em> While making iphone applications we need to keep in mind few things like:- </p>
+
+<ol>
+<li>UI Guidelines from Apple need to be adhered to when making applications/websites for IOS.</li>
+<li>They should have Backward OS compatibility</li>
+<li><p>Only one application should be allowed to run at a time.
+<em><strong>Android:-</strong></em> We need to keep in mind some additional testing aspects while working for android platform which are :- </p></li>
+<li><p>Android allows to run multiple applications in background</p></li>
+<li><p>Application gets normally minimized on exiting.
+<em><strong>Blackberry:-</strong></em> Some additional testing aspects for Blackberry applications are given below:- </p></li>
+<li><p>It  allows running multiple applications in background</p></li>
+<li><p>Device Reboot is needed for clearing cached data</p></li>
+<li><p>Device Reboot is needed for uninstalling/installing any application.</p></li>
+<li><p>Should be Signed/certified by RIM
+<strong>2) Diversity of the Mobile Devices:-</strong></p></li>
+</ol>
+
+<p>There is a huge variety of mobile devices available  in market with different screen sizes , different input methods like touchscreen, qwerty keypads, trackball and each of them having different hardware capabilities. We know the fact that testing on every device is not possible and feasible because we cannot buy every handset and test on each. We know that exhaustive testing of user interfaces is very important to ensure compatibility of the application and verifying UI consistency on every device is important which is really challenging and time consuming task. It seems that the diversity in handsets is a big challenge for testing. We know that mobile devices also have different application runtimes like Binary Runtime Environment for Wireless Java and embedded visual basic runtime, etc which means applications should be tested specific to runtime also.</p>
+
+<p><strong>3) Diversity in Hardware Configuration:-</strong></p>
+
+<p>Apart from diversity in platform and mobile devices, there is diversity in their hardware also. There are many drawbacks of diverse hardware configurations. Some of the drawbacks are discussed here like Mobile environment provides lesser memory and processing power for computing as compared to PC which results in limitations in processing speed and variations in performance of applications. Therefore, testing should ensure that the applications deliver optimum performance for all desired configurations of hardware. Some mobile devices communicate through WAP and some use HTTP for communication. Applications should be tested for their compatibility with WAP-enabled as well as HTTP-enabled devices.</p>
+
+<p><strong>4) Diversity in Network</strong></p>
+
+<p>We know there is always unpredictability in network latency when applications communicate over network boundaries, leading to inconsistent data transfer speeds. It demands testing to measure the performance of applications for various network bandwidths of various service providers. Wireless network use data optimizers like gateways to deliver content and it may result in decreased performance in case of heavy traffic.  Therefore, testing should be performed to determine the network traffic level at which gateway capabilities will impact the performance of the mobile application.</p>
+
+<p>There are few solutions which can be used to overcome few of  the challenges mentioned above while testing mobile application. I would recommend mobile testers to use a combination of the below mentioned techniques along with testing applications on real devices on real network: - </p>
+
+<ul>
+<li>Using Test automation to increase the test coverage. Some automation tools available for mobile apps testing are TestComplete, Test Quest Pro, Robotium, Sikuli, Deviceanywhere, FoneMonkey(iPhone), Eggplant(iPhone), TestiPhone(For iPhoneMobileWeb), IBM® Rational® Performance Tester (RPT), MITE(A Mobile content testing and validation tool for Mobile Web app).</li>
+<li>Testing on Mobile Emulators mainly for Unit and Integration testing. The emulators could be used to conduct performance, GUI and compatibility testing also but the testing using actual devices is preferred.</li>
+<li>Testing on Remote Real devices using Remote Device Access.</li>
+<li>Testing on cloud-based platforms, like the Perfecto Mobile Handset Cloud which helps QA teams to test their widgets, applications and mobile content on variety of handsets.</li>
+</ul>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#6246" title="2011-11-23 12:58:15">Nikhil Mehta</a>:</strong> Priyanka Substantial information on mobile testing. Very nice</p>
+
+<p><strong><a href="#6015" title="2011-10-12 15:26:25">Vikrant Taneja</a>:</strong> Hi Priyanka, I think the effort you gave and the knowledge you shared is appreciable. I believe it will be very beneficial for people who are new to mobile testing. Thanks, Vikrant</p>
+
+<p><strong><a href="#6140" title="2011-11-07 18:40:49">Surajit Purkayastha</a>:</strong> Hi Priyanka, This text is super helpful for testers who are naive in this field. I would appreciate if you could exemplify a test case / test scenario for, lets say a android application. Surajit</p>
+
+<p><strong><a href="#7918" title="2012-03-14 16:14:10">Devendra Acharya</a>:</strong> Hey Priyanka, Really this is very useful information..</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2011/10/09/when-why-rule-engines/" data-toggle="tooltip" data-placement="top" title="When Why Rule Engines">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2011/10/16/implementing-multithreading-in-php/" data-toggle="tooltip" data-placement="top" title="Implementing Multithreading In Php">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

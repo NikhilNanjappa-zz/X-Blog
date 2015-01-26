@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Exploring Android Charting And Graphs Solutions - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2010/08/31/exploring-android-charting-and-graphs-solutions/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Exploring Android Charting And Graphs Solutions</h1>
+                    
+                    <span class="meta">Posted by ykapoor on August 31, 2010</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Exploring Android Charting and Graphs solutions</h1>
+
+<p>In one of the Android applications that I was creating the requirement was to have graphs and charts to present the data in a meaningful way to the user. With no direct charting API support in Android to address graphs and charts creation, I explored few other possible solutions.</p>
+
+<p>This blog does not focus on comparing the available solutions but demonstrates the simple implementations using the approaches explored.</p>
+
+<p>I considered three different ways to create charts in Android device</p>
+
+<ol>
+<li><a href="http://code.google.com/apis/chart/">Google chart API</a></li>
+<li><a href="http://www.achartengine.org/">Achartengine</a></li>
+<li><a href="http://code.google.com/p/chartdroid/">ChartDroid</a> I tried creating a Pie Chart while using the solutions. Google charting API being the easiest one to integrate is taken first</li>
+</ol>
+
+<h4>Google Charting API support</h4>
+
+<p>Using Google charting API, we can create charts and graphs directly by providing data to the Google charting service</p>
+
+<p>The call to the Google&#39;s charting API looks like below:</p>
+
+<p>[code language=&quot;xml&quot;]http://chart.apis.google.com/chart?cht=&amp;chd=&amp;chs=&amp;...additional_parameters...
+ ```</p>
+
+<p>More on Google charting API can be found <a href="http://code.google.com/apis/chart/docs/making_charts.html">here</a></p>
+
+<p>For creating a pie chart using Google charting solution, I created the following URI</p>
+
+<p>[code language=&quot;xml&quot;]http://chart.apis.google.com/chart?cht=p3&amp;chd=t:30,60,10&amp;chs=250x100&amp;chl=cars|bikes|trucks
+ ```</p>
+
+<p>Within my activity&#39;s onCreate() I included the code below</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">@Override public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); WebView googleChartView = new WebView(this); setContentView(googleChartView); String mUrl = &quot;http://chart.apis.google.com/chart?cht=p3&amp;amp;chd=t:30,60,10&amp;amp;chs=250x100&amp;amp;chl=cars|bikes|trucks&quot;; googleChartView.loadUrl(mUrl); }
+</code></pre></div>
+<p>In the onCreate() method, I am creating a WebView and just loading it with the URL response. It needs an internet access so I included the code below within AndroidManifest.xml [code language=&quot;xml&quot;] <uses-permission android:name="android.permission.INTERNET" /> 
+ ```</p>
+
+<p>That&#39;s it!!! we are done with the first approach. The screen shot for the application I build using Google chart API looks like below:</p>
+
+<p>[caption id=&quot;attachment_4674&quot; align=&quot;alignnone&quot; width=&quot;300&quot; caption=&quot;Google Charting API PIE Chart&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2010/08/GoogleAPIChart-300x193.png" alt="Google Charting API PIE Chart" title="GoogleAPIChart">[/caption]</p>
+
+<p>The only issue I had with this approach is that the device should have internet access available which in my case may not be always there. This small limitation made me look into other approaches and I came across another solution <a href="http://www.achartengine.org/">Achartengine</a>.</p>
+
+<h4>Achartengine</h4>
+
+<p>This Achart&#39;s charting support comes in the form of a download-able <a href="http://code.google.com/p/achartengine/downloads/list">Jar</a>.</p>
+
+<p>I added this into the lib folder of my application.</p>
+
+<p>[caption id=&quot;attachment_4677&quot; align=&quot;alignnone&quot; width=&quot;247&quot; caption=&quot;Android App Structure&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2010/08/libFolder.png" alt="Library Folder" title="libFolder">[/caption]</p>
+
+<p>I created a class with a method that gives out a Pie chart intent as below</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> public class AChartExample {
+
+public Intent execute(Context context) { int[] colors = new int[] { Color.RED, Color.YELLOW, Color.BLUE }; DefaultRenderer renderer = buildCategoryRenderer(colors);
+
+CategorySeries categorySeries = new CategorySeries(&quot;Vehicles Chart&quot;); categorySeries.add(&quot;cars &quot;, 30); categorySeries.add(&quot;trucks&quot;, 20); categorySeries.add(&quot;bikes &quot;, 60);
+
+return ChartFactory.getPieChartIntent(context, categorySeries, renderer); }
+
+protected DefaultRenderer buildCategoryRenderer(int[] colors) { DefaultRenderer renderer = new DefaultRenderer(); for (int color : colors) { SimpleSeriesRenderer r = new SimpleSeriesRenderer(); r.setColor(color); renderer.addSeriesRenderer(r); } return renderer; } } 
+</code></pre></div>
+<p>Within the execute method a SimpleSeriesRender is created with the required color that is required in the pie chart. These renderers are then added to the DefaultRender.</p>
+
+<p>Next step is to create a CategorySeries with the appropriate data. Once this is done we can get achartingengine specific intent back with the following call <code>ChartFactory.getPieChartIntent(context, categorySeries, renderer);</code></p>
+
+<p>With this intent we launch our activity and the code goes as below</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> Intent achartIntent = new AChartExample().execute(this); startActivity(achartIntent); 
+ ``` The screen shot below shows the generated PIE chart using Achart library
+
+[caption id=&quot;attachment_4697&quot; align=&quot;alignleft&quot; width=&quot;223&quot; caption=&quot;Achart&quot;]![][8][/caption] The other charting solution I explored is [chartDroid ][3]
+
+#### Chartdroid
+
+This solution needs the ChartDroid Application to be installed along with the application which intends to use the charting solution.
+
+Although, we can install the application programmaticly from the Android apps market place, I directly installed the application into my device to explore it further.To install it download the apk from [here][9] and install it to the device.
+
+The Chartdroid&#39;s charting solution requires a content provider to be created. Below is the content provider&#39;s code that I created
+</code></pre></div>
+<p>public class ChartDroidDataProvider extends ContentProvider {</p>
+
+<p>static final String AUTHORITY = &quot;com.xyz.contentprovider.chardroid&quot;;</p>
+
+<p>@Override public String getType(Uri uri) { return &quot;vnd.android.cursor.dir/vnd.com.googlecode.chartdroid.graphable&quot;; }</p>
+
+<p>public static final Uri PROVIDER<em>URI = new Uri.Builder().scheme( ContentResolver.SCHEME</em>CONTENT).authority(AUTHORITY).build();</p>
+
+<p>@Override public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {</p>
+
+<p>// Fetch the actual data</p>
+
+<p>MatrixCursor c = new MatrixCursor(new String[] { BaseColumns.<em>ID, &quot;COLUMN</em>AXIS<em>INDEX&quot;, &quot;COLUMN</em>SERIES<em>INDEX&quot;, &quot;COLUMN</em>DATUM<em>VALUE&quot;, &quot;COLUMN</em>DATUM_LABEL&quot; });</p>
+
+<p>c.newRow().add(1).add(0).add(1).add(30).add(null); c.newRow().add(2).add(0).add(1).add(10).add(null);</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#3111" title="2010-11-01 09:33:29">Amir</a>:</strong> thank you very much for your help. I have downloaded it.</p>
+
+<p><strong><a href="#3286" title="2010-11-19 16:39:07">PM_Android</a>:</strong> Thanx Yogesh for making my life,,,,,,, this is really an awesome article , actually i was playing and facing trouble with AchartEngine, and then i have tried to create an example from your code section, but failed to do it. Later on, i have downloaded the example code that you have provided ,from the code i came to know that we need to add the following activity to AndroidManifest.xml file, that you have forgot to mentioned above: Now, i got the success !! Thanx</p>
+
+<p><strong><a href="#3282" title="2010-11-19 12:46:31">Paresh Mayani</a>:</strong> Really an awesome article you have provided, i have referred the PieChart example using AChartEngine, but please if possible provide a sample for drawing LineChart, i am stack at here</p>
+
+<p><strong><a href="#3086" title="2010-10-29 13:10:42">Amir</a>:</strong> hi... Its a Superb tutorial and How to download the entire source code....Im not able to do it... i have registered too..im not able to find an option there...How to do it?</p>
+
+<p><strong><a href="#5581" title="2011-05-17 18:35:38">MariyaS</a>:</strong> I want to display the multiple charts in one activity.. that means i want to see that charts one by one using by scrollbars..I used afreechart jar file to generate the charts...... can anyone help me.... Please...... Thanks in advance..</p>
+
+<p><strong><a href="#5359" title="2011-03-22 00:22:06">Shashank</a>:</strong> will u plz how 2 draw bar graph using same method Thanx</p>
+
+<p><strong><a href="#5403" title="2011-04-05 19:08:18">Yogesh Kapoor</a>:</strong> I don&#39;t know if it&#39;s useful for you now, as I am too late to respond. If the problem is still not resolved rest of the response might help. You need to make sure that your jar is also dex compiled. So there&#39;s an additional step apart from including the jar into the lib folder. In eclipse this automatically happens when we have the Android plugin installed and the <strong>jar is included into eclipse&#39;s build path</strong>.</p>
+
+<p><strong><a href="#5357" title="2011-03-18 13:42:06">Shivakanth</a>:</strong> I Got it. We have the source @ following shared location: http://code.google.com/p/achartengine/downloads/detail?name=achartengine-0.2.0-demo-source.zip&amp;can=2&amp;q= Thanks a lot for sharing this Article</p>
+
+<p><strong><a href="#5580" title="2011-05-17 18:33:42">MariyaS</a>:</strong> I want to display the multiple charts in one activity.. that means i want to see that charts one by one using by scrollbars..I used afreechart jar file to generate the charts...... can anyone help me.... Please...... Thanks in advance...</p>
+
+<p><strong><a href="#5281" title="2011-02-09 14:54:12">david berneda</a>:</strong> Hi ! We&#39;ve just released first beta of TeeChart for Android. https://market.android.com/details?id=com.steema.teechart.android We&#39;re working on a simple demo on how to use it from other applications, via Intent, Cursor, ContentProvider and passing simple xml / text data.</p>
+
+<p><strong><a href="#5047" title="2011-01-25 16:55:22">Diana</a>:</strong> Hi! Thanx alot for sharing with us.I am going to implement the code.</p>
+
+<p><strong><a href="#5256" title="2011-02-04 12:55:57">halfhp</a>:</strong> Great article - nice to see working code examples. Did you happen to come across androidplot during your exploration? (http://androidplot.com) If so, what is your impression of it compared to the ones that you reviewed here?</p>
+
+<p><strong><a href="#5626" title="2011-06-19 21:21:12">Carling</a>:</strong> If you are using Achartengine, dont forget to include within the application tag of AndroidManifest.xml file. I had to spend a lot of time for this problem. Thank you Yogesh for this great tutorial.</p>
+
+<p><strong><a href="#1061" title="2010-09-08 20:50:04">Ankit</a>:</strong> This was a great tutorial, i&#39;m not sure why your site doesn&#39;t come up first when searching for \android charts\. Thanks,</p>
+
+<p><strong><a href="#3088" title="2010-10-29 16:46:51">Yogesh Kapoor</a>:</strong> Hi Amir, I have corrected the source code download link. Give it a try now.</p>
+
+<p><strong><a href="#5356" title="2011-03-18 13:10:47">Shivakanth</a>:</strong> this is really an awesome article , actually i was playing and facing trouble with AchartEngine, and then i have tried to create an example from your code section, but failed to do it. We are gettign anerror ststing that we need to add the activity in manifest file. So coul you please provide us the list of activites that needs to be added or could you please provide us the sample working code, So that we can download it.</p>
+
+<p><strong><a href="#3028" title="2010-10-14 17:23:24">ajay</a>:</strong> This tutorial has helped me a lot.Great work done. I’m also thinking why your site doesn’t come up first when searching for android charts.</p>
+
+<p><strong><a href="#3128" title="2010-11-03 14:19:38">xue</a>:</strong> hi Amir, i wanna known how to draw line chart on achartengine? ths!</p>
+
+<p><strong><a href="#5358" title="2011-03-22 00:19:18">Shashank</a>:</strong> Can u tell how to crete bar graphs using same technique Thnx...</p>
+
+<p><strong><a href="#5519" title="2011-04-29 14:50:07">sathish</a>:</strong> Hi shilpa, There should be two classes to run the above code. In those, one class should extend Activity, but coming to second one it is not. In the above code you mentioned , &#39;AChartExample&#39; is a class which is having a method named execute(Context) and it will return an Intent object like follow public class AChartExampe{ ----- ---- private Intent execute(Context c){ ---- ---- Intent i = ChartFactory.getPieChartIntent(context, categorySeries, renderer); return i; } } and there should be another class which is nothing but our activity class, in this class we create an object for AChartExample class and using this object we call the execute(Context) method then we will get an intent and then call startActivity(intent); public class MyActivity extends Activity{ ---- ---- ---- public void userdefinedMethod(){ --- --- Intent in= new AChartExample().execute(this); startActivity(in); } }</p>
+
+<p><strong><a href="#5627" title="2011-06-19 21:24:08">Carling</a>:</strong> Include activity android:name=&quot;org.achartengine.GraphicalActivity&quot; - (for the angular brackets that line is missing in my previous comment.)</p>
+
+<p><strong><a href="#5468" title="2011-04-14 18:24:39">Shilpa</a>:</strong> In chartengine solution i am not getting the fallowing step ChartFactory.getPieChartIntent(context, categorySeries, renderer); Intent achartIntent = new AChartExample().execute(this); startActivity(achartIntent); do we need to create seperate class that extends activity for this Please if possible give me details with code i am very mouch in need of it thanks in advance</p>
+
+<p><strong><a href="#5372" title="2011-03-31 12:24:36">wira</a>:</strong> Hi, I use AChartEngine, but I&#39;m fail!, My Eclipse can not resolve where is achartengine.jar reside, although I have put it in LIB folder in my project. Is there something that I forgot?</p>
+
+<p><strong><a href="#5706" title="2011-07-11 13:47:37">saurabh</a>:</strong> HI Yogesh Excellent tutorial...this must be tagged on the first hit on google i would say.I was wondering is there a way to display the charts in 3 D. Rgds, Saurabh</p>
+
+<p><strong><a href="#5709" title="2011-07-12 05:42:04">Kazu</a>:</strong> Thank yo soooooooooo much! Your tutorial saved my life!! :D</p>
+
+<p><strong><a href="#5736" title="2011-07-20 09:59:42">nik</a>:</strong> i would like to attach aChartEngine0.6.0 bar chart,column chart in android. can you please provide solution? and one more question are raise in my mind is that for achartEngine0.6.0 , purchase any licence ?</p>
+
+<p><strong><a href="#5984" title="2011-10-05 11:21:26">Sravanthi</a>:</strong> It&#39;s a very good tutorial in the fresher perspective. It helped me a lot. Thank you.</p>
+
+<p><strong><a href="#6117" title="2011-11-05 23:40:01">rans</a>:</strong> thanks alot!!!!! very helpful</p>
+
+<p><strong><a href="#6127" title="2011-11-06 21:59:56">lerie</a>:</strong> Im also having a problem linking the library I guess, when I place the Intent code for the new AChartExample it says.. &quot;AChartExample cannot be resolved to a type&quot; my code is.. Intent in = new AChartExample().execute(this); startActivity(in); and it is inside my main activity.</p>
+
+<p><strong><a href="#6128" title="2011-11-06 22:02:13">lerie</a>:</strong> Also, when I use the google code for the online stuff, it gives an error saying it chs be at least 1 pixel.. this code was straight copy and pasted from the tutorial.. WebView googleChartView = new WebView(this); setContentView(googleChartView); String mUrl = &quot;http://chart.apis.google.com/chart?cht=p3&amp;chd=t:30,60,10&amp;chs=250x100&amp;chl=cars|bikes|trucks&quot;; googleChartView.loadUrl(mUrl); it does show chs is at 250x100</p>
+
+<p><strong><a href="#6425" title="2011-12-21 06:55:43">najia</a>:</strong> Hi Yogesh, I choosed to use google chart but when there is no internet connection,it simply doesn&#39;t display the report or throws any error. Can you please let me know.</p>
+
+<p><strong><a href="#6352" title="2011-12-07 18:17:54">Umar</a>:</strong> nice tutorial, but google chart which is very simple chart not working at my sitd please try hitting that url and see the error. Thanks,</p>
+
+<p><strong><a href="#6389" title="2011-12-13 18:43:22">Abhilash</a>:</strong> while i am running AChartEngine project i am getting error on emulator as &quot;unfortunatly AChartEngine has stopped.&quot; please resolve my issue. Thanks in advance...</p>
+
+<p><strong><a href="#6975" title="2012-01-16 12:46:44">godsmash</a>:</strong> Hi, First of all, I would like to thank you for this Great tutorial. Secondly, do you have any example of 1- drawing bar chart, and if possible 2- drawing bar chart by retrieving data from database thanks.</p>
+
+<p><strong><a href="#7382" title="2012-02-05 18:46:47">Fazileh</a>:</strong> Hi, At first, thank you for this useful tutorial. and second: I used Achartengine, and I have two tab that each tab has to show a chart that their values come from database. My code does not have any error message! But both chart are the same, despite the values are different. I will appreciate if you help me. Thank you</p>
+
+<p><strong><a href="#7100" title="2012-01-24 14:22:53">Siddhant</a>:</strong> Nice tutorial.. However, i would like to ask you whether there are any other types of Chart libraries whose source i can download and use (like AChartEngine) which have a more &quot;fancier&quot; or &quot;jazzier&quot; look and feel? Thanks in advance..</p>
+
+<p><strong><a href="#8402" title="2012-04-09 11:38:57">Swati</a>:</strong> Great tutorial:-)</p>
+
+<p><strong><a href="#8403" title="2012-04-09 11:40:23">Swati</a>:</strong> great tutorial</p>
+
+<p><strong><a href="#7897" title="2012-03-11 22:27:35">Maidul Ialam</a>:</strong> Hi Yogesh Kapoor, Hope all is well .Thank you very much for your tutorial sites. I am try to download your source code But I am unable to download.Could you please send me your source code ? I am looking forward to your positive reply. Thanks Maidul Islam</p>
+
+<p><strong><a href="#9201" title="2012-07-20 11:43:13">Kennie</a>:</strong> Hi Yogesh Kapoor, Thanks for the tutorial, however when I am running your example codes Achartgraph and ChartDroidgraphs keep force close when I click the button only google chart API is working. Can you please advise me on how to keep it running ? Thanks alot in advance. Kennie</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2010/08/30/4543/" data-toggle="tooltip" data-placement="top" title="4543">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2010/09/14/groovy-client-for-apache-cassandra/" data-toggle="tooltip" data-placement="top" title="Groovy Client For Apache Cassandra">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>
