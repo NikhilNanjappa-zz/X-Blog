@@ -97,7 +97,7 @@
 
 <p>Recently I was working on a user story and after the initial design and a bit of implementation, I noticed that the code is not organised nicely and also making my life hard from the unit testing standpoint. The business problem my code addressed was building a rule engine (built with a set of validation rules)  that is applied on the input from the client , generate warning, error messages and validating the input.So, this is how I designed my implementation at first</p>
 
-<p>[sourcecode language=&quot;java&quot;] class Validator { ValidationResult result;</p>
+<p>class Validator { ValidationResult result;</p>
 
 <p>public ValidationResult validate(input){ rule1(); rule2(); rule3();</p>
 
@@ -107,7 +107,8 @@
 
 <p>}</p>
 
-<p>private rule1(){ doSomething... } private rule2(){ doSomething... } ...and so on. } [/sourcecode]</p>
+<p>private rule1(){ doSomething... } private rule2(){ doSomething... } ...and so on. } 
+```</p>
 
 <p>At first when I read the user story documentation, I had to apply 4 rules in all, but think of a scenario when the user has a couple of more rules to be applied on the input now and wants to take out a few which we implemented in the first place , what would u do now?</p>
 
@@ -117,21 +118,23 @@
 
 <p>Validator now would only have one method called validate and no private methods inside it , since all the rules take input as a parameter and return validation result as the output, created the following interface</p>
 
-<p>[sourcecode language=&quot;java&quot;] interface ValidationRule { ValidationResult validate(input,result); } [/sourcecode]</p>
+<p>interface ValidationRule { ValidationResult validate(input,result); } 
+```</p>
 
 <p>I pulled out all the private methods from Validator and created a class for each one of those with the following implementation</p>
 
 <p>Note : result is an instance of ValidationResult only</p>
 
-<p>[sourcecode language=&quot;java&quot;] class Rule1 implements ValidationRule{ public void validate(input,result){ [business logic here .....]; } }</p>
+<p>class Rule1 implements ValidationRule{ public void validate(input,result){ [business logic here .....]; } }</p>
 
-<p>class Rule2 implements ValidationRule{ public void validate(input,result){ [business logic here .....]; } } [/sourcecode]</p>
+<p>class Rule2 implements ValidationRule{ public void validate(input,result){ [business logic here .....]; } } 
+```</p>
 
 <p>and so on ...</p>
 
 <p>Lets plugin these into Validator ..I used spring&#39;s dependency injection in following way My Validator class would look like</p>
 
-<p>[sourcecode language=&quot;java&quot;] class Validator { ValidationResult result; List<ValidationRule> rules;</p>
+<p>class Validator { ValidationResult result; List<ValidationRule> rules;</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">public void setRules(List&amp;lt;ValidationRule&amp;gt; rules){
  this.rules=rules;
 }
@@ -140,11 +143,13 @@ public ValidationResult validate(input){
      rule.validate(input,this.result);
 }
 </code></pre></div>
-<p>} } [/sourcecode]</p>
+<p>} } 
+```</p>
 
 <p>In the application-context.xml I added following</p>
 
-<p>[sourcecode language=&quot;xml&quot;] <bean id="validator"> <property name="rules"> <list> <bean class="com.xebia.business.rules.Rule1"/> <bean class="com.xebia.business.rules.Rule2"/> <bean class="com.xebia.business.rules.Rule3"/> ----- ----- </list> </property> </bean> [/sourcecode]</p>
+<p>[sourcecode language=&quot;xml&quot;] <bean id="validator"> <property name="rules"> <list> <bean class="com.xebia.business.rules.Rule1"/> <bean class="com.xebia.business.rules.Rule2"/> <bean class="com.xebia.business.rules.Rule3"/> ----- ----- </list> </property> </bean> 
+```</p>
 
 <p>I added unit test cases for all the rules as Rule1Test, Rule2Test e.g., independent of one another.</p>
 

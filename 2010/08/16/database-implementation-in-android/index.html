@@ -102,7 +102,8 @@
 <p>Let&#39;s start with the creation of the database utility. First of all we need to extend the SQLiteOpenHelper class.</p>
 
 <blockquote>
-<p>[sourcecode language=&quot;java&quot;] public class DatabaseHelper extends SQLiteOpenHelper { static final String DATABASE<em>NAME = &quot;records&quot;; static final int DATABASE</em>VERSION = 1; static final String TABLE<em>CREATE = &quot;create table address (id integer primary key autoincrement, &quot; + &quot;city text not null, street text not null,     &quot; + &quot;country text not null);&quot;; DatabaseHelper(Context context) { super(context, DATABASE</em>NAME, null, DATABASE<em>VERSION); } @Override public void onCreate(SQLiteDatabase db) { db.execSQL(TABLE</em>CREATE); } @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { db.execSQL(&quot;DROP TABLE IF EXISTS address&quot;); onCreate(db); } } [/sourcecode] </p>
+<p>public class DatabaseHelper extends SQLiteOpenHelper { static final String DATABASE<em>NAME = &quot;records&quot;; static final int DATABASE</em>VERSION = 1; static final String TABLE<em>CREATE = &quot;create table address (id integer primary key autoincrement, &quot; + &quot;city text not null, street text not null,     &quot; + &quot;country text not null);&quot;; DatabaseHelper(Context context) { super(context, DATABASE</em>NAME, null, DATABASE<em>VERSION); } @Override public void onCreate(SQLiteDatabase db) { db.execSQL(TABLE</em>CREATE); } @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { db.execSQL(&quot;DROP TABLE IF EXISTS address&quot;); onCreate(db); } } 
+``` </p>
 </blockquote>
 
 <p>It requires a constructor taking a context. The context in our case will be the Activity from which the DatabaseHelper will be created.  The super constructor is called with the database name and database version. If the database asked does not exists, then a new database is created. The onCreate() and onUpgrade() methods are also needed. The onCreate() method is a callback method used to create the database and the other callback method onUpgrade() is used to delete the old table and create new if a new version of database is specified.</p>
@@ -112,7 +113,8 @@
 <p>Now we have a database and table created. We will proceed to insert data into the table. For this we will create an AddressDAO class which will operate on the address table created using the DatabaseHelper class.</p>
 
 <blockquote>
-<p>[sourcecode language=&quot;java&quot;] public class AddressDAO { static final String TABLE_NAME = &quot;address&quot;; static final String ID = &quot;id&quot;; static final String CITY = &quot;city&quot;; static final String STREET = &quot;street&quot;; static final String COUNTRY = &quot;country&quot;; private final Context androidContext; private DatabaseHelper databaseHelper; private SQLiteDatabase db; public AddressDAO(Context ctx) { this.androidContext = ctx; databaseHelper = new DatabaseHelper(androidContext); } ... } [/sourcecode]</p>
+<p>public class AddressDAO { static final String TABLE_NAME = &quot;address&quot;; static final String ID = &quot;id&quot;; static final String CITY = &quot;city&quot;; static final String STREET = &quot;street&quot;; static final String COUNTRY = &quot;country&quot;; private final Context androidContext; private DatabaseHelper databaseHelper; private SQLiteDatabase db; public AddressDAO(Context ctx) { this.androidContext = ctx; databaseHelper = new DatabaseHelper(androidContext); } ... } 
+```</p>
 </blockquote>
 
 <p>Here we have created variables like table name, column names , the context and a constructor used to instantiate the DatabaseHelper. The DatabaseHelper’s instantiation ensures the presense of an address table.</p>
@@ -120,52 +122,47 @@
 <p>Now we can insert utility methods in the AddressDAO. Let’s start with opening the databse. The open() simple gets a writeble database using the DatabaseHelper’s superclass’s methods. The close simply closes the writeble database.</p>
 
 <blockquote>
-<p>[sourcecode language=&quot;java&quot;] public void open() throws SQLException { db = databaseHelper.getWritableDatabase(); } [/sourcecode] [sourcecode language=&quot;java&quot;] public void close() { databaseHelper.close(); } [/sourcecode]</p>
+<p>public void open() throws SQLException { db = databaseHelper.getWritableDatabase(); } 
+<code>public void close() { databaseHelper.close(); } 
+</code></p>
 </blockquote>
 
 <p>The insert method will insert city,street, and country in their respective columns. It uses ContentValues classes which stores data as key value pairs. The key being the column name and the value being the data to be stored in that column. It uses databaseHelper’s insert method, which asks for the table name and the values to be inserted.</p>
 
 <blockquote>
-<p>[sourcecode language=&quot;java&quot;] public long insert(String city, String street, String country) { ContentValues values = new ContentValues(); values.put(CITY, city); values.put(STREET, street); values.put(COUNTRY, country); return db.insert(TABLE_NAME, null, values); } [/sourcecode]</p>
+<p>public long insert(String city, String street, String country) { ContentValues values = new ContentValues(); values.put(CITY, city); values.put(STREET, street); values.put(COUNTRY, country); return db.insert(TABLE_NAME, null, values); } 
+```</p>
 </blockquote>
 
 <p>Next we will implement the delete method. The delete method needs the table name, and the where clause. In our case we delete by id. </p>
 
 <blockquote>
-<p>[sourcecode language=&quot;java&quot;]</p>
-
 <p>public boolean delete(long id) { String whereClause = ID + &quot;=&quot; + id; return db.delete(TABLE_NAME, whereClause, null) &gt; 0; }</p>
-
-<p>[/sourcecode]</p>
 </blockquote>
 
 <p>Now we will implement the get method. It takes the id as parameter and gets by id. The columns to be extracted can be specified in a String array. It also has a where clause. The query method returns a Cursor object. The cursor.moveToFirst() method ensures that it points to the object found, if it has.</p>
 
 <blockquote>
-<p>[sourcecode language=&quot;java&quot;] public Cursor get(long id) throws SQLException { String[] columns = new String[] { ID, CITY, STREET, COUNTRY }; String whereClause = ID + &quot;=&quot; + id; Cursor mCursor = db.query(true, TABLE_NAME, columns, whereClause, null, null, null, null, null); if (mCursor != null) { mCursor.moveToFirst(); } return mCursor; } [/sourcecode]</p>
+<p>public Cursor get(long id) throws SQLException { String[] columns = new String[] { ID, CITY, STREET, COUNTRY }; String whereClause = ID + &quot;=&quot; + id; Cursor mCursor = db.query(true, TABLE_NAME, columns, whereClause, null, null, null, null, null); if (mCursor != null) { mCursor.moveToFirst(); } return mCursor; } 
+```</p>
 </blockquote>
 
 <p>The getAll method is same as get() other than it doesn’t has any where clause. The Cursor object returned has methods like moveToFirst(), moveToNext(), moveToLast() which can be used to iterate over the list obtained.</p>
 
 <blockquote>
-<p>[sourcecode language=&quot;java&quot;] public Cursor getAll() { String[] columns = new String[] { ID, CITY, STREET, COUNTRY }; return db.query(TABLE_NAME, columns, null, null, null, null, null); } [/sourcecode]</p>
+<p>public Cursor getAll() { String[] columns = new String[] { ID, CITY, STREET, COUNTRY }; return db.query(TABLE_NAME, columns, null, null, null, null, null); } 
+```</p>
 </blockquote>
 
 <p>The update method is same as the insert method, other than that it has a where clause. </p>
 
 <blockquote>
-<p>[sourcecode language=&quot;java&quot;]</p>
-
 <p>public boolean update(long id, String city, String street, String country) { ContentValues values = new ContentValues(); values.put(CITY, city); values.put(STREET, street); values.put(COUNTRY, country); String whereClause = ID + &quot;=&quot; + id; return db.update(TABLE_NAME, values, whereClause, null) &gt; 0; }</p>
-
-<p>[/sourcecode]</p>
 </blockquote>
 
 <p>To test this code you can create an Activity which uses its onCreate() to initialize the AddressDao. Then insert, get and delete an object using the AddressDAO. </p>
 
 <blockquote>
-<p>[sourcecode language=&quot;java&quot;]</p>
-
 <p>public class AddressActivity extends Activity {</p>
 
 <p>@Override public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); setContentView(R.layout.main); AddressDAO addressDAO = new AddressDAO(this); insert(addressDAO); get(addressDAO); delete(addressDAO); }</p>

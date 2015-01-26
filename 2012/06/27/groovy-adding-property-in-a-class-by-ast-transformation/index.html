@@ -113,61 +113,65 @@
 <p><strong>Step 1:</strong></p>
 
 <p>Create a Class &quot;AuditFieldsASTTransformation&quot; which implements ASTTransformation interface and provides implementation of &quot;visit&quot; method. Also add Compilation phase Canonicalization(or any other as per requirement) to do the required AST transformation in given phase.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> @GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION) class AuditFieldsASTTransformation implements ASTTransformation{
 
-<p>[sourcecode lang=&quot;groovy&quot;] @GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION) class AuditFieldsASTTransformation implements ASTTransformation{</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public void visit(ASTNode[] nodes, SourceUnit source) {
-    ....
-}
+
+    public void visit(ASTNode[] nodes, SourceUnit source) {
+        ....
+    }
+
+
+} 
 </code></pre></div>
-<p>} [/sourcecode]</p>
-
 <p><strong>Step 2:</strong></p>
 
 <p>Next, add logic in &quot;visit&quot; method to add new property in a class.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> @GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION) class AuditFieldsASTTransformation implements ASTTransformation{
 
-<p>[sourcecode lang=&quot;groovy&quot;] @GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION) class AuditFieldsASTTransformation implements ASTTransformation{</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">public void visit(ASTNode[] nodes, SourceUnit source) {
-    nodes.each{ASTNode astNode-&amp;gt;
-        if(astNode instanceof ClassNode){
-            ClassNode classNode = (ClassNode)astNode
-            classNode.addProperty(&amp;quot;createdBy&amp;quot;, Modifier.PUBLIC, new ClassNode(String), null, null, null)
-            classNode.addProperty(&amp;quot;editedBy&amp;quot;, Modifier.PUBLIC, new ClassNode(String), null, null, null)
-            classNode.addProperty(&amp;quot;createdDate&amp;quot;, Modifier.PUBLIC, new ClassNode(Date), null, null, null)
-            classNode.addProperty(&amp;quot;editedDate&amp;quot;, Modifier.PUBLIC, new ClassNode(Date), null, null, null)
+
+    public void visit(ASTNode[] nodes, SourceUnit source) {
+        nodes.each{ASTNode astNode-&amp;gt;
+            if(astNode instanceof ClassNode){
+                ClassNode classNode = (ClassNode)astNode
+                classNode.addProperty(&amp;quot;createdBy&amp;quot;, Modifier.PUBLIC, new ClassNode(String), null, null, null)
+                classNode.addProperty(&amp;quot;editedBy&amp;quot;, Modifier.PUBLIC, new ClassNode(String), null, null, null)
+                classNode.addProperty(&amp;quot;createdDate&amp;quot;, Modifier.PUBLIC, new ClassNode(Date), null, null, null)
+                classNode.addProperty(&amp;quot;editedDate&amp;quot;, Modifier.PUBLIC, new ClassNode(Date), null, null, null)
+            }
         }
     }
+
+
 }
 </code></pre></div>
-<p>}[/sourcecode]</p>
-
 <p>In above code we are adding properties &quot;createdBy&quot;, &quot;editedBy&quot;, &quot;createdDate&quot; and &quot;editedDate&quot; by addProperty method on ClassNode. We will see in a moment what this ClassNode actually represents.</p>
 
 <p><strong>Step 3:</strong></p>
 
 <p>Now create a custom- annotation class &quot;Auditable&quot; which binds above created &quot;AuditFieldsASTTransformation&quot; class.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> @Retention(RetentionPolicy.RUNTIME) @Target([ ElementType.TYPE ]) @GroovyASTTransformationClass(&quot;AuditFieldsASTTransformation&quot;) @interface Auditable {
 
-<p>[sourcecode lang=&quot;groovy&quot;] @Retention(RetentionPolicy.RUNTIME) @Target([ ElementType.TYPE ]) @GroovyASTTransformationClass(&quot;AuditFieldsASTTransformation&quot;) @interface Auditable {</p>
-
-<p>} [/sourcecode]</p>
-
+} 
+</code></pre></div>
 <p>In above code, we gave Target as ElementType.TYPE, which means this annotation can be applied only at Class level. After this, annotation @Auditable can be applied on any class and compiler would automatically add above mentioned four audit fields in the class at compile time.</p>
 
 <p><strong>Step 4:</strong></p>
 
 <p>Let&#39;s now create a class on which audit fields are required to be added.</p>
-
-<p>[sourcecode lang=&quot;groovy&quot;] @Auditable class Project { String name String location int teamSize } [/sourcecode]</p>
-
-<p>Above class represents Project details. Any time, details are updated, user who updated the details and time at which details were updated needs to be persisted. So in order to add required audit fields in Project class, all we need to do is add @Auditable at class level. Now when Project class is compiled, compiler would invoke &quot;visit&quot; method of  &quot;AuditFieldsASTTransformation&quot; class. ClassNode in &quot;visit&quot; method represents Project class(or any other class with @Auditable annotation) and via &quot;addProperty&quot; method all four audit fields are added in Project class structure and finally bytecode is generated. If one decompiles bytecode of Project class and look underneath, all four audit fields can be seen in the class as mentioned below. </p>
-
-<p>[sourcecode lang=&quot;groovy&quot;] class Project { String name String location int teamSize</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">String createdBy
-String editedBy
-Date createdDate
-Date editedDate
+<div class="highlight"><pre><code class="language-text" data-lang="text"> @Auditable class Project { String name String location int teamSize } 
 </code></pre></div>
-<p>} [/sourcecode]</p>
+<p>Above class represents Project details. Any time, details are updated, user who updated the details and time at which details were updated needs to be persisted. So in order to add required audit fields in Project class, all we need to do is add @Auditable at class level. Now when Project class is compiled, compiler would invoke &quot;visit&quot; method of  &quot;AuditFieldsASTTransformation&quot; class. ClassNode in &quot;visit&quot; method represents Project class(or any other class with @Auditable annotation) and via &quot;addProperty&quot; method all four audit fields are added in Project class structure and finally bytecode is generated. If one decompiles bytecode of Project class and look underneath, all four audit fields can be seen in the class as mentioned below. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> class Project { String name String location int teamSize
 
+
+    String createdBy
+    String editedBy
+    Date createdDate
+    Date editedDate
+
+
+} 
+</code></pre></div>
 <p><strong>Conclusion</strong> At first, adding new fields dynamically by AST Transformation at compile time might not look very exciting. But when it is combined with adding new methods in a class, one can write very generic code which can be used in multiple projects. One can add methods which automatically finds currently logged in user and updates &quot;editedDate&quot; field while saving domain object. This is exactly what &quot;Audit-Trail&quot; plugin of Grails does and can be used in any Grails project. There are many other Grails plugin available which uses this concept of adding utility fields and methods in a Class via AST Transformation. This is compile time meta-programming technique which is generally considered better than run-time meta-programming as far as performance is considered. Grails 2.0 heavily relies on this technique and adds many utility methods in various artifacts at compile time.</p>
 
 

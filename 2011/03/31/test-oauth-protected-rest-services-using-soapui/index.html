@@ -122,11 +122,13 @@ Please note that the first four parameters are static for a particular consumer 
 
 <hr>
 
-<p>[sourcecode language=&quot;java&quot;] int time = (System.currentTimeMillis()/1000); String timeString = String.valueOf(time); groovyUtils.setPropertyValue(&quot;Properties&quot;, &quot;timeString&quot;, timeString); [/sourcecode]</p>
+<p>int time = (System.currentTimeMillis()/1000); String timeString = String.valueOf(time); groovyUtils.setPropertyValue(&quot;Properties&quot;, &quot;timeString&quot;, timeString); 
+```</p>
 
 <p><strong>oauth_nonce</strong></p>
 
-<p>[sourcecode language=&quot;java&quot;] long timeStampResult =Long.valueOf(timeString); String nonce =String.valueOf(timeStampResult + new Random().nextInt()); groovyUtils.setPropertyValue(&quot;Properties&quot;, &quot;nonce&quot;, nonce); [/sourcecode]</p>
+<p>long timeStampResult =Long.valueOf(timeString); String nonce =String.valueOf(timeStampResult + new Random().nextInt()); groovyUtils.setPropertyValue(&quot;Properties&quot;, &quot;nonce&quot;, nonce); 
+```</p>
 
 <p><strong>oauth_signature</strong></p>
 
@@ -140,7 +142,8 @@ Please note that the first four parameters are static for a particular consumer 
 
 <p>This is a sample base string which is formatted for better readability.</p>
 
-<p>[sourcecode language=&quot;xml&quot;] GET&amp;http%3A%2F%2Flocalhost%3A8080%2Fabc.com6%2Frest%2Fusers%2Fget&amp;%3D %26oauth<em>callback%3Doob %26oauth</em>consumer<em>key%3DconsumerKey %26oauth</em>nonce%3D175942032 %26oauth<em>signature</em>method%3DHMAC-SHA1 %26oauth<em>timestamp%3D1301554858 %26oauth</em>token%3Df285bed1-c57c-42db-8438-3ec33fd6c4be %26oauth<em>version%3D1.0 %26user</em>name%3Ddemouser [/sourcecode]</p>
+<p>[sourcecode language=&quot;xml&quot;] GET&amp;http%3A%2F%2Flocalhost%3A8080%2Fabc.com6%2Frest%2Fusers%2Fget&amp;%3D %26oauth<em>callback%3Doob %26oauth</em>consumer<em>key%3DconsumerKey %26oauth</em>nonce%3D175942032 %26oauth<em>signature</em>method%3DHMAC-SHA1 %26oauth<em>timestamp%3D1301554858 %26oauth</em>token%3Df285bed1-c57c-42db-8438-3ec33fd6c4be %26oauth<em>version%3D1.0 %26user</em>name%3Ddemouser 
+```</p>
 
 <p>On close inspection it is easy to understand that the base string consists of 
     * HTTP method.
@@ -153,41 +156,49 @@ Please note that in the URL the parameters appear in the ascending order of the 
 
 <p><strong>OAuth Specific parameters</strong></p>
 
-<p>[sourcecode language=&quot;xml&quot;] def oauth<em>version = context.expand( &#39;${#Project#oauth</em>version}&#39; ) def oauth<em>consumer</em>key = context.expand( &#39;${#Project#oauth<em>consumer</em>key}&#39; ) def oauth<em>callback = context.expand( &#39;${#Project#oauth</em>callback}&#39; ) def oauth<em>signature</em>method = context.expand( &#39;${#Project#oauth<em>signature</em>method}&#39; ) def oauth<em>token = context.expand( &#39;${#Project#oauth</em>token}&#39; ) def token<em>secret = context.expand( &#39;${#Project#token</em>secret}&#39; ) [/sourcecode]</p>
+<p>[sourcecode language=&quot;xml&quot;] def oauth<em>version = context.expand( &#39;${#Project#oauth</em>version}&#39; ) def oauth<em>consumer</em>key = context.expand( &#39;${#Project#oauth<em>consumer</em>key}&#39; ) def oauth<em>callback = context.expand( &#39;${#Project#oauth</em>callback}&#39; ) def oauth<em>signature</em>method = context.expand( &#39;${#Project#oauth<em>signature</em>method}&#39; ) def oauth<em>token = context.expand( &#39;${#Project#oauth</em>token}&#39; ) def token<em>secret = context.expand( &#39;${#Project#token</em>secret}&#39; ) 
+```</p>
 
 <p><strong>API specific parameters</strong></p>
 
-<p>[sourcecode language=&quot;xml&quot;] def user<em>name = context.expand( &#39;${Properties#user</em>name}&#39; ) [/sourcecode]</p>
+<p>[sourcecode language=&quot;xml&quot;] def user<em>name = context.expand( &#39;${Properties#user</em>name}&#39; ) 
+```</p>
 
 <p>Please note that if you want to make the script generic then in that case the api specific properties and their values will have to be passed dynamically to the script.Once all the parameters are available they will have to be sorted in the alphabetic order of names of parameters, for that we will take following steps</p>
 
 <p>(i) <strong>Put the parameters in a Map</strong></p>
 
-<p>[sourcecode language=&quot;java&quot;] Map parameterMap = new HashMap(); parameterMap.put(&quot;oauth<em>version&quot;, oauth</em>version); parameterMap.put(&quot;oauth<em>consumer</em>key&quot;, oauth<em>consumer</em>key); ............ parameterMap.put(&quot;oauth<em>timestamp&quot;, timeString); parameterMap.put(&quot;user</em>name&quot; , user_name); [/sourcecode]</p>
+<p>Map parameterMap = new HashMap(); parameterMap.put(&quot;oauth<em>version&quot;, oauth</em>version); parameterMap.put(&quot;oauth<em>consumer</em>key&quot;, oauth<em>consumer</em>key); ............ parameterMap.put(&quot;oauth<em>timestamp&quot;, timeString); parameterMap.put(&quot;user</em>name&quot; , user_name); 
+```</p>
 
 <p>(ii)<strong>Sort the parameter</strong></p>
 
-<p>[sourcecode language=&quot;java&quot;] Map sorted = new LinkedHashMap(); List keys = new ArrayList(map.keySet()); Collections.sort(keys); for (String key : keys){ sorted.put(key, map.get(key)); } [/sourcecode]</p>
+<p>Map sorted = new LinkedHashMap(); List keys = new ArrayList(map.keySet()); Collections.sort(keys); for (String key : keys){ sorted.put(key, map.get(key)); } 
+```</p>
 
 <p>Once the parameter are sorted, a string has to be generated in the query string format, to be appended to the encoded string generated from end point</p>
 
 <p><strong>Create a encoded parameter string</strong></p>
 
-<p>[sourcecode language=&quot;java&quot;] StringBuffer encodedString = new StringBuffer(map.size() * 20); for (String key : map.keySet()) { if(encodedString.length() &gt; 0){ encodedString.append(&#39;&amp;&#39;); } encodedString.append(percentEncode(key)).append(&#39;=&#39;).append(percentEncode(map.get(key))); } def encodedParamString = encodedString.toString(); [/sourcecode]</p>
+<p>StringBuffer encodedString = new StringBuffer(map.size() * 20); for (String key : map.keySet()) { if(encodedString.length() &gt; 0){ encodedString.append(&#39;&amp;&#39;); } encodedString.append(percentEncode(key)).append(&#39;=&#39;).append(percentEncode(map.get(key))); } def encodedParamString = encodedString.toString(); 
+```</p>
 
 <p>The url to the REST resource has to be encoded.</p>
 
 <p>*<em>Encode the endpoint url string *</em></p>
 
-<p>[sourcecode language=&quot;java&quot;] String encodedURL = URLUtils.percentEncode(endpoint); [/sourcecode]</p>
+<p>String encodedURL = URLUtils.percentEncode(endpoint); 
+```</p>
 
 <p>Now create the base string using the encoded url, encoded string generated from parameters and the HTTP method.</p>
 
-<p>[sourcecode language=&quot;java&quot;] def basicString= String.format( &quot;%s&amp;%s&amp;%s&quot;, &quot;GET&quot;, encodedURL, encodedParamString ); [/sourcecode]</p>
+<p>def basicString= String.format( &quot;%s&amp;%s&amp;%s&quot;, &quot;GET&quot;, encodedURL, encodedParamString ); 
+```</p>
 
 <p><strong>Generate cryptographic function and signature</strong></p>
 
-<p>[sourcecode language=&quot;java&quot;] SecretKeySpec key = new SecretKeySpec((&quot;consumerKey&amp;&quot;+token_secret).getBytes(&quot;UTF-8&quot;), &quot;HmacSHA1&quot;); Mac mac = Mac.getInstance(&quot;HmacSHA1&quot;); mac.init(key); byte[] bytes = mac.doFinal(basicString.getBytes(&quot;UTF-8&quot;)); def signature = new String(Base64.encodeBase64(bytes)).replace(&quot;\r\n&quot;, &quot;&quot;); groovyUtils.setPropertyValue(&quot;Properties&quot;, &quot;signature&quot;, signature); [/sourcecode]</p>
+<p>SecretKeySpec key = new SecretKeySpec((&quot;consumerKey&amp;&quot;+token_secret).getBytes(&quot;UTF-8&quot;), &quot;HmacSHA1&quot;); Mac mac = Mac.getInstance(&quot;HmacSHA1&quot;); mac.init(key); byte[] bytes = mac.doFinal(basicString.getBytes(&quot;UTF-8&quot;)); def signature = new String(Base64.encodeBase64(bytes)).replace(&quot;\r\n&quot;, &quot;&quot;); groovyUtils.setPropertyValue(&quot;Properties&quot;, &quot;signature&quot;, signature); 
+```</p>
 
 <p>Now transfer these properties set in the testcase properties to the request parameters. That&#39;s all one needs to do to call rest based services protected by OAuth 1.0.
 Reference: <a href="http://vimeo.com/api/docs/oauth">http://vimeo.com/api/docs/oauth</a></p>

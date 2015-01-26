@@ -111,7 +111,8 @@ continues till the cycle reaches the last slide.</p>
 
 <p>To add cycle plugin in your node/page template just insert the following code at the top:</p>
 
-<p>[sourcecode language=&quot;php&quot;]<br /> &lt;?php<br /> drupal<em>add</em>js(drupal<em>get</em>path(&#39;theme&#39;, &#39;my_theme&#39;).&#39;/js/jquery.cycle.all.js&#39;)<br /> ?&gt;<br /> [/sourcecode]</p>
+<p>[sourcecode language=&quot;php&quot;]<br /> &lt;?php<br /> drupal<em>add</em>js(drupal<em>get</em>path(&#39;theme&#39;, &#39;my_theme&#39;).&#39;/js/jquery.cycle.all.js&#39;)<br /> ?&gt;<br /> 
+```</p>
 
 <p>The above line will add the cycle javascript file my first going into the themes folder and then in your theme directory,<br>
 in my case it was &#39;my_theme&#39;. Please note it is &#39;theme&#39; and not &#39;themes&#39; many people get confused and take this as<br>
@@ -123,17 +124,20 @@ the actual directory name but this is just Drupal syntax to get to the themes di
 free to put code where ever you feel happy.</p>
 
 <p>Here is the HTML page:<br>
-[sourcecode language=&quot;html&quot;]<br /> &lt;html&gt;<br /> &lt;head&gt;<br /> &lt;!-- let&#39;s leave this empty for now --&gt;<br /> &lt;script&gt;&lt;/script&gt;<br /> &lt;/head&gt;<br /> &lt;body&gt;<br /> &lt;div id=&#39;homepage&#39;&gt;<br /> &lt;div id=&#39;questions&#39;&gt;<br /> &lt;div id=&#39;ques-1&#39;&gt;Is Scrum really going to work in one month project?&lt;/div&gt;<br /> &lt;div id=&#39;ques-2&#39;&gt;Do you know what TDD is?&lt;/div&gt;<br /> &lt;div id=&#39;ques-3&#39;&gt;When was the last time you used CI?&lt;/div&gt;<br /> &lt;div id=&#39;ques-4&#39;&gt;Are you Agile?&lt;/div&gt;<br /> &lt;div id=&#39;ques-5&#39;&gt;2 developers takes 4 months, therefor 4 developers will take 2 months. What do you say?&lt;/div&gt;<br /> &lt;/div&gt;<br /> &lt;div id=&#39;answers&#39;&gt;<br /> &lt;div id=&#39;ans-1&#39;&gt;Yes, I am 200% sure that it might work.&lt;/div&gt;<br /> &lt;div id=&#39;ans-2&#39;&gt;Yes, I do. It means The Developer&#39;s Death.&lt;/div&gt;<br /> &lt;div id=&#39;ans-3&#39;&gt;OMG! What do I need a Crime Investigator for?!&lt;/div&gt;<br /> &lt;div id=&#39;ans-4&#39;&gt;Yes, I proudly say that I am A-jahil (ignorant).&lt;/div&gt;<br /> &lt;div id=&#39;ans-5&#39;&gt;Thank God!! This is not happening in the real life, otherwise 9 people would be making a baby in a month.&lt;/div&gt;<br /> &lt;/div&gt;<br /> &lt;/div&gt;<br /> &lt;/body&gt;<br /> &lt;/html&gt;<br /> [/sourcecode]</p>
+[sourcecode language=&quot;html&quot;]<br /> &lt;html&gt;<br /> &lt;head&gt;<br /> &lt;!-- let&#39;s leave this empty for now --&gt;<br /> &lt;script&gt;&lt;/script&gt;<br /> &lt;/head&gt;<br /> &lt;body&gt;<br /> &lt;div id=&#39;homepage&#39;&gt;<br /> &lt;div id=&#39;questions&#39;&gt;<br /> &lt;div id=&#39;ques-1&#39;&gt;Is Scrum really going to work in one month project?&lt;/div&gt;<br /> &lt;div id=&#39;ques-2&#39;&gt;Do you know what TDD is?&lt;/div&gt;<br /> &lt;div id=&#39;ques-3&#39;&gt;When was the last time you used CI?&lt;/div&gt;<br /> &lt;div id=&#39;ques-4&#39;&gt;Are you Agile?&lt;/div&gt;<br /> &lt;div id=&#39;ques-5&#39;&gt;2 developers takes 4 months, therefor 4 developers will take 2 months. What do you say?&lt;/div&gt;<br /> &lt;/div&gt;<br /> &lt;div id=&#39;answers&#39;&gt;<br /> &lt;div id=&#39;ans-1&#39;&gt;Yes, I am 200% sure that it might work.&lt;/div&gt;<br /> &lt;div id=&#39;ans-2&#39;&gt;Yes, I do. It means The Developer&#39;s Death.&lt;/div&gt;<br /> &lt;div id=&#39;ans-3&#39;&gt;OMG! What do I need a Crime Investigator for?!&lt;/div&gt;<br /> &lt;div id=&#39;ans-4&#39;&gt;Yes, I proudly say that I am A-jahil (ignorant).&lt;/div&gt;<br /> &lt;div id=&#39;ans-5&#39;&gt;Thank God!! This is not happening in the real life, otherwise 9 people would be making a baby in a month.&lt;/div&gt;<br /> &lt;/div&gt;<br /> &lt;/div&gt;<br /> &lt;/body&gt;<br /> &lt;/html&gt;<br /> 
+```</p>
 
 <p>I defined two separate DIVs to show questions and answers because cycle plugin works on a container element and then container&#39;s each child element will become a slide.</p>
 
 <p>Add the following code in the <script> tag:</p>
 
-<p>[sourcecode language=&quot;javascript&quot;]<br /> jQuery(window).bind(&quot;load&quot;, function() {</p> <p> jQuery(&#39;#questions&#39;).cycle({<br /> fx : &#39;scrollRight&#39;, // scroll left-to-right<br /> speed : &#39;slow&#39;,<br /> timeoutFn : calculateTimeout, // described below<br /> nowrap : true, // stop slideshow after the last slide<br /> })<br /> jQuery(&#39;#answers&#39;).cycle({<br /> fx : &#39;scrollLeft&#39;, // scroll right-to-left<br /> speed : &#39;slow&#39;,<br /> timeoutFn : calculateTimeoutAnswers, // described below<br /> nowrap : true<br /> })<br /> });<br /> [/sourcecode]</p>
+<p>[sourcecode language=&quot;javascript&quot;]<br /> jQuery(window).bind(&quot;load&quot;, function() {</p> <p> jQuery(&#39;#questions&#39;).cycle({<br /> fx : &#39;scrollRight&#39;, // scroll left-to-right<br /> speed : &#39;slow&#39;,<br /> timeoutFn : calculateTimeout, // described below<br /> nowrap : true, // stop slideshow after the last slide<br /> })<br /> jQuery(&#39;#answers&#39;).cycle({<br /> fx : &#39;scrollLeft&#39;, // scroll right-to-left<br /> speed : &#39;slow&#39;,<br /> timeoutFn : calculateTimeoutAnswers, // described below<br /> nowrap : true<br /> })<br /> });<br /> 
+```</p>
 
 <p>and here are the timeout functions:</p>
 
-<p>[sourcecode language=&quot;javascript&quot;]<br /> var timeouts = [9, 9, 9, 9, 9];<br /> function calculateTimeout(currElement, nextElement, opts, isForward) {<br /> var index = opts.currSlide;<br /> return timeouts[index] * 1000;<br /> } </p> <p>var timeoutsAnswers = // explained below ;<br /> function calculateTimeoutAnswers(currElement, nextElement, opts, isForward) {<br /> var index = opts.currSlide;<br /> return timeoutsAnswers[index] * 1000;<br /> }<br /> [/sourcecode]</p>
+<p>[sourcecode language=&quot;javascript&quot;]<br /> var timeouts = [9, 9, 9, 9, 9];<br /> function calculateTimeout(currElement, nextElement, opts, isForward) {<br /> var index = opts.currSlide;<br /> return timeouts[index] * 1000;<br /> } </p> <p>var timeoutsAnswers = // explained below ;<br /> function calculateTimeoutAnswers(currElement, nextElement, opts, isForward) {<br /> var index = opts.currSlide;<br /> return timeoutsAnswers[index] * 1000;<br /> }<br /> 
+```</p>
 
 <p>I created these to set a delay for each slide and left enough delay, or 4 sec, to display the questions&#39; corresponding answer.</p>
 
@@ -144,11 +148,13 @@ do the trick. But then it hit-me!! </p>
 <p>Why not add some dummy child elements to &#39;answers&#39; container or what I called them &#39;delay&#39; elements!!</p>
 
 <p>Hence the HTML for anwers container became:<br>
-[sourcecode language=&quot;html&quot;]<br /> &lt;div id=&#39;answers&#39;&gt;<br /> &lt;div class=&#39;delay&#39;&gt;&lt;/div&gt;<br /> &lt;div id=&#39;ans-1&#39;&gt;Yes, I am 200% sure that it might work.&lt;/div&gt;<br /> &lt;div class=&#39;delay&#39;&gt;&lt;/div&gt;<br /> &lt;div id=&#39;ans-2&#39;&gt;Yes, I do. It means The Developer&#39;s Death.&lt;/div&gt;<br /> &lt;div class=&#39;delay&#39;&gt;&lt;/div&gt;<br /> &lt;div id=&#39;ans-3&#39;&gt;OMG! What do I need a Crime Investigator for?!&lt;/div&gt;<br /> &lt;div class=&#39;delay&#39;&gt;&lt;/div&gt;<br /> &lt;div id=&#39;ans-4&#39;&gt;Yes, I proudly say that I am A-jahil (ignorant).&lt;/div&gt;<br /> &lt;div class=&#39;delay&#39;&gt;&lt;/div&gt;<br /> &lt;div id=&#39;ans-5&#39;&gt;Thank God!! This is not happening in the real life, otherwise 9 people would be making a baby in a month.&lt;/div&gt;<br /> &lt;/div&gt;<br /> [/sourcecode]</p>
+[sourcecode language=&quot;html&quot;]<br /> &lt;div id=&#39;answers&#39;&gt;<br /> &lt;div class=&#39;delay&#39;&gt;&lt;/div&gt;<br /> &lt;div id=&#39;ans-1&#39;&gt;Yes, I am 200% sure that it might work.&lt;/div&gt;<br /> &lt;div class=&#39;delay&#39;&gt;&lt;/div&gt;<br /> &lt;div id=&#39;ans-2&#39;&gt;Yes, I do. It means The Developer&#39;s Death.&lt;/div&gt;<br /> &lt;div class=&#39;delay&#39;&gt;&lt;/div&gt;<br /> &lt;div id=&#39;ans-3&#39;&gt;OMG! What do I need a Crime Investigator for?!&lt;/div&gt;<br /> &lt;div class=&#39;delay&#39;&gt;&lt;/div&gt;<br /> &lt;div id=&#39;ans-4&#39;&gt;Yes, I proudly say that I am A-jahil (ignorant).&lt;/div&gt;<br /> &lt;div class=&#39;delay&#39;&gt;&lt;/div&gt;<br /> &lt;div id=&#39;ans-5&#39;&gt;Thank God!! This is not happening in the real life, otherwise 9 people would be making a baby in a month.&lt;/div&gt;<br /> &lt;/div&gt;<br /> 
+```</p>
 
 <p>and the timeoutAnswers array became:</p>
 
-<p>[sourcecode language=&quot;javascript&quot;]<br /> // do some hit-n-trail because the slide out time for both questions and answers<br /> // will not be exactly same even though we set it to 4+5=9 sec<br /> // you may need to change 5 to something like 4.6 or less.<br /> var timeoutsAnswers = [4, 5, 4, 5, 4, 5, 4, 5, 4, 5]<br /> [/sourcecode]</p>
+<p>[sourcecode language=&quot;javascript&quot;]<br /> // do some hit-n-trail because the slide out time for both questions and answers<br /> // will not be exactly same even though we set it to 4+5=9 sec<br /> // you may need to change 5 to something like 4.6 or less.<br /> var timeoutsAnswers = [4, 5, 4, 5, 4, 5, 4, 5, 4, 5]<br /> 
+```</p>
 
 <p>Here is the full HTML:</p>
 

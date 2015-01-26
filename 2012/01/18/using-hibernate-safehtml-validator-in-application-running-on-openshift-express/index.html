@@ -101,7 +101,8 @@
 
 <p>Create a jbossas-7.0 OpenShift Express application using rhc-create-app command as shown below.</p>
 
-<p>[sourcecode lang=&quot;text&quot;] rhc-create-app -l <rhlogin email> -a pastebin -t jbossas-7.0 -d [/sourcecode]</p>
+<p>[sourcecode lang=&quot;text&quot;] rhc-create-app -l <rhlogin email> -a pastebin -t jbossas-7.0 -d 
+```</p>
 
 <p>In case you are not aware of OpenShift Express please refer to the documentation at <a href="https://docs.redhat.com/docs/en-US/OpenShift_Express/1.0/html/User_Guide/index.html">https://docs.redhat.com/docs/en-US/OpenShift_Express/1.0/html/User_Guide/index.html</a></p>
 
@@ -109,23 +110,27 @@
 
 <p>I am using Spring Roo to create a pastebin clone application and will be using MongoDB as the datastore. In case you are not aware of Spring Roo you can refer to my <a href="http://www.ibm.com/developerworks/views/opensource/libraryview.jsp?search_by=introducing+spring+roo,">IBM DeveloperWorks series on Spring Ro</a>o. But before we create application remove the generated src and pom.xml files using commands shown below.</p>
 
-<p>[sourcecode lang=&quot;text&quot;] git rm -rf pom.xml src git commit -m &quot;removed default files&quot; [/sourcecode]</p>
+<p>[sourcecode lang=&quot;text&quot;] git rm -rf pom.xml src git commit -m &quot;removed default files&quot; 
+```</p>
 
 <p>Now fire the roo shell and execute the following commands to create the application.</p>
 
-<p>[sourcecode lang=&quot;text&quot;] project --topLevelPackage com.shekhar.pastebin --projectName pastebin mongo setup entity mongo --class ~.domain.Post field string --fieldName body --notNull --sizeMax 4000 repository mongo --interface ~.repository.PostRepository service --interface ~.service.PostService web mvc setup web mvc all --package ~.web [/sourcecode]</p>
+<p>[sourcecode lang=&quot;text&quot;] project --topLevelPackage com.shekhar.pastebin --projectName pastebin mongo setup entity mongo --class ~.domain.Post field string --fieldName body --notNull --sizeMax 4000 repository mongo --interface ~.repository.PostRepository service --interface ~.service.PostService web mvc setup web mvc all --package ~.web 
+```</p>
 
 <p>*<em>Embed MongoDB Cartridge *</em></p>
 
 <p>After the application has generated add MongoDB cartridge to the application using rhc-ctl-app command as shown below.</p>
 
-<p>[sourcecode lang=&quot;text&quot;] rhc-ctl-app -l <rhlogin email> -a pastebin -e add-mongodb-2.0 [/sourcecode] </p>
+<p>[sourcecode lang=&quot;text&quot;] rhc-ctl-app -l <rhlogin email> -a pastebin -e add-mongodb-2.0 
+``` </p>
 
 <p><strong>Do Mongo Setup Again</strong></p>
 
 <p>Now that we have embed MongoDB cartridge we should run the mongo setup command again to correctly configure the MongoDB. Fire the roo shell and execute the following line.</p>
 
-<p>[sourcecode lang=&quot;text&quot;] mongo setup --databaseName pastebin --username admin --password _cvF8XgIxIzv --host 127.1.27.1 --port 27017 [/sourcecode]</p>
+<p>[sourcecode lang=&quot;text&quot;] mongo setup --databaseName pastebin --username admin --password _cvF8XgIxIzv --host 127.1.27.1 --port 27017 
+```</p>
 
 <p>Make sure your database.properties file has all the correct value.</p>
 
@@ -143,13 +148,15 @@
 @SafeHtml
 private String body;
 </code></pre></div>
-<p>} [/sourcecode]</p>
+<p>} 
+```</p>
 
 <p>Once you have added this annotation if you try and run this on tomcat using mvn tomcat:run you will face <strong>java.lang.ClassNotFoundException : org.jsoup.safety.Whit</strong>*<em>elist *</em>while creating a post.</p>
 
 <p>To fix this add jsoup dependency to pom.xml</p>
 
-<p>[sourcecode lang=&quot;xml&quot;] <dependency> <groupId>org.jsoup</groupId> <artifactId>jsoup</artifactId> <version>1.6.1</version> </dependency> [/sourcecode]</p>
+<p>[sourcecode lang=&quot;xml&quot;] <dependency> <groupId>org.jsoup</groupId> <artifactId>jsoup</artifactId> <version>1.6.1</version> </dependency> 
+```</p>
 
 <p>Now if you try and run again on tomcat you will be able to successfully create a post.</p>
 
@@ -157,17 +164,20 @@ private String body;
 
 <p>Before you commit the code and push to express you need to first define a maven  profile called openshift. OpenShift uses this profile when it run the build in cloud.</p>
 
-<p>[sourcecode lang=&quot;xml&quot;] <profile> &lt;!-- When built in OpenShift the &#39;openshift&#39; profile will be used when invoking mvn. --&gt; &lt;!-- Use this profile for any OpenShift specific customization your app will need. --&gt; &lt;!-- By default that is to put the resulting archive into the &#39;deployments&#39; folder. --&gt; &lt;!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html --&gt; <id>openshift</id> <build> <finalName>demo1</finalName> <plugins> <plugin> <artifactId>maven-war-plugin</artifactId> <version>2.1.1</version> <configuration> <outputDirectory>deployments</outputDirectory> <warName>ROOT</warName> </configuration> </plugin> </plugins> </build> </profile> [/sourcecode]</p>
+<p>[sourcecode lang=&quot;xml&quot;] <profile> &lt;!-- When built in OpenShift the &#39;openshift&#39; profile will be used when invoking mvn. --&gt; &lt;!-- Use this profile for any OpenShift specific customization your app will need. --&gt; &lt;!-- By default that is to put the resulting archive into the &#39;deployments&#39; folder. --&gt; &lt;!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html --&gt; <id>openshift</id> <build> <finalName>demo1</finalName> <plugins> <plugin> <artifactId>maven-war-plugin</artifactId> <version>2.1.1</version> <configuration> <outputDirectory>deployments</outputDirectory> <warName>ROOT</warName> </configuration> </plugin> </plugins> </build> </profile> 
+```</p>
 
 <p>To push the code on OpenShift Express cloud add the files and commit them as shown below.</p>
 
-<p>[sourcecode lang=&quot;text&quot;] git add src pom.xml git commit -m &quot;adding pastebin application&quot; [/sourcecode]</p>
+<p>[sourcecode lang=&quot;text&quot;] git add src pom.xml git commit -m &quot;adding pastebin application&quot; 
+```</p>
 
 <p>finally push the code using git push command.</p>
 
 <p>After build has run fine and code deployed to express. Hit the url and try creating a post and you will get &quot;Internal Error&quot;. And if you tail the logs using rhc-tail-files command and you will see exception as shown below</p>
 
-<p>[sourcecode lang=&quot;text&quot;] org.jsoup.safety.Whitelist from [Module &quot;org.hibernate.validator:main&quot; from local module loader @16aa37a6 (roots: /var/lib/libra/521ca7af66d64093ae386ed99a49a790/linkbin/jbossas-7.0/standalone/configuration/modules,/var/lib/libra/521ca7af66d64093ae386ed99a49a790/linkbin/jbossas-7.0/modules)] at org.jboss.modules.ModuleClassLoader.findClass(ModuleClassLoader.java:191) at org.jboss.modules.ConcurrentClassLoader.performLoadClassChecked(ConcurrentClassLoader.java:361) at org.jboss.modules.ConcurrentClassLoader.performLoadClassChecked(ConcurrentClassLoader.java:333) at org.jboss.modules.ConcurrentClassLoader.performLoadClass(ConcurrentClassLoader.java:310) at org.jboss.modules.ConcurrentClassLoader.loadClass(ConcurrentClassLoader.java:103) at java.lang.Class.getDeclaredFields0(Native Method) [:1.6.0<em>22] at java.lang.Class.privateGetDeclaredFields(Class.java:2308) [:1.6.0</em>22] at java.lang.Class.getDeclaredFields(Class.java:1760) [:1.6.0_22] [/sourcecode]</p>
+<p>[sourcecode lang=&quot;text&quot;] org.jsoup.safety.Whitelist from [Module &quot;org.hibernate.validator:main&quot; from local module loader @16aa37a6 (roots: /var/lib/libra/521ca7af66d64093ae386ed99a49a790/linkbin/jbossas-7.0/standalone/configuration/modules,/var/lib/libra/521ca7af66d64093ae386ed99a49a790/linkbin/jbossas-7.0/modules)] at org.jboss.modules.ModuleClassLoader.findClass(ModuleClassLoader.java:191) at org.jboss.modules.ConcurrentClassLoader.performLoadClassChecked(ConcurrentClassLoader.java:361) at org.jboss.modules.ConcurrentClassLoader.performLoadClassChecked(ConcurrentClassLoader.java:333) at org.jboss.modules.ConcurrentClassLoader.performLoadClass(ConcurrentClassLoader.java:310) at org.jboss.modules.ConcurrentClassLoader.loadClass(ConcurrentClassLoader.java:103) at java.lang.Class.getDeclaredFields0(Native Method) [:1.6.0<em>22] at java.lang.Class.privateGetDeclaredFields(Class.java:2308) [:1.6.0</em>22] at java.lang.Class.getDeclaredFields(Class.java:1760) [:1.6.0_22] 
+```</p>
 
 <p>You might thought why this error is coming as you have already added dependency in pom.xml. The reason is that this validation is carried by Hibernate Validator in JBoss AS7 and you need to add JSoup module.</p>
 

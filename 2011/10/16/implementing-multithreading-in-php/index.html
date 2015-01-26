@@ -109,7 +109,8 @@
 
 <h1>or</h1>
 
-<p>$ gearmand -d [/sourcecode]</p>
+<p>$ gearmand -d 
+```</p>
 
 <p>If you are using windows or Mac, I would suggest you to use Java version of Gearman server. I have not tried that but I think Java version can easily be installed and run on Windows/Mac.</p>
 
@@ -151,14 +152,13 @@ I am using PHP extension on my Ubuntu machine to run examples to explain Multi-t
 
 <p>$result= strrev($workload); echo &quot;Result: $result\n&quot;;</p>
 
-<h1>Return what we want to send back to the client. return $result; } [/sourcecode]</h1>
+<h1>Return what we want to send back to the client. return $result; }</h1>
+<div class="highlight"><pre><code class="language-text" data-lang="text">The above code is creating a GearmanWorker and attaching it to the default Gearman server (local gearmand server process, you can pass server ip and port if your gearman server running on different machine)
 
-<p>The above code is creating a GearmanWorker and attaching it to the default Gearman server (local gearmand server process, you can pass server ip and port if your gearman server running on different machine)</p>
+To see if the above worker is running properly and producing expected results, you have to run the worker by using the following command:
 
-<p>To see if the above worker is running properly and producing expected results, you have to run the worker by using the following command:</p>
-
-<p>[sourcecode language=&quot;bash&quot;] $ php gearman-worker.php [/sourcecode]</p>
-
+[sourcecode language=&quot;bash&quot;] $ php gearman-worker.php 
+</code></pre></div>
 <p>Now create a client to create Job for the worker. Here is the code for the client.php or gearman-client.php:</p>
 
 <p>[sourcecode language=&quot;php&quot;] &lt;?php // following example code is taken from : http://www.php.net/manual/en/gearman.examples-reverse.php</p>
@@ -179,15 +179,18 @@ I am using PHP extension on my Ubuntu machine to run examples to explain Multi-t
 
 <h1>Check for various return packets and errors. switch($gmclient-&gt;returnCode()) { case GEARMAN<em>WORK</em>DATA: echo &quot;Data: $result\n&quot;; break; case GEARMAN<em>WORK</em>STATUS: list($numerator, $denominator)= $gmclient-&gt;doStatus(); echo &quot;Status: $numerator/$denominator complete\n&quot;; break; case GEARMAN<em>WORK</em>FAIL: echo &quot;Failed\n&quot;; exit; case GEARMAN<em>SUCCESS: break; default: echo &quot;RET: &quot; . $gmclient-&gt;returnCode() . &quot;\n&quot;; exit; } } while($gmclient-&gt;returnCode() != GEARMAN</em>SUCCESS);</h1>
 
-<p>?&gt; [/sourcecode]</p>
+<p>?&gt; 
+```</p>
 
 <p>Now when you run the above code by:</p>
 
-<p>[sourcecode language=&quot;bash&quot;] $ php gearman-client.php [/sourcecode]</p>
+<p>[sourcecode language=&quot;bash&quot;] $ php gearman-client.php 
+```</p>
 
 <p>It will generate a JOB for gearman worker(s) available on server (in our case, we created only one worker but you can run multiple workers for the same JOB). The above code is not running the reverse job in background or you can say not running in multi-threaded style. Like we have used:</p>
 
-<p>[sourcecode language=&quot;php&quot;] $result = $gmclient-&gt;do(&quot;reverse&quot;, &quot;Hello!&quot;); [/sourcecode]</p>
+<p>[sourcecode language=&quot;php&quot;] $result = $gmclient-&gt;do(&quot;reverse&quot;, &quot;Hello!&quot;); 
+```</p>
 
 <p>Which will hold the code execution of the client until it gets the result or response from worker. To make it multi-threaded you have to modify your code a bit. For example see below:</p>
 
@@ -209,15 +212,18 @@ I am using PHP extension on my Ubuntu machine to run examples to explain Multi-t
 
 <p>echo &quot;done!\n&quot;;</p>
 
-<p>?&gt; [/sourcecode]</p>
+<p>?&gt; 
+```</p>
 
 <p>Now just by making the call to worker as:</p>
 
-<p>[sourcecode language=&quot;php&quot;] $job_handle = $gmclient-&gt;doBackground(&quot;reverse&quot;, &quot;this is a test&quot;); [/sourcecode]</p>
+<p>[sourcecode language=&quot;php&quot;] $job_handle = $gmclient-&gt;doBackground(&quot;reverse&quot;, &quot;this is a test&quot;); 
+```</p>
 
 <p>The code execution will not halt. doBackground() method is the method which is being used for creating a separate thread to perform a specific JOB. The above program will do:</p>
 
-<p>[sourcecode language=&quot;php&quot;] echo &quot;done!\n&quot;; [/sourcecode]</p>
+<p>[sourcecode language=&quot;php&quot;] echo &quot;done!\n&quot;; 
+```</p>
 
 <p>and finish the execution as soon as the Job is sent to worker (as it has nothing more to do, you can make some more logic and then check the client status and response)</p>
 

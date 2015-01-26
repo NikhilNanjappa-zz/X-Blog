@@ -120,7 +120,8 @@ Let&#39;s look at these options in detail.</li>
 
 <p>A Query Object is a structure of objects that can form itself into a SQL query. You can create this query by referring to classes and fields rather than tables and columns. In this way those who write the queries can do so independently of the database schema and changes to the schema can be localized in a single place. A Query object is based on <a href="http://en.wikipedia.org/wiki/Interpreter_pattern">Interpreter</a> pattern. Hibernate, a leading framework for Object Relational mapping provides API for query Objects. Following is an example of data Access Code written using query objects</p>
 
-<p>[sourcecode language=&quot;java&quot;] List cats = sess.createCriteria(Cat.class) .add( Restrictions.like(&quot;name&quot;, &quot;Fritz%&quot;) ) .add( Restrictions.between(&quot;weight&quot;, minWeight, maxWeight) ) .list(); [/sourcecode]</p>
+<p>List cats = sess.createCriteria(Cat.class) .add( Restrictions.like(&quot;name&quot;, &quot;Fritz%&quot;) ) .add( Restrictions.between(&quot;weight&quot;, minWeight, maxWeight) ) .list(); 
+```</p>
 
 <p>The advantages of Query Object come with more sophisticated needs: keeping database schemas encapsulated, supporting multiple databases, supporting multiple schemas, and optimizing to avoid multiple queries. Some projects with a particularly sophisticated data source team might want to build these capabilities themselves, but most people who use Query Object do so with a tool. There are a lot of tools available like Hibernate, Toplink, iBatis which provide APIs for creating queries using object oriented code.</p>
 
@@ -130,13 +131,14 @@ Let&#39;s look at these options in detail.</li>
 
 <p>Repository presents a simple interface. Clients create a criteria object specifying the characteristics of the objects they want returned from a query. For example, to find person objects by name we first create a criteria object, setting each individual criterion like so: criteria.equals(Person.LAST<em>NAME, &quot;Gupta&quot;), and criteria.like(Person.FIRST</em>NAME, &quot;V&quot;). Then we invoke repository.matching(criteria) to return a list of domain objects representing people with the last name Gupta and a first name starting with V. Under the covers, Repository combines Metadata Mapping with a Query Object to automatically generate SQL code from the criteria. An example involving repository is shown below</p>
 
-<p>[sourcecode language=&quot;java&quot;] public class Person { //domain object public List dependents() { return Registry.personRepository().dependentsOf(this); } }</p>
+<p>public class Person { //domain object public List dependents() { return Registry.personRepository().dependentsOf(this); } }</p>
 
 <p>public class PersonRepository extends Repository { public List dependentsOf(aPerson) { Criteria criteria = new Criteria(); criteria.equal(Person.parent, aPerson); return matching(criteria); } }</p>
 
 <p>abstract class Repository { private RepositoryStrategy strategy; protected List matching(aCriteria) { return strategy.matching(aCriteria); } }</p>
 
-<p>public class RelationalStrategy implements RepositoryStrategy { protected List matching(Criteria criteria) { Query query = new Query(myDomainObjectClass()) query.addCriteria(criteria); return query.execute(); } } [/sourcecode]</p>
+<p>public class RelationalStrategy implements RepositoryStrategy { protected List matching(Criteria criteria) { Query query = new Query(myDomainObjectClass()) query.addCriteria(criteria); return query.execute(); } } 
+```</p>
 
 <p>Because Repository&#39;s interface shields the domain layer from awareness of the data source, we can refactor the implementation of the querying code inside the Repository without changing any calls from clients. Indeed, the domain code needn&#39;t care about the source or destination of domain objects. In we want to change the data to be picked up from the memory instead of the database, we can simply change the RepositoryStrategy from relational to in memory by creating an in memory relational strategy.</p>
 

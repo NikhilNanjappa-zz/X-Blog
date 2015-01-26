@@ -101,7 +101,8 @@
 
 <p>So lets begin. In the header section of our HTML file, we include the dojo.js file as shown below:</p>
 
-<p>[sourcecode language=&quot;html&quot;] <script src='http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js' data-dojo-config="async: true, parseOnLoad: true"> </script> [/sourcecode]</p>
+<p>[sourcecode language=&quot;html&quot;] <script src='http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js' data-dojo-config="async: true, parseOnLoad: true"> </script> 
+```</p>
 
 <p>As you might have noticed, the configuration parameters are async:true and pasrseOnLoad: true.<br>
 *<em>async *</em> defines if Dojo core should be loaded asynchronously. *<em>parseOnLoad *</em> If true, parses the page with dojo/parser when the DOM and all initial dependencies have loaded. </p>
@@ -110,7 +111,8 @@
 
 <p>Also Dojo provides us the themes which we can use to provide our layout the feel-good factor.</p>
 
-<p>[sourcecode language=&quot;html&quot;] <link rel="stylesheet" media="screen" href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dijit/themes/claro/claro.css" /> [/sourcecode]</p>
+<p>[sourcecode language=&quot;html&quot;] <link rel="stylesheet" media="screen" href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dijit/themes/claro/claro.css" /> 
+```</p>
 
 <p>The above tag will include the CSS for claro theme, other themes are also available like Soria, Tundra, Nihilo etc. For more information on themes visit the below link: <a href="http://dojotoolkit.org/reference-guide/1.7/dijit/themes.html">http://dojotoolkit.org/reference-guide/1.7/dijit/themes.html</a></p>
 
@@ -118,13 +120,15 @@
 
 <p>In the markup style of creating layout in Dojo, it (Dojo) relies heavily on data-dojo- attributes. These attributes tell the Dojo what widget class to instantiate and then which properties to apply on the widget. So this means below HTML div is not just ordinary div but infact it is TabConatiner Widget provided by the Dojo.</p>
 
-<p>[sourcecode language=&quot;html&quot;] <div class="demoLayout" id="appLayout" data-dojo-props="region: 'center', tabPosition: 'bottom'" data-dojo-type="dijit.layout.TabContainer"> </div> [/sourcecode]</p>
+<p>[sourcecode language=&quot;html&quot;] <div class="demoLayout" id="appLayout" data-dojo-props="region: 'center', tabPosition: 'bottom'" data-dojo-type="dijit.layout.TabContainer"> </div> 
+```</p>
 
 <p>The above HTML code will create a Tabbed Container which allows us to create tabs inside it. The data-dojo-type attribute tell the Dojo parser to instantiate the TabContainer widget. And the data-dojo-props attribute defines the additional parameters for the widget. The parameter region tell the place where TabContainer is to be placed and the tabPosition defines the position of the tabs which will be used by the user to navigate among the tabs.</p>
 
 <p>Now inside the div with id=”appLayout” place the following code:</p>
 
-<p>[sourcecode language=&quot;html&quot;] <div data-dojo-props="title: 'First Tab'" data-dojo-type="dijit.layout.ContentPane" class="centerPanel"> <h1>First Tab</h1> </div> [/sourcecode]</p>
+<p>[sourcecode language=&quot;html&quot;] <div data-dojo-props="title: 'First Tab'" data-dojo-type="dijit.layout.ContentPane" class="centerPanel"> <h1>First Tab</h1> </div> 
+```</p>
 
 <p>Above HTML code would create the tabbed pane for the first tab. As you must have noticed this time we have used the widget ContentPane for the data-dojo-type attribute in order to instantiate the same.</p>
 
@@ -163,15 +167,12 @@
          comboButton.startup();
          menu.startup();
 });
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">This is how we create layouts in Dojo. Here is the summary: 1\. We learned markup and programmatic ways of creating layouts in Dojo. 2\. We created a tabbed pane with three tabs by using markup style. 3\. We created a menu on the first tab by programmatic way of creating the layout.
+
+## Comments
+
+**[Anandarajeshwaran.J](#8795 &quot;2012-05-15 12:29:24&quot;):** I think the following tutorial will help the readers gain more knowledge. http://www.ibm.com/developerworks/web/tutorials/wa-dojotoolkit/section5.html
 </code></pre></div>
-<p>[/sourcecode]</p>
-
-<p>This is how we create layouts in Dojo. Here is the summary: 1. We learned markup and programmatic ways of creating layouts in Dojo. 2. We created a tabbed pane with three tabs by using markup style. 3. We created a menu on the first tab by programmatic way of creating the layout.</p>
-
-<h2>Comments</h2>
-
-<p><strong><a href="#8795" title="2012-05-15 12:29:24">Anandarajeshwaran.J</a>:</strong> I think the following tutorial will help the readers gain more knowledge. http://www.ibm.com/developerworks/web/tutorials/wa-dojotoolkit/section5.html</p>
-
 
                 <hr>
 

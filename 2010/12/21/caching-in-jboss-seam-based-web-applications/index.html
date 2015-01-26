@@ -99,11 +99,13 @@
 
 <p>As I said above, in Seam everything is a component (You can get full details <a href="http://docs.jboss.org/seam/2.2.0.GA/reference/en-US/html/concepts.html">here</a>). So first lets configure this caching component in Seam by specifying it in components.xml as follows.</p>
 
-<p>[sourcecode language=&quot;xml&quot;] <components xmlns="http://jboss.com/products/seam/components" xmlns:cache="http://jboss.com/products/seam/cache" xsi:schemaLocation=" http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.2.xsd http://jboss.com/products/seam/cache http://jboss.com/products/seam/cache-2.2.xsd "> <cache:eh-cache-provider configuration="ehcache.xml" /> </components>[/sourcecode]</p>
+<p>[sourcecode language=&quot;xml&quot;] <components xmlns="http://jboss.com/products/seam/components" xmlns:cache="http://jboss.com/products/seam/cache" xsi:schemaLocation=" http://jboss.com/products/seam/core http://jboss.com/products/seam/core-2.2.xsd http://jboss.com/products/seam/cache http://jboss.com/products/seam/cache-2.2.xsd "> <cache:eh-cache-provider configuration="ehcache.xml" /> </components>
+```</p>
 
 <p>The caching configuration file provided above is optional and note that we are using ehache provider. So the configuration file format has no seam specific things. If you want you can switch your cache provider with tree cache just by replacing ehcache line with</p>
 
-<p>[sourcecode language=&quot;xml&quot;]<cache:jboss-cache-provider configuration="treecache.xml" /> [/sourcecode]</p>
+<p>[sourcecode language=&quot;xml&quot;]<cache:jboss-cache-provider configuration="treecache.xml" /> 
+```</p>
 
 <p>Irrespective of the provider, the following details will remain same.</p>
 
@@ -113,7 +115,8 @@
 
 <p>In seam, a part of html can be cached just by surrounding it with<a href="http://www.jsftoolbox.com/documentation/seam/09-TagReference/seam-cache.html"> s:cache</a> tag.</p>
 
-<p>[sourcecode language=&quot;html&quot;]<div> <span>I am not cached </span> <div> <s:cache> <div> <span>I am cached. No need to render every time </span> </div> <a href="/s:cache">/s:cache</a> [/sourcecode]</p>
+<p>[sourcecode language=&quot;html&quot;]<div> <span>I am not cached </span> <div> <s:cache> <div> <span>I am cached. No need to render every time </span> </div> <a href="/s:cache">/s:cache</a> 
+```</p>
 
 <p>So simple. Isn&#39;t it?  You can provide regions and keys like in any normal caching, as attributes to further control caching. </p>
 
@@ -121,13 +124,14 @@
 
 <p>If you have used frameworks like Hibernate, you might have heard about caching the database returned objects (Level1 caching). Just like caching objects returned from database, you might like to use few objects returned from service layer. For example, if you are building social network site you might need list of country objects at different places like in registration form, search form etc. So it makes sense to cache them instead of populating them from database every time. Note that page fragment caching won&#39;t be effective if you are using this list at different places in different formats. To use this feature you can inject the cache provider component and use it to put\remove\update operations.</p>
 
-<p>[sourcecode language=&quot;java&quot;] @In private CacheProvider<CacheManager> cacheProvider;</p>
+<p>@In private CacheProvider<CacheManager> cacheProvider;</p>
 
 <hr>
 
 <hr>
 
-<p>Object obj = cacheProvider.get(&quot;key&quot;,&quot;region&quot;); update(obj); cacheProvider.put(&quot;key&quot;,&quot;region&quot;,obj); [/sourcecode]</p>
+<p>Object obj = cacheProvider.get(&quot;key&quot;,&quot;region&quot;); update(obj); cacheProvider.put(&quot;key&quot;,&quot;region&quot;,obj); 
+```</p>
 
 <p>Here the CacheProvider is an abstract class that is a wrapper around underlying cache manager. So you can implement a custom cache provider by implementing this abstract class. Infact above page fragment caching also uses this <code>CacheProvider</code> in the background (afterall html snippet which is nothing but a String Object). </p>
 

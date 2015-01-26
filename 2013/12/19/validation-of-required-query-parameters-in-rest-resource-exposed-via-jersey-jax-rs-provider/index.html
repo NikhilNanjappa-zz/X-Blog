@@ -106,15 +106,13 @@
 <p>Adding @DefaultValue annotation and setting the parameter to an appropriate value whenever it&#39;s missing was also an option but that was also ruled out because it is always not possible to define the default value. Also, I had to write code to validate the passed in value for each query parameter in my resource method so that it matched the expected pattern value. Implementing such kind of validation at each resource method would be cumbersome and hard to manage as it may lead to boiler plate code problem.</p>
 
 <p>After much thought process and brain storming session, I decided to implement above validation in a generic way. Firstly, I created an name-binding annotation as mentioned below:</p>
-
-<p>[sourcecode] @NameBinding @Retention(RetentionPolicy.RUNTIME) public @interface ValidateQueryParams { public abstract String[] value(); } [/sourcecode]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> @NameBinding @Retention(RetentionPolicy.RUNTIME) public @interface ValidateQueryParams { public abstract String[] value(); } 
+</code></pre></div>
 <p>@ValidateQueryParams annotation&#39;s value is the array of query parameters that need be validated for its existence in request along with expected value pattern (as defined by standard regular expression). The name of query parameter and its expected value pattern are separated by &#39;:&#39;</p>
 
 <p>Above annotation is used on resource method in following manner:</p>
-
-<p>[sourcecode] @POST @Consumes(MediaType.APPLICATION<em>JSON) @Produces(MediaType.APPLICATION</em>JSON) @ValidateQueryParams({&quot;id:[0-9]+&quot;, &quot;version:[0-9]+&quot;}) public Response getEntity(@Context UriInfo ui, @Context HttpHeaders hh, String data); [/sourcecode]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> @POST @Consumes(MediaType.APPLICATION_JSON) @Produces(MediaType.APPLICATION_JSON) @ValidateQueryParams({&quot;id:[0-9]+&quot;, &quot;version:[0-9]+&quot;}) public Response getEntity(@Context UriInfo ui, @Context HttpHeaders hh, String data); 
+</code></pre></div>
 <p>Above definition means that before invoking my resource method &quot;getEntity&quot;, I need to check for presence of following query parameters in request:</p>
 
 <ul>
@@ -125,15 +123,13 @@
 <p>If any of the above query parameters are not present in my request or its value doesn’t match the specified regex pattern, the application shall throw BAD_REQUEST exception.</p>
 
 <p>Thereafter, I created a new filter that was bound to this annotation in following manner:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> /__ _ Filter to perform request parameters validation on REST resource _ _ _/ @Provider @ValidateQueryParams(&quot;&quot;) public class ValidationFilter implements ContainerRequestFilter { @Override public void filter(ContainerRequestContext requestContext) { try { validateQueryParams(requestContext); } catch (Exception e) { throw new WebApplicationException(Status.BAD_REQUEST); } }
 
-<p>[sourcecode] /__ _ Filter to perform request parameters validation on REST resource _ _ <em>/ @Provider @ValidateQueryParams(&quot;&quot;) public class ValidationFilter implements ContainerRequestFilter { @Override public void filter(ContainerRequestContext requestContext) { try { validateQueryParams(requestContext); } catch (Exception e) { throw new WebApplicationException(Status.BAD</em>REQUEST); } }</p>
-
-<p>... ... [/sourcecode]</p>
-
+... ... 
+</code></pre></div>
 <p>All the code for validating the query parameters present in request is now implemented in above filter. For reader reference, query parameters map can be retrieved from ContainerRequestContext object in following manner (inside request filter):</p>
-
-<p>[sourcecode] MultivaluedMap<String, String> requestQueryParamMap = requestContext.getUriInfo().getQueryParameters(); [/sourcecode]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> MultivaluedMap&lt;String, String&gt; requestQueryParamMap = requestContext.getUriInfo().getQueryParameters(); 
+</code></pre></div>
 <p>Now, there is a common place where I need to write the code for validating the query parameters - where I check for their existence and if the supplied value matches the expected pattern value or not. If the validation fails, then I just throw BAD_REQUEST exception. I&#39;ve attached the sample code for creating such filter with this blog <a href="http://xebee.xebia.in/wp-content/uploads/2013/12/ValidationFilter.java_.txt">ValidationFilter.java</a>. Since, this validation filter is called before any resource method is invoked, so it served my use case to perfection. Finally, all is well now :).</p>
 
 <p>Happy Reading!</p>

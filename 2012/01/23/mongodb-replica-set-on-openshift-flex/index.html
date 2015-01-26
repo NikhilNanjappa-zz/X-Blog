@@ -109,13 +109,14 @@
 <li>Go to the File tab and upload the bookshop.war and deploy the changes. This will restart the application.</li>
 <li>In the Overview tab you will find the url of the application. Append bookshop to the url as bookshop is the context path. The application url will be like <a href="http://replica107550541-1150999735.us-east-1.elb.amazonaws.com/bookshop/">http://replica107550541-1150999735.us-east-1.elb.amazonaws.com/bookshop/</a>. You will be able to do CRUD operations on Book.</li>
 <li>There is a bug in the flex code that sometimes it is not able to add a particular node to the replica set. To check that all of the three nodes are added to replica set lets ssh to first instance in our cluster. To do it type ssh admin@107.21.186.11. Replace ip address with your instance ip address.</li>
-<li>Next connect to mongo on machine by typing command shown below. [sourcecode lang=&quot;text&quot;] /opt/vostok/cartridges/mongodb-2.0.1/bundle/bin/mongo [/sourcecode]</li>
-<li>If you see the output that you are logged into PRIMARY &gt;. It means replica set is configured. [sourcecode lang=&quot;text&quot;] [admin@ip-10-194-195-117 ~]$ /opt/vostok/cartridges/mongodb-2.0.1/bundle/bin/mongo MongoDB shell version: 2.0.1 connecting to: test PRIMARY&gt; [/sourcecode]</li>
+<li>Next connect to mongo on machine by typing command shown below. [sourcecode lang=&quot;text&quot;] /opt/vostok/cartridges/mongodb-2.0.1/bundle/bin/mongo 
+<code>
+13. If you see the output that you are logged into PRIMARY &gt;. It means replica set is configured. [sourcecode lang=&quot;text&quot;] [admin@ip-10-194-195-117 ~]$ /opt/vostok/cartridges/mongodb-2.0.1/bundle/bin/mongo MongoDB shell version: 2.0.1 connecting to: test PRIMARY&gt; 
+</code></li>
 <li>Next we should check that all the three instances are added to replica set. To check do execute rs.status() command. The command and output are shown below. [sourcecode lang=&quot;text&quot;] PRIMARY&gt; rs.status() { &quot;set&quot; : &quot;SET1&quot;, &quot;date&quot; : ISODate(&quot;2012-01-22T18:46:02Z&quot;), &quot;myState&quot; : 1, &quot;members&quot; : [ { &quot;<em>id&quot; : 0, &quot;name&quot; : &quot;10.194.195.117:27017&quot;, &quot;health&quot; : 1, &quot;state&quot; : 1, &quot;stateStr&quot; : &quot;PRIMARY&quot;, &quot;optime&quot; : { &quot;t&quot; : 1327256835000, &quot;i&quot; : 1 }, &quot;optimeDate&quot; : ISODate(&quot;2012-01-22T18:27:15Z&quot;), &quot;self&quot; : true }, { &quot;</em>id&quot; : 1, &quot;name&quot; : &quot;10.212.138.54:27017&quot;, &quot;health&quot; : 1, &quot;state&quot; : 2, &quot;stateStr&quot; : &quot;SECONDARY&quot;, &quot;uptime&quot; : 1121, &quot;optime&quot; : { &quot;t&quot; : 1327256835000, &quot;i&quot; : 1 }, &quot;optimeDate&quot; : ISODate(&quot;2012-01-22T18:27:15Z&quot;), &quot;lastHeartbeat&quot; : ISODate(&quot;2012-01-22T18:46:02Z&quot;), &quot;pingMs&quot; : 0 } ], &quot;ok&quot; : 1 }</li>
 </ol>
-
-<p>[/sourcecode]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">
+</code></pre></div>
 
                 <hr>
 

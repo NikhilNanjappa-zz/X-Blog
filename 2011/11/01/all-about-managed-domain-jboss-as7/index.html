@@ -147,7 +147,8 @@ Starting up the servers it is supposed to start????? What does that mean? To und
 <em>Lsiting 1-1</em></li>
 </ul>
 
-<p>[sourcecode type=&quot;xml&quot;] <servers> <server name="server-one" group="main-server-group" auto-start="true"> <jvm name="default"/> </server> <server name="server-two" group="main-server-group" auto-start="true"> <jvm name="default"> <heap size="64m" max-size="256m"/> </jvm> <socket-binding-group ref="standard-sockets" port-offset="150"/> </server> <servers> [/sourcecode] </p>
+<p>[sourcecode type=&quot;xml&quot;] <servers> <server name="server-one" group="main-server-group" auto-start="true"> <jvm name="default"/> </server> <server name="server-two" group="main-server-group" auto-start="true"> <jvm name="default"> <heap size="64m" max-size="256m"/> </jvm> <socket-binding-group ref="standard-sockets" port-offset="150"/> </server> <servers> 
+``` </p>
 
 <ul>
 <li>*<em>Management interface *</em> - Host controller also exposes the management interfaces. Management interface can be native or HTTP. Exposing the native interface is mandatory, because the DomainController uses the native interface to interact with the HostController and pass on the admin instructions to HostController. More on this when we discuss the DomainController.</li>
@@ -155,11 +156,13 @@ Starting up the servers it is supposed to start????? What does that mean? To und
 _Listing 1-2</em></li>
 </ul>
 
-<p>[sourcecode type=&quot;xml&quot;] <domain-controller> <local/> </domain-controller> [/sourcecode]</p>
+<p>[sourcecode type=&quot;xml&quot;] <domain-controller> <local/> </domain-controller> 
+```</p>
 
 <p><em>Listing 1-3</em></p>
 
-<p>[sourcecode type=&quot;xml&quot;] <domain-controller> <remote host="192.168.1.143" port="9999"/> </domain-controller> [/sourcecode]</p>
+<p>[sourcecode type=&quot;xml&quot;] <domain-controller> <remote host="192.168.1.143" port="9999"/> </domain-controller> 
+```</p>
 
 <p><strong>Conclusions</strong></p>
 

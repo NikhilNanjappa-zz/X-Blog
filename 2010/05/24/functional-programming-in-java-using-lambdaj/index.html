@@ -122,30 +122,23 @@ for(String string : list) {
 
 }
 return filteredList;
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">    &lt;em&gt;Using lambdaj&lt;/em&gt;
+    [sourcecode lang=&quot;java&quot;]
+     List&amp;lt;String&amp;gt; list = Arrays.asList(&amp;quot;invalid1&amp;quot;, &amp;quot; invalid2&amp;quot;);
 
-[/sourcecode]
-
-&lt;em&gt;Using lambdaj&lt;/em&gt;
-[sourcecode lang=&quot;java&quot;]
- List&amp;lt;String&amp;gt; list = Arrays.asList(&amp;quot;invalid1&amp;quot;, &amp;quot; invalid2&amp;quot;);
-
-return filter(startsWith(&amp;quot;inv&amp;quot;), list);
-[/sourcecode]
-&lt;em&gt;Using Enumerable&lt;/em&gt;
+    return filter(startsWith(&amp;quot;inv&amp;quot;), list);
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">&lt;em&gt;Using Enumerable&lt;/em&gt;
 [sourcecode lang=&quot;java&quot;]
 List&amp;lt;/span&amp;gt; list = Arrays.asList(&amp;quot;invalid1&amp;quot;, &amp;quot; invalid2&amp;quot;);
 
 return Collect(list,fn(s,s.startsWith(&amp;quot;inv&amp;quot;));
-[/sourcecode]
-Filter/Collect are static methods provided in the lambdaj/Enumerable library which do the actual filtering/collection on collection. &quot;&lt;strong&gt;startsWith&quot;&lt;/strong&gt; is expressed as a hamcrest matcher and the lambda expression fn(s,s.startsWith(&quot;inv&quot;)) will be converted to below , after you do the lambda expression weaving.
-[sourcecode lang=&quot;java&quot;]
-new Fn1() {
-public Object call(Object arg) {
-return (String) arg.startsWith(&amp;quot;inv&amp;quot;);
-}};
-[/sourcecode]
-
-In this case the 6 lines of code are just reduced to 1.
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">    Filter/Collect are static methods provided in the lambdaj/Enumerable library which do the actual filtering/collection on collection. &quot;&lt;strong&gt;startsWith&quot;&lt;/strong&gt; is expressed as a hamcrest matcher and the lambda expression fn(s,s.startsWith(&quot;inv&quot;)) will be converted to below , after you do the lambda expression weaving.
+    [sourcecode lang=&quot;java&quot;]
+    new Fn1() {
+    public Object call(Object arg) {
+    return (String) arg.startsWith(&amp;quot;inv&amp;quot;);
+    }};
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">In this case the 6 lines of code are just reduced to 1.
 </code></pre></div>
 <p>Closures</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">We have a scenario where you have search for an employee, compare its name with some pattern and if it matches, send the message. Now gradually you can have more criteria on which you want to match, you want a regex match or don’t want to use ignore case and many more.  For all those cases you will end up duplicating the sendMessage() method with different line instead of the one shown marked with dashes(-).
@@ -178,79 +171,75 @@ public boolean  sendMessage(String pattern) {
        } 
     return found;  
 }
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">    &lt;em&gt;Using lambdaj&lt;/em&gt;&lt;em&gt; &lt;/em&gt;
+    [sourcecode lang=&quot;java&quot;]
+    public boolean sendMessageUsingIgnoreCase() {
 
+        Closure2&amp;lt;Employee, String&amp;gt; ignoreCaseClosure  = closure(Employee.class, String.class);
 
-[/sourcecode]
-&lt;em&gt;Using lambdaj&lt;/em&gt;&lt;em&gt; &lt;/em&gt;
-[sourcecode lang=&quot;java&quot;]
-public boolean sendMessageUsingIgnoreCase() {
+        {of(this).ignore(var(Employee.class), var(String.class));}
 
-    Closure2&amp;lt;Employee, String&amp;gt; ignoreCaseClosure  = closure(Employee.class, String.class);
+        return sendMessage(&amp;quot;pattern&amp;quot;, ignoreCaseClosure);
 
-    {of(this).ignore(var(Employee.class), var(String.class));}
-
-    return sendMessage(&amp;quot;pattern&amp;quot;, ignoreCaseClosure);
-
-}
+    }
 
 
 
-public boolean sendMessageUsingRegexCriteria() {
+    public boolean sendMessageUsingRegexCriteria() {
 
-    Closure2&amp;lt;Employee, String&amp;gt; regexClosure   =closure(Employee.class,String.class);
+        Closure2&amp;lt;Employee, String&amp;gt; regexClosure   =closure(Employee.class,String.class);
 
-    {of(this).regex(var(Employee.class), var(String.class));}
+        {of(this).regex(var(Employee.class), var(String.class));}
 
-    return sendMessage(&amp;quot;pattern&amp;quot;, regexClosure);
-}
-
-
-
-private boolean ignore(Employee emp, String pattern) {
-
-    return emp.getName().equalsIgnoreCase(pattern);
-}
+        return sendMessage(&amp;quot;pattern&amp;quot;, regexClosure);
+    }
 
 
 
-private boolean regex(Employee employee, String pattern) {
+    private boolean ignore(Employee emp, String pattern) {
 
-    Pattern p = Pattern.compile(pattern);
-
-    return p.matcher(employee.getName()).find();
-
-}
+        return emp.getName().equalsIgnoreCase(pattern);
+    }
 
 
 
-private boolean sendMessage(String pattern,Closure2&amp;lt;Employee, String&amp;gt; closure) {
+    private boolean regex(Employee employee, String pattern) {
 
-        FinderService service = context.getService(&amp;quot;finderService&amp;quot;);
+        Pattern p = Pattern.compile(pattern);
 
-        boolean found = false;
+        return p.matcher(employee.getName()).find();
 
-            try {
+    }
 
-            Employee employee = service.find();
 
-            if (null != employee) {
 
-    ----------  if ((Boolean) closure.apply(employee, pattern)){ ---------
-               found = true;
+    private boolean sendMessage(String pattern,Closure2&amp;lt;Employee, String&amp;gt; closure) {
 
-            }
+            FinderService service = context.getService(&amp;quot;finderService&amp;quot;);
 
-            if(found)  service.sendMessage(&amp;quot;Found the employee&amp;quot;);
+            boolean found = false;
 
-           } catch (Exception e) {
+                try {
 
-             found = false;
+                Employee employee = service.find();
 
-           } 
-        return found;  
-}
-[/sourcecode]
-We created two closures ignoreCaseClosure and regexClosure which are basically the ignore and regex methods that will be used inside the sendMessage() method . This was you can create as many closures as you want based on different criteria’s and pass them to sendMessage().Here we extracted the logic which is variable and avoid duplication.
+                if (null != employee) {
+
+        ----------  if ((Boolean) closure.apply(employee, pattern)){ ---------
+                   found = true;
+
+                }
+
+                if(found)  service.sendMessage(&amp;quot;Found the employee&amp;quot;);
+
+               } catch (Exception e) {
+
+                 found = false;
+
+               } 
+            return found;  
+    }
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">We created two closures ignoreCaseClosure and regexClosure which are basically the ignore and regex methods that will be used inside the sendMessage() method . This was you can create as many closures as you want based on different criteria’s and pass them to sendMessage().Here we extracted the logic which is variable and avoid duplication.
 
 
 
@@ -275,19 +264,14 @@ for (Entry&amp;lt;String, String&amp;gt; param : params.entries()) {
 }
 
 sb.append(param.getKey()).append(&#39;=&#39;).append(param.getValue());
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">    &lt;em&gt;Using lambdaj &lt;/em&gt;&lt;em&gt; &lt;/em&gt;
+    [sourcecode lang=&quot;java&quot;]
+    OrMatcher&amp;lt;String&amp;gt; toExclude = or(equalTo(&amp;quot;type&amp;quot;), equalTo(&amp;quot;graphPage&amp;quot;));
 
-[/sourcecode]
+    List&amp;lt;Entry&amp;lt;String, String&amp;gt;&amp;gt; paramsList = select(params.entries(),  not(having(on(Entry.class).getKey(), toExclude)));
 
-&lt;em&gt;Using lambdaj &lt;/em&gt;&lt;em&gt; &lt;/em&gt;
-[sourcecode lang=&quot;java&quot;]
-OrMatcher&amp;lt;String&amp;gt; toExclude = or(equalTo(&amp;quot;type&amp;quot;), equalTo(&amp;quot;graphPage&amp;quot;));
-
-List&amp;lt;Entry&amp;lt;String, String&amp;gt;&amp;gt; paramsList = select(params.entries(),  not(having(on(Entry.class).getKey(), toExclude)));
-
-String graphLink = join(paramsList, &amp;quot;&amp;amp;&amp;quot;);
-[/sourcecode]
-
-The code is almost self explanatory you create an orMatcher for the types to be excluded. Then you apply select on the list using that matcher which return you a List&lt;Entries&gt;. Finally a join on it to return a string of concatenated entries.
+    String graphLink = join(paramsList, &amp;quot;&amp;amp;&amp;quot;);
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">The code is almost self explanatory you create an orMatcher for the types to be excluded. Then you apply select on the list using that matcher which return you a List&lt;Entries&gt;. Finally a join on it to return a string of concatenated entries.
 
 There are more features available with these libraries which are quite useful. One way of using them in you application is to create a seperate maven project with the available source code of library and then use it. This is also help in modifying/adding new stuff to the library as per project requirements.
 </code></pre></div>

@@ -113,10 +113,6 @@
 
 <p>Apart from standard unix commands, we can also use languages like Ruby and Python to program map and reduce functions.</p>
 
-<p>** </p>
-
-<hr>
-
 <p><strong>Example</strong></p>
 
 <p>The prerequisite for running this example are</p>
@@ -129,38 +125,15 @@
 <p>The two commands that we will use in this example are <strong>cut *<em>and *</em>uniq</strong>. <a href="http://www.computerhope.com/unix/ucut.htm">Cut </a>command is used to cut out specified fields of a line, whereas <a href="http://www.computerhope.com/unix/uuniq.htm">Uniq</a> command is used for filtering out repeated lines from a file.</p>
 
 <p>Hadoop job that we will execute will give a list of all the unique cited patent ids. To run the job, please execute the following command from the hadoop distribution folder</p>
-
-<p>``</p>
-
-<p><code></code></p>
-
-<p><code>bin/hadoop jar contrib/streaming/hadoop-*-streaming.jar</code></p>
-
-<p>`</p>
-
-<p>-input <input path></p>
-
-<p>-output <output path></p>
-
-<p>-mapper &#39;cut -f 2 -d ,&#39;</p>
-
-<p>-reducer &#39;uniq&#39;</p>
-
-<p>`<code></code></p>
-
-<p>``````````````Let&#39;s discuss the above command in detail. Since, Hadoop Streaming is a contrib package, it&#39;s jar placed in the contrib folder of the Hadoop distribution. -input and -output are standard hadoop attributes to specify the locations of input and output locations. In case of Hadoop streaming, mapper and reducer are unix commands which operate on each line of input.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">bin/hadoop jar contrib/streaming/hadoop-*-streaming.jar -input &lt;input path&gt; -output &lt;output path&gt; -mapper <span class="s1">&#39;cut -f 2 -d ,&#39;</span> -reducer <span class="s1">&#39;uniq&#39;</span>
+</code></pre></div>
+<p>Let&#39;s discuss the above command in detail. Since, Hadoop Streaming is a contrib package, it&#39;s jar placed in the contrib folder of the Hadoop distribution. -input and -output are standard hadoop attributes to specify the locations of input and output locations. In case of Hadoop streaming, mapper and reducer are unix commands which operate on each line of input.</p>
 
 <p>The mapper expression will split each line of input based on comma(,) and pick the second element of the splitted result. So, the output of the mapper is cited patent id in each line. Now, the job of the reducer is to simply remove the duplicates and getting us the desired output. </p>
-
-<p>** </p>
-
-<hr>
 
 <p><strong>Conclusion</strong></p>
 
 <p>As seen from the above example, with Hadoop Streaming we need not write and maintain the code for Mappers and Reducers. It combines the powers of scripting languages and parallel processing capabilities of Hadoop infrastructure to deliver jobs without having to write Java programs, thus, resulting in quicker response to the ad-hoc queries and requirements of the business.</p>
-
-<p>** </p>
 
 <hr>
 

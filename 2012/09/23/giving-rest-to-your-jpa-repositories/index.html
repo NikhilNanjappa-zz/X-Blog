@@ -105,7 +105,7 @@
 
 <p><strong>The Code</strong> Here is the link to complete project : <a href="https://github.com/vijayrawatsan/Spring-Data-Rest">Github Repo</a> Here is the link to live application : <strong>[Sprig Data Rest Example App</strong>]<a href="Hosting%20by%20%5BAppFog.com%20PaaS%5D%5B5%5D">4</a></p>
 
-<p><strong>Domain Classes and JPA Repositories</strong> Below are the simple domain classes and corresponding repositories used in the example. <strong>User Class</strong> [sourcecode language=&quot;java&quot;] package in.xebia.datarest.domain; @Entity public class User {</p>
+<p><strong>Domain Classes and JPA Repositories</strong> Below are the simple domain classes and corresponding repositories used in the example. <strong>User Class</strong>  package in.xebia.datarest.domain; @Entity public class User {</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">@Id @GeneratedValue(strategy = GenerationType.AUTO)
 private Long id;
 private String userName;
@@ -114,7 +114,8 @@ private String password;
 
     //getters and setters
 </code></pre></div>
-<p>} [/sourcecode]</p>
+<p>} 
+```</p>
 
 <p><strong>User Repository</strong> <code>
  package in.xebia.datarest.repository; public interface UserRepository extends JpaRepository&lt;User, Long&gt; { } 
@@ -163,7 +164,8 @@ public Post findByTitle(@Param(&amp;quot;title&amp;quot;) String title);
 <p><strong>Response</strong> [code language=&quot;css&quot;] { &quot;links&quot; : [ { &quot;rel&quot; : &quot;post&quot;, &quot;href&quot; : &quot;http://localhost:8080/datarest/post&quot; }, { &quot;rel&quot; : &quot;user&quot;, &quot;href&quot; : &quot;http://localhost:8080/datarest/user&quot; } ], &quot;content&quot; : [ ] } 
  ``` The above response shows how many repositories are exposed and under which urls. </p>
 
-<p>Lets create a user. <strong>Request</strong> [sourcecode language=&quot;css&quot; wraplines=&quot;true&quot;] curl -v -d &#39;{&quot;userName&quot; : &quot;Vijay&quot;, &quot;password&quot;:&quot;123&quot;}&#39; -H &quot;Content-Type: application/json&quot; http://localhost:8080/datarest/user [/sourcecode]</p>
+<p>Lets create a user. <strong>Request</strong> [sourcecode language=&quot;css&quot; wraplines=&quot;true&quot;] curl -v -d &#39;{&quot;userName&quot; : &quot;Vijay&quot;, &quot;password&quot;:&quot;123&quot;}&#39; -H &quot;Content-Type: application/json&quot; http://localhost:8080/datarest/user 
+```</p>
 
 <p>This will create a user with userName as Vijay and password as 123. Now lets see how a post can be created(<strong>Embedded Types</strong>).</p>
 

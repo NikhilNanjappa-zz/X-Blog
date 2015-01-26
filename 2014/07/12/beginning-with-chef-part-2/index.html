@@ -91,7 +91,7 @@
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
 
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-              <h4>Reading time about 4  minutes</h4>
+              <h4>Reading time about 5  minutes</h4>
 
               <h1>Beginning with Chef - Part 2</h1>
 
@@ -121,37 +121,49 @@ They can be accessed inside the cookbooks, attribute files using search. example
 
 <p>Now, lets explore the node object and see the attributes and databags. We will also see how we can modify and set them.<br>
 First lets see what all nodes are registered with chef-server:</p>
-
-<p>[sourcecode]<br /> Anirudhs-MacBook-Pro:chef-repo anirudh$ knife node list<br /> aws-linux-node<br /> aws-node-ubuntu<br /> awsnode<br /> [/sourcecode]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;br /&gt; Anirudhs-MacBook-Pro:chef-repo anirudh$ knife node list&lt;br /&gt; aws-linux-node&lt;br /&gt; aws-node-ubuntu&lt;br /&gt; awsnode&lt;br /&gt; 
+</code></pre></div>
 <p>Now lets see the details of the node awsnode.</p>
-
-<p>[sourcecode]<br /> Anirudhs-MacBook-Pro:chef-repo anirudh$ knife node show awsnode<br /> Node Name: awsnode<br /> Environment: _default<br /> FQDN: ip-172-31-36-73.us-west-2.compute.internal<br /> IP: 172.31.36.73<br /> Run List: recipe[apache]<br /> Roles:<br /> Recipes: apache, apache::default<br /> Platform: redhat 7.0<br /> Tags:<br /> [/sourcecode]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;br /&gt; Anirudhs-MacBook-Pro:chef-repo anirudh$ knife node show awsnode&lt;br /&gt; Node Name: awsnode&lt;br /&gt; Environment: _default&lt;br /&gt; FQDN: ip-172-31-36-73.us-west-2.compute.internal&lt;br /&gt; IP: 172.31.36.73&lt;br /&gt; Run List: recipe[apache]&lt;br /&gt; Roles:&lt;br /&gt; Recipes: apache, apache::default&lt;br /&gt; Platform: redhat 7.0&lt;br /&gt; Tags:&lt;br /&gt; 
+</code></pre></div>
 <p><strong>Finding specific attributes</strong> : You can find the fqdn of the aws node.<br>
-[sourcecode]<br /> Anirudhs-MacBook-Pro:chef-repo anirudh$ knife node show awsnode -a fqdn<br /> awsnode:<br /> fqdn: ip-172-31-36-73.us-west-2.compute.internal<br /> [/sourcecode]</p>
+<code>
+&lt;br /&gt; Anirudhs-MacBook-Pro:chef-repo anirudh$ knife node show awsnode -a fqdn&lt;br /&gt; awsnode:&lt;br /&gt; fqdn: ip-172-31-36-73.us-west-2.compute.internal&lt;br /&gt; 
+</code></p>
 
 <p><strong>Search</strong> : Search is one of the best features of chef, &#39;Search&#39;. Chef Server uses <a href="http://lucene.apache.org/solr/">Solr</a> for searching the node objects. So we can provide Solr style queries to search the Json node object attributes and data-bags.</p>
 
 <p>Lets see how we can search all the nodes and see their fqdn (fully qualiifed domain name)<br>
-[sourcecode]<br /> Anirudhs-MacBook-Pro:chef-repo anirudh$ knife search node &quot;<em>:</em>&quot; -a fqdn<br /> 2 items found</p> <p>node1:<br /> fqdn: centos63.example.com</p> <p>awsnode:<br /> fqdn: ip-172-31-36-73.us-west-2.compute.internal</p> <p>[/sourcecode]</p>
+<code>
+&lt;br /&gt; Anirudhs-MacBook-Pro:chef-repo anirudh$ knife search node &amp;quot;_:_&amp;quot; -a fqdn&lt;br /&gt; 2 items found&lt;/p&gt; &lt;p&gt;node1:&lt;br /&gt; fqdn: centos63.example.com&lt;/p&gt; &lt;p&gt;awsnode:&lt;br /&gt; fqdn: ip-172-31-36-73.us-west-2.compute.internal&lt;/p&gt; &lt;p&gt;
+</code></p>
 
 <p><strong>Changing the defaults using attributes</strong><br>
 Lets try to change some defaults in our apache cookbook using the attributes.</p>
 
 <p>In the /chef-repo/cookbooks/apache/attributes folder we can find the file default.rb (create if not)<br>
 Add the following :<br>
-[sourcecode]<br /> default[&quot;apache&quot;][&quot;indexfile&quot;]=&quot;index1.html&quot;<br /> [/sourcecode]<br>
+<code>
+&lt;br /&gt; default[&amp;quot;apache&amp;quot;][&amp;quot;indexfile&amp;quot;]=&amp;quot;index1.html&amp;quot;&lt;br /&gt; 
+</code><br>
 Now go to the folder cookbooks/apache/files/default and make a file index1.html<br>
-[sourcecode]<br /> &lt;html&gt;<br /> &lt;body&gt;<br /> &lt;h1&gt; Dude!! This is index1.html, it has been changed by chef!&lt;/h1&gt;<br /> &lt;/body&gt;<br /> &lt;/html&gt;<br /> [/sourcecode] </p>
+<code>
+&lt;br /&gt; &amp;lt;html&amp;gt;&lt;br /&gt; &amp;lt;body&amp;gt;&lt;br /&gt; &amp;lt;h1&amp;gt; Dude!! This is index1.html, it has been changed by chef!&amp;lt;/h1&amp;gt;&lt;br /&gt; &amp;lt;/body&amp;gt;&lt;br /&gt; &amp;lt;/html&amp;gt;&lt;br /&gt; 
+</code> </p>
 
 <p>The last thing we need to do get this working is change the recipe and tell it to pick the default index file from the node attribute &#39;indexfile&#39; which we have just set.<br>
 So, open the file &#39;cookbooks/apache/recipes/default.rb&#39; and append this:<br>
-[sourcecode]<br /> cookbook_file &quot;/var/www/index.html&quot; do<br /> source node[&quot;apache&quot;][&quot;indexfile&quot;]<br /> mode &quot;0644&quot;<br /> end<br /> [/sourcecode]<br>
+<code>
+&lt;br /&gt; cookbook_file &amp;quot;/var/www/index.html&amp;quot; do&lt;br /&gt; source node[&amp;quot;apache&amp;quot;][&amp;quot;indexfile&amp;quot;]&lt;br /&gt; mode &amp;quot;0644&amp;quot;&lt;br /&gt; end&lt;br /&gt; 
+</code><br>
 Now upload the cookbook to the chef server using the command :<br>
-[sourcecode]<br /> Anirudhs-MacBook-Pro:chef-repo anirudh$ knife cookbook upload apache<br /> [/sourcecode]<br>
+<code>
+&lt;br /&gt; Anirudhs-MacBook-Pro:chef-repo anirudh$ knife cookbook upload apache&lt;br /&gt; 
+</code><br>
 And then go to the node, and run the chef-client<br>
-[sourcecode]<br /> opscode@awsnode:~$ sudo chef-client<br /> [/sourcecode]</p>
+<code>
+&lt;br /&gt; opscode@awsnode:~$ sudo chef-client&lt;br /&gt; 
+</code></p>
 
 <p>Now, hit the external IP of the node in the browser, and we can see the change.<br>
 So, we just now used the attribute to change the default index page of the apache server.</p>
@@ -159,23 +171,32 @@ So, we just now used the attribute to change the default index page of the apach
 <p>An important thing to note here is the precedence of setting attributes.<br>
 defaults in recipe take a precedence over the attributes, and Role takes precedence over the recipes.<br>
 The order of precedence is as follows:<br>
-[sourcecode]<br /> Ohai &gt; Role &gt; Environment &gt; Recipe &gt; Attribute<br /> [/sourcecode]</p>
+<code>
+&lt;br /&gt; Ohai &amp;gt; Role &amp;gt; Environment &amp;gt; Recipe &amp;gt; Attribute&lt;br /&gt; 
+</code></p>
 
 <p><strong>Roles:</strong><br>
 A Role tell us what a particular node is acting as, the type of the node, is it a &quot;web server&quot;, a &quot;database&quot; etc. The use of this feature is that we can associate the run<em>list with it.<br>
 So, instead of providing recipies as run</em>list to the node, We will associate the run_lists with a role and then apply this role to a node.</p>
 
 <p><strong>Creating a role:</strong><br>
-[sourcecode]<br /> knife create role webserver<br /> [/sourcecode]<br>
+<code>
+&lt;br /&gt; knife create role webserver&lt;br /&gt; 
+</code><br>
 Check if role is created:<br>
-[sourcecode]<br /> Anirudhs-MacBook-Pro:chef-repo anirudh$ knife role show webserver<br /> chef<em>type: role<br /> default</em>attributes:<br /> apache:<br /> sites:<br /> admin:<br /> port: 8000<br /> description: Web Server<br /> env<em>run</em>lists:<br /> json<em>class: Chef::Role<br /> name: webserver<br /> override</em>attributes:<br /> run<em>list: recipe[apache]<br /> [/sourcecode]<br>
-This role we just created has added apache recipe in the run</em>list.</p>
+<code>
+&lt;br /&gt; Anirudhs-MacBook-Pro:chef-repo anirudh$ knife role show webserver&lt;br /&gt; chef_type: role&lt;br /&gt; default_attributes:&lt;br /&gt; apache:&lt;br /&gt; sites:&lt;br /&gt; admin:&lt;br /&gt; port: 8000&lt;br /&gt; description: Web Server&lt;br /&gt; env_run_lists:&lt;br /&gt; json_class: Chef::Role&lt;br /&gt; name: webserver&lt;br /&gt; override_attributes:&lt;br /&gt; run_list: recipe[apache]&lt;br /&gt; 
+</code><br>
+This role we just created has added apache recipe in the run_list.</p>
 
 <p><strong>Assign this role to the node &quot;awsnode&quot;</strong><br>
-[sourcecode]<br /> Anirudhs-MacBook-Pro:chef-repo anirudh$ knife node run<em>list add awsnode &#39;role[webserver]&#39;<br /> awsnode:<br /> run</em>list:<br /> recipe[apache]<br /> role[webserver]<br /> [/sourcecode]</p>
+<code>
+&lt;br /&gt; Anirudhs-MacBook-Pro:chef-repo anirudh$ knife node run_list add awsnode &#39;role[webserver]&#39;&lt;br /&gt; awsnode:&lt;br /&gt; run_list:&lt;br /&gt; recipe[apache]&lt;br /&gt; role[webserver]&lt;br /&gt; 
+</code></p>
 
 <p><strong>Upload this role to the chef-server:</strong><br>
-[sourcecode]<br /> Anirudhs-MacBook-Pro:chef-repo anirudh$ knife role from file webserver.rb<br /> [/sourcecode</p>
+```
+<br /> Anirudhs-MacBook-Pro:chef-repo anirudh$ knife role from file webserver.rb<br /> [/sourcecode</p>
 
 
                 <hr>

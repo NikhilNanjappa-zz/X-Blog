@@ -131,9 +131,8 @@
 <p>Once Ubuntu is installed, adding a ssh server is as easy as apt-get install openssh-server openssh-client. You can setup a passwordless ssh login using instruction at the link (http://www.debian-administration.org/articles/152)</p>
 
 <p>Java need to be installed on the machine as well. Most of the NoSQL servers recommend sun-jre for now. You will have to download the installer from Sun/Oracle site. You could refer to following steps.</p>
-
-<p>[sourcecode] ssh-add ~/xebia/id_dsa scp jre-6u21-linux-i586.bin xebia@192.168.56.101: ssh xebia@192.168.56.101 &#39;chmod u+x jre*;./jre-6u21-linux-i586.bin;ln -s jre-6u21-linux-i586 jre&#39; [/sourcecode]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> ssh-add ~/xebia/id_dsa scp jre-6u21-linux-i586.bin xebia@192.168.56.101: ssh xebia@192.168.56.101 &#39;chmod u+x jre*;./jre-6u21-linux-i586.bin;ln -s jre-6u21-linux-i586 jre&#39; 
+</code></pre></div>
 <p><strong>Network Setup</strong></p>
 
 <p>VirtualBox provides 4 types of networking (detailed in its help). For now, we are going to use Host Networking as we want to have a network between the VMs and host.</p>
@@ -145,71 +144,62 @@
 <p>It is desirable to have a basic OS image and an additional hardware disk image. This gives an option to use the same OS image with some other softwares.</p>
 
 <p>Following steps show how to mount and configure a new drive in the OS.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> // Manually create a 1 GB drive using VirtualBox Virtual Media Manager and attach it to the VM. // new disk should be /dev/sdb fdisk /dev/sdb mkfs -t ext4 /dev/sdb1 tune2fs -m 1 /dev/sdb1
 
-<p>[sourcecode] // Manually create a 1 GB drive using VirtualBox Virtual Media Manager and attach it to the VM. // new disk should be /dev/sdb fdisk /dev/sdb mkfs -t ext4 /dev/sdb1 tune2fs -m 1 /dev/sdb1</p>
-
-<p>// create an entry in fstab to mount this drive automaticallly (/media/hadoop)</p>
-
-<p>[/sourcecode]</p>
-
+// create an entry in fstab to mount this drive automaticallly (/media/hadoop)
+</code></pre></div>
 <p>I have setup access to the VM from my Host Ubuntu machine so that i do not have to live with the flickering display of the VM. Following script automates installation of hadoop on the just mounted drive.</p>
-
-<p>[sourcecode] scp hadoop_ xebia@$<VM IP>:/media/hadoop/ ssh xebia@$<VM IP> &#39;cd /media/hadoop;gunzip hadoop.tar.gz;tar xvf hadoop.tar&#39; ssh xebia@$<VM IP> &#39;cd /media/hadoop;ln -s hadoop-_ hadoop&#39; [/sourcecode]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> scp hadoop_ xebia@$&lt;VM IP&gt;:/media/hadoop/ ssh xebia@$&lt;VM IP&gt; &#39;cd /media/hadoop;gunzip hadoop.tar.gz;tar xvf hadoop.tar&#39; ssh xebia@$&lt;VM IP&gt; &#39;cd /media/hadoop;ln -s hadoop-_ hadoop&#39; 
+</code></pre></div>
 <p>Hadoop config is modified to refer to java installation and modify core-site.xml, hdfs-site.xml, mapred-site.xml. Later &quot;slaves&quot; file in conf need to be modified to refer to other VMs.</p>
 
 <p><strong>Automation</strong> The above process is lengthy and i did not want to do this for every VM. VirtalBox provides a command line interface to perform all activities that are done from UI. And now we had two disk images (Guest OS and Hadoop install) which can be sort of reused for every VM. See the following annotated script for details.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># !/bin/bash
 
-<p>[sourcecode]</p>
+# Path to already created disk images
 
-<h1>!/bin/bash</h1>
+cd ~/.VirtualBox/HardDisks OS_IMAGE=ubuntu-mini2.vdi HADOOP_DISK=hadoop-disk.vdi
 
-<h1>Path to already created disk images</h1>
+# ARGS is new VM name
 
-<p>cd ~/.VirtualBox/HardDisks OS<em>IMAGE=ubuntu-mini2.vdi HADOOP</em>DISK=hadoop-disk.vdi</p>
+vmname=&quot;$1&quot; VB=VBoxManage
 
-<h1>ARGS is new VM name</h1>
+if [ -z &quot;$vmname&quot; ]; then echo &quot;Provide a VM Name&quot;; exit -1; fi
 
-<p>vmname=&quot;$1&quot; VB=VBoxManage</p>
+# Does as it says .. clones the disks.
 
-<p>if [ -z &quot;$vmname&quot; ]; then echo &quot;Provide a VM Name&quot;; exit -1; fi</p>
+function clonedisks() { if [ -f &quot;${vmname}.vdi&quot; ]; then echo &quot;Disk image exists... ${vmname}.vdi&quot;; exit -1; fi echo &quot;Cloning disks...${vmname}&quot;; $VB clonehd $OS_IMAGE ${vmname}.vdi --remember $VB clonehd $HADOOP_DISK ${vmname}-hadoop.vdi --remember }
 
-<h1>Does as it says .. clones the disks.</h1>
+# Created a Virtual Machine
 
-<p>function clonedisks() { if [ -f &quot;${vmname}.vdi&quot; ]; then echo &quot;Disk image exists... ${vmname}.vdi&quot;; exit -1; fi echo &quot;Cloning disks...${vmname}&quot;; $VB clonehd $OS<em>IMAGE ${vmname}.vdi --remember $VB clonehd $HADOOP</em>DISK ${vmname}-hadoop.vdi --remember }</p>
+function createVM() { $VB createvm --name ${vmname} --ostype &quot;Ubuntu&quot; \--register }
 
-<h1>Created a Virtual Machine</h1>
+function configureVM() {
 
-<p>function createVM() { $VB createvm --name ${vmname} --ostype &quot;Ubuntu&quot; --register }</p>
+# Machine settings
 
-<p>function configureVM() {</p>
+$VB modifyvm ${vmname} --memory 512 $VB modifyvm ${vmname} --vram 12 $VB modifyvm ${vmname} --cpus 1 $VB modifyvm ${vmname} --boot1 disk
 
-<h1>Machine settings</h1>
+# Configures the network
 
-<p>$VB modifyvm ${vmname} --memory 512 $VB modifyvm ${vmname} --vram 12 $VB modifyvm ${vmname} --cpus 1 $VB modifyvm ${vmname} --boot1 disk</p>
+$VB modifyvm ${vmname} --nic1 hostonly $VB modifyvm ${vmname} --nictype1 82540EM $VB modifyvm ${vmname} --hostonlyadapter1 vboxnet0
 
-<h1>Configures the network</h1>
+# Attached the two hard drives
 
-<p>$VB modifyvm ${vmname} --nic1 hostonly $VB modifyvm ${vmname} --nictype1 82540EM $VB modifyvm ${vmname} --hostonlyadapter1 vboxnet0</p>
+$VB storagectl ${vmname} --name &quot;${vmname}-sata&quot; \--add sata --controller IntelAhci --sataportcount 2 $VB storageattach ${vmname} --storagectl &quot;${vmname}-sata&quot; \--port 1 --device 0 --type hdd --medium ${vmname}.vdi $VB storageattach ${vmname} --storagectl &quot;${vmname}-sata&quot; \--port 2 --device 0 --type hdd --medium ${vmname}-hadoop.vdi
 
-<h1>Attached the two hard drives</h1>
+# fix the VMs hostname
 
-<p>$VB storagectl ${vmname} --name &quot;${vmname}-sata&quot; --add sata --controller IntelAhci --sataportcount 2 $VB storageattach ${vmname} --storagectl &quot;${vmname}-sata&quot; --port 1 --device 0 --type hdd --medium ${vmname}.vdi $VB storageattach ${vmname} --storagectl &quot;${vmname}-sata&quot; --port 2 --device 0 --type hdd --medium ${vmname}-hadoop.vdi</p>
+$VB guestcontrol execute hello /bin/ls --username xebia --password xebia123 --verbose --wait-for stdout
 
-<h1>fix the VMs hostname</h1>
+}
 
-<p>$VB guestcontrol execute hello /bin/ls --username xebia --password xebia123 --verbose --wait-for stdout</p>
+function start() { VBoxHeadless --startvm ${vmname} --vrdp=off }
 
-<p>}</p>
+clonedisks createVM configureVM
 
-<p>function start() { VBoxHeadless --startvm ${vmname} --vrdp=off }</p>
-
-<p>clonedisks createVM configureVM</p>
-
-<h1>start</h1>
-
-<p>[/sourcecode]</p>
-
+# start
+</code></pre></div>
 <p>With the new VM setup do not forget to add its IP/hostname to &#39;slaves&#39; file.</p>
 
 <p><strong>Open Issues:</strong> Since we are using the OS disk image every host has the same name which creates a problem. I am fixing this manually at present by editing /etc/hosts and /etc/hostname. This can be fixed by installing Guest Additions in the OS image and automating the process(in progress).</p>

@@ -91,7 +91,7 @@
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
 
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-              <h4>Reading time about 3  minutes</h4>
+              <h4>Reading time about 2  minutes</h4>
 
               <h1>Domain Driven Design : Specification Pattern</h1>
 
@@ -103,18 +103,20 @@
 
 <p>Most application have small rules which are evaluated as boolean value. Some of these rules can be simple. But, there are certain rules which are fairly complex. They are infact, a combination of one or more of such smaller business rules. Sometimes, these rules are applicable on multiple objects and can be complex enough to make their prescence felt and it is advisable to factor them out in a separate class or method. Such business rules can be termed as Specification as they test a object against a specified criteria. Let&#39;s see the example of a specification.</p>
 
-<p>[sourcecode language=&quot;java&quot;] class OverdueInvoiceSpecification extends InvoiceSpecification { private Date currentDate;</p>
+<p>class OverdueInvoiceSpecification extends InvoiceSpecification { private Date currentDate;</p>
 
 <p>public OverdueInvoiceSpecification(Date currentDate) { this.currentDate = currentDate; }</p>
 
 <p>public boolean isSatisfiedBy(Invoice invoice) { int gracePeriod = invoice.customer().getPaymentGracePeriod(); Date deadline = invoice.dueDate() + gracePeriod;</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">  return currentDate.after(deadline);
 </code></pre></div>
-<p>} } [/sourcecode]</p>
+<p>} } 
+```</p>
 
 <p>Now, we can simply apply the rules wherever, we want</p>
 
-<p>[sourcecode language=&quot;java&quot;] class CustomerAccount { boolean isOverDue() { Specification overDueSpec = new OverdueInvoiceSpecification(new Date()); Iterator<Invoice> listInvoices = customer.getInvoices().iterator(); for (Invoice invoice : listInvoices) { if (overDueSpec.isSatisfiedBy(invoice)) return true; } return false; } } [/sourcecode]</p>
+<p>class CustomerAccount { boolean isOverDue() { Specification overDueSpec = new OverdueInvoiceSpecification(new Date()); Iterator<Invoice> listInvoices = customer.getInvoices().iterator(); for (Invoice invoice : listInvoices) { if (overDueSpec.isSatisfiedBy(invoice)) return true; } return false; } } 
+```</p>
 
 <p>There can be many places which warrant the use of specification pattern in an application. Mostly, they are used in </p>
 

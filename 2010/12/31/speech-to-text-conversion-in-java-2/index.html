@@ -114,11 +114,12 @@
 <p><dependencies><br>
 <dependency> <groupId>cmu.sphinx</groupId> <artifactId>sphinx4</artifactId> <version>4.0</version> </dependency> </dependencies></p>
 
-<p></project> [/sourcecode]</p>
+<p></project> 
+```</p>
 
 <p>We will first write the java code for the speech recognizer. Create a class and name it &quot;<strong>HelloWorld.java</strong>&quot;. Code it as:</p>
 
-<p>[sourcecode language=&quot;java&quot;] package com.xebia.speech-to-text-converter;</p>
+<p>package com.xebia.speech-to-text-converter;</p>
 
 <p>import java.io.IOException; import java.net.URL;</p>
 
@@ -163,7 +164,8 @@
     }
 }
 </code></pre></div>
-<p>} [/sourcecode]</p>
+<p>} 
+```</p>
 
 <p>To set it, up and running, we will write a grammar file for the input expected by the recognizer.</p>
 
@@ -171,13 +173,12 @@
 
 <p>The grammar file will take the following form:</p>
 
-<p>[sourcecode language=&quot;java&quot;]</p>
-
 <h1>JSGF V1.0;</h1>
 
 <p>/__ _ JSGF Grammar for Hello World example _/ grammar hello;</p>
 
-<p>public <greet> = (Good morning | Hello) <name>; <name> = ( Winfred | Evandro | Paul | Philip | Will ); [/sourcecode]</p>
+<p>public <greet> = (Good morning | Hello) <name>; <name> = ( Winfred | Evandro | Paul | Philip | Will ); 
+```</p>
 
 <p>According to this grammar, the system can recognize the following if spoken: 1. Good morning Winfred 2. Good morning Will 3. Hello Winfred 4. Hello Philip or anything starting with a <greet> and followed by a <name> from the options available in grammar.</p>
 

@@ -140,11 +140,12 @@
 
 <p>Only if the above two conditions are satisfied server will further process the other headers and finally establish the connection. The server side code can be somewhat like this</p>
 
-<p>[sourcecode language=&quot;java&quot;] if (aReq.getMethod() != HttpMethod.GET) { sendHttpResponse(aCtx, aReq, new DefaultHttpResponse(HttpVersion.HTTP<em>1</em>1, HttpResponseStatus.FORBIDDEN)); return; } // Serve the WebSocket handshake request. if (HttpHeaders.Values.UPGRADE.equalsIgnoreCase(aReq.getHeader(HttpHeaders.Names.CONNECTION)) &amp;&amp; HttpHeaders.Values.WEBSOCKET.equalsIgnoreCase(aReq.getHeader(HttpHeaders.Names.UPGRADE))) {</p>
+<p>if (aReq.getMethod() != HttpMethod.GET) { sendHttpResponse(aCtx, aReq, new DefaultHttpResponse(HttpVersion.HTTP<em>1</em>1, HttpResponseStatus.FORBIDDEN)); return; } // Serve the WebSocket handshake request. if (HttpHeaders.Values.UPGRADE.equalsIgnoreCase(aReq.getHeader(HttpHeaders.Names.CONNECTION)) &amp;&amp; HttpHeaders.Values.WEBSOCKET.equalsIgnoreCase(aReq.getHeader(HttpHeaders.Names.UPGRADE))) {</p>
 
 <p>//start processing the upgrade request.</p>
 
-<p>} [/sourcecode]
+<p>} 
+```
   * <strong>Host</strong> - It is important to ensure that the protocol is protected against threats of DNS rebinding and it should be possible to serve multiple domains from one IP address. Keeping these requirements in mind the WebSocket protocol specification requires that the handshake request should contain the Host header. Hackers use DNS rebinding to read data from private network. To know more about DNS rebinding <a href="http://vimeo.com/7907871">watch this video</a>.
   * <strong>Origin</strong> - The server should be able to make an informed decision about whether it wishes to accept a handshake invitation from a client. The Origin request header enables the client to send information about the origin of each request to the server. Servers can use this information to decide if each request is valid or not. To know more about Origin header <a href="http://people.mozilla.com/%7Ebsterne/content-security-policy/origin-header-proposal.html">click here</a>.
   * <strong>Sec-WebSocket-Protocol</strong> - It is possible that the applications develop a few application level protocol layered over the WebSocket protocol. Such protocols are considered  as sub-protocols. The client should explicitly mention the sub-protocol /s which it can use to send/receive data to/from server. Sec-WebSocket-Protocol header is the sub protocol selector. In this header the client can send space separated list of strings. These string represent the sub-protocol the (the application-level protocol  layered over the WebSocket protocol) that the client can use. For example a client may be capable of handling sub protocols which send data packets in JSON, CSV or XML format. In that case the sub protocol details can be added in this header.

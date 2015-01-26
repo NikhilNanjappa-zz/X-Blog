@@ -91,7 +91,7 @@
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
 
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-              <h4>Reading time about 3  minutes</h4>
+              <h4>Reading time about 4  minutes</h4>
 
               <h1>Webdriver: No HTTP Response Headers</h1>
 
@@ -106,17 +106,12 @@
 <p><em><strong>Steps to intercept Web Requests and modify Headers:</strong></em> <strong>1.</strong> In your Selenium test suite, initialize proxy server as a global variable and start it in before running any test in the suite</p>
 
 <p>[sourcecode lang=&quot;text&quot;] ProxyServer server = new ProxyServer(4444); server.start();</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">**2.** Create a Generic method which takes a list of headers and then adds a requestInterceptor on the proxy server. Inside the interceptor, we can pass the headers and write them onto the incoming request.
 
-<p>[/sourcecode]</p>
+[sourcecode lang=&quot;text&quot;]
 
-<p><strong>2.</strong> Create a Generic method which takes a list of headers and then adds a requestInterceptor on the proxy server. Inside the interceptor, we can pass the headers and write them onto the incoming request.</p>
-
-<p>[sourcecode lang=&quot;text&quot;]</p>
-
-<p>if ( headersList!= null &amp;&amp; !headersList.isEmpty()) { for (Entry<String,String> header : headersList.entrySet()) { server.addHeader(header.getKey(), header.getValue()); } }</p>
-
-<p>[/sourcecode]</p>
-
+if ( headersList!= null &amp;&amp; !headersList.isEmpty()) { for (Entry&lt;String,String&gt; header : headersList.entrySet()) { server.addHeader(header.getKey(), header.getValue()); } }
+</code></pre></div>
 <p><strong>3.</strong> Now call this generic method in every test case where you want to modify some request headers. IMPORTANT: Make sure that you explicitly clear out any interceptors that might have added in previous test cases since this generic method would be called from all such test cases.</p>
 
 <p>[sourcecode lang=&quot;text&quot;]</p>
@@ -124,21 +119,16 @@
 <p>// get the Selenium proxy object Proxy proxy = server.seleniumProxy();</p>
 
 <p>if(browserName.equalsIgnoreCase(&quot;firefox&quot;)){ FirefoxProfile ffprofile = new FirefoxProfile(); ffprofile.setPreference(&quot;network.proxy.http&quot;, &quot;localhost&quot;); ffprofile.setPreference(&quot;network.proxy.http<em>port&quot;, 4444); ffprofile.setPreference(&quot;network.proxy.ssl&quot;, &quot;localhost&quot;); ffprofile.setPreference(&quot;network.proxy.ssl</em>port&quot;, 4444); ffprofile.setPreference(&quot;network.proxy.type&quot;, 1); ffprofile.setPreference(&quot;network.proxy.no<em>proxies</em>on&quot;, &quot;&quot;); ffprofile.setAcceptUntrustedCertificates(true); ffprofile.setAssumeUntrustedCertificateIssuer(true); ffprofile.setPreference( &quot;webdriver<em>assume</em>untrusted_issuer&quot;, &quot;false&quot;);</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">**4.** Now add the proxy server instance while setting up the capabilities of the browser desired for testing.
 
-<p>[/sourcecode]</p>
+[sourcecode lang=&quot;text&quot;] DesiredCapabilities capabilities = new DesiredCapabilities(); capabilities.setCapability(FirefoxDriver.PROFILE,ffprofile); capabilities.setCapability(CapabilityType.PROXY, proxy); driver = new FirefoxDriver(capabilities); } else if(browserName.equalsIgnoreCase(&quot;internetexplorer&quot;)){ DesiredCapabilities iecapabilities = DesiredCapabilities .internetExplorer(); iecapabilities.setCapability(&quot;ignoreProtectedModeSettings&quot;, &quot;true&quot;); iecapabilities .setCapability( InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, &quot;true&quot;); iecapabilities.setCapability(CapabilityType.PROXY, proxy); driver = new InternetExplorerDriver(iecapabilities); } else if(browserName.equalsIgnoreCase(&quot;chrome&quot;)){
 
-<p><strong>4.</strong> Now add the proxy server instance while setting up the capabilities of the browser desired for testing.</p>
+DesiredCapabilities chromeCapabilities = DesiredCapabilities.chrome(); chromeCapabilities.setCapability(&quot;chrome.switches&quot;, Arrays.asList(&quot;\--start-maximized&quot;,&quot;\--ignore-certificate-errors&quot;)); // added capability for proxy server for adding custom headers chromeCapabilities.setCapability(CapabilityType.PROXY, proxy);
 
-<p>[sourcecode lang=&quot;text&quot;] DesiredCapabilities capabilities = new DesiredCapabilities(); capabilities.setCapability(FirefoxDriver.PROFILE,ffprofile); capabilities.setCapability(CapabilityType.PROXY, proxy); driver = new FirefoxDriver(capabilities); } else if(browserName.equalsIgnoreCase(&quot;internetexplorer&quot;)){ DesiredCapabilities iecapabilities = DesiredCapabilities .internetExplorer(); iecapabilities.setCapability(&quot;ignoreProtectedModeSettings&quot;, &quot;true&quot;); iecapabilities .setCapability( InternetExplorerDriver.INTRODUCE<em>FLAKINESS</em>BY<em>IGNORING</em>SECURITY_DOMAINS, &quot;true&quot;); iecapabilities.setCapability(CapabilityType.PROXY, proxy); driver = new InternetExplorerDriver(iecapabilities); } else if(browserName.equalsIgnoreCase(&quot;chrome&quot;)){</p>
+//chromeCapabilities.setCapability(&quot;chrome.switches&quot;, Arrays.asList(&quot;\--ignore-certificate-errors&quot;)); ChromeDriverService service = new ChromeDriverService.Builder().usingAnyFreePort().usingDriverExecutable(new File(&quot;chromedriver.exe&quot;)).build(); service.start(); driver = new ChromeDriver(service,chromeCapabilities);
 
-<p>DesiredCapabilities chromeCapabilities = DesiredCapabilities.chrome(); chromeCapabilities.setCapability(&quot;chrome.switches&quot;, Arrays.asList(&quot;--start-maximized&quot;,&quot;--ignore-certificate-errors&quot;)); // added capability for proxy server for adding custom headers chromeCapabilities.setCapability(CapabilityType.PROXY, proxy);</p>
-
-<p>//chromeCapabilities.setCapability(&quot;chrome.switches&quot;, Arrays.asList(&quot;--ignore-certificate-errors&quot;)); ChromeDriverService service = new ChromeDriverService.Builder().usingAnyFreePort().usingDriverExecutable(new File(&quot;chromedriver.exe&quot;)).build(); service.start(); driver = new ChromeDriver(service,chromeCapabilities);</p>
-
-<p>}</p>
-
-<p>[/sourcecode]</p>
-
+}
+</code></pre></div>
 <p><strong>5.</strong> Now run the test and intercept all the requests using fiddler.(<a href="http://www.fiddler2.com/fiddler2/">Fiddler</a> was also not able to capture all the headers. So,a tool called <a href="http://www.wireshark.org/download.html">Wireshark </a> can be used to do the same). *<em>6. *</em>Verify if the customized headers have been added/updated in your web request.</p>
 
 <p>So, the above piece of code helped me in adding HTTP headers with the request.</p>

@@ -103,7 +103,8 @@
 
 <p>Assuming that you have registration functionality working with Symfony framework and its URL is http://www.xyz.com/register and it shows a form:</p>
 
-<p>[sourcecode language=&quot;html&quot;] <form action="/register" method="post" > <tr> <th><label for="signup_username">User Name</label></th> <td><input type="text" name="signup[username]" id="signup_username" /></td> </tr> <tr> <th><label for="signup_email">Email</label></th> <td><input type="text" name="signup[email]" id="signup_email" /></td> </tr> <tr> <th><label for="signup_password">Password</label></th> <td><input type="password" name="signup[password]" id="signup_password" /></td> </tr> <tr> <th><label for="signup_password_confirmation">Confirm Password</label></th> <td><input type="password" name="signup[password_confirmation]" id="signup_password_confirmation" /></td> </tr> </form> <pre>[/sourcecode]</p>
+<p>[sourcecode language=&quot;html&quot;] <form action="/register" method="post" > <tr> <th><label for="signup_username">User Name</label></th> <td><input type="text" name="signup[username]" id="signup_username" /></td> </tr> <tr> <th><label for="signup_email">Email</label></th> <td><input type="text" name="signup[email]" id="signup_email" /></td> </tr> <tr> <th><label for="signup_password">Password</label></th> <td><input type="password" name="signup[password]" id="signup_password" /></td> </tr> <tr> <th><label for="signup_password_confirmation">Confirm Password</label></th> <td><input type="password" name="signup[password_confirmation]" id="signup_password_confirmation" /></td> </tr> </form> <pre>
+```</p>
 
 <p>I am assuming you have a fair idea of writing functional test cases in Symfony. Now to create a functional test case. Create a test file RegisterTest.php in your project&#39;s test/functional directory, you can do it manually or if you have used Symfony CLI to generate your module, it will automatically generate the test file and it will look like the following by default:</p>
 
@@ -111,43 +112,53 @@
 
 <p>$browser = new sfTestFunctional(new sfBrowser());</p>
 
-<p>$browser-&gt; get(&#39;/register&#39;)-&gt; with(&#39;request&#39;)-&gt;begin()-&gt; isParameter(&#39;module&#39;, &#39;UserRegistration&#39;)-&gt; isParameter(&#39;action&#39;, &#39;index&#39;)-&gt; end()-&gt; with(&#39;response&#39;)-&gt;begin()-&gt; isStatusCode(200)-&gt; checkElement(&#39;body&#39;, &#39;!/This is a temporary page/&#39;)-&gt; end(); [/sourcecode]</p>
+<p>$browser-&gt; get(&#39;/register&#39;)-&gt; with(&#39;request&#39;)-&gt;begin()-&gt; isParameter(&#39;module&#39;, &#39;UserRegistration&#39;)-&gt; isParameter(&#39;action&#39;, &#39;index&#39;)-&gt; end()-&gt; with(&#39;response&#39;)-&gt;begin()-&gt; isStatusCode(200)-&gt; checkElement(&#39;body&#39;, &#39;!/This is a temporary page/&#39;)-&gt; end(); 
+```</p>
 
 <p>To test general success of the registration page, if it  is properly loaded in the browser, update the above code with the following:</p>
 
-<p>[sourcecode language=&quot;php&quot;] $browser-&gt; get(&#39;/register&#39;)-&gt; with(&#39;request&#39;)-&gt;begin()-&gt; isParameter(&#39;module&#39;, &#39;UserRegistration&#39;)-&gt; isParameter(&#39;action&#39;, &#39;index&#39;)-&gt; end()-&gt; with(&#39;response&#39;)-&gt;begin()-&gt; isStatusCode(200)-&gt; checkElement(&#39;form input[type=&quot;text&quot;][name=&quot;signin[username]&quot;]&#39;,true)-&gt; checkElement(&#39;form input[type=&quot;text&quot;][name=&quot;signin[password]&quot;]&#39;,true)-&gt; end(); [/sourcecode]</p>
+<p>[sourcecode language=&quot;php&quot;] $browser-&gt; get(&#39;/register&#39;)-&gt; with(&#39;request&#39;)-&gt;begin()-&gt; isParameter(&#39;module&#39;, &#39;UserRegistration&#39;)-&gt; isParameter(&#39;action&#39;, &#39;index&#39;)-&gt; end()-&gt; with(&#39;response&#39;)-&gt;begin()-&gt; isStatusCode(200)-&gt; checkElement(&#39;form input[type=&quot;text&quot;][name=&quot;signin[username]&quot;]&#39;,true)-&gt; checkElement(&#39;form input[type=&quot;text&quot;][name=&quot;signin[password]&quot;]&#39;,true)-&gt; end(); 
+```</p>
 
 <p>I am just checking only 2 fields of the form but you can check as many fields as you want. The above code will make a GET request to &#39;/register&#39; through a mock browser object &#39;$browser&#39; and check the response if the form have those required elements in it.</p>
 
-<p>[sourcecode language=&quot;php&quot;] input[type=&quot;text&quot;][name=&quot;signin[username]&quot;] ~ <input type="text" name="signup[username]" id="signup_username" /> [/sourcecode]</p>
+<p>[sourcecode language=&quot;php&quot;] input[type=&quot;text&quot;][name=&quot;signin[username]&quot;] ~ <input type="text" name="signup[username]" id="signup_username" /> 
+```</p>
 
 <p>When you run the above test case via Symfony command line tool:</p>
 
-<p>[sourcecode language=&quot;bash&quot;] symfony test:functional yourapp RegisterTest [/sourcecode]</p>
+<p>[sourcecode language=&quot;bash&quot;] symfony test:functional yourapp RegisterTest 
+```</p>
 
 <p>it will give you a result something like:</p>
 
-<p>[sourcecode language=&quot;php&quot;] # get /register ok 1 - status code is 200 ok 2 - response selector form input[type=text][name=signin[username]] exists ok 2 - response selector form input[type=text][name=signin[password]] exists [/sourcecode]</p>
+<p>[sourcecode language=&quot;php&quot;] # get /register ok 1 - status code is 200 ok 2 - response selector form input[type=text][name=signin[username]] exists ok 2 - response selector form input[type=text][name=signin[password]] exists 
+```</p>
 
 <p>Now to extend the test case to test the functionality for actually registering the user with the form, use the code below:</p>
 
-<p>[sourcecode language=&quot;php&quot;] $browser-&gt; get(&#39;/register&#39;)-&gt; with(&#39;request&#39;)-&gt;begin()-&gt; isParameter(&#39;module&#39;, &#39;UserRegistration&#39;)-&gt; isParameter(&#39;action&#39;, &#39;index&#39;)-&gt; end()-&gt; with(&#39;response&#39;)-&gt;begin()-&gt; isStatusCode(200)-&gt; checkElement(&#39;form input[type=&quot;text&quot;][name=&quot;signin[username]&quot;]&#39;,true)-&gt; checkElement(&#39;form input[type=&quot;text&quot;][name=&quot;signin[password]&quot;]&#39;,true)-&gt; end()-&gt; with(&#39;form&#39;)-&gt;begin()-&gt; setField(&#39;signup[username]&#39;, &#39;abc&#39;)-&gt; setField(&#39;signup[email<em>address]&#39;, &#39;abc@xyz.com&#39;)-&gt; setField(&#39;signup[password]&#39;, &#39;xyz&#39;)-&gt; setField(&#39;signup[password</em>confirmation]&#39;, &#39;xyz&#39;)-&gt; click(&#39;save&#39;)-&gt; end(); [/sourcecode]</p>
+<p>[sourcecode language=&quot;php&quot;] $browser-&gt; get(&#39;/register&#39;)-&gt; with(&#39;request&#39;)-&gt;begin()-&gt; isParameter(&#39;module&#39;, &#39;UserRegistration&#39;)-&gt; isParameter(&#39;action&#39;, &#39;index&#39;)-&gt; end()-&gt; with(&#39;response&#39;)-&gt;begin()-&gt; isStatusCode(200)-&gt; checkElement(&#39;form input[type=&quot;text&quot;][name=&quot;signin[username]&quot;]&#39;,true)-&gt; checkElement(&#39;form input[type=&quot;text&quot;][name=&quot;signin[password]&quot;]&#39;,true)-&gt; end()-&gt; with(&#39;form&#39;)-&gt;begin()-&gt; setField(&#39;signup[username]&#39;, &#39;abc&#39;)-&gt; setField(&#39;signup[email<em>address]&#39;, &#39;abc@xyz.com&#39;)-&gt; setField(&#39;signup[password]&#39;, &#39;xyz&#39;)-&gt; setField(&#39;signup[password</em>confirmation]&#39;, &#39;xyz&#39;)-&gt; click(&#39;save&#39;)-&gt; end(); 
+```</p>
 
 <p>Assuming the code redirects the user to some other page after successfully registration:</p>
 
-<p>[sourcecode language=&quot;php&quot;] with(&#39;form&#39;)-&gt;begin()-&gt; setField(&#39;signup[username]&#39;, &#39;abc&#39;)-&gt; setField(&#39;signup[email<em>address]&#39;, &#39;abc@xyz.com&#39;)-&gt; setField(&#39;signup[password]&#39;, &#39;xyz&#39;)-&gt; setField(&#39;signup[password</em>confirmation]&#39;, &#39;xyz&#39;)-&gt; click(&#39;save&#39;)-&gt; end()-&gt; with(&#39;response&#39;)-&gt;begin()-&gt; isRedirected()-&gt; isStatusCode(302)-&gt; followRedirect()-&gt; end(); [/sourcecode]</p>
+<p>[sourcecode language=&quot;php&quot;] with(&#39;form&#39;)-&gt;begin()-&gt; setField(&#39;signup[username]&#39;, &#39;abc&#39;)-&gt; setField(&#39;signup[email<em>address]&#39;, &#39;abc@xyz.com&#39;)-&gt; setField(&#39;signup[password]&#39;, &#39;xyz&#39;)-&gt; setField(&#39;signup[password</em>confirmation]&#39;, &#39;xyz&#39;)-&gt; click(&#39;save&#39;)-&gt; end()-&gt; with(&#39;response&#39;)-&gt;begin()-&gt; isRedirected()-&gt; isStatusCode(302)-&gt; followRedirect()-&gt; end(); 
+```</p>
 
 <p>Now there is a case in which the form had some errors while submitting, it will fail your test:</p>
 
-<p>[sourcecode language=&quot;php&quot;] isRedirected()-&gt; isStatusCode(302)-&gt; [/sourcecode]</p>
+<p>[sourcecode language=&quot;php&quot;] isRedirected()-&gt; isStatusCode(302)-&gt; 
+```</p>
 
 <p>and you have no clue why it is failing? What was the error on the form? or if the form had an error while submitting the request. Use the following code to check that:</p>
 
-<p>[sourcecode language=&quot;php&quot;] with(&#39;form&#39;)-&gt;begin()-&gt; setField(&#39;signup[username]&#39;, &#39;abc&#39;)-&gt; setField(&#39;signup[email<em>address]&#39;, &#39;abc@xyz.com&#39;)-&gt; setField(&#39;signup[password]&#39;, &#39;xyz&#39;)-&gt; setField(&#39;signup[password</em>confirmation]&#39;, &#39;xyz&#39;)-&gt; click(&#39;save&#39;)-&gt; end()-&gt; with(&#39;form&#39;)-&gt;begin()-&gt; hasErrors(false)-&gt; end()-&gt; with(&#39;response&#39;)-&gt;begin()-&gt; isRedirected()-&gt; isStatusCode(302)-&gt; followRedirect()-&gt; end(); [/sourcecode]</p>
+<p>[sourcecode language=&quot;php&quot;] with(&#39;form&#39;)-&gt;begin()-&gt; setField(&#39;signup[username]&#39;, &#39;abc&#39;)-&gt; setField(&#39;signup[email<em>address]&#39;, &#39;abc@xyz.com&#39;)-&gt; setField(&#39;signup[password]&#39;, &#39;xyz&#39;)-&gt; setField(&#39;signup[password</em>confirmation]&#39;, &#39;xyz&#39;)-&gt; click(&#39;save&#39;)-&gt; end()-&gt; with(&#39;form&#39;)-&gt;begin()-&gt; hasErrors(false)-&gt; end()-&gt; with(&#39;response&#39;)-&gt;begin()-&gt; isRedirected()-&gt; isStatusCode(302)-&gt; followRedirect()-&gt; end(); 
+```</p>
 
 <p>By using the above code at-least you can now know that the form had errors and you can use debug method of the $browser object to debug that error:</p>
 
-<p>[sourcecode language=&quot;php&quot;] with(&#39;form&#39;)-&gt;begin()-&gt; hasErrors(false)-&gt; debug()-&gt; end()-&gt; [/sourcecode]</p>
+<p>[sourcecode language=&quot;php&quot;] with(&#39;form&#39;)-&gt;begin()-&gt; hasErrors(false)-&gt; debug()-&gt; end()-&gt; 
+```</p>
 
 <p>This is how you can write and debug test cases for Form POST request testing scenarios.</p>
 

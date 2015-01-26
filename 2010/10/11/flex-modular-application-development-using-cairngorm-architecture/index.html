@@ -116,7 +116,7 @@
 <em>&#39;The Controller is the most sophisticated part of the Cairngorm architecture. The Controller layer is implemented as a singleton FrontController. The FrontController instance, which receives every View-generated event, dispatches the events to the assigned Command class based on the event&#39;s declared type.&#39;</em> Modules can use the controller of the base class. In such a case, all commands of the module need to be registered with the main controller at the time of module load, and, should thereby be removed when the module is unloaded.</li>
 </ul>
 
-<p>[sourcecode language=&quot;java&quot;] package xyz { import com.adobe.cairngorm.control.FrontController; import mx.collections.ArrayCollection; import .......control.<em>; import .......commands.</em>; import .......CommandDesc;</p>
+<p>package xyz { import com.adobe.cairngorm.control.FrontController; import mx.collections.ArrayCollection; import .......control.<em>; import .......commands.</em>; import .......CommandDesc;</p>
 
 <p>public class BaseApplicationController extends FrontController { public function BaseApplicationController() { initialiseCommands(); }</p>
 
@@ -128,11 +128,12 @@
 
 <p>//Remove all module level commands public function removeCommands(commandList:ArrayCollection):void{ for(var i:int=0;i var commDes:CommandDesc =commandList.getItemAt(i) as CommandDesc; this.removeCommand(commDes.getEventName()); } }</p>
 
-<p>} } [/sourcecode]</p>
+<p>} } 
+```</p>
 
 <p>Where CommandDesc.as contains the module level event name and the corresponding Command class:</p>
 
-<p>[sourcecode language=&quot;java&quot;] package abc { import com.adobe.cairngorm.commands.Command;</p>
+<p>package abc { import com.adobe.cairngorm.commands.Command;</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">public class CommandDesc
 {
     private var eventName:String;
@@ -152,7 +153,8 @@
     }
 }
 </code></pre></div>
-<p>} [/sourcecode] </p>
+<p>} 
+``` </p>
 
 <ul>
 <li><em>Model:</em>
@@ -163,7 +165,7 @@
 
 <p>Interface level ModelLocator that should implement com.adobe.cairngorm.model.ModelLocator:</p>
 
-<p>[sourcecode language=&quot;java&quot;] package externalInterface { import com.adobe.cairngorm.model.ModelLocator;</p>
+<p>package externalInterface { import com.adobe.cairngorm.model.ModelLocator;</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">public class InterfaceModelLocator implements com.adobe.cairngorm.model.ModelLocator
 {
     public static var interfaceModelLocator:InterfaceModelLocator;
@@ -196,17 +198,19 @@
     }
 }
 </code></pre></div>
-<p>} [/sourcecode]</p>
+<p>} 
+```</p>
 
 <p>Application level ModelLocator that should use the interface level ModelLocator:</p>
 
-<p>[sourcecode language=&quot;java&quot;] [Bindable] public class ApplicationModelLocator extends InterfaceModelLocator { private static var modelLocator : ApplicationModelLocator;</p>
+<p>[Bindable] public class ApplicationModelLocator extends InterfaceModelLocator { private static var modelLocator : ApplicationModelLocator;</p>
 
 <p>public static function getInstance() : ApplicationModelLocator { if ( modelLocator == null ) { modelLocator = new ApplicationModelLocator(); InterfaceModelLocator.getInstance().addModel(&quot;ApplicationLevelModelName&quot;,modelLocator); }</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">return ApplicationModelLocator(
 InterfaceModelLocator.getInstance().getModel(&amp;quot;ApplicationLevelModelName&amp;quot;));
 </code></pre></div>
-<p>} } [/sourcecode]</p>
+<p>} } 
+```</p>
 
 <p>The module level ModelLocator should be coded on similar lines. </p>
 

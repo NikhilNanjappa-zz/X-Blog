@@ -124,12 +124,16 @@
 <li>Invoke apt</li>
 <li><p>Use Mirror packages for representing types and processing declaration and types.
 <strong>APT Configuration</strong></p></li>
-<li><p>Configuration is done by creating text file containing fully qualified name of the AP under file META-INF/services/javax.annotation.processing.Processor. Sample file content is shown below: [sourcecode language=&quot;java&quot;]com.abc.ConstructorWithoutArgsProcessor[/sourcecode]</p></li>
-<li><p>Jar the AP classes and META-INF
-[sourcecode language=&quot;java&quot;] jar cvMif myProcessor.jar -C com/_ META-INF/services/_ [/sourcecode]  <strong>Sample Annotation Processor Source Code</strong></p></li>
+<li><p>Configuration is done by creating text file containing fully qualified name of the AP under file META-INF/services/javax.annotation.processing.Processor. Sample file content is shown below: com.abc.ConstructorWithoutArgsProcessor
+<code>
+2. Jar the AP classes and META-INF
+jar cvMif myProcessor.jar -C com/_ META-INF/services/_ 
+</code>  <strong>Sample Annotation Processor Source Code</strong></p></li>
 </ol>
 
-<p>[sourcecode language=&quot;java&quot;] public class MyCustomProcessor extends AbstractProcessor { public boolean process(Set annotations, RoundEnvironment env) { for (TypeElement type : annotations) { doProcess(env, type); } return true; } [/sourcecode] Let&#39;s write a sample annotation [sourcecode language=&quot;java&quot;] @Inherited @Documented @Retention(RetentionPolicy.SOURCE) @Target(ElementType.TYPE) public @interface ConstructorWithoutArgs { } [/sourcecode] Here is the code of custom processor: [sourcecode language=&quot;java&quot;] @SupportedAnnotationTypes(&quot;com.abc.ConstructorWithoutArgs&quot;) @SupportedSourceVersion(SourceVersion.RELEASE_6) public class ConstructorWithoutArgsProcessor extends AbstractProcessor { public boolean process(Set&lt;? extends TypeElement&gt; annotations, RoundEnvironment env) { for (TypeElement type : annotations) { processClassesWithoutConstructorArgs(env, type); } return true; }</p>
+<p>public class MyCustomProcessor extends AbstractProcessor { public boolean process(Set annotations, RoundEnvironment env) { for (TypeElement type : annotations) { doProcess(env, type); } return true; } 
+<code>Let&#39;s write a sample annotation  @Inherited @Documented @Retention(RetentionPolicy.SOURCE) @Target(ElementType.TYPE) public @interface ConstructorWithoutArgs { } 
+</code> Here is the code of custom processor:  @SupportedAnnotationTypes(&quot;com.abc.ConstructorWithoutArgs&quot;) @SupportedSourceVersion(SourceVersion.RELEASE_6) public class ConstructorWithoutArgsProcessor extends AbstractProcessor { public boolean process(Set&lt;? extends TypeElement&gt; annotations, RoundEnvironment env) { for (TypeElement type : annotations) { processClassesWithoutConstructorArgs(env, type); } return true; }</p>
 
 <p>private void processClassesWithoutConstructorArgs(RoundEnvironment env, TypeElement type) { for (Element element : env.getElementsAnnotatedWith(type)) { processClass(element); } }</p>
 
@@ -137,17 +141,20 @@
 
 <p>private boolean doesClassContainConstructorWithoutArgs(Element el) { for (Element subelement : el.getEnclosedElements()) { if (subelement.getKind() == ElementKind.CONSTRUCTOR &amp;&amp; subelement.getModifiers().contains(Modifier.PUBLIC)) { TypeMirror mirror = subelement.asType(); if (mirror.accept(noArgsVisitor, null)) return true; } } return false; }</p>
 
-<p>private static final TypeVisitor<Boolean, Void> noArgsVisitor = new SimpleTypeVisitor6<Boolean, Void>() { public Boolean visitExecutable(ExecutableType t, Void v) { return t.getParameterTypes().isEmpty(); } }; } [/sourcecode] In the doesClassContainConstructorWithoutArgs() method, we iterate through all of the class elements and pick out the public constructors. A class that does not have any will automatically fail the test. Note that when we do not specify any constructor, Java automatically adds a default no-args constructor. </p>
+<p>private static final TypeVisitor<Boolean, Void> noArgsVisitor = new SimpleTypeVisitor6<Boolean, Void>() { public Boolean visitExecutable(ExecutableType t, Void v) { return t.getParameterTypes().isEmpty(); } }; } 
+``` In the doesClassContainConstructorWithoutArgs() method, we iterate through all of the class elements and pick out the public constructors. A class that does not have any will automatically fail the test. Note that when we do not specify any constructor, Java automatically adds a default no-args constructor. </p>
 
-<p>Once we have found our constructor element, we visit it with to determine whether the argument list is empty. Using the Visitor pattern in this case helps us to avoid a downcast. Once we have all these files packaged in a jar file, let&#39;s call it myProcessor.jar, we can add a processing parameter to our call to javac: [sourcecode language=&quot;java&quot;] javac -classpath .;myProcessor.jar -processorpath myProcessor.jar com/*.java [/sourcecode]</p>
+<p>Once we have found our constructor element, we visit it with to determine whether the argument list is empty. Using the Visitor pattern in this case helps us to avoid a downcast. Once we have all these files packaged in a jar file, let&#39;s call it myProcessor.jar, we can add a processing parameter to our call to javac:  javac -classpath .;myProcessor.jar -processorpath myProcessor.jar com/*.java 
+```</p>
 
-<p>Let&#39;s test this with few test cases: [sourcecode language=&quot;java&quot;] @ConstructorWithoutArgs public abstract class SuperClassWithoutArgs { public SuperClassWithoutArgs() { } }</p>
+<p>Let&#39;s test this with few test cases:  @ConstructorWithoutArgs public abstract class SuperClassWithoutArgs { public SuperClassWithoutArgs() { } }</p>
 
 <p>// Passes public class PublicConstructorWithoutArgs extends SuperClassWithoutArgs { public PublicConstructorWithoutArgs() { } }</p>
 
 <p>// Fails public class NonPublicConstructor extends SuperClassWithoutArgs { NonPublicConstructor() { } }</p>
 
-<p>// Fails public class WrongConstructor extends SuperClassWithoutArgs { public WrongConstructor(String aString) { } } [/sourcecode] When we compile these classes with the ConstructorWithoutArgsProcessor, we see the following compiler errors: </p>
+<p>// Fails public class WrongConstructor extends SuperClassWithoutArgs { public WrongConstructor(String aString) { } } 
+``` When we compile these classes with the ConstructorWithoutArgsProcessor, we see the following compiler errors: </p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">error: Class NonPublicConstructor needs a No-Args Constructor
 error: Class WrongConstructor needs a No-Args Constructor
 2 errors

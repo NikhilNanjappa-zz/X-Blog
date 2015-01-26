@@ -107,7 +107,8 @@
 
 <p>Tapestry needs to be informed about the languages it needs to support. If the application supports English, French and German then contributeApplicationDefaults method of the AppModule class should have following code</p>
 
-<p>[sourcecode language=&quot;java&quot;] public static void contributeApplicationDefaults( MappedConfiguration configuration){ configuration.add(&quot;tapestry.supported-locales&quot;, &quot;en,fr,de&quot;); } [/sourcecode] </p>
+<p>public static void contributeApplicationDefaults( MappedConfiguration configuration){ configuration.add(&quot;tapestry.supported-locales&quot;, &quot;en,fr,de&quot;); } 
+``` </p>
 
 <h4>Step 2: Create locale specific property files</h4>
 
@@ -133,7 +134,8 @@
 
 <p> </p>
 
-<p>[sourcecode language=&quot;xml&quot;] ${message:key.in.proprties.file} [/sourcecode] </p>
+<p>[sourcecode language=&quot;xml&quot;] ${message:key.in.proprties.file} 
+``` </p>
 
 <p>Tapestry framework will take care of replacing the key with appropriate localized value.</p>
 
@@ -154,7 +156,8 @@
 
 <p> </p>
 
-<p>[sourcecode language=&quot;xml&quot;] app com.abc.xyz.lmnFilter [/sourcecode] </p>
+<p>[sourcecode language=&quot;xml&quot;] app com.abc.xyz.lmnFilter 
+``` </p>
 
 <p> </p>
 
@@ -172,7 +175,8 @@
 
 <p> </p>
 
-<p>[sourcecode language=&quot;xml&quot;] confirm.delete.key=You are about to delete entity &#39;%s&#39;. Are you sure ? [/sourcecode] </p>
+<p>[sourcecode language=&quot;xml&quot;] confirm.delete.key=You are about to delete entity &#39;%s&#39;. Are you sure ? 
+``` </p>
 
 <p> </p>
 
@@ -180,7 +184,8 @@
 
 <p> </p>
 
-<p>[sourcecode language=&quot;xml&quot;] ${format:confirm.delete.key=deleteEntityName} [/sourcecode] </p>
+<p>[sourcecode language=&quot;xml&quot;] ${format:confirm.delete.key=deleteEntityName} 
+``` </p>
 
 <p> </p>
 
@@ -206,7 +211,8 @@
 
 <p>To put this message catalog in package other than default package add following code to contributeValidationMessagesSource(Configuration<String> configuration) :</p>
 
-<p>[sourcecode language=&quot;java&quot;] public void contributeValidationMessagesSource(Configuration configuration) { configuration.add(&quot;path/to/your/package/ValidationMessages.properties&quot;); } [/sourcecode]</p>
+<p>public void contributeValidationMessagesSource(Configuration configuration) { configuration.add(&quot;path/to/your/package/ValidationMessages.properties&quot;); } 
+```</p>
 
 <h2>Comments</h2>
 

@@ -181,27 +181,22 @@ A better solution is to have an in-memory image data cache. This can optimize th
 }
 </code></pre></div>
 <p>}</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">ImageDataCache implements following methods:
 
-<p>[/sourcecode]</p>
+[sourcecode language=&quot;actionscript3&quot;]
 
-<p>ImageDataCache implements following methods:</p>
+function getImageData(imageId:String):BitmapData;
 
-<p>[sourcecode language=&quot;actionscript3&quot;]</p>
+function putImageData(imageId:String, imageData:BitmapData):void;
 
-<p>function getImageData(imageId:String):BitmapData;</p>
+function markImageDataLoading(imageId:String);
 
-<p>function putImageData(imageId:String, imageData:BitmapData):void;</p>
+function hasImageData(imageId:String);
 
-<p>function markImageDataLoading(imageId:String);</p>
+function purgeImageData(imageId:String);
 
-<p>function hasImageData(imageId:String);</p>
-
-<p>function purgeImageData(imageId:String);</p>
-
-<p>function clear();</p>
-
-<p>[/sourcecode]</p>
-
+function clear();
+</code></pre></div>
 <p><strong>Conclusion:</strong></p>
 
 <p>The difference in using CachedImage once and 10 times for the same URL is almost negligible (0.2 MB), however that is huge for Image (53 MB). You can download the complete source code <a href="http://xebee.xebia.in/wp-content/uploads/2010/11/ImageCacheProject.zip">here</a>.</p>

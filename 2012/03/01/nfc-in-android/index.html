@@ -91,7 +91,7 @@
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
 
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-              <h4>Reading time about 6  minutes</h4>
+              <h4>Reading time about 5  minutes</h4>
 
               <h1>NFC in Android</h1>
 
@@ -136,26 +136,22 @@ The appropriate application is chosen to do the job on the bases of intent and t
 <p>android:pathPrefix=&quot;/company.html&quot; /&gt;</p>
 
 <p></intent-filter></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">This Intent filter will filter intent generated on detecting a tag having a URI as data and will result in opening www.xebia.in/company.html in browser. 
 
-<p>[/sourcecode]</p>
+![][2]
 
-<p>This Intent filter will filter intent generated on detecting a tag having a URI as data and will result in opening www.xebia.in/company.html in browser. </p>
+**Extracting required data from the NFC intent:**
 
-<p><img src="http://xebee.xebia.in/wp-content/uploads/2012/02/Tag_dispatching.png" alt="" title="Tag_dispatching"></p>
+When the selected activity opens up after tag dispatch, required data is extracted from the incoming intent to proceed further. This data is contained in &quot;extras&quot; of the intent:
 
-<p><strong>Extracting required data from the NFC intent:</strong></p>
+1**.  EXTRA_TAG: **The extra for containing payload data and tag technology information bound into a  Tag object.
 
-<p>When the selected activity opens up after tag dispatch, required data is extracted from the incoming intent to proceed further. This data is contained in &quot;extras&quot; of the intent:</p>
-
-<p>1*<em>.  EXTRA_TAG: *</em>The extra for containing payload data and tag technology information bound into a  Tag object.</p>
-
-<p>[sourcecode language=&quot;java&quot;] Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG); [/sourcecode]</p>
-
+ Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG); 
+</code></pre></div>
 <p>2. *<em>EXTRA<em>NDEF</em>MESSAGES: *</em>The extra for containing all the NDEF messages in Tag object. These messages are obtained in an Array of Parcelable objects.</p>
 
-<p>[sourcecode language=&quot;java&quot;]</p>
-
-<p>public void onResume() { super.onResume(); Intent parentIntent = getIntent(); if (NfcAdapter.ACTION<em>NDEF</em>DISCOVERED.equals(parentIntent.getAction())){ Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA<em>NDEF</em>MESSAGES); if (rawMsgs != null) { msgs = new NdefMessage[rawMsgs.length]; for (int i = 0; i &lt; rawMsgs.length; i++){ msgs[i] = (NdefMessage) rawMsgs[i]; } } } } [/sourcecode]</p>
+<p>public void onResume() { super.onResume(); Intent parentIntent = getIntent(); if (NfcAdapter.ACTION<em>NDEF</em>DISCOVERED.equals(parentIntent.getAction())){ Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA<em>NDEF</em>MESSAGES); if (rawMsgs != null) { msgs = new NdefMessage[rawMsgs.length]; for (int i = 0; i &lt; rawMsgs.length; i++){ msgs[i] = (NdefMessage) rawMsgs[i]; } } } } 
+```</p>
 
 <p><strong>Using Beam to push data:</strong></p>
 
@@ -163,7 +159,7 @@ The appropriate application is chosen to do the job on the bases of intent and t
 
 <p>*<em>CreateNdefMessageCallback *</em>interface is implemented to add Ndef push functionality in the Activity. This implementation requires following method to be defined:</p>
 
-<p>[sourcecode language=&quot;java&quot;] public NdefMessage createNdefMessage(NfcEvent event) { String message = &quot;This is NFC message&quot;; NdefRecord mimeRecord = createMimeRecord(&quot;application/param.android.sample.beam&quot;, message.getBytes()); NdefRecord appRecord = NdefRecord.createApplicationRecord(&quot;param.android.sample.beam&quot;); NdefRecord[] ndefRecords = new NdefRecord[] { mimeRecord, appRecord }; NdefMessage ndefMessage = new NdefMessage(ndefRecords); return ndefMessage; }</p>
+<p>public NdefMessage createNdefMessage(NfcEvent event) { String message = &quot;This is NFC message&quot;; NdefRecord mimeRecord = createMimeRecord(&quot;application/param.android.sample.beam&quot;, message.getBytes()); NdefRecord appRecord = NdefRecord.createApplicationRecord(&quot;param.android.sample.beam&quot;); NdefRecord[] ndefRecords = new NdefRecord[] { mimeRecord, appRecord }; NdefMessage ndefMessage = new NdefMessage(ndefRecords); return ndefMessage; }</p>
 
 <p>public NdefRecord createMimeRecord(String mimeType, byte[] payload) { byte[] mimeBytes = mimeType.getBytes(Charset.forName(&quot;US-ASCII&quot;)); NdefRecord mimeRecord = new NdefRecord( NdefRecord.TNF<em>MIME</em>MEDIA, mimeBytes, new byte[0</p>
 

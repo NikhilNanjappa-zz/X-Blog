@@ -122,42 +122,40 @@ String url = &amp;quot;http://192.168.1.146:8080/grailsRestWS/project/&amp;quot;
 String data = restTemplate.getForObject(url, String.class);
 setContentView(R.layout.main);
 }
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">Let&#39;s try to understand the code given above
+
+**Line 7:** It creates a restTemplate object. The RestTemplate aides Restful communication with the HTTP servers.
+
+**Line 8:** The restTemplate is assigned a requestFactory. RequestFactory is used for creating HttpClientRequest representing a client side http request.
+
+**Line 9:** The url used is not localhost or the loop back address 127.0.0.1. You might have guessed it already. The application is deployed onto a device or an Android emulator. It is the device that takes the localhost IP not the development machine. To resolve this, I have used the IP address as per my machine&#39;s network configuration.
+
+**Line 10:** It is a rest call to the web-service url. Please notice that it is a HTTP GET request as indicated by the name getForObject(). I have specified the String.class as the second argument to the method which means the data returned is to be interpreted as String data.
+
+The method supported by the **RestTemplate** are listed below [code language=&quot;java&quot; light=&quot;true&quot;] HTTP RestTemplate DELETE delete(String, String...) GET getForObject(String, Class, String...) HEAD headForHeaders(String, String...) OPTIONS optionsForAllow(String, String...) POST postForLocation(String, Object, String...) PUT put(String, Object, String...) 
+ ``` But, when I try to run this code I get an exception
+
+[sourcecode language=&quot;java&quot; light=&quot;true&quot;] no suitable HttpMessageConverter found for response type [com.xebia.android.Project] and content type [application/json] 
+``` That&#39;s because we are not dealing with text data here but JSON data type
+
+Making this work requires few changes to our activity class. Below are the changes to be made  public class DefaultActivity extends Activity { /*_ Called when the activity is first created. _/ @Override public void onCreate(Bundle savedInstanceState) { ... RestTemplate restTemplate = &lt;strong&gt;getRestTemplate()&lt;/strong&gt;; JSONData[] jsonData = restTemplate.getForObject(url,ProjectData[].class); ... }
+
+
+    private RestTemplate getRestTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setRequestFactory(new CommonsClientHttpRequestFactory());
+        &amp;lt;strong&amp;gt;MappingJacksonHttpMessageConverter jsonConverter = 
+                                new MappingJacksonHttpMessageConverter();
+        List&amp;lt;MediaType&amp;gt; supportedMediaTypes = new ArrayList&amp;lt;MediaType&amp;gt;();
+        supportedMediaTypes.add(new MediaType(&amp;quot;application&amp;quot;,&amp;quot;json&amp;quot;));
+        jsonConverter.setSupportedMediaTypes(supportedMediaTypes);&amp;lt;/strong&amp;gt;
+
+        List&amp;lt;HttpMessageConverter&amp;lt;?&amp;gt;&amp;gt; listHttpMessageConverters = restTemplate
+                .getMessageConverters();
+        restTemplate.setMessageConverters(listHttpMessageConverters);
+        return restTemplate;
+    }
 </code></pre></div>
-<p>[/sourcecode]</p>
-
-<p>Let&#39;s try to understand the code given above</p>
-
-<p><strong>Line 7:</strong> It creates a restTemplate object. The RestTemplate aides Restful communication with the HTTP servers.</p>
-
-<p><strong>Line 8:</strong> The restTemplate is assigned a requestFactory. RequestFactory is used for creating HttpClientRequest representing a client side http request.</p>
-
-<p><strong>Line 9:</strong> The url used is not localhost or the loop back address 127.0.0.1. You might have guessed it already. The application is deployed onto a device or an Android emulator. It is the device that takes the localhost IP not the development machine. To resolve this, I have used the IP address as per my machine&#39;s network configuration.</p>
-
-<p><strong>Line 10:</strong> It is a rest call to the web-service url. Please notice that it is a HTTP GET request as indicated by the name getForObject(). I have specified the String.class as the second argument to the method which means the data returned is to be interpreted as String data.</p>
-
-<p>The method supported by the <strong>RestTemplate</strong> are listed below [code language=&quot;java&quot; light=&quot;true&quot;] HTTP RestTemplate DELETE delete(String, String...) GET getForObject(String, Class, String...) HEAD headForHeaders(String, String...) OPTIONS optionsForAllow(String, String...) POST postForLocation(String, Object, String...) PUT put(String, Object, String...) 
- ``` But, when I try to run this code I get an exception</p>
-
-<p>[sourcecode language=&quot;java&quot; light=&quot;true&quot;] no suitable HttpMessageConverter found for response type [com.xebia.android.Project] and content type [application/json] [/sourcecode] That&#39;s because we are not dealing with text data here but JSON data type</p>
-
-<p>Making this work requires few changes to our activity class. Below are the changes to be made [sourcecode language=&quot;java&quot;] public class DefaultActivity extends Activity { /*_ Called when the activity is first created. _/ @Override public void onCreate(Bundle savedInstanceState) { ... RestTemplate restTemplate = <strong>getRestTemplate()</strong>; JSONData[] jsonData = restTemplate.getForObject(url,ProjectData[].class); ... }</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">private RestTemplate getRestTemplate() {
-    RestTemplate restTemplate = new RestTemplate();
-    restTemplate.setRequestFactory(new CommonsClientHttpRequestFactory());
-    &amp;lt;strong&amp;gt;MappingJacksonHttpMessageConverter jsonConverter = 
-                            new MappingJacksonHttpMessageConverter();
-    List&amp;lt;MediaType&amp;gt; supportedMediaTypes = new ArrayList&amp;lt;MediaType&amp;gt;();
-    supportedMediaTypes.add(new MediaType(&amp;quot;application&amp;quot;,&amp;quot;json&amp;quot;));
-    jsonConverter.setSupportedMediaTypes(supportedMediaTypes);&amp;lt;/strong&amp;gt;
-
-    List&amp;lt;HttpMessageConverter&amp;lt;?&amp;gt;&amp;gt; listHttpMessageConverters = restTemplate
-            .getMessageConverters();
-    restTemplate.setMessageConverters(listHttpMessageConverters);
-    return restTemplate;
-}
-</code></pre></div>
-<p>[/sourcecode]</p>
-
 <p>To handle the JSON array data the response should be understandable by the restTemplate.</p>
 
 <p>As such, in the code above I have registered a ** MappingJacksonHttpMessageConverter **with the restTemplate so as to read and write JSON data. </p>
@@ -169,7 +167,8 @@ setContentView(R.layout.main);
 <p>Here&#39;s our *<em>Android client *</em>side class representing Project data</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text"> @JsonIgnoreProperties( {&quot;class&quot; }) public class JSONData { private String name; private Integer id; private String owner; private Issue[] issues; … //getter and setters for all … } 
 </code></pre></div>
-<p>here, JsonIgnoreProperties annotation conveys the JSON mapper that these are the properties to be excluded. The JSON response contains a class variable which I am ignoring in the code above. [sourcecode language=&quot;java&quot;] {&quot;class&quot;:&quot;com.xyz.Project&quot;,&quot;id&quot;:1,&quot;issues&quot;:[],&quot;name&quot;:&quot;TestProject0&quot;,&quot;owner&quot;:&quot;Test0&quot;} [/sourcecode]</p>
+<p>here, JsonIgnoreProperties annotation conveys the JSON mapper that these are the properties to be excluded. The JSON response contains a class variable which I am ignoring in the code above.  {&quot;class&quot;:&quot;com.xyz.Project&quot;,&quot;id&quot;:1,&quot;issues&quot;:[],&quot;name&quot;:&quot;TestProject0&quot;,&quot;owner&quot;:&quot;Test0&quot;} 
+```</p>
 
 <p>Please note that issues property is declared as an array. This is because with JSON it&#39;s easier to work with arrays.</p>
 

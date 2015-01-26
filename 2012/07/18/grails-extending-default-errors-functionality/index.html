@@ -91,7 +91,7 @@
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
 
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-              <h4>Reading time about 4  minutes</h4>
+              <h4>Reading time about 5  minutes</h4>
 
               <h1>Grails: Extending default &#39;Errors&#39; functionality</h1>
 
@@ -122,9 +122,8 @@
 <p>As mentioned earlier, Spring Framework provides separate abstraction for handling Global level errors as <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/validation/ObjectError.html">ObjectError</a> which encapsulates an object error, that is, a global reason for rejecting an object. Field level errors are handled via <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/validation/FieldError.html">FieldError</a> Class which inherits from ObjectError along with properties encapsulating field level information.</p>
 
 <p>What we need to do is to inject a field named ‘<strong>errorType</strong>’ in ObjectError Class or individually in FieldError in order to <strong>differentiate between Error &amp; Warning</strong>. Since these classes are pre-compiled and shipped in Spring framework plug-in, one cannot get access to the source code of these classes. Therefore, in order to add a custom field in these pre-compiled classes, we can make use of <strong>Groovy Metaclass Injection mechanism</strong>. Metaclass Injection provides a way to add new fields, methods, constructors or modify the body of existing methods in a class. Complete information around Groovy Metaclass Injection can be found <strong><a href="http://groovy.codehaus.org/JN3525-MetaClasses">here</a></strong>.</p>
-
-<p>[sourcecode lang=&quot;groovy&quot;] ObjectError.metaClass.errorType = ErrorType.HARD_ERROR [/sourcecode]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> ObjectError.metaClass.errorType = ErrorType.HARD_ERROR 
+</code></pre></div>
 <p>*****ErrorType is a user-defined enum having two values - HARD<em>ERROR, SOFT</em>ERROR</p>
 
 <p>Here I have injected errorType field into ObjectError Class whose default value is HARD_ERROR. Adding a field in the above manner exposes a default getter-setter method at the runtime, so one need not to expose any getter-setter method explicitly.</p>
@@ -134,10 +133,9 @@
 <p>The most important prerequisite of this step is to_ identify the <strong>implementation class of Errors Interface</strong> in Grails pre 2.0 &amp; post 2.0_ versions. Spring framework provides <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/validation/BeanPropertyBindingResult.html">BeanPropertyBindingResult</a> Class as the implementation class of Errors Interface which is referenced directly in Grails pre 2.0 versions, whereas in post 2.0 versions, Grails provide its own class <a href="http://grails.org/doc/latest/api/grails/validation/ValidationErrors.html">ValidationErrors</a> extending BeanPropertyBindingResult Class, which provides two methods (<em>getAt, putAt</em>) for easy retrieval and addition of field errors.</p>
 
 <p>Once this is done, next task is to <strong>inject a new method in the implementation class</strong> that adds an error with supplied ‘errorType’. The signature of new overloaded method will be very much similar to that of existing methods for adding error, with only difference that it will accept an <strong>additional argument of type <em>ErrorType</em></strong>.</p>
-
-<p>[sourcecode lang=&quot;groovy&quot;] BeanPropertyBindingResult.metaClass.rejectValue = { String field, String code, Object[] args, String defaultMsg, ErrorType errorType-&gt; String[] codes = ``` 
- FieldError fieldError = new FieldError(delegate.objectName,field, null,false,codes,args,defaultMsg) fieldError.errorType = errorType delegate.addError(fieldError) } [/sourcecode]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> BeanPropertyBindingResult.metaClass.rejectValue = { String field, String code, Object[] args, String defaultMsg, ErrorType errorType-&gt; String[] codes = ``` 
+ FieldError fieldError = new FieldError(delegate.objectName,field, null,false,codes,args,defaultMsg) fieldError.errorType = errorType delegate.addError(fieldError) } 
+</code></pre></div>
 <p>*For injecting this new overloaded method, we have again used Grails Metaclass Injection mechanism.</p>
 
 

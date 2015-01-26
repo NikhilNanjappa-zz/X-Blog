@@ -117,17 +117,20 @@ We will now create a shared instance for <em>ImageDownloadManager</em> (Objectiv
 
 <p>In order to do so, define a class method <em>instance</em> in <em>ImageDownloadManager.h</em>:</p>
 
-<p>[sourcecode lang=&quot;objc&quot;]<br /> #import &lt;foundation&gt;</p> <p>@interface ImageDownloadManager : NSObject</p> <p>+ (ImageDownloadManager _) instance;</p> <p>@end<br /> [/sourcecode]</p>
+<p>[sourcecode lang=&quot;objc&quot;]<br /> #import &lt;foundation&gt;</p> <p>@interface ImageDownloadManager : NSObject</p> <p>+ (ImageDownloadManager _) instance;</p> <p>@end<br /> 
+```</p>
 
 <p>In the implementation file i.e. in <em>ImageDownloadManager.m</em>, declare a static variable <em>singletonInstance</em> of type <em>ImageDownloadManager</em> and implement the instance method as:</p>
 
-<p>[sourcecode lang=&quot;objc&quot;]<br /> #import &quot;ImageDownloadManager.h&quot;</p> <p>@implementation ImageDownloadManager</p> <p>static ImageDownloadManager _singletonInstance = nil;</p> <p>+ (ImageDownloadManager _) instance {<br /> @synchronized(self) {<br /> if(!singletonInstance) {<br /> singletonInstance = [[ImageDownloadManager alloc] init];<br /> }<br /> }</p> <p> return singletonInstance;<br /> }</p> <p>@end<br /> [/sourcecode]</p>
+<p>[sourcecode lang=&quot;objc&quot;]<br /> #import &quot;ImageDownloadManager.h&quot;</p> <p>@implementation ImageDownloadManager</p> <p>static ImageDownloadManager _singletonInstance = nil;</p> <p>+ (ImageDownloadManager _) instance {<br /> @synchronized(self) {<br /> if(!singletonInstance) {<br /> singletonInstance = [[ImageDownloadManager alloc] init];<br /> }<br /> }</p> <p> return singletonInstance;<br /> }</p> <p>@end<br /> 
+```</p>
 
 <p><em>@synchronized()</em> directive locks a section of the code for use by a single thread. Other threads are blocked until the thread executes last statement in the <em>@synchronized()</em> block. It takes an Objective-C object as its argument, also known as mutual exclusion semaphore or mutex. Over here class object <em>self</em> is used as a semaphore to create a shared instance safely across threads.</p>
 
 <p>So we have now shared instance of <em>ImageDownloadManager</em> available throughout the application which is accessible by:</p>
 
-<p>[sourcecode lang=&quot;objc&quot;]<br /> ImageDownloadManager _imageDownloadManager = [ImageDownloadManager instance];<br /> [/sourcecode]</p>
+<p>[sourcecode lang=&quot;objc&quot;]<br /> ImageDownloadManager _imageDownloadManager = [ImageDownloadManager instance];<br /> 
+```</p>
 
 <hr>
 
@@ -144,11 +147,13 @@ Let us now move on to our first task i.e. download an image asynchronously from 
 
 <p>With all changes, <em>ImageDownloadOperation.h</em> should look like:</p>
 
-<p>[sourcecode lang=&quot;objc&quot;]<br /> #import &lt;foundation&gt;</p> <p>@interface ImageDownloadOperation : NSOperation</p> <p>@property(readonly, copy) NSURL _url;</p> <p>- (id)initWithURL:(NSURL _)url;</p> <p>@end<br /> [/sourcecode]</p>
+<p>[sourcecode lang=&quot;objc&quot;]<br /> #import &lt;foundation&gt;</p> <p>@interface ImageDownloadOperation : NSOperation</p> <p>@property(readonly, copy) NSURL _url;</p> <p>- (id)initWithURL:(NSURL _)url;</p> <p>@end<br /> 
+```</p>
 
 <p><em>ImageDownloadOperation.m</em> should look like:</p>
 
-<p>[sourcecode lang=&quot;objc&quot;]<br /> #import &quot;ImageDownloadOperation.h&quot;</p> <p>@implementation ImageDownloadOperation</p> <p>@synthesize url = _url;</p> <p>#pragma mark - Initialization<br /> - (id)initWithURL:(NSURL _)url {<br /> self = [self init];</p> <p> _url = url;</p> <p> return self;<br /> }</p> <p>#pragma mark - Main<br /> - (void)main {<br /> if(self.isCancelled == YES || self.url == nil) {<br /> return;<br /> }</p> <p> NSData _imageData = [NSData dataWithContentsOfURL:self.url];</p> <p> if(self.isCancelled == YES) {<br /> return;<br /> }</p> <p> UIImage *image;</p> <p> if(imageData != nil) {<br /> image = [UIImage imageWithData:imageData];<br /> }<br /> }</p> <p>@end<br /> [/sourcecode]</p>
+<p>[sourcecode lang=&quot;objc&quot;]<br /> #import &quot;ImageDownloadOperation.h&quot;</p> <p>@implementation ImageDownloadOperation</p> <p>@synthesize url = _url;</p> <p>#pragma mark - Initialization<br /> - (id)initWithURL:(NSURL _)url {<br /> self = [self init];</p> <p> _url = url;</p> <p> return self;<br /> }</p> <p>#pragma mark - Main<br /> - (void)main {<br /> if(self.isCancelled == YES || self.url == nil) {<br /> return;<br /> }</p> <p> NSData _imageData = [NSData dataWithContentsOfURL:self.url];</p> <p> if(self.isCancelled == YES) {<br /> return;<br /> }</p> <p> UIImage *image;</p> <p> if(imageData != nil) {<br /> image = [UIImage imageWithData:imageData];<br /> }<br /> }</p> <p>@end<br /> 
+```</p>
 
 <p>The property <em>url</em> is read only and can only be set during initialization. In the <em>main</em> method, we download image data available at the given URL using _[NSData dataWithContentsOfURL</p>
 

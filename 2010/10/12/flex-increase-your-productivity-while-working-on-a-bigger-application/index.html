@@ -105,50 +105,34 @@ This is where flex conditional compiling came to rescue.Using flex conditional c
 to go to production and still have it in the Application. In the example below we will see a simpler way to add flex conditional compiling code.</p>
 
 <p>In Flex , you can pass additional constants during compile time using the  -define as  compiler argument. Following is the syntax you add to your compiler</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">[sourcecode language=&quot;java&quot;]
+<div class="highlight"><pre><code class="language-text" data-lang="text">-define=NAMESPACE::variable,value
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">Where the namespace can be anything like DEBUG , RELEASE and value of the variable can be Boolean, String, or Number, or an expression that can be evaluated in ActionScript at compile time.In the below example we are going to create a namespace DEBUG and pass the variable insertCode as BooleanOnce you have passed the variable as compiler argument this can be further used in the flex code using&lt;/p&gt;
 
 
-
-
--define=NAMESPACE::variable,value
-
-
-
-
-[/sourcecode]
-</code></pre></div>
-<p>Where the namespace can be anything like DEBUG , RELEASE and value of the variable can be Boolean, String, or Number, or an expression that can be evaluated in ActionScript at compile time.In the below example we are going to create a namespace DEBUG and pass the variable insertCode as BooleanOnce you have passed the variable as compiler argument this can be further used in the flex code using</p></p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">[sourcecode language=&quot;java&quot;]DEBUG::insertCode[/sourcecode]
+    DEBUG::insertCode
 </code></pre></div>
 <p>In flex to allow a block</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">[sourcecode language=&quot;java&quot;]
-    { 
+<div class="highlight"><pre><code class="language-text" data-lang="text">    { 
 
 
 
 
 
 }
-</code></pre></div>
-<p>[/sourcecode]</p>
-
-<p>to be complied or not is decided by the  evaluating expression before the block. If the expression evaluated to be true the block is add to the compile code</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">[sourcecode language=&quot;java&quot;]
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">to be complied or not is decided by the  evaluating expression before the block. If the expression evaluated to be true the block is add to the compile code
 
 
 
 
-expression{
+
+
+
+    expression{
 
 
 
 
-}
-
-
-
-
-[/sourcecode]
+    }
 </code></pre></div>
 <p>Below is the example showing how I use conditional compiling to speedup the application development. Click on this link  <a href="http://xebee.xebia.in/wp-content/uploads/2010/10/ConditionalCompiling.zip">ConditionalCompiling</a> to download the project and check it out.</p>
 

@@ -109,9 +109,10 @@
 
 <p>You might have explored basic <strong>Spring Configuration</strong> with no xml, but today we will look how to configure <strong>Spring Security</strong> with zero xml. I am writing this blog assuming you have an idea for Spring basic configuration with no xml. We need to make the following entry in POM.xml file:</p>
 
-<p>[sourcecode language=&quot;xml&quot;] <dependency> <groupId>org.springframework.security</groupId> <artifactId>spring-security-web</artifactId> <version>3.2.0.RELEASE</version> </dependency> <dependency> <groupId>org.springframework.security</groupId> <artifactId>spring-security-config</artifactId> <version>3.2.0.RELEASE</version> </dependency> <dependency> <groupId>org.springframework.security</groupId> <artifactId>spring-security-taglibs</artifactId> <version>3.2.0.RELEASE</version> </dependency> [/sourcecode] <strong>spring-security-taglibs</strong> is used to use taglib in jsp files for gathering security related information.</p>
+<p>[sourcecode language=&quot;xml&quot;] <dependency> <groupId>org.springframework.security</groupId> <artifactId>spring-security-web</artifactId> <version>3.2.0.RELEASE</version> </dependency> <dependency> <groupId>org.springframework.security</groupId> <artifactId>spring-security-config</artifactId> <version>3.2.0.RELEASE</version> </dependency> <dependency> <groupId>org.springframework.security</groupId> <artifactId>spring-security-taglibs</artifactId> <version>3.2.0.RELEASE</version> </dependency> 
+``` <strong>spring-security-taglibs</strong> is used to use taglib in jsp files for gathering security related information.</p>
 
-<p>Next step would be Creating your Spring Security configuration, for this you need to create a class for configuring this: [sourcecode language=&quot;java&quot;] @Configuration @EnableWebMvcSecurity @ComponentScan(&quot;com.priyank.sample&quot;) public class MultiHttpSecurityConfig extends WebSecurityConfigurerAdapter {</p>
+<p>Next step would be Creating your Spring Security configuration, for this you need to create a class for configuring this:  @Configuration @EnableWebMvcSecurity @ComponentScan(&quot;com.priyank.sample&quot;) public class MultiHttpSecurityConfig extends WebSecurityConfigurerAdapter {</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">@Autowired
 private DataSource dataSource;
 
@@ -151,19 +152,14 @@ public AuthenticationManager getAuthenticationManager() throws Exception {
 }
 </code></pre></div>
 <p>}</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">  * The annotation **@EnableWebMvcSecurity** is added this to an @Configuration class to have the Spring Security configuration integrate with Spring MVC.
+  * We are using authentication by two means, first as database authentication and secondly in-memory authentication.
+  * The above configuration is done in **configure** method with **AuthenticationManagerBuilder** as parameter, we register our userDetailService and in-memory authentication with **AuthenticationManagerBuilder**.
+  * I have used **BCryptPasswordEncoder** just to show its functionality that how to integrate it with our authentication system.
+  * The **configure** method with **HttpSecurity** as a parameter is used to configure the authorization of request, same as **** tag used in security-context xml file.
 
-<p>[/sourcecode]</p>
-
-<ul>
-<li>The annotation <strong>@EnableWebMvcSecurity</strong> is added this to an @Configuration class to have the Spring Security configuration integrate with Spring MVC.</li>
-<li>We are using authentication by two means, first as database authentication and secondly in-memory authentication.</li>
-<li>The above configuration is done in <strong>configure</strong> method with <strong>AuthenticationManagerBuilder</strong> as parameter, we register our userDetailService and in-memory authentication with <strong>AuthenticationManagerBuilder</strong>.</li>
-<li>I have used <strong>BCryptPasswordEncoder</strong> just to show its functionality that how to integrate it with our authentication system.</li>
-<li>The <strong>configure</strong> method with <strong>HttpSecurity</strong> as a parameter is used to configure the authorization of request, same as **** tag used in security-context xml file.</li>
-</ul>
-
-<p>Next step would be registering Spring Security with the war, to do this we need to create a Class that will extend <strong>AbstractSecurityWebApplicationInitializer</strong> and register our configuration file in the constructor by passing it to the super class constructor as : [sourcecode language=&quot;java&quot;] public class SecurityWebApplicationInitializer extends AbstractSecurityWebApplicationInitializer { public SecurityWebApplicationInitializer() { super(MultiHttpSecurityConfig.class); } } [/sourcecode]</p>
-
+Next step would be registering Spring Security with the war, to do this we need to create a Class that will extend **AbstractSecurityWebApplicationInitializer** and register our configuration file in the constructor by passing it to the super class constructor as :  public class SecurityWebApplicationInitializer extends AbstractSecurityWebApplicationInitializer { public SecurityWebApplicationInitializer() { super(MultiHttpSecurityConfig.class); } } 
+</code></pre></div>
 <p>This class will serve two purpose </p>
 
 <ul>
@@ -171,7 +167,7 @@ public AuthenticationManager getAuthenticationManager() throws Exception {
 <li>Add a ContextLoaderListener that loads the SecurityConfig.</li>
 </ul>
 
-<p>We are almost done with the configuration part, the only thing left is to configure <strong>UserDetailsService</strong>, we can have a look on the implementation below: [sourcecode language=&quot;java&quot;] @Component public class LocalUserDetailService implements UserDetailsService {</p>
+<p>We are almost done with the configuration part, the only thing left is to configure <strong>UserDetailsService</strong>, we can have a look on the implementation below:  @Component public class LocalUserDetailService implements UserDetailsService {</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">@Autowired
 private EmployeeService employeeService;
 
@@ -193,7 +189,8 @@ public CustomUserBean loadUserByUsername(String userName)
     return user;
 }
 </code></pre></div>
-<p>} [/sourcecode] The above class override the <strong>loadUserByUsername</strong> method and returns the user object after manipulation from the database persisted user.</p>
+<p>} 
+``` The above class override the <strong>loadUserByUsername</strong> method and returns the user object after manipulation from the database persisted user.</p>
 
 <p>You can download the source code <a href="http://xebee.xebia.in/wp-content/uploads/2014/02/JavaConfiguration1.zip">JavaConfiguration.zip</a> here.</p>
 

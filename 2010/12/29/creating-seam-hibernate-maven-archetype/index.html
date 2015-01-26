@@ -101,8 +101,9 @@
 
 <ul>
 <li>First we created the structure of the project that we wanted to be generated from the archetype.</li>
-<li>We then used the command  <strong>mvn archetype:create-from-project</strong> (in root directory). An important file to be considered after this step is <strong>archetype-metadata.xml</strong> (found in target/generated-sources/archetype/src/main/resources/META-INF/maven) which contains meta information about the directories and files that will be included in the archetype. We can further enrich this file by marking required properties, giving them default values or even creating new properties. For example [sourcecode language=&quot;xml&quot;] <requiredProperties> <requiredProperty key="groupId"> <defaultValue>com.xebia</defaultValue> </requiredProperty> </requiredProperties> [/sourcecode]</li>
-<li>We now ran *<em>mvn install *</em>(after navigating to target/generated-sources/archetype) to finally generate the required archetype.
+<li>We then used the command  <strong>mvn archetype:create-from-project</strong> (in root directory). An important file to be considered after this step is <strong>archetype-metadata.xml</strong> (found in target/generated-sources/archetype/src/main/resources/META-INF/maven) which contains meta information about the directories and files that will be included in the archetype. We can further enrich this file by marking required properties, giving them default values or even creating new properties. For example [sourcecode language=&quot;xml&quot;] <requiredProperties> <requiredProperty key="groupId"> <defaultValue>com.xebia</defaultValue> </requiredProperty> </requiredProperties> 
+```
+* We now ran *<em>mvn install *</em>(after navigating to target/generated-sources/archetype) to finally generate the required archetype.
 This method allowed us to use an IDE to generate the startup project and automatically convert it into the the archetype by running few commands.</li>
 </ul>
 
@@ -110,7 +111,8 @@ This method allowed us to use an IDE to generate the startup project and automat
 
 <p>[sourcecode language=&quot;xml&quot;]</p>
 
-<p>|--pom.xml <code>\-- src |-- main | |-- java | |</code>-- com | | <code>\-- xebia | |</code>-- seam | | |-- components | | | |-- Login.java | | | <code>\-- Register.java | |</code>-- domain | | <code>\-- User.java | |-- resources | | |-- hibernate.cfg.xml | | |-- hibernate.properties | |</code>-- seam.properties | <code>\-- webapp | |-- home.xhtml | |-- index.jsp | |-- login.xhtml | |-- META-INF | |</code>-- MANIFEST.MF | |-- register.xhtml | |-- template.xhtml | <code>\-- WEB-INF | |-- components.xml | |-- faces-config.xml | |-- lib | |-- pages.xml |</code>-- web.xml <code>\-- test |-- java |</code>-- com | <code>\-- xebia |</code>-- seam | |-- components | | <code>\-- LoginTest.java |</code>-- databaseSetup | <code>\-- IDataMethods.java</code>-- resources |-- dataset.xml `-- hibernate-test.cfg.xml [/sourcecode]</p>
+<p>|--pom.xml <code>\-- src |-- main | |-- java | |</code>-- com | | <code>\-- xebia | |</code>-- seam | | |-- components | | | |-- Login.java | | | <code>\-- Register.java | |</code>-- domain | | <code>\-- User.java | |-- resources | | |-- hibernate.cfg.xml | | |-- hibernate.properties | |</code>-- seam.properties | <code>\-- webapp | |-- home.xhtml | |-- index.jsp | |-- login.xhtml | |-- META-INF | |</code>-- MANIFEST.MF | |-- register.xhtml | |-- template.xhtml | <code>\-- WEB-INF | |-- components.xml | |-- faces-config.xml | |-- lib | |-- pages.xml |</code>-- web.xml <code>\-- test |-- java |</code>-- com | <code>\-- xebia |</code>-- seam | |-- components | | <code>\-- LoginTest.java |</code>-- databaseSetup | <code>\-- IDataMethods.java</code>-- resources |-- dataset.xml <code>-- hibernate-test.cfg.xml 
+</code>``</p>
 
 <p>It was fun learning how maven can be used to do stuff that cannot be done with the help of other build tools which are pretty limited in the build scope. The archetype source is <a href="http://xebee.xebia.in/wp-content/uploads/2010/12/archetype.zip">here</a> , just unzip it and run mvn install to install the archetype in local repository.Then use <strong>mvn</strong> <strong>archetype:generate -DarchetypeCatalog=local</strong> to generate new project. We plan to release it to the maven repositories soon. Watch this blog for more updates.</p>
 

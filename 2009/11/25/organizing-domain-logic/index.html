@@ -117,19 +117,22 @@ In this blog, we will discuss various patterns of organizing domain logic and sp
 
 <p><strong>Transaction Script (TS)</strong> Transaction script is essentially a procedure that takes input from the presentation, processes it with validations and calculations, stores data in the database, send emails, etc. It may also fetch the data and send to the UI. It&#39;s more like coding a C program in Java. Typically, in transaction script method of organizing domain logic, the code is segregated into various services and each service has methods that perform a particular business functionality. A method of a transaction service might look like this</p>
 
-<p>[sourcecode language=&quot;java&quot;]void tsmethod(params) { // get data // process data if () { } else if { } else { } // insert/update/delete data //send email }[/sourcecode]</p>
+<p>void tsmethod(params) { // get data // process data if () { } else if { } else { } // insert/update/delete data //send email }
+```</p>
 
 <p>As you can see from the above, most of the above code is procedural. Here, the services act on the entities. A typical example would be an interaction between session bean and entity bean. Another similar pattern not mentioned in the PoEEA is <a href="http://martinfowler.com/bliki/AnemicDomainModel.html">Anemic Domain Model</a> (ADM) which works on the same principle where domain objects have attributes and relationships but does not have behaviour. Behaviour is provided by the services. The different between TS and ADM is that in former we do not have domain objects but rather have something which Fowler describe as <a href="http://martinfowler.com/eaaCatalog/tableDataGateway.html">Table Data Gateway</a>, which essentially is a wrapper for SQL queries.</p>
 
 <p><strong>Domain Model (DM)</strong> In domain model approach, both behaviour and data are encapsulated inside the domain objects. Domain model looks different from the database design and utilizes inheritance, strategies, and other design patterns to create complex webs of small interconnected objects. A typical domain model code might look like</p>
 
-<p>[sourcecode lang=&quot;java&quot;]class Bar { private BarAdmissionPolicy = new BarAdmissionPolicy(); public void admit(Person person) { if (BarAdmissionPolicy.isAllowed(person)) { this.add(person) } } } public class BarAdmissionPolicy { public boolean isAllowed(Person person) { if (person.age &gt; 18) { return true; } return false; } }[/sourcecode]</p>
+<p>[sourcecode lang=&quot;java&quot;]class Bar { private BarAdmissionPolicy = new BarAdmissionPolicy(); public void admit(Person person) { if (BarAdmissionPolicy.isAllowed(person)) { this.add(person) } } } public class BarAdmissionPolicy { public boolean isAllowed(Person person) { if (person.age &gt; 18) { return true; } return false; } }
+```</p>
 
 <p>A well designed domain model provides an abstraction of the domain logic. It encapsulates complex business logic as interactions between domain objects.</p>
 
 <p><strong>Table Module (TM)</strong> It is essentially a singleton instance that handles the business logic for all the rows in a database table. There is no concept of identity in a Table Module. It is designed to operate on entire table data. A typical domain might look like</p>
 
-<p>[sourcecode language=&quot;java&quot;]class Product { void insert(name, type, etc) { } void insertAll(List) { } void calculateProductCost(List productIds) { } }[/sourcecode]</p>
+<p>class Product { void insert(name, type, etc) { } void insertAll(List) { } void calculateProductCost(List productIds) { } }
+```</p>
 
 <p>As you can see, a table module encapsulates the data and behaviour of the entire table. It is most commonly used in places where UI widgets are data-aware like Oracle Forms or .Net environment which has Visual Studio, which provides tools like <a href="http://en.wikipedia.org/wiki/Recordset">RecordSet</a>.</p>
 

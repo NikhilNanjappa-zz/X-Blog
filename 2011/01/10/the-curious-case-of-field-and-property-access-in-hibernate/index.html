@@ -112,7 +112,8 @@
             return hotel;
     }
 </code></pre></div>
-<p>... [/sourcecode]</p>
+<p>... 
+```</p>
 
 <p>Well, this points to a classic rule of Hibernate Access types (the focus of this blog) ; &quot;<strong>Be consistent while placing your annotations or use @Access instead</strong>&quot;. By default if we don&#39;t use @Access, Hibernate looks for <strong>@Id</strong> or <strong>@EmbeddedId</strong> and then decides whether it should look for other annotations on the fields or on the getters(properties).Thus either place the annotations on the fields only or on the getters(properties) only. Mixing them and not using @Access will cause abnormal behaviour.</p>
 
@@ -137,7 +138,8 @@
             return hotel;
     }
 </code></pre></div>
-<p>... [/sourcecode]</p>
+<p>... 
+```</p>
 
 <p>You could also place the @Access(AccessType.PROPERTY) or @Access(AccessType.FIELD) annotation on the class instead to mark the properties or fields as the access types. Thats a personal preference that we leave to you, but for us Field access wins hands down for its clarity.</p>
 

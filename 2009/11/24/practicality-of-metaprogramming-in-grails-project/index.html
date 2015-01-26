@@ -105,15 +105,18 @@
 
 <p>we can add a method to an object using  its metaClass and a <a href="http://groovy.codehaus.org/Closures">closure</a></p>
 
-<p>[sourcecode language=&quot;java&quot;]class Module { String name } Module.metaClass.album = { //add the logic for this dynamic method album }[/sourcecode]</p>
+<p>class Module { String name } Module.metaClass.album = { //add the logic for this dynamic method album }
+```</p>
 
 <p>Some of the scenarios where we can use Metaprogramming in my Grails project(indirectly) are</p>
 
-<p><strong>1) Using Dynamic methods for domain objects provided by GORM</strong> [sourcecode language=&quot;java&quot;]Module.findAllByNameLike(&quot;%Groovy%&quot;); def module = new Module(name:&#39;groovy&#39;,url:&#39;someurl&#39;).save()[/sourcecode] In controllers and Services we can use these dynamic methods and it makes life very simple.</p>
+<p><strong>1) Using Dynamic methods for domain objects provided by GORM</strong> Module.findAllByNameLike(&quot;%Groovy%&quot;); def module = new Module(name:&#39;groovy&#39;,url:&#39;someurl&#39;).save()
+``` In controllers and Services we can use these dynamic methods and it makes life very simple.</p>
 
 <p><strong>2) Groovy has added the some methods to final classes like java,lang.Integer, java,lang.String.</strong></p>
 
-<p>Groovy added closure methods to metaClass of these classes. [sourcecode language=&quot;java&quot;]3.times { //put your business logic here }[/sourcecode] We can use this helpful methods of Groovy in our application. The readability is increased here and syntax is simple.</p>
+<p>Groovy added closure methods to metaClass of these classes. 3.times { //put your business logic here }
+``` We can use this helpful methods of Groovy in our application. The readability is increased here and syntax is simple.</p>
 
 <p>Consider a situation if we have to add these dynamic methods to business objects in our application.  Yes we can very well add these methods dynamically and do our business logic but it comes at huge cost.</p>
 

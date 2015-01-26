@@ -99,13 +99,14 @@
 
 <p>Jquery already provides <a href="http://docs.jquery.com/Plugins/Autocomplete">auto suggest</a> functionality. The question here is making functionality generic so that next time we have to use that its a breeze to use. Lets create a tag which can add the necessary jquery code for a text field to have auto suggest capability.</p>
 
-<p><strong>HTML code :</strong> [sourcecode language=&quot;html&quot;] <g:textField name="city" id="city" value="" /> <g:autoSuggest autoCompleteForId="city" searchObject="com.xebia.Address" searchProperty="city"/> [/sourcecode]</p>
+<p><strong>HTML code :</strong> [sourcecode language=&quot;html&quot;] <g:textField name="city" id="city" value="" /> <g:autoSuggest autoCompleteForId="city" searchObject="com.xebia.Address" searchProperty="city"/> 
+```</p>
 
 <p>For searchObject property we must give the fully qualified class name of the domain object. Here we have Address as the domain objects which has a property city in it. The above tag is handled by the following closure in the Taglibrary.</p>
 
 <p><strong>Autocomplete Tag Library:</strong></p>
 
-<p>[sourcecode language=&quot;java&quot;] def autoSuggest = { attrs , body -&gt; def searchObject = attrs.searchObject def searchProperty = attrs.searchProperty def htmlId = attrs.autoCompleteForId def width = attrs.width def contextName = grailsApplication.config.grails.serverURL def actionName = attrs.action ? attrs.action : &#39;autoSuggest&#39; def controllerName = attrs.controller ? attrs.controller : &#39;autocomplete&#39; </p>
+<p>def autoSuggest = { attrs , body -&gt; def searchObject = attrs.searchObject def searchProperty = attrs.searchProperty def htmlId = attrs.autoCompleteForId def width = attrs.width def contextName = grailsApplication.config.grails.serverURL def actionName = attrs.action ? attrs.action : &#39;autoSuggest&#39; def controllerName = attrs.controller ? attrs.controller : &#39;autocomplete&#39; </p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">    String serviceUrl =  createLink(controller:controllerName, action:actionName , absolute:true)
 
     importScriptsAndCSS(out, contextName, pageScope);
@@ -133,36 +134,33 @@
     &#39;&#39;&#39;
 
 }
-</code></pre></div>
-<p>[/sourcecode]</p>
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">The method importScriptsAndCSS(out, contextName, pageScope) as the name suggests, adds the necessary css and javascript needed only once per page. The auto suggest tag that we use in tandem with a text field captures the property that we need suggestions for on an domain object and adds necessary jquery code to hit a generic AutoSuggestController which will return the matching options in JSON format to jquery. Now lets look at the generic AutoSuggestController code.
 
-<p>The method importScriptsAndCSS(out, contextName, pageScope) as the name suggests, adds the necessary css and javascript needed only once per page. The auto suggest tag that we use in tandem with a text field captures the property that we need suggestions for on an domain object and adds necessary jquery code to hit a generic AutoSuggestController which will return the matching options in JSON format to jquery. Now lets look at the generic AutoSuggestController code.</p>
+**AutoSuggestController**
 
-<p><strong>AutoSuggestController</strong></p>
+ def autoSuggest = { log.debug(&quot;Inside the auto complete controller&quot;) def searchObject = params.searchObject def searchProperty = params.searchProperty def queryValue = params.query
 
-<p>[sourcecode language=&quot;java&quot;] def autoSuggest = { log.debug(&quot;Inside the auto complete controller&quot;) def searchObject = params.searchObject def searchProperty = params.searchProperty def queryValue = params.query</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    def searchCriteria = grailsApplication.getClassForName(searchObject).createCriteria()
-    log.debug &amp;quot;query value is ${queryValue}&amp;quot;
-    def results = searchCriteria.list{
-        projections {
-            groupProperty(searchProperty)
+
+        def searchCriteria = grailsApplication.getClassForName(searchObject).createCriteria()
+        log.debug &amp;quot;query value is ${queryValue}&amp;quot;
+        def results = searchCriteria.list{
+            projections {
+                groupProperty(searchProperty)
+            }
+            ilike(searchProperty, &amp;quot;%${queryValue}%&amp;quot;)
+            maxResults(5)
         }
-        ilike(searchProperty, &amp;quot;%${queryValue}%&amp;quot;)
-        maxResults(5)
+        log.debug(&amp;quot;Auto suggest Results  : &amp;quot;+results)
+        render createJSONForResults(results, queryValue , searchProperty)
     }
-    log.debug(&amp;quot;Auto suggest Results  : &amp;quot;+results)
-    render createJSONForResults(results, queryValue , searchProperty)
-}
 </code></pre></div>
-<p>[/sourcecode]</p>
-
 <p>The above code snippet is the action that will be accessed by the jquery which also passes the search Property and Search Object to the controller. Dynamically we determine the domain object by this line of code <strong>grailsApplication.getClassForName(searchObject).createCriteria()</strong></p>
 
 <p>We get the domain object from the fully qualified class name and then create a criteria on the grails domain object. In this criteria we attempt to get the list of objects for which the searchProperty(city) matches. Once we get the list of objects we have to convert the list into JSON object format, so that that is passed back to the jquery to render the auto suggestions.</p>
 
 <p><strong>JSON format can be achieved like this</strong></p>
 
-<p>[sourcecode language=&quot;java&quot;] private String createJSONForResults(def results, String queryValue, String searchProperty) { def resultsArray = results.toArray() StringBuilder resultsJSONObject = new StringBuilder(&quot;{ query : \&#39;${queryValue}\&#39; , suggestions: [&quot;) if(resultsArray.length &gt; 0) { for(int i=0;i&lt;resultsArray.length-1;i++) { String currentProperty = resultsArray[i] currentProperty = &quot;&#39;&quot; + currentProperty + &quot;&#39;,&quot; resultsJSONObject.append(currentProperty) }</p>
+<p>private String createJSONForResults(def results, String queryValue, String searchProperty) { def resultsArray = results.toArray() StringBuilder resultsJSONObject = new StringBuilder(&quot;{ query : \&#39;${queryValue}\&#39; , suggestions: [&quot;) if(resultsArray.length &gt; 0) { for(int i=0;i&lt;resultsArray.length-1;i++) { String currentProperty = resultsArray[i] currentProperty = &quot;&#39;&quot; + currentProperty + &quot;&#39;,&quot; resultsJSONObject.append(currentProperty) }</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">        def lastResult = resultsArray[resultsArray.length-1]
         String lastElement = &amp;quot;&#39;&amp;quot; + lastResult + &amp;quot;&#39;]}&amp;quot;
         resultsJSONObject.append(lastElement)
@@ -171,19 +169,18 @@
         resultsJSONObject.append(&amp;quot;]}&amp;quot;)
     }
 }
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">This piece of functionality can be used across the Grails applications and can be resued heavily in a single application as well following the DRY principle.
+
+**Conclusion** Following the same way of using a taglibrary and generic controller we can implement the other functionalities like rating objects, using adding favourites and many more using Grails dynamism.
+
+
+
+## Comments
+
+**[omarji](#359 &quot;2010-08-30 19:31:15&quot;):** Cool, I would be interested to know how to manage not writing the scripts and css more than once using importScriptsAndCSS() Note: you could use the elvis operator for the ternary ops. if you like :) def controllerName = attrs.controller ?: &#39;autocomplete&#39;
+
+**[Sunil Prakash Inteti](#858 &quot;2010-09-06 09:40:14&quot;):** omarji, Here is the way that you could use for importing css once. [sourcecode lang=&quot;java&quot;] private void importScriptsAndCSS(def out,String contextName,def pageScope ){ def executedOnceAutocomplete try { executedOnceAutocomplete = pageScope.executedOnceAutocomplete } catch(MissingPropertyException b) { //ignore } if(!executedOnceAutocomplete) { out &lt;&lt; &#39;&lt;link rel=\&quot;stylesheet\&quot; href=\&quot;&#39; out &lt;&lt; contextName out &lt;&lt; &#39;/css/autocomplete/autocomplete.css\&quot; /&gt; &#39; out &lt;&lt; &#39;&lt;script src=&quot;&#39; out &lt;&lt; contextName out &lt;&lt; &#39;/js/jquery/jquery.autocomplete.js&quot; &gt;&lt;/script&gt;&#39; pageScope.executedOnceAutocomplete = true; } } 
 </code></pre></div>
-<p>[/sourcecode]</p>
-
-<p>This piece of functionality can be used across the Grails applications and can be resued heavily in a single application as well following the DRY principle.</p>
-
-<p><strong>Conclusion</strong> Following the same way of using a taglibrary and generic controller we can implement the other functionalities like rating objects, using adding favourites and many more using Grails dynamism.</p>
-
-<h2>Comments</h2>
-
-<p><strong><a href="#359" title="2010-08-30 19:31:15">omarji</a>:</strong> Cool, I would be interested to know how to manage not writing the scripts and css more than once using importScriptsAndCSS() Note: you could use the elvis operator for the ternary ops. if you like :) def controllerName = attrs.controller ?: &#39;autocomplete&#39;</p>
-
-<p><strong><a href="#858" title="2010-09-06 09:40:14">Sunil Prakash Inteti</a>:</strong> omarji, Here is the way that you could use for importing css once. [sourcecode lang=&quot;java&quot;] private void importScriptsAndCSS(def out,String contextName,def pageScope ){ def executedOnceAutocomplete try { executedOnceAutocomplete = pageScope.executedOnceAutocomplete } catch(MissingPropertyException b) { //ignore } if(!executedOnceAutocomplete) { out &lt;&lt; &#39;<link rel=\"stylesheet\" href=\"' out << contextName out << '/css/autocomplete/autocomplete.css\" /> &#39; out &lt;&lt; &#39;<script src="' out << contextName out << '/js/jquery/jquery.autocomplete.js" ></script>&#39; pageScope.executedOnceAutocomplete = true; } } [/sourcecode]</p>
-
 
                 <hr>
 

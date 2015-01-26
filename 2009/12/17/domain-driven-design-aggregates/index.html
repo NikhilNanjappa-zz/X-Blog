@@ -105,15 +105,17 @@
 
 <p>In a software system, a common requirement can be to maintain the history of the changes to a user&#39;s payment information, like credit card number, cvv number, etc. Typically, this is done by creating an object for user&#39;s history and persisting it. This can be done as shown in the code below</p>
 
-<p>[sourcecode language=&quot;java&quot;] void updatePaymentInformation(params...) { //service class method User user = User.get(id);</p>
+<p>void updatePaymentInformation(params...) { //service class method User user = User.get(id);</p>
 
 <p>UserHistory userHistory = new UserHistory(user); //copy constructor to copy auditable fields userHistory.save();</p>
 
-<p>user.setCreditCardNumber(); user.setCvvNumber(); user.save(); } [/sourcecode]</p>
+<p>user.setCreditCardNumber(); user.setCvvNumber(); user.save(); } 
+```</p>
 
 <p>Above code seemingly easy, but logically, UserHistory does not have use without a user. The true identity of the UserHistory is the associated user. So, it is better to manage the UserHistory from the User object itself as shown in the code below.</p>
 
-<p>[sourcecode language=&quot;java&quot;] class User { Set<UserHistory> userHistories; void updatePaymentInformation(params..) { //user class method this.setCreditCardNumber(...); this.setCvvNumber(...) userHistories.add(new UserHistory(this)); } } [/sourcecode]</p>
+<p>class User { Set<UserHistory> userHistories; void updatePaymentInformation(params..) { //user class method this.setCreditCardNumber(...); this.setCvvNumber(...) userHistories.add(new UserHistory(this)); } } 
+```</p>
 
 <p>In above example, we can see that UserHistory cannot exist without User. So, we can enforce the access to UserHistory through User object only. This will minimize the dependencies between the classes and reduce complexity. The example mentioned in here in trivial, but in real world, there can be many other scenarios where one entity can also exist without another entity, like an Order item cannot exist without an Order, a Book cannot exist without a page. One important thing to note here is that in these examples, the reverse relation is also important, i.e., an Order does not have a meaning without a Order item and nobody will read a book without pages. Here, Book and Order represent a cluster of associated objects, which model something meaningful as a whole but lose importance when separated from each other.</p>
 

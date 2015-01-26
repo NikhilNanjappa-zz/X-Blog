@@ -128,19 +128,21 @@ On deliberation and analysis we decided to use OSGi framework to solve the techn
 
 <p>a. Interface Store.java</p>
 
-<p>[sourcecode language=&quot;java&quot;] package com.osgi.learn.ext;</p>
+<p>package com.osgi.learn.ext;</p>
 
 <p>import java.util.List; import com.osgi.learn.ext.entities.Item;</p>
 
-<p>public interface Store { public String getStoreName(); public List<Item> getItems(); } [/sourcecode]</p>
+<p>public interface Store { public String getStoreName(); public List<Item> getItems(); } 
+```</p>
 
 <p>b. Class Item.java</p>
 
-<p>[sourcecode language=&quot;java&quot;] package com.osgi.learn.ext.entities;</p>
+<p>package com.osgi.learn.ext.entities;</p>
 
 <p>public class Item { private String name; private float price;</p>
 
-<p>public String getName() { return name; } public void setName(String name) { this.name = name; } public float getPrice() { return price; } public void setPrice(float price) { this.price = price; } } [/sourcecode]</p>
+<p>public String getName() { return name; } public void setName(String name) { this.name = name; } public float getPrice() { return price; } public void setPrice(float price) { this.price = price; } } 
+```</p>
 
 <p>This glue code can be packaged as a Jar and injected as dependency to both application and implementing bundles. The bundles would provide the implementation for Store.java and export the implementation as service.</p>
 
@@ -152,13 +154,15 @@ On deliberation and analysis we decided to use OSGi framework to solve the techn
 
 <p>Embed OSGi container in the web-application - Apache Felix in our case. To programmatically start a Felix container we need to do the following (to see the complete code download the <a href="http://www.esnips.com/nsdoc/e5b8d17b-0009-49f4-a9d1-cb10a545ba35/?action=forceDL">HostApplication.java </a>and<a href="http://www.esnips.com/nsdoc/239da89e-7a11-4960-a274-8b20929a1b8b/?action=forceDL"> StoreServiceTracker.java</a>).</p>
 
-<p>[sourcecode language=&quot;java&quot;] try { felix = new Felix(getConfigMap()); felix.start(); logger.info(&quot;OSGI container started&quot;);</p>
+<p>try { felix = new Felix(getConfigMap()); felix.start(); logger.info(&quot;OSGI container started&quot;);</p>
 
-<p>} catch (BundleException ex) { logger.error(&quot;Could not create framework: &quot;, ex); throw new RuntimeException(ex); } [/sourcecode]</p>
+<p>} catch (BundleException ex) { logger.error(&quot;Could not create framework: &quot;, ex); throw new RuntimeException(ex); } 
+```</p>
 
 <p>In the above code one thing that needs special attention is &#39;getConfigMap()&#39;. getConfigMap() will return an Object of java.util.Map which contains special configuration info which we want to pass to the container during start up. The configMap argument in the Felix container can be passed as null. The framework is supposed to have intelligent defaults which it will use to get started. But in case you want to override the defaults then you can do something like this:</p>
 
-<p>[sourcecode language=&quot;java&quot;] public Map getConfigMap(){ // Create a configuration property map. Map configMap = new HashMap(); // Export the host provided service interface package. configMap.put(FelixConstants.FRAMEWORK<em>SYSTEMPACKAGES</em>EXTRA,                      - 1 &quot;com.learn.osgi.ext; version=1.0.0&quot;); //specify the file system path to a directory which will be used by framework. One of the many uses is to store the cached bundle here. configMap.put(FelixConstants.FRAMEWORK_STORAGE, cacheDirectory);                  - 2 return configMap; } [/sourcecode]</p>
+<p>public Map getConfigMap(){ // Create a configuration property map. Map configMap = new HashMap(); // Export the host provided service interface package. configMap.put(FelixConstants.FRAMEWORK<em>SYSTEMPACKAGES</em>EXTRA,                      - 1 &quot;com.learn.osgi.ext; version=1.0.0&quot;); //specify the file system path to a directory which will be used by framework. One of the many uses is to store the cached bundle here. configMap.put(FelixConstants.FRAMEWORK_STORAGE, cacheDirectory);                  - 2 return configMap; } 
+```</p>
 
 <p>-1 FelixConstants.FRAMEWORK<em>SYSTEMPACKAGES</em>EXTRA - This attribute tells OSGi framework to add the specified package as part of system package so that it gets available to all bundles by default. It also enable communication between application and the bundles. The other option could be to also deploy the jar with the package com.learn.osgi.ext as bundle.</p>
 
@@ -168,19 +172,21 @@ On deliberation and analysis we decided to use OSGi framework to solve the techn
 
 <p>There may be number of bundles deployed in the container, some of them may be system bundles and others may be supporting bundles. To identify the Store bundles we will have to create a service tracker</p>
 
-<p>[sourcecode language=&quot;java&quot;] import org.osgi.framework.BundleContext; import org.osgi.util.tracker.ServiceTracker; import com.osgi.learn.ext.Store;</p>
+<p>import org.osgi.framework.BundleContext; import org.osgi.util.tracker.ServiceTracker; import com.osgi.learn.ext.Store;</p>
 
 <p>public class StoreServiceTracker extends ServiceTracker { /__ _ Constructor _ @param bundleContext */ public StoreServiceTracker(BundleContext bundleContext) { super(bundleContext, Store.class.getName(), null); }</p>
 
-<p>/__ _ Opens this tracker _/ @Override public void open() { super.open(); } } [/sourcecode]</p>
+<p>/__ _ Opens this tracker _/ @Override public void open() { super.open(); } } 
+```</p>
 
 <p>Just after the start up of felix we can execute the following code to instantiate the tracker</p>
 
-<p>[sourcecode language=&quot;java&quot;] storeServiceTracker = new storeServiceTracker(felix.getBundleContext()); storeServiceTracker.open(); [/sourcecode]</p>
+<p>storeServiceTracker = new storeServiceTracker(felix.getBundleContext()); storeServiceTracker.open(); 
+```</p>
 
 <p>Now to get all bundles that are registered as Store bundles just call the following method</p>
 
-<p>[sourcecode language=&quot;java&quot;] public Set<Bundle> getStoreBundles() {</p>
+<p>public Set<Bundle> getStoreBundles() {</p>
 
 <p>ServiceReference[] refs = getTrackedStoreServiceReferences(); if (refs == null) {</p>
 

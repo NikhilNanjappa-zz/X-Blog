@@ -123,7 +123,8 @@
 
 <p>[sourcecode language=&quot;php&quot;] /*_ * twoth/config/config.php * Configuration file. * Used for defining the Consumer key and Consumer Secret of Twitter * Application. _/</p>
 
-<p>define(&#39;CONSUMER<em>KEY&#39;,&#39;**</em><em>_</em><strong><em>_</em>_</strong><strong><em>*</em></strong><strong>&#39;); define(&#39;CONSUMER_SECRET&#39;,&#39;</strong><em>*</em>*<strong><em>_</em>_</strong><strong><em>*</em></strong><strong><em>*</em></strong><strong><em>*</em></strong><strong><em>*</em></strong>***&#39;); [/sourcecode]</p>
+<p>define(&#39;CONSUMER<em>KEY&#39;,&#39;**</em><em>_</em><strong><em>_</em>_</strong><strong><em>*</em></strong><strong>&#39;); define(&#39;CONSUMER_SECRET&#39;,&#39;</strong><em>*</em>*<strong><em>_</em>_</strong><strong><em>*</em></strong><strong><em>*</em></strong><strong><em>*</em></strong><strong><em>*</em></strong>***&#39;); 
+```</p>
 
 <p>Lets move on to the index.php file. In this file we will import the following three files: </p>
 
@@ -145,7 +146,8 @@
 
 <p>/_ * saving the request token in the session for future use <em>/ $</em>SESSION[&#39;request<em>token&#39;] = $requestToken[&#39;oauth</em>token&#39;]; $<em>SESSION[&#39;request</em>token<em>secret&#39;] = $requestToken[&#39;oauth</em>token_secret&#39;];</p>
 
-<p>/_ * Redirecting the user to the Twitter Sign in page where he/she will * provide his/her user credentials. _/ header (&#39;Location: &#39; . $twitterOAuth-&gt;getAuthorizeURL($requestToken)); [/sourcecode]</p>
+<p>/_ * Redirecting the user to the Twitter Sign in page where he/she will * provide his/her user credentials. _/ header (&#39;Location: &#39; . $twitterOAuth-&gt;getAuthorizeURL($requestToken)); 
+```</p>
 
 <p>Now if user has successfully entered his/her credentials, he will redirected to the callback url. Twitter will pass one parameter named &quot;oauth_token&quot; in the url itself. This parameter will be compared to the request token saved in the session, both of these parameters should be same.</p>
 

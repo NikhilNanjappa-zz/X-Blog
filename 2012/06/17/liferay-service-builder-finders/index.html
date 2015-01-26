@@ -107,13 +107,15 @@
 Add the following xml inside the email entry declared in service.xml</li>
 </ol>
 
-<p>[sourcecode language=&quot;xml&quot;] &lt;!-- Finders --&gt; <finder return-type="Collection" name="Subject"> <finder-column name="subject"></finder-column> </finder> <finder return-type="Collection" name="From"> <finder-column name="from"></finder-column> </finder> [/sourcecode]</p>
+<p>[sourcecode language=&quot;xml&quot;] &lt;!-- Finders --&gt; <finder return-type="Collection" name="Subject"> <finder-column name="subject"></finder-column> </finder> <finder return-type="Collection" name="From"> <finder-column name="from"></finder-column> </finder> 
+```</p>
 
 <p>For the above declaration, we will see the following method in EmailPersistence and their implementation in EmailPersistenceImpl</p>
 
 <p>[sourcecode language=&quot;xml&quot;] public java.util.List<com.xebia.model.email> findBySubject( java.lang.String subject) throws com.liferay.portal.kernel.exception.SystemException;</p>
 
-<p>public java.util.List<com.xebia.model.email> findByFrom( java.lang.String from) throws com.liferay.portal.kernel.exception.SystemException; [/sourcecode]</p>
+<p>public java.util.List<com.xebia.model.email> findByFrom( java.lang.String from) throws com.liferay.portal.kernel.exception.SystemException; 
+```</p>
 
 <p>There are some additional helper methods generated for accessing data corresponding to these fields. These methods can be used to find count or limit the number of results etc.</p>
 
@@ -125,7 +127,8 @@ Add the following xml inside the email entry declared in service.xml</li>
 
 <p>Lets first start with writing of the custom query which will help us in retrieving all the emails between two dates. Our query will look like this</p>
 
-<p>[sourcecode language=&quot;xml&quot;] SELECT Email.* FROM Email WHERE Email.date between ? AND ? [/sourcecode]</p>
+<p>[sourcecode language=&quot;xml&quot;] SELECT Email.* FROM Email WHERE Email.date between ? AND ? 
+```</p>
 
 <p>Include this sql in /docroot/WEB-INF/src/custom-sql/default.xml file. So that default.xml sql will look something like this</p>
 
@@ -133,7 +136,8 @@ Add the following xml inside the email entry declared in service.xml</li>
 
 <p>We can also create custom file and then mention the reference of that file in default.xml.</p>
 
-<p>[sourcecode language=&quot;xml&quot;] &lt;!--?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?--&gt; <custom-sql> <sql id="com.xebia.service.persistence.EmailFinder.getEmailBetweenDates"> &lt;![CDATA[ SELECT Email.* FROM Email WHERE Email.date between ? AND ? ]]&gt; </sql> </custom-sql> [/sourcecode]</p>
+<p>[sourcecode language=&quot;xml&quot;] &lt;!--?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?--&gt; <custom-sql> <sql id="com.xebia.service.persistence.EmailFinder.getEmailBetweenDates"> &lt;![CDATA[ SELECT Email.* FROM Email WHERE Email.date between ? AND ? ]]&gt; </sql> </custom-sql> 
+```</p>
 
 <p>the id attribute is the unique identifier through which this query is recognized.</p>
 
@@ -180,15 +184,12 @@ Add the following xml inside the email entry declared in service.xml</li>
 
     return emails;
 }
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">**Code Utilization**
+
+Calling of the finder methods is almost same as calling any of the service methods.
+
+[sourcecode language=&quot;xml&quot;] List&lt;email&gt; emailsByDate = EmailFinderUtil.getEmailBetweenDates(Date startDate, Date endDate); 
 </code></pre></div>
-<p>[/sourcecode]</p>
-
-<p><strong>Code Utilization</strong></p>
-
-<p>Calling of the finder methods is almost same as calling any of the service methods.</p>
-
-<p>[sourcecode language=&quot;xml&quot;] List<email> emailsByDate = EmailFinderUtil.getEmailBetweenDates(Date startDate, Date endDate); [/sourcecode]</p>
-
 <p><strong>Object Mappings</strong></p>
 
 <p>So far we have seen how to perform cruds and advanced search on a entity. Now let’s consider this example.</p>
@@ -203,7 +204,8 @@ Add the following xml inside the email entry declared in service.xml</li>
 
 <p>But this is not how it works in the liferay. We cannot create a relation between the entities using the service.xml which basically means no work will be done automatically either at the DB level (foreign keys) and at object level (has a relationship) , yes there are workarounds but out of the box this is not provided. In the liferay <a href="http://www.liferay.com/dtd/liferay-service-builder_5_2_0.dtd%20">DTD</a> for service.xml , there is section that will describe how to create one-2-one / many-2-many relationships but even if we follow that convention , service builder will not create the mappings in generated java classes. This is how the attachment entity will look like.</p>
 
-<p>[sourcecode language=&quot;xml&quot;] <entity name="Attachment" local-service="true" remote-service="false" table="Email"> <column name="id" type="long" primary="true"> <column name="type" type="String"> <column name="emailId" type="long"> <column name="content" type="String"> &lt;!-- Finders --&gt; <finder name="id"> <finder-column name="to"></finder-column> </finder> <finder name="emailId" return-type="Collection"> <finder-column name="from"></finder-column> </finder> </column></column></column></column></entity> [/sourcecode]</p>
+<p>[sourcecode language=&quot;xml&quot;] <entity name="Attachment" local-service="true" remote-service="false" table="Email"> <column name="id" type="long" primary="true"> <column name="type" type="String"> <column name="emailId" type="long"> <column name="content" type="String"> &lt;!-- Finders --&gt; <finder name="id"> <finder-column name="to"></finder-column> </finder> <finder name="emailId" return-type="Collection"> <finder-column name="from"></finder-column> </finder> </column></column></column></column></entity> 
+```</p>
 
 <p>To achieve the above scenario : 1) Create an EmailDTO to contain email and its corresponding Attachment. Code below</p>
 

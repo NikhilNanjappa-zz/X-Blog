@@ -122,25 +122,30 @@ Creating one time style is easy to use throughout the project. Then we do not ne
 
 <p>I found by using</p>
 
-<p>[sourcecode language=&quot;html&quot;]<button><span><span>Label</span></span></button>[/sourcecode]</p>
+<p>[sourcecode language=&quot;html&quot;]<button><span><span>Label</span></span></button>
+```</p>
 
 <p>or</p>
 
-<p>[sourcecode language=&quot;html&quot;] <a href="#"><span>submit</span></a>[/sourcecode]</p>
+<p>[sourcecode language=&quot;html&quot;] <a href="#"><span>submit</span></a>
+```</p>
 
 <p>We can create and style resizable buttons. But in tapestry when we have to provide two action “Submit” and “Cancel” we cannot use <button> html element. We were using t:id=”…” t:value=”…” t:type=”…” which is not supported to perform two action on a form. In <button> tag we are using <span> tag to show the label which will appear on button, as the <button> tag has open and close tag, like</p>
 
-<p>[sourcecode language=&quot;html&quot;]<button><span><span>Label</span></span></button>[/sourcecode]</p>
+<p>[sourcecode language=&quot;html&quot;]<button><span><span>Label</span></span></button>
+```</p>
 
 <p>Using sliding doors we can have buttons flexible, where background image expand with the size of the button&#39;s text. I will be using sliding doors technique where two complementing images creating the illusion of a single, stretching image to create my <input> button.</p>
 
 <p>Here is the way I created my <input> button. You can also download the demo file from <a href="http://xebee.xebia.in/2010/09/17/creating-and-styling-resizable-buttons/input-buttonfile/">here</a></p>
 
-<p>[sourcecode language=&quot;html&quot;] &lt;!-- This div is container of the buttons, if you want to place it on right or left side just assign new css class which float it to right/left --&gt; <div> &lt;!--This div contain the small piece of left side of button image, fix width image --&gt; <div> &lt;!--Input button with the css class --&gt; <input type="submit" id="previous" value="&#171; previous" /> &lt;! -- Div with left side of image close here --&gt; </div> &lt;! -- Spacer image for creating space between two images with float left css style --&gt; <img src="images/spacer.gif" width="20" height="1"></img> &lt;!--This div contain the small piece of left side of button image, fix width image --&gt; <div> &lt;!--Input button with the css class --&gt; <input type="submit" id="next" value="next &#187;" /> &lt;! -- Div with left side of image close here --&gt; </div> &lt;! -- Container div ends --&gt; </div> [/sourcecode]</p>
+<p>[sourcecode language=&quot;html&quot;] &lt;!-- This div is container of the buttons, if you want to place it on right or left side just assign new css class which float it to right/left --&gt; <div> &lt;!--This div contain the small piece of left side of button image, fix width image --&gt; <div> &lt;!--Input button with the css class --&gt; <input type="submit" id="previous" value="&#171; previous" /> &lt;! -- Div with left side of image close here --&gt; </div> &lt;! -- Spacer image for creating space between two images with float left css style --&gt; <img src="images/spacer.gif" width="20" height="1"></img> &lt;!--This div contain the small piece of left side of button image, fix width image --&gt; <div> &lt;!--Input button with the css class --&gt; <input type="submit" id="next" value="next &#187;" /> &lt;! -- Div with left side of image close here --&gt; </div> &lt;! -- Container div ends --&gt; </div> 
+```</p>
 
 <p><strong>Style created for input button:</strong></p>
 
-<p>[sourcecode language=&quot;html&quot;] <style> .button<em>placeholder { border:none; } /</em> Buttonimage-new.png is 700px in width, which is used in background with right top <em>/ .button</em>style<em>enabled { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #ffffff; background: url(images/Buttonimage-new.png) no-repeat right top; text-align:center; cursor:pointer; height:29px; border:0px; margin:0px; font-weight:bold; vertical-align:middle; padding:0 15px; } .button</em>style<em>enabled:hover { background: url(images/Buttonimagehover-new.png) no-repeat right top; border:0px; margin:0px; } .button</em>style<em>enabled</em>edge { background: url(images/left-Buttonimage.png) no-repeat left top; height:29px; border:0px; margin:0px; padding-left:2px; } .left_float { float:left; } </style> [/sourcecode]</p>
+<p>[sourcecode language=&quot;html&quot;] <style> .button<em>placeholder { border:none; } /</em> Buttonimage-new.png is 700px in width, which is used in background with right top <em>/ .button</em>style<em>enabled { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #ffffff; background: url(images/Buttonimage-new.png) no-repeat right top; text-align:center; cursor:pointer; height:29px; border:0px; margin:0px; font-weight:bold; vertical-align:middle; padding:0 15px; } .button</em>style<em>enabled:hover { background: url(images/Buttonimagehover-new.png) no-repeat right top; border:0px; margin:0px; } .button</em>style<em>enabled</em>edge { background: url(images/left-Buttonimage.png) no-repeat left top; height:29px; border:0px; margin:0px; padding-left:2px; } .left_float { float:left; } </style> 
+```</p>
 
 <p>*<em>Images used in the button are: *</em>(I am using 700 width image for long button to fit in it.) </p>
 

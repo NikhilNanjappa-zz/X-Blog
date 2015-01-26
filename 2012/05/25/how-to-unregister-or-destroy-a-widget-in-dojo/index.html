@@ -105,7 +105,8 @@
 
 <p>Here what was my code looked like before:</p>
 
-<p>[sourcecode language=&quot;html&quot;] &lt;!-- HTML --&gt; <div id="country-tree-container"></div> [/sourcecode]</p>
+<p>[sourcecode language=&quot;html&quot;] &lt;!-- HTML --&gt; <div id="country-tree-container"></div> 
+```</p>
 
 <p>[sourcecode language=&quot;javascript&quot;] // Javascript require([&quot;dojo/data/ItemFileWriteStore&quot;, &quot;dijit/tree/ForestStoreModel&quot;, &quot;dijit/Tree&quot;], function(Store, Model, dijitTree){ //other piece of code self = this;</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">    populateTree = function(){
@@ -124,13 +125,10 @@
         }, &amp;quot;country-tree-container&amp;quot;);
     }
 });
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">and here what it is now:
+
+[sourcecode language=&quot;html&quot;] &lt;!-- No Change --&gt; &lt;div id=&quot;country-tree-container&quot;&gt;&lt;/div&gt; 
 </code></pre></div>
-<p>[/sourcecode]</p>
-
-<p>and here what it is now:</p>
-
-<p>[sourcecode language=&quot;html&quot;] &lt;!-- No Change --&gt; <div id="country-tree-container"></div> [/sourcecode]</p>
-
 <p>[sourcecode language=&quot;javascript&quot;] //Javascript (changes in require and populateTree functions)</p>
 
 <p>require([&quot;dojo/dom-construct&quot;, &quot;dojo/data/ItemFileWriteStore&quot;, &quot;dijit/tree/ForestStoreModel&quot;, &quot;dijit/Tree&quot;], function(domConstruct, Store, Model, dijitTree){ //other piece of code self = this;</p>
@@ -160,19 +158,16 @@
                     }, &amp;quot;tree-container&amp;quot;);
     }
     });
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">We added our tree in &#39;tree-container&#39; instead of &#39;country-tree-container&#39;.
+
+**Step 1 **: get the dijit.Tree **Step 2 **: check if that tree exists (null for the first time) **Step 3 **: if exists delete/unregister/kill the whole tree **Step 4 **: construct the &lt;div id=&#39;tree-container&#39;...&gt; with dom-construct as a child node of &#39;country-tree-container&#39; div
+
+The above solution worked perfectly for me. If you have any question for me or any suggestion please let me know.
+
+**Reference:** Thanks to Fabián Mandelbaum and [his solution][1].
+
+That&#39;s it folks...
 </code></pre></div>
-<p>[/sourcecode]</p>
-
-<p>We added our tree in &#39;tree-container&#39; instead of &#39;country-tree-container&#39;.</p>
-
-<p>*<em>Step 1 *</em>: get the dijit.Tree *<em>Step 2 *</em>: check if that tree exists (null for the first time) *<em>Step 3 *</em>: if exists delete/unregister/kill the whole tree *<em>Step 4 *</em>: construct the <div id='tree-container'...> with dom-construct as a child node of &#39;country-tree-container&#39; div</p>
-
-<p>The above solution worked perfectly for me. If you have any question for me or any suggestion please let me know.</p>
-
-<p><strong>Reference:</strong> Thanks to Fabián Mandelbaum and <a href="http://mail.dojotoolkit.org/pipermail/dojo-interest/2009-October/040079.html">his solution</a>.</p>
-
-<p>That&#39;s it folks...</p>
-
 
                 <hr>
 

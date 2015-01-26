@@ -99,7 +99,8 @@
 
 <p>So, a resource would be something like </p>
 
-<p>[sourcecode language=&quot;java&quot;] GET ../foods/1 would get you the food with id 1. PUT ../foods/2 would update the food with id 2. POST ../foods will add a new food. DELETE ../foods/1 will delete the food resource with id 1.</span> [/sourcecode]</p>
+<p>[sourcecode language=&quot;java&quot;] GET ../foods/1 would get you the food with id 1. PUT ../foods/2 would update the food with id 2. POST ../foods will add a new food. DELETE ../foods/1 will delete the food resource with id 1.</span> 
+```</p>
 
 <p>But in a real life complex application, we are faced with exposing many services such as approve, reject where it becomes inevitable to add verbs to the URL. What should we do? Should we just have the URLs like ../foods/1/approve ? </p>
 
@@ -140,15 +141,13 @@
 <p>So, still if we get stuck in a situation where we have to use a verb, what could be our options. Below are the alternatives :</p>
 
 <p><strong>1.</strong> Use a &quot;method&quot; Query param - Use a Query param method=approve So our approach would be:</p>
-
-<p>[sourcecode] PUT .../foods/1/?method=approve&amp;user=10134 [/sourcecode]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> PUT .../foods/1/?method=approve&amp;user=10134 
+</code></pre></div>
 <p>(flicker uses this approach ;example http://api.flickr.com/services/rest/?method=flickr.test.echo&amp;name=value.)</p>
 
 <p><strong>2. </strong>Send a JSON Form object</p>
-
-<p>[sourcecode] POST .../foods/1 JSON: {method:approve} [/sourcecode]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> POST .../foods/1 JSON: {method:approve} 
+</code></pre></div>
 <p><strong>3.</strong> Use noun instead of verb. Instead of using verb &quot;approve&quot; we would use the noun &quot;approval&quot; and make this a domain object. The approval would have association with the domain objects which are required to be approved.</p>
 
 <p>for example, to approve a food, we would have two additional domain objects.</p>
@@ -156,13 +155,11 @@
 <p>    1. ApprovalRequest     2. Approval (or Approved)</p>
 
 <p>To submit a food for approval We would do:</p>
-
-<p>[sourcecode] POST ../foods/1/approvalRequests -- &gt;foodId :1 is added into ApprovalRequest [/sourcecode]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> POST ../foods/1/approvalRequests -- &gt;foodId :1 is added into ApprovalRequest 
+</code></pre></div>
 <p>To approve this food, we would do</p>
-
-<p>[sourcecode] POST ../foods/1/approval -- &gt; foodId :1 is added to Approval The flow hence becomes , Food --- &gt; ApprovalRequest ---&gt; Approval GET on ../foods/approval will give all approved foods and a GET on ../foods/approvalRequests will give all pending foods. doing a DELETE ../foods/1/approvalRequests -- &gt;will reject the food. [/sourcecode]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text"> POST ../foods/1/approval -- &gt; foodId :1 is added to Approval The flow hence becomes , Food --- &gt; ApprovalRequest ---&gt; Approval GET on ../foods/approval will give all approved foods and a GET on ../foods/approvalRequests will give all pending foods. doing a DELETE ../foods/1/approvalRequests -- &gt;will reject the food. 
+</code></pre></div>
 <p>(This is how facebook handles the states of friend requests.) </p>
 
 <p>So, the basic idea is to model in such a way that all our verbs become states if want them to be exposed via HTTP. This looks a very RESTful and neat approach.</p>

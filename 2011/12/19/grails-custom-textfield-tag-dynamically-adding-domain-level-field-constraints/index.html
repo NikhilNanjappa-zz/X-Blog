@@ -107,7 +107,8 @@
 
 <p>So the next thing to identify was How to create such a Smart Tag? Then, I came across this link &quot;<a href="http://www.javathinking.com/2008/03/maxlength-html-attribute-for-domain-objects/">MaxLength HTML attribute for domain objects</a>&quot; hosted on the official <a href="http://www.grails.org/Smarter+grails+tags">Grails Smart Tag webpage</a>. The solution is exactly what we discussed in the above lines.</p>
 
-<p>[sourcecode lang=&quot;javascript&quot;] def maxlength = object.constraints.&quot;${attrs.name}&quot;.getMaxSize() if(maxlength) { attrs.put(&#39;maxlength&#39;, maxlength) } attrs.put(&#39;value&#39;, fieldValue(bean:object,field:attrs.name)) ... [/sourcecode]</p>
+<p>[sourcecode lang=&quot;javascript&quot;] def maxlength = object.constraints.&quot;${attrs.name}&quot;.getMaxSize() if(maxlength) { attrs.put(&#39;maxlength&#39;, maxlength) } attrs.put(&#39;value&#39;, fieldValue(bean:object,field:attrs.name)) ... 
+```</p>
 
 <p>In the above mentioned code, the key thing to look for is</p>
 
@@ -147,7 +148,8 @@
 
 <p>[sourcecode lang=&quot;java&quot;] class Car { CarDetails carDetails String companyName static constraints = { companyName maxSize: 20 } }</p>
 
-<p>class CarDetails { String color static constraints = { color maxSize: 10 } } [/sourcecode]</p>
+<p>class CarDetails { String color static constraints = { color maxSize: 10 } } 
+```</p>
 
 <p><strong>Custom TagLib</strong> -</p>
 

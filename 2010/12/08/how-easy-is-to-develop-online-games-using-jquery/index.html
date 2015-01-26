@@ -103,19 +103,23 @@
 
 <p>The code listing below shows the sample plugin skeleton.</p>
 
-<p>[sourcecode language=&quot;java&quot;]<br /> (function( $ ){<br /> $.fn.myPlugin = function() {</p> <p> // provide some logic this plugin does.</p> <p> };<br /> })( jQuery );</p> <p>[/sourcecode]</p>
+<p><br /> (function( $ ){<br /> $.fn.myPlugin = function() {</p> <p> // provide some logic this plugin does.</p> <p> };<br /> })( jQuery );</p> <p>
+```</p>
 
 <p>The listing below calls the myPlugin written above on the given element.</p>
 
-<p>[sourcecode language=&quot;java&quot;]<br /> $(&#39;#element&#39;).myPlugin();<br /> [/sourcecode]</p>
+<p><br /> $(&#39;#element&#39;).myPlugin();<br /> 
+```</p>
 
 <p>Next code listing shows how to set width to all the div elements and setting color to blue.</p>
 
-<p>[sourcecode language=&quot;java&quot;]<br /> (function( $ ){<br /> $.fn.setWidthDim = function( type ) {</p> <p> return this.each(function() {</p> <p> var $this = $(this);<br /> if ( !type || type == &#39;width&#39; ) {<br /> $this.width( $this.width() );<br /> }<br /> });<br /> };<br /> })( jQuery );<br /> [/sourcecode]</p>
+<p><br /> (function( $ ){<br /> $.fn.setWidthDim = function( type ) {</p> <p> return this.each(function() {</p> <p> var $this = $(this);<br /> if ( !type || type == &#39;width&#39; ) {<br /> $this.width( $this.width() );<br /> }<br /> });<br /> };<br /> })( jQuery );<br /> 
+```</p>
 
 <p>Calling above plugin:</p>
 
-<p>[sourcecode language=&quot;java&quot;]<br /> $(&#39;div&#39;).setWidthDim(&#39;width&#39;).css(&#39;color&#39;, &#39;blue&#39;);<br /> [/sourcecode]</p>
+<p><br /> $(&#39;div&#39;).setWidthDim(&#39;width&#39;).css(&#39;color&#39;, &#39;blue&#39;);<br /> 
+```</p>
 
 <p>To understand more about the syntax and jQuery function object, refer the docs at <a href="http://docs.jquery.com/Plugins/Authoring">jQuery Plugin</a>.</p>
 
@@ -170,7 +174,8 @@
 
 <p><strong>Example:</strong></p>
 
-<p>[sourcecode language=&quot;java&quot;]</p> <p> 1. Animation effects to go infinitely<br /> $(document).ready(function()<br /> {<br /> $(&quot;#image&quot;).angularMove({<br /> angleRotation: -60,<br /> move: true,<br /> duration: 100,<br /> keepGoing: true,<br /> easing: &#39;linear&#39;<br /> });<br /> });</p> <p> 2. Animation effects to go until duration as specified in parameter<br /> $(document).ready(function()<br /> {<br /> $(&quot;#image&quot;).angularMove({<br /> angleRotation: -60,<br /> move: true,<br /> duration: 4000,<br /> keepGoing: false,<br /> easing: &#39;linear&#39;<br /> });<br /> });</p> <p>[/sourcecode]</p>
+<p></p> <p> 1. Animation effects to go infinitely<br /> $(document).ready(function()<br /> {<br /> $(&quot;#image&quot;).angularMove({<br /> angleRotation: -60,<br /> move: true,<br /> duration: 100,<br /> keepGoing: true,<br /> easing: &#39;linear&#39;<br /> });<br /> });</p> <p> 2. Animation effects to go until duration as specified in parameter<br /> $(document).ready(function()<br /> {<br /> $(&quot;#image&quot;).angularMove({<br /> angleRotation: -60,<br /> move: true,<br /> duration: 4000,<br /> keepGoing: false,<br /> easing: &#39;linear&#39;<br /> });<br /> });</p> <p>
+```</p>
 
 <p><strong>Demo:</strong></p>
 

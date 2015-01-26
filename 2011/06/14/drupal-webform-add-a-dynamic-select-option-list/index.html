@@ -112,10 +112,14 @@
 <ol>
 <li>Create a custom Webform module ( webform_custom ) with the following files.</li>
 <li><strong>webform_custom.info</strong> – as the name suggest contains the info of the module
-[sourcecode language=&quot;php&quot;] name = Webform Custom description = Provides custom functionality for the Webform core = 6.x project = &quot;webform_custom&quot; package = Other [/sourcecode] </li>
-<li><strong>webform_custom.module</strong> – this file will contain the code that will generate our dynamic options list, for now just keep this file empty</li>
-<li><p>Active you custom module from <em><strong>Administer → Site building → Modules</strong></em></p></li>
-<li><p>The following hook adds another item for “Load a pre-built option list” menu in Webform&#39;s select form component. This hook will go into the module file:</p></li>
+[sourcecode language=&quot;php&quot;] name = Webform Custom description = Provides custom functionality for the Webform core = 6.x project = &quot;webform<em>custom&quot; package = Other 
+``` 
+* **webform</em>custom.module** – this file will contain the code that will generate our dynamic options list, for now just keep this file empty
+1. Active you custom module from <em><strong>Administer → Site building → Modules</strong></em></li>
+</ol>
+
+<ol>
+<li>The following hook adds another item for “Load a pre-built option list” menu in Webform&#39;s select form component. This hook will go into the module file:</li>
 </ol>
 
 <p>[sourcecode language=&quot;php&quot;] function webform<em>custom</em>webform<em>select</em>options_info()</p>
@@ -138,7 +142,8 @@
 
 <p>return $items;</p>
 
-<p>} [/sourcecode]</p>
+<p>} 
+```</p>
 
 <p>The result of the above function will add the following item in the select form component drop-down: </p>
 
@@ -177,7 +182,8 @@ while ($date = db_fetch_object($select)) {
 
 <p>return $dates;</p>
 
-<p>} [/sourcecode]</p>
+<p>} 
+```</p>
 
 <ol>
 <li>Now go back to the Webform select form component and choose the &#39;Training class dates&#39; option from the “Load a pre-built option list” dropdown and save the field.</li>

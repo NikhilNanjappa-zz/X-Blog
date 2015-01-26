@@ -99,21 +99,24 @@
 
 <p>For example purpose <strong>I choose to show a barchart here which shows goals scored by Striker in a EPL season by name</strong>. We need to add the chart to our view page. Taglibrary of grails is of a great help here especially if we are using the chart at various places in our application.So first let us write a Taglibrary <strong>OFCTaglibrary.groovy</strong> and add a closure chart. Ofcourse this is put under the Taglibrary folder for grails for convention purposes.</p>
 
-<p>[sourcecode language=&quot;java&quot;] public class OFCTaglibrary { static namespace = &quot;grailsOfc&quot; def chart = { attrs -&gt; if (!attrs.name) throwTagError(&quot;Tag [chart] is missing required attribute [name]&quot;) String name = attrs.remove(&#39;name&#39;) String width = attrs.width ? attrs.remove(&quot;width&quot;) : &quot;350&quot; String height = attrs.height ? attrs.remove(&quot;height&quot;) : &quot;200&quot; String url = attrs.url? attrs.remove(&quot;url&quot;) : &quot;&quot; String flashFileName = &quot;open-flash-chart.swf&quot; out &lt;&lt; &quot;<div id='$name' name='$name'></div>\n&quot; out &lt;&lt; &quot;&quot;&quot; <script type="text/javascript"> var params = {}; params.wmode = &quot;transparent&quot;; swfobject.embedSWF(&quot;${request.contextPath}/${flashFileName}&quot;, &quot;$name&quot;, &quot;$width&quot;,&quot;$height&quot;,&quot;9.0.0&quot;, &quot;expressInstall.swf&quot;, {&quot;data-file&quot;:&quot;$url&quot;},params);</script> &quot;&quot;&quot; } } [/sourcecode]</p>
+<p>public class OFCTaglibrary { static namespace = &quot;grailsOfc&quot; def chart = { attrs -&gt; if (!attrs.name) throwTagError(&quot;Tag [chart] is missing required attribute [name]&quot;) String name = attrs.remove(&#39;name&#39;) String width = attrs.width ? attrs.remove(&quot;width&quot;) : &quot;350&quot; String height = attrs.height ? attrs.remove(&quot;height&quot;) : &quot;200&quot; String url = attrs.url? attrs.remove(&quot;url&quot;) : &quot;&quot; String flashFileName = &quot;open-flash-chart.swf&quot; out &lt;&lt; &quot;<div id='$name' name='$name'></div>\n&quot; out &lt;&lt; &quot;&quot;&quot; <script type="text/javascript"> var params = {}; params.wmode = &quot;transparent&quot;; swfobject.embedSWF(&quot;${request.contextPath}/${flashFileName}&quot;, &quot;$name&quot;, &quot;$width&quot;,&quot;$height&quot;,&quot;9.0.0&quot;, &quot;expressInstall.swf&quot;, {&quot;data-file&quot;:&quot;$url&quot;},params);</script> &quot;&quot;&quot; } } 
+```</p>
 
 <p>Now we have created a tag library which we can use in view pages to insert the OFC chart . I will expain the attributes in the closure a little later.(rather i feel it is self explainatory ;) )</p>
 
 <p>This is the piece of code that we should put in the view to show a OFC chart.</p>
 
-<p>[sourcecode language=&quot;html&quot;] <grailsOfc:chart name="barChart" url="${createLink(controller:'stats',action: 'bar_graph')}" width="${chartWidth}" height="174" /> [/sourcecode]</p>
+<p>[sourcecode language=&quot;html&quot;] <grailsOfc:chart name="barChart" url="${createLink(controller:'stats',action: 'bar_graph')}" width="${chartWidth}" height="174" /> 
+```</p>
 
 <p>So when this page is rendered grails looks for the Taglibrary with namespace <strong>grailsOfc</strong>. In this Taglibrary it looks for the chart closure, and puts the code for the swf object in the view. The *<em>open-flash-chart.swf *</em> looks for the data-file in the url</p>
 
-<p>[sourcecode language=&quot;java&quot;]${createLink(controller:&#39;stats&#39;,action: &#39;bar_graph&#39;)}[/sourcecode]</p>
+<p>${createLink(controller:&#39;stats&#39;,action: &#39;bar_graph&#39;)}
+```</p>
 
 <p><strong><a href="http://www.grails.org/Tag+-+createLink">createLink</a></strong> is a GrailsTag which we can use to call an action on Grails Controller. The idea here is, we can put the logic to get the data from the server. We shall now look at the StatsController code.</p>
 
-<p>[sourcecode language=&quot;java&quot;] def bar_graph = { def players = Player.findAll() //could be a more complex logic. This is just to get a filtered list of players</p>
+<p>def bar_graph = { def players = Player.findAll() //could be a more complex logic. This is just to get a filtered list of players</p>
 
 <p>def x<em>axis</em>labels = [] List values = [] players.each { x<em>axis</em>labels.add( it.playerName) Map bar = [:] bar.put(&quot;top&quot;, it.goals()) bar.put(&quot;colour&quot;, &quot;#0080F7&quot;) values.add(bar) }</p>
 
@@ -133,7 +136,8 @@
 
 <p>render goalChart as JSON; //grails provides converters to convert map in to JSON format.</p>
 
-<p>} [/sourcecode]</p>
+<p>} 
+```</p>
 
 <p>To summarize here we are building x-axis, y-axis and its labels, adding them to the chart which can be anything (bar or pie or any) in a map and convert this to JSON format.</p>
 

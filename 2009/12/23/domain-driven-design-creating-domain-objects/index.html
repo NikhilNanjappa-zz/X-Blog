@@ -110,12 +110,14 @@ Object creation has nothing to do with the domain. Moreover, with complex object
 <p>Factories have several benefits over constructors, which are </p>
 
 <ul>
-<li>Factories can tell about the objects they are creating, while constructors cannot. Let&#39;s take an example, an Order object can be created by passing params or by using an existing object to create a repeat order. So, in the Order class, two constructors for can be created as [sourcecode language=&quot;java&quot;] class Order{ public Order(params) {} public Order(Order repearOrder) {} } [/sourcecode]</li>
+<li>Factories can tell about the objects they are creating, while constructors cannot. Let&#39;s take an example, an Order object can be created by passing params or by using an existing object to create a repeat order. So, in the Order class, two constructors for can be created as  class Order{ public Order(params) {} public Order(Order repearOrder) {} } 
+```</li>
 </ul>
 
 <p>where, if we use factory, we can make code more expressive, as shown below</p>
 
-<p>[sourcecode language=&quot;java&quot;] class OrderFactory{ public static Order createOrder(params) {} public static Order createRepeatOrder(Order order) {} } [/sourcecode]
+<p>class OrderFactory{ public static Order createOrder(params) {} public static Order createRepeatOrder(Order order) {} } 
+```
   * Whenever we call a constructor, a new object is created, whereas, we can control object creation by using factory. We can create a pool of objects and we might not have to create new objects every time. This is more applicable in case of Value Objects factories since VOs are mostly immutable we can keep a pool of VOs and avoid new object creation every time.
   * Factories are polymorphic, in that, they can return the object or any subtype of the object being created, whereas, constructors do not provide such flexibility.
   * In cases where the object being created has a lot of optional parameters, we can have a Builder object as the Factory. <a href="http://en.wikipedia.org/wiki/Builder_pattern">Builder</a> is one of Gof&#39;s creational pattern which is used when an object has to be created in steps or when there are large number of optional parameters. For example, If an object has 2 mandatory parameters and 8 optional parameters, then it is not advisable to use constructors as providing constructors for all the combinations would swamp the object with constructors.

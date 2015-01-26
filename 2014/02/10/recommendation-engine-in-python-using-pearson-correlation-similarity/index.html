@@ -132,16 +132,14 @@ With this data set available, let’s first write a function in Python which wil
 <p>Create a python file movieRecommendations.py and write loadMoviesRatings function which is responsible for parsing movie and user ratings file and creating a dictionary:</p>
 
 <p>[sourcecode language=&quot;python&quot;] def loadMovieRatings(): movies={} for line in open(&quot;data/ml-100k/u.item&quot;): (id,movie)=line.split(&quot;|&quot;)[0:2] movies[id]=movie movieRatings={} for line in open(&quot;data/ml-100k/u.data&quot;): (userId, movieId, rating, ts) = line.split(&quot;\t&quot;) movieRatings.setdefault(userId,{}) movieRatings[userId][movies[movieId]]=float(rating) return movieRatings</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Now let’s execute this function on python command line to see what is the output.
 
-<p>[/sourcecode]</p>
-
-<p>Now let’s execute this function on python command line to see what is the output.</p>
-
-<p>[sourcecode language=&quot;python&quot;] &gt;&gt;&gt;import movieRecommendations &gt;&gt;&gt;movieRatings=movieRecommendations.loadMovieRatings() &gt;&gt;&gt;movieRatings [/sourcecode]</p>
-
+[sourcecode language=&quot;python&quot;] &gt;&gt;&gt;import movieRecommendations &gt;&gt;&gt;movieRatings=movieRecommendations.loadMovieRatings() &gt;&gt;&gt;movieRatings 
+</code></pre></div>
 <p>This returns a dictionary in following format where key is user ID and value is movie name and rating given by respective user:</p>
 
-<p>[sourcecode language=&quot;python&quot;] { 1 : { &#39;Doom Generation, The (1995)&#39;: 2.0, &#39;Twelve Monkeys (1995)&#39;: 4.0, &#39;Mask, The (1994)&#39;: 4.0, &#39;To Wong Foo, Thanks for Everything! Julie Newmar (1995)&#39;: 3.0 … }, 2 : { &#39;River Wild, The (1994)&#39;: 3.0, &#39;Sabrina (1995)&#39;: 3.0, &#39;Evita (1996)&#39;: 3.0, &#39;Richard III (1995)&#39;: 2.0, &#39;Postino, Il (1994)&#39;: 4.0, &#39;Donnie Brasco (1997)&#39;: 4.0 … } } [/sourcecode]</p>
+<p>[sourcecode language=&quot;python&quot;] { 1 : { &#39;Doom Generation, The (1995)&#39;: 2.0, &#39;Twelve Monkeys (1995)&#39;: 4.0, &#39;Mask, The (1994)&#39;: 4.0, &#39;To Wong Foo, Thanks for Everything! Julie Newmar (1995)&#39;: 3.0 … }, 2 : { &#39;River Wild, The (1994)&#39;: 3.0, &#39;Sabrina (1995)&#39;: 3.0, &#39;Evita (1996)&#39;: 3.0, &#39;Richard III (1995)&#39;: 2.0, &#39;Postino, Il (1994)&#39;: 4.0, &#39;Donnie Brasco (1997)&#39;: 4.0 … } } 
+```</p>
 
 <p><strong>&gt;&gt; Finding users with similar taste : Pearson Correlation Similarity</strong></p>
 
@@ -163,13 +161,10 @@ With this data set available, let’s first write a function in Python which wil
     if den==0: return 0
     r=num/den
     return r
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">Above function returns value between -1 and 1. A value of 1 means two users have exactly same ratings for every movie. Let’s now try this function with 2 users and see how similar they are –
+
+[sourcecode language=&quot;python&quot;] &gt;&gt;&gt;import imp &gt;&gt;&gt;imp.reload(movieRecommendations) &gt;&gt;&gt;movieRecommendations.calculatePearsonSimilarity(movieRatings, ‘1’,’2’) 0.16084123285437085 
 </code></pre></div>
-<p>[/sourcecode]</p>
-
-<p>Above function returns value between -1 and 1. A value of 1 means two users have exactly same ratings for every movie. Let’s now try this function with 2 users and see how similar they are –</p>
-
-<p>[sourcecode language=&quot;python&quot;] &gt;&gt;&gt;import imp &gt;&gt;&gt;imp.reload(movieRecommendations) &gt;&gt;&gt;movieRecommendations.calculatePearsonSimilarity(movieRatings, ‘1’,’2’) 0.16084123285437085 [/sourcecode]</p>
-
 <p>Here the output is 0.16 which means user ‘1’ and ‘2’ are not very similar in terms of their ratings for movies.</p>
 
 <p><strong>&gt;&gt; Weighted Similarity Score</strong></p>

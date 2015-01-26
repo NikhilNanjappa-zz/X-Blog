@@ -101,7 +101,8 @@
 
 <p>I will use Spring Roo to create a simple bookshop application. Fire up the Roo shell and execute the following commands.</p>
 
-<p>[sourcecode lang=&quot;text&quot;] project --topLevelPackage com.xebia.bookshop --projectName bookshop mongo setup --databaseName bookshop --host localhost --port 27017 entity mongo --class ~.domain.Book --testAutomatically --identifierType org.bson.types.ObjectId field string --fieldName title --notNull field string --fieldName author --notNull field number --type double --fieldName price --notNull repository mongo --interface ~.repository.BookRepository --entity ~.domain.Book service --interface ~.service.BookService web mvc setup web mvc all --package ~.web [/sourcecode]</p>
+<p>[sourcecode lang=&quot;text&quot;] project --topLevelPackage com.xebia.bookshop --projectName bookshop mongo setup --databaseName bookshop --host localhost --port 27017 entity mongo --class ~.domain.Book --testAutomatically --identifierType org.bson.types.ObjectId field string --fieldName title --notNull field string --fieldName author --notNull field number --type double --fieldName price --notNull repository mongo --interface ~.repository.BookRepository --entity ~.domain.Book service --interface ~.service.BookService web mvc setup web mvc all --package ~.web 
+```</p>
 
 <p>This will create a simple bookshop application. You can deploy this application on local tomcat using mvn tomcat:run. Please make sure you have MongoDB running on your local system.</p>
 
@@ -109,33 +110,34 @@
 
 <p>OpenShift Express supports two forms of deployment one is source code deployment which I showed in my last two blogs and other is war/binary deployment. In this blog I will show you how to deploy war to the Express cloud. Before we can deploy the application to OpenShift Express we first need to create bookshop application. To create the application execute the following command. You need rhc ruby gem to execute the command.</p>
 
-<p>[sourcecode lang=&quot;text&quot;] rhc-create-app -l <rhlogin> -a bookshop -t jbossas-7.0 [/sourcecode]</p>
+<p>[sourcecode lang=&quot;text&quot;] rhc-create-app -l <rhlogin> -a bookshop -t jbossas-7.0 
+```</p>
 
 <p>It will prompt for the password. Now that you have created the application you should embed MongoDB cartridge in your application.</p>
 
-<p>[sourcecode lang=&quot;text&quot;] rhc-ctl-app -l <rhlogin> -a bookshop -e add-mongodb-2.0 [/sourcecode]</p>
+<p>[sourcecode lang=&quot;text&quot;] rhc-ctl-app -l <rhlogin> -a bookshop -e add-mongodb-2.0 
+```</p>
 
 <p>Now that we have created the application and added the MongoDB cartridge we need to make change in our Spring application. We need to change applicationContext-mongo.xml file to have correct values for MongoDB factory. The values which exist are for application running on your local system. To change these values to OpenShift ones add a profile as shown below.</p>
 
-<p>[sourcecode lang=&quot;xml&quot;] <beans profile="openshift"> <mongo:db-factory dbname="${mongo.name}" host="${OPENSHIFT_NOSQL_DB_HOST}" port="${OPENSHIFT_NOSQL_DB_PORT}" username="${OPENSHIFT_NOSQL_DB_USERNAME}" password="${OPENSHIFT_NOSQL_DB_PASSWORD}" /> </beans> [/sourcecode]</p>
+<p>[sourcecode lang=&quot;xml&quot;] <beans profile="openshift"> <mongo:db-factory dbname="${mongo.name}" host="${OPENSHIFT_NOSQL_DB_HOST}" port="${OPENSHIFT_NOSQL_DB_PORT}" username="${OPENSHIFT_NOSQL_DB_USERNAME}" password="${OPENSHIFT_NOSQL_DB_PASSWORD}" /> </beans> 
+```</p>
 
 <p>You also need to mention one context-param in web.xml to tell which profile is active. To do it add the following context-param.</p>
 
 <p>[sourcecode lang=&quot;xml&quot;] <context-param> <param-name>spring.profiles.active</param-name> <param-value>openshift</param-value> </context-param></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Now build the project using mvn clean install -Dtest=maven.test.skip=true and copy to war file to deployments folder in OpenShift bookshop application. Also change the name of war to ROOT.war otherwise you application will be available at url_of_application/bookshop. Now to deploy do the following in deployments folder.
 
-<p>[/sourcecode]</p>
-
-<p>Now build the project using mvn clean install -Dtest=maven.test.skip=true and copy to war file to deployments folder in OpenShift bookshop application. Also change the name of war to ROOT.war otherwise you application will be available at url<em>of</em>application/bookshop. Now to deploy do the following in deployments folder.</p>
-
-<p>[sourcecode lang=&quot;text&quot;] git add . git commit -a -m &quot;adding bookshop application&quot; git push [/sourcecode]</p>
-
+[sourcecode lang=&quot;text&quot;] git add . git commit -a -m &quot;adding bookshop application&quot; git push 
+</code></pre></div>
 <p>Wait for application to get deployed and see your application running at <a href="http://bookshop-random.rhcloud.com/">http://bookshop-random.rhcloud.com/</a></p>
 
 <p><strong>Deploying to Cloud Foundry</strong></p>
 
 <p>To deploy the bookshop application to Cloud Foundry we just need to add one more profile as shown below.</p>
 
-<p>[sourcecode lang=&quot;xml&quot;] <beans profile="cloud"> <cloud:mongo-db-factory id="mongoDbFactory"/> </beans> [/sourcecode]</p>
+<p>[sourcecode lang=&quot;xml&quot;] <beans profile="cloud"> <cloud:mongo-db-factory id="mongoDbFactory"/> </beans> 
+```</p>
 
 <p>In web.xml change the value of spring.profiles.active to cloud and create a war. To deploy to Cloud Foundry follow the following steps </p>
 

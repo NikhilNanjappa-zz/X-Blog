@@ -110,11 +110,13 @@ An order is placed for a customer, and over a period of time, a customer can hav
 
 <p>A brokerage account can have many investments. So, there is a one to many relationship between a brokerage account and it&#39;s investments. But most investment are against a stock. So, a one-to-many relationship can be reduced to a one-to-one relationship by adding a qualifier, which in this case would be a stock symbol. This is shown in the following code segment</p>
 
-<p>[sourcecode language=&quot;java&quot;] public class BrokerageAccount { Set<Investment> Investments; public Set getInvestments() { return investments; } } [/sourcecode]</p>
+<p>public class BrokerageAccount { Set<Investment> Investments; public Set getInvestments() { return investments; } } 
+```</p>
 
 <p>The above code can be changed to</p>
 
-<p>[sourcecode language=&quot;java&quot;] public class BrokerageAccount { Map<String stockSymbol, Investment> investments; public Set getInvestment(String stockSymbol) { return (Investment) investments.get(stockSymbol); } } [/sourcecode]</p>
+<p>public class BrokerageAccount { Map<String stockSymbol, Investment> investments; public Set getInvestment(String stockSymbol) { return (Investment) investments.get(stockSymbol); } } 
+```</p>
 
 <p>The fact that an investment is against a stock symbol is made more explicit by adding a qualifier which in this case is a stock symbol. ** Entities**</p>
 

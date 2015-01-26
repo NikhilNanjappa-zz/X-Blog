@@ -113,7 +113,8 @@
 
 <p>We can do basic operations like insert, update, delete as well as query the contacts database. For example, to insert a contact :</p>
 
-<p>[sourcecode language=&quot;java&quot;] ContentValues values = new ContentValues(); values.put(RawContacts.ACCOUNT<em>TYPE, accountType); values.put(RawContacts.ACCOUNT</em>NAME, accountName); Uri rawContactUri = getContentResolver().insert(RawContacts.CONTENT_URI, values); long rawContactId = ContentUris.parseId(rawContactUri); [/sourcecode]</p>
+<p>ContentValues values = new ContentValues(); values.put(RawContacts.ACCOUNT<em>TYPE, accountType); values.put(RawContacts.ACCOUNT</em>NAME, accountName); Uri rawContactUri = getContentResolver().insert(RawContacts.CONTENT_URI, values); long rawContactId = ContentUris.parseId(rawContactUri); 
+```</p>
 
 <p><strong>What Android4.0 (ICS) added to it:</strong></p>
 
@@ -146,13 +147,12 @@
 
 <p>Intents are the mainstay of Android system. Apart from regular usage of intents to start another activities, passing data across activities and applications, receiving broadcasts and triggering a service, intents can perform an interesting job for us: to give apps the power to &quot;share&quot; and that without a much extra effort. The simplest case is to create &quot;Activity chooser &quot; dialog to chose a social app capable of sharing:</p>
 
-<p>[sourcecode language=&quot;java&quot;] Intent intent=new Intent(android.content.Intent.ACTION<em>SEND); intent.setType(&quot;text/plain&quot;); intent.addFlags(Intent.FLAG</em>ACTIVITY<em>CLEAR</em>WHEN<em>TASK</em>RESET); // Add data to the intent, the receiving app will decide what to do with it. intent.putExtra(Intent.EXTRA<em>SUBJECT, “Here goes the subject...”); intent.putExtra(Intent.EXTRA</em>TEXT, “Here goes the message body...”); <pre>[/sourcecode]</p>
+<p>Intent intent=new Intent(android.content.Intent.ACTION<em>SEND); intent.setType(&quot;text/plain&quot;); intent.addFlags(Intent.FLAG</em>ACTIVITY<em>CLEAR</em>WHEN<em>TASK</em>RESET); // Add data to the intent, the receiving app will decide what to do with it. intent.putExtra(Intent.EXTRA<em>SUBJECT, “Here goes the subject...”); intent.putExtra(Intent.EXTRA</em>TEXT, “Here goes the message body...”); <pre>
+```</p>
 
 <p>*<em>Updates in 4.0: *</em>In this version, a new tool is introduced : <a href="http://developer.android.com/reference/android/widget/ShareActionProvider.html" title="ShareActionProvider">ShareActionProvider</a> . This will create a &quot;share&quot; button in the Action Bar. It is a sub-class of ActionProvider. ActionProviders are responsible for creating views to do the required action that will accomplish a given task. ShareActionProvider will create view for &quot;share&quot; task.</p>
 
 <p>For using ShareActionProvider, modify the onCreateOptionsMenu() method in the Activity:</p>
-
-<p>[sourcecode language=&quot;java&quot;]</p>
 
 <p>public boolean onCreateOptionsMenu(Menu menu) {</p>
 
@@ -163,13 +163,10 @@
 <p>mShareActionProvider.setShareHistoryFileName(&quot;custom<em>share</em>history.xml&quot;);</p>
 
 <p>}</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">This will create a list of share targets the user can chose from to perform the sharing. The order of the share targets will depend on the past usage of the user which is saved in a history file. We can either use the default history file or we can maintain a custom history file and use that file throughout the application.
 
-<p>[/sourcecode]</p>
-
-<p>This will create a list of share targets the user can chose from to perform the sharing. The order of the share targets will depend on the past usage of the user which is saved in a history file. We can either use the default history file or we can maintain a custom history file and use that file throughout the application.</p>
-
-<p>The ICS release has brought exciting goodies for developers and updates in social API&#39;s are most appealing.</p>
-
+The ICS release has brought exciting goodies for developers and updates in social API&#39;s are most appealing.
+</code></pre></div>
 
                 <hr>
 

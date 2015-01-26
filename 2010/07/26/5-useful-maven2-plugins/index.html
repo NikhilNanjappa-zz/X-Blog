@@ -127,7 +127,8 @@
 
 <p><strong>Solution:</strong> Use maven WAR plugin with overlays. Add below plugin configuration to the project <a href="http://maven.apache.org/pom.html">POM</a> file.</p>
 
-<p>[sourcecode language=&quot;xml&quot;] <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-war-plugin</artifactId> <version>2.1-beta-1</version> <configuration> <warName>FinalProject</warName> <overlays> &lt;!--Overlay an AAR file inside the generated WAR file --&gt; <overlay> <groupId>com.test.services</groupId> <artifactId>test-services</artifactId> <type>aar</type> <targetPath>WEB-INF/services</targetPath> </overlay> &lt;!--Overlay a ZIP file and place extracted content under WEB-INF/knowledge --&gt; <overlay> <groupId>com.test.knowledge</groupId> <artifactId>test-knowledge</artifactId> <type>zip</type> <targetPath>WEB-INF/knowledge</targetPath> </overlay> &lt;!--Overlay a WAR file and exclude the .jpg in final war --&gt; <overlay> <groupId>com.example.project</groupId> <artifactId>projectdependency</artifactId> <excludes> <exclude>images/sampleimage-dependency.jpg</exclude> </excludes> </overlay> </overlays> </configuration> </plugin> [/sourcecode]</p>
+<p>[sourcecode language=&quot;xml&quot;] <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-war-plugin</artifactId> <version>2.1-beta-1</version> <configuration> <warName>FinalProject</warName> <overlays> &lt;!--Overlay an AAR file inside the generated WAR file --&gt; <overlay> <groupId>com.test.services</groupId> <artifactId>test-services</artifactId> <type>aar</type> <targetPath>WEB-INF/services</targetPath> </overlay> &lt;!--Overlay a ZIP file and place extracted content under WEB-INF/knowledge --&gt; <overlay> <groupId>com.test.knowledge</groupId> <artifactId>test-knowledge</artifactId> <type>zip</type> <targetPath>WEB-INF/knowledge</targetPath> </overlay> &lt;!--Overlay a WAR file and exclude the .jpg in final war --&gt; <overlay> <groupId>com.example.project</groupId> <artifactId>projectdependency</artifactId> <excludes> <exclude>images/sampleimage-dependency.jpg</exclude> </excludes> </overlay> </overlays> </configuration> </plugin> 
+```</p>
 
 <p>Overlays are applied in the order in which they are defined in the overlays configuration. By default, the source of the project (a.k.a the current build) is added first (e.g. before any overlay is applied). The current build is defined as a special overlay with no groupId, artifactId. If overlays need to be applied first, simply configure the current build after those overlays. </p>
 
@@ -137,17 +138,20 @@
 
 <p><strong>Solution:</strong> Use <a href="http://mojo.codehaus.org/cobertura-maven-plugin/">Maven cobertura</a> plugin.</p>
 
-<p>[sourcecode language=&quot;xml&quot;] <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> <version>2.4</version> <configuration> <instrumentation> <excludes> <exclude>com/project/test/TestMain.class</exclude> </excludes> </instrumentation> <check> <totalLineRate>85</totalLineRate> </check> <formats> <format>html</format> <format>xml</format> </formats> </configuration> <executions> <execution> <id>clean</id> <phase>pre-site</phase> <goals> <goal>clean</goal> </goals> </execution> <execution> <id>instrument</id> <phase>install</phase> <goals> <goal>check</goal> </goals> </execution> </executions> </plugin> [/sourcecode] </p>
+<p>[sourcecode language=&quot;xml&quot;] <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> <version>2.4</version> <configuration> <instrumentation> <excludes> <exclude>com/project/test/TestMain.class</exclude> </excludes> </instrumentation> <check> <totalLineRate>85</totalLineRate> </check> <formats> <format>html</format> <format>xml</format> </formats> </configuration> <executions> <execution> <id>clean</id> <phase>pre-site</phase> <goals> <goal>clean</goal> </goals> </execution> <execution> <id>instrument</id> <phase>install</phase> <goals> <goal>check</goal> </goals> </execution> </executions> </plugin> 
+``` </p>
 
 <h3><strong>Problem: Generate <a href="http://www.w3.org/TR/wsdl">WSDL</a> from a Java class at build time.</strong></h3>
 
 <p><strong>Solution:</strong> Use <a href="http://ws.apache.org/axis2/tools/1_2/maven-plugins/maven-java2wsdl-plugin.html">Maven Java2WSDL</a> plugin. Below configuration creates a TestProject.wsdl from the class <em>com.test.service.TestWebService</em>.</p>
 
-<p>[sourcecode language=&quot;xml&quot;] <plugin> <groupId>org.apache.axis2</groupId> <artifactId>axis2-java2wsdl-maven-plugin</artifactId> <version>1.5</version> <executions> <execution> <id>generate web service wsdl</id> <goals> <goal>java2wsdl</goal> </goals> <configuration> <serviceName>TestService</serviceName> <className>com.test.service.TestWebService</className> <targetNamespace>http://www.test.com/TestProject</targetNamespace> <schemaTargetNamespace>http://www.test.com/TestProject</schemaTargetNamespace> <elementFormDefault>qualified</elementFormDefault> <package2Namespace> <property> <name>com.test.domain</name> <value>http://www.test.com/TestProject</value> </property> </package2Namespace> <outputFileName>target/generated-resources/TestProject.wsdl</outputFileName> </configuration> </execution> </executions> </plugin> [/sourcecode]</p>
+<p>[sourcecode language=&quot;xml&quot;] <plugin> <groupId>org.apache.axis2</groupId> <artifactId>axis2-java2wsdl-maven-plugin</artifactId> <version>1.5</version> <executions> <execution> <id>generate web service wsdl</id> <goals> <goal>java2wsdl</goal> </goals> <configuration> <serviceName>TestService</serviceName> <className>com.test.service.TestWebService</className> <targetNamespace>http://www.test.com/TestProject</targetNamespace> <schemaTargetNamespace>http://www.test.com/TestProject</schemaTargetNamespace> <elementFormDefault>qualified</elementFormDefault> <package2Namespace> <property> <name>com.test.domain</name> <value>http://www.test.com/TestProject</value> </property> </package2Namespace> <outputFileName>target/generated-resources/TestProject.wsdl</outputFileName> </configuration> </execution> </executions> </plugin> 
+```</p>
 
 <p>NOTE: The plugin will be invoked automatically in the generate-sources phase. You can also invoke it directly from the command line by running the command.</p>
 
-<p>[sourcecode language=&quot;xml&quot;] mvn java2wsdl:java2wsdl [/sourcecode] </p>
+<p>[sourcecode language=&quot;xml&quot;] mvn java2wsdl:java2wsdl 
+``` </p>
 
 <h3><strong>Problem: Generate web service stub from the wsdl file.</strong></h3>
 

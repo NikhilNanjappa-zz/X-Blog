@@ -111,7 +111,8 @@
 
 <p>So, the input data for our Mapper could be a flat file generated out of Values of the Key-Value of <twitterHandle,Tweet>. It would look something like this :</p>
 
-<p>[sourcecode language=&quot;java&quot;] I love #agileNCR. Attenindg sesssion on #hadoop. ..... .... [/sourcecode]</p>
+<p>[sourcecode language=&quot;java&quot;] I love #agileNCR. Attenindg sesssion on #hadoop. ..... .... 
+```</p>
 
 <p>click <a href="https://github.com/anirudh83/xke_hadoop/blob/master/input/test.jpda">here </a>to see the sample input file.</p>
 
@@ -119,28 +120,25 @@
 
 <p><strong>Step 1: Mapper</strong> Mapper while tokenising would collect only the tokens which start by #.</p>
 
-<p>[sourcecode language=&quot;java&quot;] @Override public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException { String line = value.toString(); StringTokenizer tokenizer = new StringTokenizer(line); while (tokenizer.hasMoreTokens()) { String token = tokenizer.nextToken(); if(token.startsWith(&quot;#&quot;)){ word.set(token.toLowerCase()); // Context here is like a multi set which allocates value &quot;one&quot; for key &quot;word&quot;. context.write(word, one); } } [/sourcecode] </p>
+<p>[sourcecode language=&quot;java&quot;] @Override public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException { String line = value.toString(); StringTokenizer tokenizer = new StringTokenizer(line); while (tokenizer.hasMoreTokens()) { String token = tokenizer.nextToken(); if(token.startsWith(&quot;#&quot;)){ word.set(token.toLowerCase()); // Context here is like a multi set which allocates value &quot;one&quot; for key &quot;word&quot;. context.write(word, one); } } 
+``` </p>
 
 <p><strong>Step 2: Combiner</strong> Combiner would combine all the same hashtags together.</p>
 
 <p><strong>Step3: Reducer</strong></p>
 
-<p>[sourcecode language=&quot;java&quot;] @Override protected void reduce(Text key, Iterable&lt;IntWritable&gt; values, Context context) throws IOException, InterruptedException { int sum = 0; for (IntWritable val : values) { sum += val.get(); } context.write(key, new IntWritable(sum)); } </pre> [/sourcecode] </p>
+<p>[sourcecode language=&quot;java&quot;] @Override protected void reduce(Text key, Iterable&lt;IntWritable&gt; values, Context context) throws IOException, InterruptedException { int sum = 0; for (IntWritable val : values) { sum += val.get(); } context.write(key, new IntWritable(sum)); } </pre> 
+``` </p>
 
 <p>Reducer will generate the output something like this :</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># agileNCR 21
 
-<p>[sourcecode]</p>
+# hello 4
 
-<h1>agileNCR 21</h1>
+# xomato 88
 
-<h1>hello 4</h1>
-
-<h1>xomato 88</h1>
-
-<h1>zo 36</h1>
-
-<p>[/sourcecode]</p>
-
+# zo 36
+</code></pre></div>
 <p>The problem with this output is that it is sorted by the key values, as in the mapping phase the shuffle and sort step sorts them alphabeticaly on the basis of keys.</p>
 
 <p>To get the desired out of sorting it on the basis of number of occurances of each hashTag, we would need them to be sorted on the basis of values. So we decided to pass this output to second Map-Reduce job which will swap the key and the value and then perform sort.</p>
@@ -162,42 +160,34 @@
 
     }
 }
-</code></pre></div>
-<p>[/sourcecode]</p>
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">**Step5: Reducer 2** In reducer we will swap back the result again.
 
-<p><strong>Step5: Reducer 2</strong> In reducer we will swap back the result again.</p>
+[sourcecode language=&quot;java&quot;] @Override public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
-<p>[sourcecode language=&quot;java&quot;] @Override public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    String line = value.toString(); // agilencr 4
-    StringTokenizer tokenizer = new StringTokenizer(line);
-    while (tokenizer.hasMoreTokens()) {
 
-        String token = tokenizer.nextToken();
+        String line = value.toString(); // agilencr 4
+        StringTokenizer tokenizer = new StringTokenizer(line);
+        while (tokenizer.hasMoreTokens()) {
 
-    // Context here is like a multi set which allocates value &amp;quot;one&amp;quot; for key &amp;quot;word&amp;quot;.
+            String token = tokenizer.nextToken();
 
-        context.write(new LongWritable(Long.parseLong(tokenizer.nextToken().toString())),
-             new Text(token));
+        // Context here is like a multi set which allocates value &amp;quot;one&amp;quot; for key &amp;quot;word&amp;quot;.
 
+            context.write(new LongWritable(Long.parseLong(tokenizer.nextToken().toString())),
+                 new Text(token));
+
+        }
     }
-}
 </code></pre></div>
-<p>[/sourcecode]</p>
-
 <p>So that we get the desired output like this:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># xomato 88
 
-<p>[sourcecode]</p>
+# zo 36
 
-<h1>xomato 88</h1>
+# agileNCR 21
 
-<h1>zo 36</h1>
-
-<h1>agileNCR 21</h1>
-
-<h1>hello 4</h1>
-
-<p>[/sourcecode]</p>
-
+# hello 4
+</code></pre></div>
 <p>It might not be the best way but its quite useful to understand MapReduce and Comparator. The complete source code can be downloaded from <a href="https://github.com/anirudh83/xke_hadoop/blob/master/src/com/example/trendfinder">here </a>.</p>
 
 <h2>Comments</h2>

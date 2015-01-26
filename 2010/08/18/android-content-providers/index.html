@@ -103,13 +103,14 @@
 
 <p>First of all we need to create a class which extends the ContentProvider class provided by Android.</p>
 
-<p>[sourcecode language=&quot;java&quot;] public class AddressProvider extends ContentProvider {</p>
+<p>public class AddressProvider extends ContentProvider {</p>
 
 <p>public static final Uri CONTENT_URI = Uri.parse(&quot;content://com.example.AddressProvider&quot;);</p>
 
 <p>private SQLiteDatabase db; private String DATABASE_TABLE = &quot;address&quot;;</p>
 
-<p>@Override public boolean onCreate() { DatabaseHelper dbHelper = new DatabaseHelper(getContext()); db = dbHelper.getWritableDatabase(); return (db == null) ? false : true; } ... } [/sourcecode]</p>
+<p>@Override public boolean onCreate() { DatabaseHelper dbHelper = new DatabaseHelper(getContext()); db = dbHelper.getWritableDatabase(); return (db == null) ? false : true; } ... } 
+```</p>
 
 <p>Here we have extended the ContentProvider class and added instance variables for using database, and an URI which is the URI of the content provider. Then we have overridden the onCreate() to initialize the SQLiteDatabase db using DatabaseHelper which was created in my <a href="http://xebee.xebia.in/2010/08/16/database-implementation-in-android/">previous post about Android databases</a>.</p>
 
@@ -119,7 +120,7 @@
 
 <p>Implement all methods by the default implementation given by Eclipse(or other IDE). Then we will change the implementation for insert() and query(). insert() is used to insert record and query() is used to fetch data.</p>
 
-<p>[sourcecode language=&quot;java&quot;] @Override public Uri insert(Uri uri, ContentValues values) {</p>
+<p>@Override public Uri insert(Uri uri, ContentValues values) {</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">  long rowID = db.insert(DATABASE_TABLE, &amp;quot;&amp;quot;, values);
 
   if (rowID &amp;gt; 0) {
@@ -131,23 +132,27 @@
 </code></pre></div>
 <p>}</p>
 
-<p>@Override public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) { String[] columns = new String[] { “id”, “city”, “street”, “country”}; return db.query(DATABASE_TABLE, columns, null, null, null, null, null); } [/sourcecode]</p>
+<p>@Override public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) { String[] columns = new String[] { “id”, “city”, “street”, “country”}; return db.query(DATABASE_TABLE, columns, null, null, null, null, null); } 
+```</p>
 
 <p>The implementation of insert() and delete simply uses the db instantiated in onCreate() to insert/fetch the record. The insert() then notifies other users using the content provider about the insertion of a row in the table.</p>
 
 <p>This content provider resembles a service in Service Oriented Architecture(SOA). For this we need to change the AndroidManifest.xml. This is just like publishing an wsdl for web services. Add the content provider as a provider in AndroidManifest.xml.</p>
 
-<p>[sourcecode language=&quot;xml&quot;] <application android:icon="@drawable/icon" android:label="@string/app_name"> <activity android:name=".AddressProviderActivity" android:label="@string/app_name1"> ... </activity> <provider android:name="AddressProvider" android:authorities="com.example.AddressProvider" /> </application> [/sourcecode]</p>
+<p>[sourcecode language=&quot;xml&quot;] <application android:icon="@drawable/icon" android:label="@string/app_name"> <activity android:name=".AddressProviderActivity" android:label="@string/app_name1"> ... </activity> <provider android:name="AddressProvider" android:authorities="com.example.AddressProvider" /> </application> 
+```</p>
 
 <p>Suppose any Activity wants to access the address db through this service provider. The Activity can use getContentResolver() method to get the handle to the provider. To insert a row from an activtiy we just need to call the insert() using getContentResolver().</p>
 
-<p>[sourcecode language=&quot;java&quot;] private void insert(AddressDAO addressDAO) { ContentValues values = new ContentValues(); values.put(&quot;city&quot;, &quot;Gurgaon&quot;); values.put(&quot;street&quot;, &quot;sector 14&quot;); values.put(&quot;country&quot;, &quot;India&quot;); getContentResolver().insert(AddressProvider.CONTENT_URI, values); } [/sourcecode]</p>
+<p>private void insert(AddressDAO addressDAO) { ContentValues values = new ContentValues(); values.put(&quot;city&quot;, &quot;Gurgaon&quot;); values.put(&quot;street&quot;, &quot;sector 14&quot;); values.put(&quot;country&quot;, &quot;India&quot;); getContentResolver().insert(AddressProvider.CONTENT_URI, values); } 
+```</p>
 
 <p>Same is the case for fetching the data.</p>
 
-<p>[sourcecode language=&quot;java&quot;] private void get(AddressDAO addressDAO) { Cursor c = getContentResolver().query(AddressProvider.CONTENT<em>URI, null, null, null, null); if (c.moveToFirst()) DisplayAddress(c); else Toast.makeText(this, &quot;No address found&quot;, Toast.LENGTH</em>LONG).show(); }</p>
+<p>private void get(AddressDAO addressDAO) { Cursor c = getContentResolver().query(AddressProvider.CONTENT<em>URI, null, null, null, null); if (c.moveToFirst()) DisplayAddress(c); else Toast.makeText(this, &quot;No address found&quot;, Toast.LENGTH</em>LONG).show(); }</p>
 
-<p>public void DisplayAddress(Cursor c) { final EditText editText = (EditText) findViewById(R.id.EditText01); editText.setText(new String(c.getString(2))); Toast.makeText(this, &quot;id: &quot; + c.getString(0) + &quot;\n&quot; + &quot;ISBN: &quot; + c.getString(1) + &quot;\n&quot; + &quot;TITLE: &quot; + c.getString(2) + &quot;\n&quot; + &quot;PUBLISHER: &quot;+ c.getString(3), Toast.LENGTH_LONG).show(); } [/sourcecode]</p>
+<p>public void DisplayAddress(Cursor c) { final EditText editText = (EditText) findViewById(R.id.EditText01); editText.setText(new String(c.getString(2))); Toast.makeText(this, &quot;id: &quot; + c.getString(0) + &quot;\n&quot; + &quot;ISBN: &quot; + c.getString(1) + &quot;\n&quot; + &quot;TITLE: &quot; + c.getString(2) + &quot;\n&quot; + &quot;PUBLISHER: &quot;+ c.getString(3), Toast.LENGTH_LONG).show(); } 
+```</p>
 
 <h2>Comments</h2>
 

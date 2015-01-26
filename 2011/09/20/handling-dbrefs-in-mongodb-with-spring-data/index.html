@@ -99,14 +99,15 @@
 
 <p>I have created a simple example with three domain classes User, Post and Comment. User can create Post and Post can have Comment(keeping it as simple as that). Below are the domain classes(of the example),</p>
 
-<p>[sourcecode language=&quot;java&quot;] import org.springframework.data.annotation.Id; import org.springframework.data.mongodb.core.mapping.Document;</p>
+<p>import org.springframework.data.annotation.Id; import org.springframework.data.mongodb.core.mapping.Document;</p>
 
 <p>@Document public class User { @Id private String id; private String userName; private String password;</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">    //getters &amp;amp; setters
 </code></pre></div>
-<p>} [/sourcecode]</p>
+<p>} 
+```</p>
 
-<p>[sourcecode language=&quot;java&quot;] import org.springframework.data.annotation.Id;</p>
+<p>import org.springframework.data.annotation.Id;</p>
 
 <p>@org.springframework.data.mongodb.core.mapping.Document public class Post {</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">@Id
@@ -118,9 +119,10 @@ private User user;
 
     //getters and setters
 </code></pre></div>
-<p>} [/sourcecode]</p>
+<p>} 
+```</p>
 
-<p>[sourcecode language=&quot;java&quot;] import org.springframework.data.annotation.Id;</p>
+<p>import org.springframework.data.annotation.Id;</p>
 
 <p>@org.springframework.data.mongodb.core.mapping.Document public class Comment {</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">@Id
@@ -133,35 +135,40 @@ private Post post;
 
     //getters and setters
 </code></pre></div>
-<p>} [/sourcecode]</p>
+<p>} 
+```</p>
 
 <p>You can see how the classes are linked with each other using <strong>@DBRef</strong> annotation. Now in order to access MongoDB and we need to create some DAO classes. Well thats a piece of cake with Spring Data&#39;s <strong>MongoRepository</strong>. Just extend MongoRepository<T, X> with you DAO where T is class name and X is class used for creating the key.</p>
 
-<p>[sourcecode language=&quot;java&quot;] import in.xebia.mongodb.blog.domain.User; import org.springframework.transaction.annotation.Transactional;</p>
+<p>import in.xebia.mongodb.blog.domain.User; import org.springframework.transaction.annotation.Transactional;</p>
 
 <p>@Transactional public interface UserDao extends org.springframework.data.mongodb.repository.MongoRepository<User, String> {</p>
 
-<p>} [/sourcecode]</p>
+<p>} 
+```</p>
 
-<p>[sourcecode language=&quot;java&quot;] import in.xebia.mongodb.blog.domain.Post; import org.springframework.transaction.annotation.Transactional;</p>
+<p>import in.xebia.mongodb.blog.domain.Post; import org.springframework.transaction.annotation.Transactional;</p>
 
 <p>@Transactional public interface PostDao extends org.springframework.data.mongodb.repository.MongoRepository<Post, String> {</p>
 
-<p>} [/sourcecode]</p>
+<p>} 
+```</p>
 
-<p>[sourcecode language=&quot;java&quot;] import in.xebia.mongodb.blog.domain.Comment; import org.springframework.transaction.annotation.Transactional;</p>
+<p>import in.xebia.mongodb.blog.domain.Comment; import org.springframework.transaction.annotation.Transactional;</p>
 
 <p>@Transactional public interface CommentDao extends org.springframework.data.mongodb.repository.MongoRepository<Comment, String>{</p>
 
-<p>} [/sourcecode]</p>
+<p>} 
+```</p>
 
 <p>MongoRepository provides basic CRUD operations like findOne(),findALL(),save(),delete(), etc. but in order to handle DBRefs we need to make custom use of <strong>MongoTemplate</strong> as shown below in the CommentService class:</p>
 
-<p>[sourcecode language=&quot;java&quot;] import static org.springframework.data.mongodb.core.query.Criteria.where; import in.xebia.mongodb.blog.api.CommentDao; import in.xebia.mongodb.blog.api.CommentService; import in.xebia.mongodb.blog.domain.Comment; import in.xebia.mongodb.blog.domain.Post; import in.xebia.mongodb.blog.domain.User; import java.util.List; import java.util.UUID; import javax.annotation.Resource; import org.springframework.data.mongodb.core.MongoTemplate; import org.springframework.data.mongodb.core.query.Query; import org.springframework.stereotype.Service; import org.springframework.transaction.annotation.Transactional;</p>
+<p>import static org.springframework.data.mongodb.core.query.Criteria.where; import in.xebia.mongodb.blog.api.CommentDao; import in.xebia.mongodb.blog.api.CommentService; import in.xebia.mongodb.blog.domain.Comment; import in.xebia.mongodb.blog.domain.Post; import in.xebia.mongodb.blog.domain.User; import java.util.List; import java.util.UUID; import javax.annotation.Resource; import org.springframework.data.mongodb.core.MongoTemplate; import org.springframework.data.mongodb.core.query.Query; import org.springframework.stereotype.Service; import org.springframework.transaction.annotation.Transactional;</p>
 
 <p>@Service(&quot;commentService&quot;) @Transactional public class CommentServiceImpl implements CommentService { @Resource private CommentDao commentDao; @Resource private MongoTemplate mongoTemplate; public List<Comment> getAll() { List<Comment> comments = commentDao.findAll(); return comments; } public Comment get(String id) { Comment comment = commentDao.findOne(id); return comment; } public Boolean add(Comment comment) { try { if(comment.getId()==null || comment.getId().length()==0) comment.setId(UUID.randomUUID().toString()); commentDao.save(comment); return true; } catch (Exception e) { e.printStackTrace(); return false; } } public List<Comment> get(Post post) { Query query = new Query(where(&quot;post.$id&quot;).is(post.getId())); List<Comment> comments = mongoTemplate.find(query, Comment.class); return comments; } public List<Comment> get(User user) { Query query = new Query(where(&quot;user.$id&quot;).is(user.getId())); List<Comment> comments = mongoTemplate.find(query, Comment.class); return comments; }</p>
 
-<p>} [/sourcecode]</p>
+<p>} 
+```</p>
 
 <p>Last but not the least here is the config file for mongo:</p>
 

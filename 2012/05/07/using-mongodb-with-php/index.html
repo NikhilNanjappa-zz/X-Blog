@@ -138,7 +138,8 @@ So lets begin.. </li>
 
 <p>So corresponding to your version of PHP installed, download the appropriate archive. Extract the archive and you will get a file named <em>php</em>mongo.dll<em>. Now copy this file and paste it to the  directory available inside the  directory where your PHP is installed. e.g. if you are using XAMPP this path can be like this _&quot;D:\xampp1.7.7\php\ext&quot;</em></p>
 
-<p>Now we need to specify the extension which we just saved in the  directory in the file name <em>&quot;php.ini&quot;</em>. So open the <em>&quot;php.ini&quot;</em> file in your favorite text-editor and paste the following line: [sourcecode language=&quot;php&quot;] extension=php_mongo.dll [/sourcecode] and then save the file.</p>
+<p>Now we need to specify the extension which we just saved in the  directory in the file name <em>&quot;php.ini&quot;</em>. So open the <em>&quot;php.ini&quot;</em> file in your favorite text-editor and paste the following line: [sourcecode language=&quot;php&quot;] extension=php_mongo.dll 
+``` and then save the file.</p>
 
 <p>Now take the web server restart to apply the changes. </p>
 
@@ -176,7 +177,8 @@ foreach ($items as $item) {
     $collection-&amp;gt;insert($item, array(&#39;safe&#39; =&amp;gt; true));
 }
 </code></pre></div>
-<p>} catch (MongoException $e) { print &quot;Exception:\n&quot;; die($e-&gt;getMessage() . &quot;\n&quot;); } [/sourcecode]</p>
+<p>} catch (MongoException $e) { print &quot;Exception:\n&quot;; die($e-&gt;getMessage() . &quot;\n&quot;); } 
+```</p>
 
 <p>As explained in the source code file above, the safe =&gt; true option ensures that each insert will wait for all previous insert operations to complete. Also, e.g if you have a unique index defined on &quot;id&quot; field, then if this option is enabled, the script will generate an exception message that can&#39;t insert duplicate records with same value for &quot;id&quot;.</p>
 
@@ -184,9 +186,11 @@ foreach ($items as $item) {
 
 <p>After you have typed the command mongo.exe and pressed ENTER key, you will be logged into the MongoDB command line shell. From this shell you can create new databases, create new collections, query the database etc. Our purpose of logging into the shell is to verify whether the records inserted from our &quot;create_db.php&quot; script have been successfully inserted or not.</p>
 
-<p>So we will first type the following command: [sourcecode language=&quot;php&quot;] use school; [/sourcecode] This command will select the database named &quot;school&quot;.</p>
+<p>So we will first type the following command: [sourcecode language=&quot;php&quot;] use school; 
+``` This command will select the database named &quot;school&quot;.</p>
 
-<p>Then we will type the following command to see the contents of the collection named &quot;students&quot;. [sourcecode language=&quot;php&quot;] db.students.find(); [/sourcecode] This command will output the contents of the collection named &quot;students&quot;. You should see the output similar to the one shown in the image below:</p>
+<p>Then we will type the following command to see the contents of the collection named &quot;students&quot;. [sourcecode language=&quot;php&quot;] db.students.find(); 
+``` This command will output the contents of the collection named &quot;students&quot;. You should see the output similar to the one shown in the image below:</p>
 
 <p>Now, our next step is to query the MongoDB from inside the php script to fetch the documents from the collection &#39;students&#39; which we have just created from the &quot;create_db.php&quot; script.</p>
 

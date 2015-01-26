@@ -97,13 +97,16 @@
 
 <p>In this post I will talk about <a href="http://developer.apple.com/library/ios/#documentation/Performance/Reference/GCD_libdispatch_Ref/Reference/reference.html">Grand central dispatch</a>, how it is better than using <a href="http://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSThread_Class/Reference/Reference.html">NSThread</a>. But before that I would like to see how and where threads are used. There are n number of distinct reasons behind using threads based on the structure and complexity of the app, but the prime reason behind using threads is <strong>asynchronously working on a task</strong> and then (if required) notifying the main thread. The whole idea behind doing so is that we do not want to block the main thread while we are executing a task. So lets see how it is implemented. Here is the small code snippet where we use NSThread to start a task in a new thread, do some time consuming task and notify to the main thread when we are done so that it can update the UI (The main thread is/should be used to update the UI).  [sourcecode lang=&quot;javascript&quot;] -(void)doSomeTask{ [NSThread detachNewThreadSelector:@selector(handlerForTask) toTarget:self withObject:nil]; }</p>
 
-<p>-(void)handlerForTask{ NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; [self performSelectorOnMainThread:@selector(notifyMainThread) withObject:nil waitUntilDone:NO]; [pool release]; } [/sourcecode]</p>
+<p>-(void)handlerForTask{ NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; [self performSelectorOnMainThread:@selector(notifyMainThread) withObject:nil waitUntilDone:NO]; [pool release]; } 
+```</p>
 
-<p>The same implementation can be done using GCD as given below. [sourcecode lang=&quot;javascript&quot;] -(void)doSomeTask{ dispatch<em>queue</em>t queue = dispatch<em>queue</em>create(&quot;com.xebia.gcd&quot;, NULL); dispatch<em>queue</em>t mainQueue = dispatch<em>get</em>main<em>queue(); dispatch</em>async(queue, ^{ [self processTask]; dispatch<em>async(mainQueue, ^{ [self notifyMainThread]; }); }); dispatch</em>release(queue); }[/sourcecode]</p>
+<p>The same implementation can be done using GCD as given below. [sourcecode lang=&quot;javascript&quot;] -(void)doSomeTask{ dispatch<em>queue</em>t queue = dispatch<em>queue</em>create(&quot;com.xebia.gcd&quot;, NULL); dispatch<em>queue</em>t mainQueue = dispatch<em>get</em>main<em>queue(); dispatch</em>async(queue, ^{ [self processTask]; dispatch<em>async(mainQueue, ^{ [self notifyMainThread]; }); }); dispatch</em>release(queue); }
+```</p>
 
 <p>See the obvious takeaway from the code above is that it is cleaner and easier to realize. In the threads we have to manage autorelease pool so that all the memory allocated is released properly. Also if we wanted to <strong>fire multiple selectors with multiple arguments</strong>, we could have easily done that using GCD. Here is the code snippet. </p>
 
-<p>[sourcecode lang=&quot;javascript&quot;] -(void)doSomeTask{ NSDictionary *info ; dispatch<em>queue</em>t queue = dispatch<em>queue</em>create(&quot;com.xebia.gcd&quot;, NULL); dispatch<em>async(queue, ^{ // multiple selectors with multiple arguments [self executeFirstTaskWithInfo:info]; [self executeSecondTaskWithInfo:info andTaskNumber:2]; }); dispatch</em>release(queue); }[/sourcecode]</p>
+<p>[sourcecode lang=&quot;javascript&quot;] -(void)doSomeTask{ NSDictionary *info ; dispatch<em>queue</em>t queue = dispatch<em>queue</em>create(&quot;com.xebia.gcd&quot;, NULL); dispatch<em>async(queue, ^{ // multiple selectors with multiple arguments [self executeFirstTaskWithInfo:info]; [self executeSecondTaskWithInfo:info andTaskNumber:2]; }); dispatch</em>release(queue); }
+```</p>
 
 <p>Apart from these here are the other advantages of using GCD instead of threads. </p>
 

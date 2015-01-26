@@ -120,7 +120,8 @@ Ok, let’s start exploring this concept with few examples:  <strong>Example 1 -
 
 <p>Ok, I think the problem is quite straightforward and the basic fact is to make a <strong>Stacked</strong> Column Chart with two column series and one line Series. So, following is a common approach &amp; unluckily a <strong>common mistake</strong> that we all may commit ..</p>
 
-<p>[sourcecode language=&quot;java&quot;] ... [Bindable] private var delhi:ArrayCollection = new ArrayCollection([ {productName:&quot;Coke&quot;,bottledSales:200,cannedSales:500,total:700}, {productName:&quot;Pepsi&quot;,bottledSales:400,cannedSales:700,total:1100}, {productName:&quot;Sprite&quot;,bottledSales:300,cannedSales:600,total:900} ]); ... <mx:ColumnChart id="multipleAxisColumn" showDataTips="true" dataProvider="{delhi}" type="stacked"> <a href="mx:horizontalAxis">mx:horizontalAxis</a> <mx:CategoryAxis categoryField="productName" title="Product"/> <a href="/mx:horizontalAxis">/mx:horizontalAxis</a> <a href="mx:verticalAxis">mx:verticalAxis</a> <mx:LinearAxis id="series1Axis" title="Sales"/> <a href="/mx:verticalAxis">/mx:verticalAxis</a> <a href="mx:series">mx:series</a> <mx:ColumnSeries yField="bottledSales" displayName="Bottled Sales" /> <mx:ColumnSeries yField="cannedSales" displayName="Canned Sales" /> <mx:LineSeries yField="total" displayName="Total Sales"/> <a href="/mx:series">/mx:series</a> <a href="/mx:ColumnChart">/mx:ColumnChart</a> [/sourcecode]</p>
+<p>... [Bindable] private var delhi:ArrayCollection = new ArrayCollection([ {productName:&quot;Coke&quot;,bottledSales:200,cannedSales:500,total:700}, {productName:&quot;Pepsi&quot;,bottledSales:400,cannedSales:700,total:1100}, {productName:&quot;Sprite&quot;,bottledSales:300,cannedSales:600,total:900} ]); ... <mx:ColumnChart id="multipleAxisColumn" showDataTips="true" dataProvider="{delhi}" type="stacked"> <a href="mx:horizontalAxis">mx:horizontalAxis</a> <mx:CategoryAxis categoryField="productName" title="Product"/> <a href="/mx:horizontalAxis">/mx:horizontalAxis</a> <a href="mx:verticalAxis">mx:verticalAxis</a> <mx:LinearAxis id="series1Axis" title="Sales"/> <a href="/mx:verticalAxis">/mx:verticalAxis</a> <a href="mx:series">mx:series</a> <mx:ColumnSeries yField="bottledSales" displayName="Bottled Sales" /> <mx:ColumnSeries yField="cannedSales" displayName="Canned Sales" /> <mx:LineSeries yField="total" displayName="Total Sales"/> <a href="/mx:series">/mx:series</a> <a href="/mx:ColumnChart">/mx:ColumnChart</a> 
+```</p>
 
 <p>Oops….an exception occurs when we try to run the application</p>
 
@@ -136,7 +137,8 @@ Ok, let’s start exploring this concept with few examples:  <strong>Example 1 -
 
 <p><img src="http://xebee.xebia.in/wp-content/uploads/2011/03/ColumnSet-300x253.jpg" alt="Exhibiting Column Set" title="ColumnSet"></p>
 
-<p>[sourcecode language=&quot;java&quot;] <a href="mx:series">mx:series</a> <mx:ColumnSet type="stacked"> <mx:ColumnSeries yField="bottledSales" displayName="Bottled Sales" /> <mx:ColumnSeries yField="cannedSales" displayName="Canned Sales" /> <a href="/mx:ColumnSet">/mx:ColumnSet</a> <mx:LineSeries yField="total" displayName="Total Sales"/> <a href="/mx:series">/mx:series</a> [/sourcecode]</p>
+<p><a href="mx:series">mx:series</a> <mx:ColumnSet type="stacked"> <mx:ColumnSeries yField="bottledSales" displayName="Bottled Sales" /> <mx:ColumnSeries yField="cannedSales" displayName="Canned Sales" /> <a href="/mx:ColumnSet">/mx:ColumnSet</a> <mx:LineSeries yField="total" displayName="Total Sales"/> <a href="/mx:series">/mx:series</a> 
+```</p>
 
 <p>The only change observed in the code is that now the two column series are wrapped into a column set and the <strong>type = “stacked”</strong> property is removed from the level of Column Chart &amp; is added to the Column Set, instead.</p>
 

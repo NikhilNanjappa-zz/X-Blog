@@ -120,7 +120,8 @@ For the first step, we used <strong>IMAP Adapter</strong> as the Inbound Channel
 </code></pre></div>
 <p>The reply message is then passed to the Mail-Outbound-Adapter which using the mail-sender (for eg. JavaMailSenderImpl ) is expected to send this message to its marked destination.</p>
 
-<p>[sourcecode language=&quot;xml&quot;] <i:service-activator input-channel="imapChannel" ref="mailReplier" method="sendMessage" output-channel="mailReply"/> <i:channel id="mailReply" /> <bean id="mailReplier" class="com.xebia.nuse.mail.ImapReplyActivator" /> <mail:outbound-channel-adapter channel="mailReply" mail-sender="mailSender" /> <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> <property name="host" value="${mail.host}" /> <property name="username" value="${mail.username}" /> <property name="password" value="${mail.password}" /> <property name="javaMailProperties"> <props> <prop key="mail.smtp.auth">true</prop> <prop key="mail.smtp.starttls.enable">true</prop> </props> </property> </bean> [/sourcecode]</p>
+<p>[sourcecode language=&quot;xml&quot;] <i:service-activator input-channel="imapChannel" ref="mailReplier" method="sendMessage" output-channel="mailReply"/> <i:channel id="mailReply" /> <bean id="mailReplier" class="com.xebia.nuse.mail.ImapReplyActivator" /> <mail:outbound-channel-adapter channel="mailReply" mail-sender="mailSender" /> <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> <property name="host" value="${mail.host}" /> <property name="username" value="${mail.username}" /> <property name="password" value="${mail.password}" /> <property name="javaMailProperties"> <props> <prop key="mail.smtp.auth">true</prop> <prop key="mail.smtp.starttls.enable">true</prop> </props> </property> </bean> 
+```</p>
 
 <p>Oops….an exception occurs when we try to run the application</p>
 
