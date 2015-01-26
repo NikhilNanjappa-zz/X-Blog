@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Android Social Apis - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2012/02/23/android-social-apis/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Android Social Apis</h1>
+                    
+                    <span class="meta">Posted by psingh on February 23, 2012</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Android Social API&#39;s and Updates in Ice Cream Sandwich</h1>
+
+<p>Giving users “power to share ” seamlessly  is a feature we will find in all popular and frequently used Mobile applications. Being social is crucial for applications. Users love to share and Android knows that. Acting prudently, Android has provided API&#39;s as well as inherent support using <a href="http://developer.android.com/reference/android/content/Intent.html">Intents</a>** **for social integration. Here, I will explicate the API&#39;s developers can use to integrate social features with their applications.</p>
+
+<hr>
+
+<p>** *<em>**ContactsContract</em>*:</p>
+
+<p>We (developers) usually use this API to get user&#39;s contacts list. The important thing about this API is that one Contact row has different information(phone number, email id, name, photo etc.) for the same person aggregated from different sources like local contacts book, Facebook account, Skype, Gmail account etc. The whole contacts database is <strong>extensible **and is managed in a </strong>three tier data model **using following three classes under ContactsContract package: </p>
+
+<ul>
+<li>RawContacts</li>
+<li>Data</li>
+<li>Contacts<img src="http://xebee.xebia.in/wp-includes/js/tinymce/plugins/wordpress/img/trans.gif" alt="" title="More..."></li>
+</ul>
+
+<p>[caption id=&quot;attachment_12251&quot; align=&quot;aligncenter&quot; width=&quot;650&quot; caption=&quot;ContactsContract&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2012/02/ContactsContract2-1024x621.jpg" alt="" title="ContactsContract">[/caption]</p>
+
+<p>We can do basic operations like insert, update, delete as well as query the contacts database. For example, to insert a contact :</p>
+
+<p>[sourcecode language=&quot;java&quot;] ContentValues values = new ContentValues(); values.put(RawContacts.ACCOUNT<em>TYPE, accountType); values.put(RawContacts.ACCOUNT</em>NAME, accountName); Uri rawContactUri = getContentResolver().insert(RawContacts.CONTENT_URI, values); long rawContactId = ContentUris.parseId(rawContactUri); [/sourcecode]</p>
+
+<p><strong>What Android4.0 (ICS) added to it:</strong></p>
+
+<ul>
+<li><strong>Easy access with high resolution photos</strong>: In this version, the people to which users are most connected will be arranged into a magazine like UI. According to Android developer team “This is to support emotional connections between humans and the devices they carry”. For this purpose higher resolution pictures will be used ( 256x256 instead of 98x98).</li>
+<li><strong>Social Stream for Sync Adapters: **Through this “biggest new edition”, social applications can display recent online activities of all the contacts in the device user’s contact list. The activities would be visible in the contact list itself. This is achieved by </strong>Sync Adapters. **Sync adapters can synchronize the raw contacts data  available locally on the device with the contact data available in the cloud resources like Facebook, Skype and other social  apps. In current update, the Sync Adapters now can also fetch update status, photos and other user posts via social stream. Following two classes are important:</li>
+<li><a href="http://developer.android.com/reference/android/provider/ContactsContract.Contacts.StreamItems.html">StreamItems</a>: Stream items contain the recent social updates of a particular user under its Raw Contact data. Also contain the comments, photos and other useful information related to that social update.</li>
+<li><a href="http://developer.android.com/reference/android/provider/ContactsContract.StreamItems.StreamItemPhotos.html">StreamItemPhotos</a>: Contains the photos related to a single social update by the user.</li>
+<li>*<em>The “ME” Contact: *</em>This will contain device user’s personal contact  information and profile data. Applications can access the “ME” profile information for display and verification purpose.</li>
+<li>*<em>Adding a new connection is easy: *</em>This is another important update in ICS. Now user can connect to a person on any social website (Facebook, Google plus) by clicking an option in the contact detail page of that person in the device&#39;s people app.</li>
+</ul>
+
+<hr>
+
+<p><strong>NFC Reloaded with Beam:</strong></p>
+
+<p>NFC or Near Field Communication is one of the latest buzzwords in mobile sphere. Besides its acclaimed uses in e-commerce, mobile payments and enterprises it is becoming a new media of sharing. This &quot;<a href="http://www.slideshare.net/ParamvirSingh1/near-field-communication-10509831" title="Slides: NFC, the &quot;tap&quot; technology">tap</a>&quot; technology can be used for exchanging any type of data between two mobile devices.</p>
+
+<p>Good thing is, NFC APIs are exposed to the developers and are available under <a href="http://developer.android.com/reference/android/nfc/package-summary.html" title="android.nfc packager summary">android.nfc</a> package.</p>
+
+<p>In 4.0, a new application &quot;Beam&quot; is introduced to make tap-and-share feature  more intuitive. Using Beam, users can share apps, contacts, music, videos and other media contents and files instantly by single tap or touch of two NFC enabled devices.</p>
+
+<p>Beam uses &quot;NDEF push&quot; to transfer data between devices when two devices come in close proximity. NDEF is a special format for NFC data and stands for &quot;NFC Data Exchange Format&quot;. Two important classes used for NFC communication are: </p>
+
+<ul>
+<li>NDEFMessage: Container for NDEFRecords.</li>
+<li>NDEFRecord: Contains the payload data, id and the type of data. if payload data is large, it is divided into   more than one NDEFRecords.
+** *<em>**Intents To Share:</em>*</li>
+</ul>
+
+<p>Intents are the mainstay of Android system. Apart from regular usage of intents to start another activities, passing data across activities and applications, receiving broadcasts and triggering a service, intents can perform an interesting job for us: to give apps the power to &quot;share&quot; and that without a much extra effort. The simplest case is to create &quot;Activity chooser &quot; dialog to chose a social app capable of sharing:</p>
+
+<p>[sourcecode language=&quot;java&quot;] Intent intent=new Intent(android.content.Intent.ACTION<em>SEND); intent.setType(&quot;text/plain&quot;); intent.addFlags(Intent.FLAG</em>ACTIVITY<em>CLEAR</em>WHEN<em>TASK</em>RESET); // Add data to the intent, the receiving app will decide what to do with it. intent.putExtra(Intent.EXTRA<em>SUBJECT, “Here goes the subject...”); intent.putExtra(Intent.EXTRA</em>TEXT, “Here goes the message body...”); <pre>[/sourcecode]</p>
+
+<p>*<em>Updates in 4.0: *</em>In this version, a new tool is introduced : <a href="http://developer.android.com/reference/android/widget/ShareActionProvider.html" title="ShareActionProvider">ShareActionProvider</a> . This will create a &quot;share&quot; button in the Action Bar. It is a sub-class of ActionProvider. ActionProviders are responsible for creating views to do the required action that will accomplish a given task. ShareActionProvider will create view for &quot;share&quot; task.</p>
+
+<p>For using ShareActionProvider, modify the onCreateOptionsMenu() method in the Activity:</p>
+
+<p>[sourcecode language=&quot;java&quot;]</p>
+
+<p>public boolean onCreateOptionsMenu(Menu menu) {</p>
+
+<p>MenuItem menuItem1 = menu.findItem(R.id.menu_item);</p>
+
+<p>mShareActionProvider = (ShareActionProvider) menuItem1.getActionProvider();</p>
+
+<p>mShareActionProvider.setShareHistoryFileName(&quot;custom<em>share</em>history.xml&quot;);</p>
+
+<p>}</p>
+
+<p>[/sourcecode]</p>
+
+<p>This will create a list of share targets the user can chose from to perform the sharing. The order of the share targets will depend on the past usage of the user which is saved in a history file. We can either use the default history file or we can maintain a custom history file and use that file throughout the application.</p>
+
+<p>The ICS release has brought exciting goodies for developers and updates in social API&#39;s are most appealing.</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2012/02/20/event-driven-architecture-eda/" data-toggle="tooltip" data-placement="top" title="Event Driven Architecture Eda">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2012/02/24/javascript-client-for-web-service-using-cxf/" data-toggle="tooltip" data-placement="top" title="Javascript Client For Web Service Using Cxf">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

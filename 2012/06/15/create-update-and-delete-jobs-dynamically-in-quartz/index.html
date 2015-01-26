@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Create Update And Delete Jobs Dynamically In Quartz - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2012/06/15/create-update-and-delete-jobs-dynamically-in-quartz/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Create Update And Delete Jobs Dynamically In Quartz</h1>
+                    
+                    <span class="meta">Posted by vrawat on June 15, 2012</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Create, Update and Delete Jobs Dynamically in Quartz</h1>
+
+<p><strong>Problem</strong> I was recently working on a poc(proof of concept). The requirements were, to be able to dynamically schedule jobs using Qaurtz. After looking examples on the web I found most of the examples were of static scheduling (where we provide the jobs in a xml beforehand). But I can only find design strategies related to my requirements, no concrete implementation. So basically I will be providing a concrete implementation of the given problem in this blog.  <strong>Design Strategy</strong></p>
+
+<ul>
+<li>Create a simple web interface for creating, updating and deleting information related to Jobs(<a href="https://github.com/vijayrawatsan/QuartzDynamicScheduling/blob/master/src/main/java/in/xebia/domain/JobData.java">JobData</a>) in database.(I will not be showing this part)</li>
+<li>Create a <strong>PersistentJobSchedulerJob</strong> which will schedule all the jobs stored in the database with a repeat interval. Basically the PersistentJobSchedulerJob is itself a job which will execute at regular intervals.</li>
+</ul>
+
+<p><strong>The Code</strong> Here is the link to the complete project <a href="https://github.com/vijayrawatsan/QuartzDynamicScheduling">GituHub Repo</a></p>
+
+<p><strong>Solution</strong> Lets start with the <strong>PersistentJobSchedulerJob.java</strong> which is the most important class.</p>
+
+<p>[code language=&quot;java&quot; highlight=&quot;13&quot;] @Service public class PersistentJobSchedulerJob {</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">private static Logger logger = Logger.getLogger(&amp;quot;PersistentJobSchedulerJob&amp;quot;);
+
+@Autowired
+private JobRepository jobRepository;
+
+@Autowired
+private MailService mailService;
+
+@SuppressWarnings({ &amp;quot;rawtypes&amp;quot;, &amp;quot;unchecked&amp;quot; })
+@Scheduled(fixedRate=30000)
+public void schedulePersistentJobs(){
+    List&amp;lt;JobData&amp;gt; jobsData= jobRepository.findAll();
+    logger.info(&amp;quot;Retriving Jobs from Database and Scheduling One by One | Total Number of Jobs: &amp;quot;+jobsData.size());
+    try{
+        Scheduler scheduler = new StdSchedulerFactory().getScheduler(); 
+        scheduler.start();  
+        for(JobData jobData: jobsData){
+            JobDetail job = newJob(MailSenderJob.class)
+                            .withIdentity(jobData.getJobName())
+                            .usingJobData(getJobDataMap(jobData))
+                            .build();
+            if(!jobData.getActive()){
+                logger.info(&amp;quot;Deleting a Job&amp;quot;);
+                scheduler.deleteJob(new JobKey(jobData.getJobName()));
+                continue;
+            }
+            if(scheduler.checkExists(new JobKey(jobData.getJobName()))){
+                logger.info(&amp;quot;Rescheduling the Job&amp;quot;);
+                Trigger oldTrigger = scheduler.getTrigger(new TriggerKey(jobData.getJobName()+&amp;quot;Trigger&amp;quot;));
+                TriggerBuilder tb = oldTrigger.getTriggerBuilder();
+                Trigger newTrigger = tb.withSchedule(simpleSchedule()
+                          .withIntervalInMilliseconds(jobData.getRepeatInterval()).
+                          repeatForever())
+                          .build();
+
+                scheduler.rescheduleJob(oldTrigger.getKey(), newTrigger);
+            }else{
+                logger.info(&amp;quot;Scheduling the Job&amp;quot;);
+                scheduler.scheduleJob(job,getTrigger(jobData));
+            }
+        }
+    }catch (SchedulerException e) {
+        logger.error(&amp;quot;Scheduler Exception : &amp;quot;+e.getMessage());    
+    }
+}
+
+private JobDataMap getJobDataMap(JobData jobData) {
+    JobDataMap jobDataMap =  new JobDataMap();
+    jobDataMap.put(&amp;quot;recipients&amp;quot;, jobData.getRecipients());
+    jobDataMap.put(&amp;quot;mailService&amp;quot;, mailService);
+    return jobDataMap;
+}
+
+private Trigger getTrigger(JobData jobData){
+    SimpleTrigger simpleTrigger = newTrigger().withIdentity(jobData.getJobName()+&amp;quot;Trigger&amp;quot;)
+                                    .startAt(jobData.getStartDateTime())
+                                    .withSchedule(simpleSchedule()
+                                      .withIntervalInMilliseconds(jobData.getRepeatInterval()).
+                                      repeatForever())
+                                      .build();
+    return simpleTrigger;
+}
+</code></pre></div>
+<p>} 
+ ```</p>
+
+<p>The above job is triggered using Spring&#39;s TaskScheduling framework(<a href="https://github.com/vijayrawatsan/QuartzDynamicScheduling/blob/master/src/main/resources/applicationContext.xml">applicationContext.xml</a>). You can see in <strong>line 13</strong> I&#39;m providing the interval in which job should be repeated. From lines <strong>15 through 43</strong> I&#39;m first reading all the jobs data from database. Then for each job&#39;s data a Quartz Job is created with a corresponding trigger. Now there are three cases, </p>
+
+<ul>
+<li>If the job is not active(that means its deleted, so when you design your CRUD application make sure for a delete operation you just turn the field active to false, do not delete the row) , check if it exists in scheduler delete it. Move to the next job.</li>
+<li>If job is active, check if it exists and if it does, simply update the trigger and reschedule the job.</li>
+<li>If job is active, check if it exists and if it does not, simply schedule the job.</li>
+</ul>
+
+<p>Lets see the code for <strong>MailSenderJob.java</strong> ``` 
+ public class MailSenderJob implements Job {</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">private static Logger logger = Logger.getLogger(&amp;quot;MailSenderJob&amp;quot;);
+
+@SuppressWarnings(&amp;quot;rawtypes&amp;quot;)
+public void execute(JobExecutionContext context)
+        throws JobExecutionException {
+    logger.info(&amp;quot;In MailSenderJob&amp;quot;);
+    MailService mailService = (MailService)context.getJobDetail().getJobDataMap().get(&amp;quot;mailService&amp;quot;);;
+    Map dataMap = context.getJobDetail().getJobDataMap();
+    String recipients = (String) dataMap.get(&amp;quot;recipients&amp;quot;);
+    logger.info(&amp;quot;Sending mails to : &amp;quot;+recipients);
+    mailService.send(recipients);
+}
+</code></pre></div>
+<p>} 
+ ```</p>
+
+<p>This is a pretty straight forward Quartz Job nothing new here. I am simply using the mailService and calling the send method. You can obviously run any logic you want.</p>
+
+<p><strong>Conclusion</strong> In this blog we learned how we can dynamically create, update and delete jobs using Quartz Scheduler.</p>
+
+<p>Happy Reading.</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#9305" title="2012-12-14 15:32:26">viswabe1</a>:</strong> It&#39;s a great job.Thanks. Will u pls send me the complete project. My mail id is viswanathan@pointelsolutions.com</p>
+
+<p><strong><a href="#9306" title="2012-12-17 19:24:49">Vijay Rawat</a>:</strong> Hi Viswanathan, I have shared the Github repo in the blog. https://github.com/vijayrawatsan/QuartzDynamicScheduling</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2012/06/12/rich-ui-interactions-the-easy-way-backbone-js/" data-toggle="tooltip" data-placement="top" title="Rich Ui Interactions The Easy Way Backbone Js">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2012/06/15/simplified-wrapper-and-interface-generator/" data-toggle="tooltip" data-placement="top" title="Simplified Wrapper And Interface Generator">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

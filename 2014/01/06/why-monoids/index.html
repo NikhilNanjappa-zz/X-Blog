@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Why Monoids - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2014/01/06/why-monoids/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Why Monoids</h1>
+                    
+                    <span class="meta">Posted by nikhil on January 6, 2014</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Why Monoids !!</h1>
+
+<p>Monoids can be treated as a design pattern in functional programming. Functional Programming is a paradigm where focus is on Functions as first class citizens i.e we can pass one function as params and return value of other function. Also, writing immutable code using recursions is preferred approach.</p>
+
+<p>Monoids can be defined as:</p>
+
+<p>&quot;We have a list of things, we have<strong> some associative way of combining</strong> them, and we get a single aggregated object back at the end. Also we have a<strong> identity element</strong> when used during combining operation there is no effect (input is same as output)&quot;</p>
+
+<p><strong>Examples</strong>:</p>
+
+<ul>
+<li><p><em>Integers</em>: </p>
+
+<p>1 + 2 = 3                           // &quot;+&quot; is combining operation
+1 + (2 + 3) = (1 + 2) + 3          // combining operation is <strong>associative</strong>
+1 + 0 = 1 and 0 + 1 = 1             // identity case = 0</p></li>
+</ul>
+
+<p>Similarly we have multiplication of integers with 1 as identity element, Max. among integers with Integer.MinValue as Identity element: max( max(12,2), 3) = max(12, max(2,3)</p>
+
+<ul>
+<li><p><em>Strings</em>: </p>
+
+<p>&quot;hello&quot; + &quot;monoids&quot; = &quot;hello monoids&quot;<br>
+&quot;a&quot; + (&quot;b&quot; + &quot;c&quot;) = (&quot;a&quot; + &quot;b&quot;) + &quot;c&quot;<br>
+&quot;a&quot; + &quot;&quot; = &quot;a&quot; and &quot;&quot; + &quot;a&quot; = &quot;a&quot;     // identity case = &quot;&quot;        </p></li>
+<li><p><em>Collections</em>:  Lists and Sets</p>
+
+<p>List(1) + List(2) = List(1,2) </p>
+
+<p>List(1,2) + List(3) = List(1) + List(1,2,3)
+List(1,2) + emptyList = List(1,2)</p></li>
+</ul>
+
+<p><strong>Why Associativity is important</strong></p>
+
+<p>Due to associativity, combining operation for let say billion of elements can be sub divided into subtasks of combining pair of elements each executed parallel over different cores/boxes. </p>
+
+<p><strong>Define Monoid in Scala</strong></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">trait Monoid[T] {       // trait is similar to Java interface (loosely speaking)
+ def Zero: T             // identity case        
+
+ def op(x: T, y: T) =&gt; T // associative operation with two param&#39;s x and y
+}
+</code></pre></div>
+<p>** *<em>** Monoids Usage</em>*</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">val list = List(1,2,3,4,5......N)                                                       
+// add as combine operation
+list.par.foldLeft(0)((x,y) =&gt; x + y)
+// multiply as combine operation
+list.par.foldLeft(1)((x,y) =&gt; x * y)
+</code></pre></div>
+<p><strong>Note</strong>: </p>
+
+<ol>
+<li><strong>par method</strong>:  built in method of scala collections converts collection to parallel collection. Multiple Threads can parallely work on it. For details, visit http://docs.scala-lang.org/overviews/parallel-collections/overview.html                              </li>
+<li><strong>foldLeft method</strong>: built in method of scala List class. foldLeft iterates a List[A] and reduces it a value of type A. For first iteration, it works on pair of base-element passed as input (0 in case of add and 1 in case of product) and first element of List[A] and applies the passed function (x+y and x<em>y respectively), result of 1st iteration and second element of List are processed in second iteration. And so on..finally an value of type A is returned.
+*</em>Monoids in Real World**</li>
+</ol>
+
+<p>UseCase: Shopping Card application would like to calculate total for N OrderLines for a specific customer. Each Order line has product, qty and total value.</p>
+
+<p><strong>API definition</strong></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">// scala syntax for class with primary constructor
+
+
+class OrderLine(productCode: String, qty: Integer,total: Float)
+</code></pre></div>
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2014/01/06/5-simple-ways-in-making-agile-transformations-successful/" data-toggle="tooltip" data-placement="top" title="5 Simple Ways In Making Agile Transformations Successful">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2014/01/10/how-to-decide-appropriate-sprint-length/" data-toggle="tooltip" data-placement="top" title="How To Decide Appropriate Sprint Length">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

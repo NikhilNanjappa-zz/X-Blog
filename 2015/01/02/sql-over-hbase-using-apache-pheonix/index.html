@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Sql Over Hbase Using Apache Pheonix - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2015/01/02/sql-over-hbase-using-apache-pheonix/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Sql Over Hbase Using Apache Pheonix</h1>
+                    
+                    <span class="meta">Posted by swapnil178 on January 2, 2015</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>SQL over HBASE using Apache Phoenix</h1>
+
+<p>Hbase is a NoSQL column oriented database inspired from Google Big Table.. Since most of the queries related to analytics are more concentrated towards accessing all the queries in a table simultaneously, Hbase’s column oriented nature proves its worth in such cases.</p>
+
+<p>Hbase uses HDFS (Hadoop File System) to store its data.HDFS use helps Hbase to achieve features like scalability and fault tolerance out of the box.</p>
+
+<p>Hbase provides two features:</p>
+
+<ul>
+<li>Accessing the data in HDFS with a table approach.</li>
+<li>It provides transactiional behaviour to multi cluster setup.</li>
+</ul>
+
+<p>For more information on Hbase, refer to :<a href="http://xebee.xebia.in/index.php/2013/02/27/hbase-a-real-time-access-to-big-data/">http://xebee.xebia.in/index.php/2013/02/27/hbase-a-real-time-access-to-big-data/</a></p>
+
+<p>There is long list  NoSql databases in market like Casaandra, MongoDb etc. For accessing the data residing in Cassandra, we have a SQL query like language CQL.The biggest advantage of using SQL is its widespread use since ages.BA and QA are quite use to writing SQL queries.</p>
+
+<p>That is the reason why CQL is quite famous among people who use Cassandra.For Hbase, we have few SQL drivers, which give a SQL type language to access data like - Apache Pheonix. Point to note here is that its just the SQL type language which is common, the way data is accessed in case of an RDBMS and Hbase or Cassandra is completely different.</p>
+
+<p>In this blog we are going to look at the way we can use Apache Phoenix to achieve SQL capabilities over Hbase.</p>
+
+<p><strong>What is Apache Phoenix?</strong></p>
+
+<p>Apache Phoenix provides an SQL driver over Hbase.Its a alternative client API which converts its SQL queries in Hbase calls i.e SQL into get,put and scan constructs of Hbase.</p>
+
+<p><strong>Advantages of Phoenix-</strong></p>
+
+<ul>
+<li>Give people an API they already know.</li>
+<li>Reducing the quantity of code.</li>
+<li>Optimized for fetching data- Provides facilities like- Aggregation,Skip scans etc</li>
+<li>It can use the existing tools- SQL client/terminal, OLAP engine</li>
+</ul>
+
+<p><strong>Getting Started with Phoenix:-</strong></p>
+
+<p>You can download Apache Pheonix from the Apache Phoenix site( <a href="http://phoenix.apache.org/download.html">http://phoenix.apache.org/download.html</a>) .There are many Phoenix versions available.Please read the Phoenix documentation before downloading Phoenix and make sure it is compatible with your currently used Hbase version.</p>
+
+<p>Once the Apache Phoenix is downloaded, unzip the tar file and you have to include the Phoenix jar files to Hbase region servers, so that we can establish a successful communication via Phoenix to Hbase.</p>
+
+<p>Note: If your Hbase is not compatible with Phoenix version, we will get an exception saying Client and Server jars are not compatible.</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>wget http://apache.mirrors.hoobly.com/phoenix/phoenix-3.2.2/bin/phoenix-3.2.2-bin.tar.gz
+<span class="nv">$ </span>tar -xvf phoenix-3.2.2-bin.tar.gz 
+<span class="nv">$ </span><span class="nb">cd </span>phoenix-3.2.2-bin/common
+<span class="nv">$ </span>cp phoenix-3.2.2-client-minimal.jar /usr/lib/hbase/lib/
+<span class="nv">$ </span>cp phoenix-core-3.2.2.jar /usr/lib/hbase/lib
+</code></pre></div>
+<p>Phoenix comes up with a command line tool: sqlline (written in python).</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">cd</span> ~/phoenix/phoenix-core-3.2.2/bin
+<span class="nv">$ </span>./psql.py localhost &lt;sql-script A&gt; &lt;argument <span class="k">for</span> the scrit A&gt; &lt;second-sql script B&gt; &lt;arguments forscript B&gt;
+</code></pre></div>
+<p>For example:</p>
+
+<p>Script A:</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">EMPLOYEE</span> <span class="p">(</span><span class="n">NAME</span> <span class="nb">VARCHAR</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span><span class="k">LOCATION</span> <span class="nb">VARCHAR</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span><span class="n">DOB</span> <span class="nb">DATE</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span><span class="n">EMPLOYEEID</span> <span class="nb">INTEGER</span> <span class="k">CONSTRAINT</span> <span class="n">PK</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">EMPLOYEEID</span><span class="p">));</span>
+</code></pre></div>
+<p>Arguments for A:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Abhishek,Delhi,1984-01-01 01:01:01,1 Rakesh,Kolkata,1983-06-25 01:01:01,2 Jemin,Chennai,1990-11-25 01:01:01,3
+</code></pre></div>
+<p>Script B:</p>
+
+<p>Running Sample queries:</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">NAME</span> <span class="k">from</span> <span class="n">EMPLOYEE</span> <span class="k">where</span> <span class="n">EMPLOYEEID</span><span class="o">=</span><span class="ss">&quot;1&quot;</span>
+</code></pre></div>
+<p>Now using sqlline we can connect to Hbase:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>./sqlline.py localhost <span class="o">[</span>cloudera@localhost bin<span class="o">]</span>
+<span class="nv">$ </span>./sqlline.py localhost .. Connecting to jdbc:phoenix:localhost Driver: org.apache.phoenix.jdbc.PhoenixDriver <span class="o">(</span>version 3.0<span class="o">)</span> Autocommit status: <span class="nb">true </span>Transaction isolation: TRANSACTION_READ_COMMITTED .. Done sqlline version 1.1.2 0: jdbc:phoenix:localhost&gt; <span class="k">select</span> count<span class="o">(</span>*<span class="o">)</span> from EMPLOYEE<span class="p">;</span> +------------+ <span class="p">|</span>  COUNT<span class="o">(</span>1<span class="o">)</span>  <span class="p">|</span> +------------+ <span class="p">|</span> <span class="m">3</span>          <span class="p">|</span> +------------+ <span class="m">1</span> row selected <span class="o">(</span>0.112 seconds<span class="o">)</span> 0: jdbc:phoenix:localhost&gt;
+</code></pre></div>
+<p><strong>Running Phoenix on AWS:</strong></p>
+
+<p>We can run Phoenix on AWS- EMR clusters.</p>
+
+<p>Step 1:Specify the Hadoop Version and choose Hbase in application to be installed.</p>
+
+<p><img class="class" src="http://xebee.xebia.in/wp-content/uploads/2015/01/1.png" width="600"></p>
+
+<p>Step 2: Specify the following in the Bootstrap portion of Cluster configuration.</p>
+
+<p><img class="class" src="http://xebee.xebia.in/wp-content/uploads/2015/01/2.png" width="600"></p>
+
+<p>Once the cluster is running, you can login to the master node using ssh and check your Phoenix configuration.</p>
+
+<p><img class="class" src="http://xebee.xebia.in/wp-content/uploads/2015/01/3.png" width="600"></p>
+
+<p><strong>Operations not supported in Apache Phoenix:</strong></p>
+
+<ul>
+<li><p>Relational operators like - UNION,INTERSECT and MINUS is not supported.</p></li>
+<li><p>Transactional support- It does not support and additional transactional capabilities other than what Hbase provides.</p></li>
+</ul>
+
+<p>We can also integrate Squirrel - SQL plugin with Apache Phoenix as well.</p>
+
+<p>All we need to do is to add appropriate driver on Squirrel client window.Using this we can easily query the Hbase database we use.</p>
+
+<p><strong>Conclusion:</strong></p>
+
+<p>Phoenix is actually been used in places where we want to hit the Hbase database using REST calls and the result of these REST calls are actually to be seen on some UI.</p>
+
+<p>Widespread knowledge of SQL increases the usefulness of Phoenix and related tools like CQL (in case of Cassandra) and Phoenix(in case of Hbase)</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2014/12/09/useful-guidelines-for-contributing-to-a-project-managed-using-git/" data-toggle="tooltip" data-placement="top" title="Useful Guidelines For Contributing To A Project Managed Using Git">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Why Websocket Is Quicker - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2011/01/26/why-websocket-is-quicker/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Why Websocket Is Quicker</h1>
+                    
+                    <span class="meta">Posted by sprasadjha on January 26, 2011</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Why WebSocket is quicker</h1>
+
+<p>There is a lot of buzz all around - &#39;WebSocket is quicker&#39;. But why WebSocket is quicker? As you read this blog this question should get answered. </p>
+
+<h3>When we say quicker comparison is with?</h3>
+
+<p>When we say WebSocket is quicker the comparison is always with HTTP. So before we start discussing WebSocket protocol let us talk about HTTP.</p>
+
+<h3>HTTP is stateless</h3>
+
+<p>In HTTP the server never remembers the interaction with a client. Every time a client sends a request to the server the client needs to introduce itself. HTTP has the request headers which helps clients send the so called introduction information to the server. Please note that this information has to be sent over the wire every time client wants to send a request to the server. Similarly when server sends the response back to the client it needs to send details about itself back to the client. HTTP protocol has response headers for this communication. But what is the reason behind this constant overhead.The reason is that the HTTP protocol is stateless. </p>
+
+<h3>WebSocket is a means of full duplex communication between peers (browser and server)</h3>
+
+<p>But the WebSocket protocol is not stateless. In WebSocket communication the client and server go through a process of handshake (to read more about handshake refer to my blog on &#39;Understanding WebSocket handshake&#39;). Handshake helps the client and server get acquainted with each other. During handshake communicating peers (client and server) share information about each other, like mode(protocol) and language (sub-protocol) of communication, and all other details which are generally shared using the request and response headers of HTTP. Once the handshake is successfully executed a dedicated lane of communication gets established between the client and the server. Which means subsequent communication will not require any introduction information to be sent over the wire. </p>
+
+<h3>Let us understand the difference between HTTP and WebSocket communication using an example.</h3>
+
+<p>Suppose the server wants to send latest NAV of an asset to the client. </p>
+
+<h3>HTTP</h3>
+
+<p>In case of HTTP the client will send a request to the server requesting the NAV and the server will respond with the NAV. </p>
+
+<h4>HTTP Ajax Request</h4>
+
+<p>[sourcecode language=&quot;xml&quot;] Request Headersview source (this is an Ajax call). Host    localhost:8080 User-Agent    Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13 (.NET CLR 3.5.30729) Accept    <em>/</em> Accept-Language    en,hi;q=0.7,sq;q=0.3 Accept-Encoding    gzip,deflate Accept-Charset    ISO-8859-1,utf-8;q=0.7,*;q=0.7 Keep-Alive    115 Connection    keep-alive Content-Type    application/x-www-form-urlencoded; charset=UTF-8 X-Requested-With    XMLHttpRequest Referer    http://localhost:8080/navApp/getNav.do Content-Length    4858 Cookie    JSESSIONID=385DB76E1CC72C99ACFEE0DCCFD30576; UserInteraction7=KonaFlashBase Pragma    no-cache Cache-Control    no-cache</p> [/sourcecode] </p>
+
+<h4>HTTP Response</h4>
+
+<p>[sourcecode language=&quot;xml&quot;] Response Headersview source Server    Apache-Coyote/1.1 Content-Type    text/html Content-Length    2 Date    Sun, 23 Jan 2011 05:21:16 GMT [/sourcecode]</p>
+
+<p>The Actual Response</p>
+
+<p>[sourcecode language=&quot;xml&quot;] 21.22 [/sourcecode] </p>
+
+<h3>WebSocket</h3>
+
+<p>WebSocket protocol ensures two way communication(full duplex communication) which means client does not need to send request to the server to receive a response. If the server wants to send the latest NAV of an asset to the client it can do so at will, till the client and server have a connection established between them. </p>
+
+<h4>WebSocket Message</h4>
+
+<p>As compared to the request/response paradigm of HTTP, WebSocket uses a paradigm close to messaging. Any peer can send a message to other at will and the other party would keep listening to any such messages from the peer. To send a message the message needs to be wrapped in a frame. <strong>Each frame of data starts with a frame type (0xFF byte in our case), followed by the number of bytes in the data, expressed as a big-endian 64 bit unsigned integer, followed by the UTF-8 data.</strong></p>
+
+<p>Which means the extra information sent with the actual data are</p>
+
+<ol>
+<li><p>0xFF  and</p></li>
+<li><p>number of bytes in the data. </p></li>
+</ol>
+
+<h4>WebSocket frame types</h4>
+
+<p>But what is 0xFF - In web socket communication the data can be sent using frames. All these frames have to start with a frame type. Frame type signifies the format of data packaged in the data frame. 0xFF frame type means the data is in UTF-8 text format. There is one more frame type 0x00, this frame type is used to close the WebSocket connection. Currently WebSocket protocol supports only two frame types 0xFF and 0x00. In future more frame types may be defined to support more data types. </p>
+
+<h3>Are the headers actually heavy?</h3>
+
+<p>If you compare the extra information in WebSocket with overhead involved in HTTP request/reponse paradigm, the amount of extra data is really less in WebSocket communication. But you may wonder why are we worried about the request and response headers so much? Does it really make any difference? If you look at the total data footprint of request and response it may come close to 1Kb. If the actual data to be communicated is of a few bytes and the rate of exchange of data is very high then the overhead of 1Kb for communicating a few bytes can cause real performance hit. That is why in all such scenarios WebSocket proves to be quicker.</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2011/01/18/extreme-programming-designing-with-crc-cards/" data-toggle="tooltip" data-placement="top" title="Extreme Programming Designing With Crc Cards">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2011/01/29/user-centered-analysis-process/" data-toggle="tooltip" data-placement="top" title="User Centered Analysis Process">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Practicality Of Metaprogramming In Grails Project - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2009/11/24/practicality-of-metaprogramming-in-grails-project/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Practicality Of Metaprogramming In Grails Project</h1>
+                    
+                    <span class="meta">Posted by sunil.inteti on November 24, 2009</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Practicality of MetaProgramming in Grails Project</h1>
+
+<p>Grails is a powerful technology to build web applications very rapidly. Groovy provides so many enhancements to Java objects. <a href="http://en.wikipedia.org/wiki/Metaprogramming" title="Metaprogramming">Metaprogramming</a> capability is one of them. Grails uses this <a href="http://groovy.codehaus.org/ExpandoMetaClass" title="Metaprogramming capability of Groovy">Metaprogramming capability of Groovy</a> heavily to accomplish things faster the way it does.</p>
+
+<p>This blog discusses the the <em>Practicality of this Metaprogramming in the Grails projects</em> based on my experiences.</p>
+
+<p>Let me explain briefly how we can achieve Metaprogramming in Groovy in a brief way.</p>
+
+<p>Every method invocation and property access in Groovy is done through <strong>[metaclass</strong>]<a href="http://groovy.codehaus.org/api/groovy/lang/MetaClass.html">3</a>. This metaclass contains the properties and methods of the class. Using this metaClass we can add,ovverirde methods to an object and thereby change object behaviour at runtime. For example :</p>
+
+<p>we can add a method to an object using  its metaClass and a <a href="http://groovy.codehaus.org/Closures">closure</a></p>
+
+<p>[sourcecode language=&quot;java&quot;]class Module { String name } Module.metaClass.album = { //add the logic for this dynamic method album }[/sourcecode]</p>
+
+<p>Some of the scenarios where we can use Metaprogramming in my Grails project(indirectly) are</p>
+
+<p><strong>1) Using Dynamic methods for domain objects provided by GORM</strong> [sourcecode language=&quot;java&quot;]Module.findAllByNameLike(&quot;%Groovy%&quot;); def module = new Module(name:&#39;groovy&#39;,url:&#39;someurl&#39;).save()[/sourcecode] In controllers and Services we can use these dynamic methods and it makes life very simple.</p>
+
+<p><strong>2) Groovy has added the some methods to final classes like java,lang.Integer, java,lang.String.</strong></p>
+
+<p>Groovy added closure methods to metaClass of these classes. [sourcecode language=&quot;java&quot;]3.times { //put your business logic here }[/sourcecode] We can use this helpful methods of Groovy in our application. The readability is increased here and syntax is simple.</p>
+
+<p>Consider a situation if we have to add these dynamic methods to business objects in our application.  Yes we can very well add these methods dynamically and do our business logic but it comes at huge cost.</p>
+
+<p>I strongly feel that using these metaClass mechanism in our business logic has more bad consequesnces than good. It makes code impossible to read and understand (Groovy is already a bit difficult than Java )and difficult to manage later on. I think its better to have appropriate design of domain objects and services rather use this metaClass stuff at all for having dynamic method behavior for object. Practically i don&#39;t see any advatage to use metaClass to add dynamic methods in our application even if we have a use case because we keep changing our application code frequently unlike the Grovvy library class that we use. I also wonder what kind of applications heavily needs this change of behaviour of objects.</p>
+
+<p>One area where I think we can use this metaClass mechanism is in Unit testing your Grails application. We can ovveride the existing method of dependant object using the metaclass and mock the behaviour of any object. (Only if you are bored with normal mocking mechanism and if you fancy using metaClass)</p>
+
+<p><strong>Conclusion :</strong></p>
+
+<p>Metaprogramming sounds so cool and you would be tempted to use it some how in your project(at least i was). I feel that we have to use this very judiciously so that we don&#39;t  make our codebase &#39;hardToUnderstand&#39; and &#39;hardToManage&#39; and &#39;hardToTest&#39;. <strong>If you(who used Grails in projects ) disagree with me, please feel free to put the counter argument and  usecase where you used the metaClass to add dynamic methods in your Grails application</strong></p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2009/11/23/ski-india-2009-%25e2%2580%2593-andamans/" data-toggle="tooltip" data-placement="top" title="Ski India 2009 %e2%80%93 Andamans">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2009/11/25/exploratory-testing-an-agile-approach/" data-toggle="tooltip" data-placement="top" title="Exploratory Testing An Agile Approach">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

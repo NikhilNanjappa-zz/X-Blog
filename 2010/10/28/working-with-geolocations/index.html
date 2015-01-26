@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Working With Geolocations - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2010/10/28/working-with-geolocations/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Working With Geolocations</h1>
+                    
+                    <span class="meta">Posted by rnagpal on October 28, 2010</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Working with GeoLocations</h1>
+
+<p>Are you looking for an API that can perform the following GeoLocation functions </p>
+
+<ul>
+<li>Find distance between two points</li>
+<li>Find extreme points i.e. points with min/max latitude and longitude from a center point, for a given distance</li>
+<li>Find point of interest near you</li>
+</ul>
+
+<p>These days we use GeoLocation related services in almost all the applications and sometimes we don&#39;t want to be dependent on third party GeoLocation API&#39;s for doing some simple operations as mentioned above. For these purposes I tried to use sample code available at different sites, but some of them gave wrong results and some of them did not suit our requirements. So, I decided to write it myself.</p>
+
+<p>In this blog I am not going to explain the trigonometric formulae for performing the above operations, but will present you with Java code that you can use. Before I show the code for performing the above listed operations, I would like to explain some basic terms.</p>
+
+<p><strong>Latitude</strong>- location of a place on Earth (or other planetary body) north or south of the equator. <strong>Lines of Latitude</strong> are the imaginary horizontal lines running east-to-west (or west to east) on maps either north or south of the equator ranging from 0° at the equator to +90° for the North Pole and −90° for the South Pole</p>
+
+<p>*<em>Longitude *</em>- An east-west measurement of position on Earth, measured from a vertical plane running through the polar axis and the prime meridian, recorded in degrees, minutes and seconds ranging from 0 degrees at the prime meridian to 180 degrees west and east.</p>
+
+<p>*<em>Geocoding *</em>- process of finding associated geographic coordinates( latitude and longitude) from other geographic data, such as street addresses, city name, state or zip codes( postal codes)</p>
+
+<p>*<em>Reverse Geocoding *</em>- finding an associated textual location such as a street address, city name ,state, zip code etc from geographic coordinates.</p>
+
+<p>To perform the above mentioned operations like finding distance between points, points in a given radius etc you need latitude and longitude of the center point. As clear from the geocoding definition, you can find latitude and longitude corresponding to an address by using any third party Geocoding API. I have used google geocoding api&#39;s which give very good results. </p>
+
+<ol>
+<li>*<em>Distance between two Points : *</em> Using the below function you can find distance between two points. [sourcecode language=&quot;java&quot;] private static double getDistanceBetweenPoints(Point p1, Point p2, String unit) { double theta = p1.longitude - p2.longitude; double dist = Math.sin(deg2rad(p1.latitude)) * Math.sin(deg2rad(p2.latitude)) + Math.cos(deg2rad(p1.latitude)) * Math.cos(deg2rad(p2.latitude)) * Math.cos(deg2rad(theta)); dist = Math.acos(dist); dist = rad2deg(dist); dist = dist * 60 * 1.1515; if (unit.equals(&quot;K&quot;)) { dist = dist * 1.609344; } else if (unit.equals(&quot;M&quot;)) { dist = dist * 0.8684; } return (dist); } [/sourcecode]</li>
+</ol>
+
+<p>The distance returned by this method depends upon the units passed. If you want to get distance in Kilometers pass &quot;K&quot; as the argument or if you want distance in Miles pass &quot;M&quot;.
+  2. <strong>Extreme points :</strong> To find the extreme points you need to know the maximum latitude and longitude difference in degrees corresponding to distance. Using these differences you can determine the maximum and minimum, latitude and longitude from center point. You just have to add or subtract these latitude/longitude differences from the center point and you will get the extreme points. Latitude difference for a distance from a point [sourcecode language=&quot;java&quot;] private static double getExtremeLatitudesDiffForPoint(Point p1, double distance) { double latitudeRadians = distance / EARTH<em>RADIUS</em>KM; double diffLat = rad2deg(latitudeRadians); return diffLat; } [/sourcecode]</p>
+
+<p>Longitude difference for a distance from a point</p>
+
+<p>[sourcecode language=&quot;java&quot;] private static double getExtremeLongitudesDiffForPoint(Point p1, double distance) { double lat1 = p1.latitude; lat1 = deg2rad(lat1); double longitudeRadius = Math.cos(lat1) * EARTH<em>RADIUS</em>KM; double diffLong = (distance / longitudeRadius); diffLong = rad2deg(diffLong); return diffLong; } [/sourcecode]</p>
+
+<p>Extreme Points</p>
+
+<p>[sourcecode language=&quot;java&quot;] private static Point[] getExtremePointsFrom(Point point, Double distance) { double longDiff = getExtremeLongitudesDiffForPoint(point, distance); double latDiff = getExtremeLatitudesDiffForPoint(point, distance); Point p1 = new Point(point.latitude - latDiff, point.longitude - longDiff); p1 = validatePoint(p1); Point p2 = new Point(point.latitude + latDiff, point.longitude + longDiff); p2 = validatePoint(p2);</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">        return new Point[] { p1, p2 };
+}
+</code></pre></div>
+<p>[/sourcecode]</p>
+
+<p>This method will return an array of two extreme points corresponding to center point and the distance from the center point. These extreme points are the points with max/min latitude and longitude.
+  3. <strong>Find point of interest near you :</strong> If you are using MySql you can use the below query to find all the points within a particular radius.Suppose you have an address table which has all the points of interest, along with latitude and longitude for each point, query to find all the points inside a given radius is [sourcecode language=&quot;sql&quot;] select <em>,3956</em>2<em>ASIN(SQRT(POWER(SIN((37.804372-abs(dest.latitude))</em>pi()/180/2 ), 2) + COS(37.804372<em>pi()/180)</em>COS(abs(dest.latitude) <em>pi()/180)</em>POWER(SIN((-122.270803-dest.longitude)*pi()/180/2 ),2))) as distance from address dest having distance &lt;100 order by distance; [/sourcecode]</p>
+
+<p>Let us assume you have some points present in your database and you want to find all the points within 10 miles of distance from the center point, you can execute the above query against the database and get the relevant points. The points returned will lie between a circle of 10 miles radius drawn from the center point. <img src="http://xebee.xebia.in/wp-content/uploads/2010/10/within-radius3.png" alt="" title="within-radius">   </p>
+
+<p>The execution of the above query will be time consuming if you have lot of points in your database, as it has lot of operations in it. In this case it would be advisable to find the extreme points and use the latitude/longitude of these points to get all the points lying within the latitude and longitude ranges of extreme points i.e. find the points between the max and min latitude/longitude. Now you will have a simple &#39;between&#39; clause in your sql query, rather than the big computation discussed in previous case.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2010/10/within-extremepoints.png" alt="" title="within-extremepoints">   </p>
+
+<p>Now using the extreme points you will get all the points that are in the square, with side length of square equal to distance and is located at the center from which you want your points. You can now find the distance of these points from center and filter out the results whose distance is greater than given distance.
+I have also attached the java file which contains all these functions. <a href="http://www.sendspace.com/file/yv0lki">GeoLocationService.java</a></p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#3175" title="2010-11-09 18:12:27">ken</a>:</strong> public double distance(double lat1, double lon1, double lat2, double lon2, String unit) { double theta = lon1 - lon2; double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta)); dist = Math.acos(dist); dist = rad2deg(dist); dist = dist * 60 * 1.1515; if (unit == &quot;K&quot;) { dist = dist * 1.609344; } else if (unit == &quot;N&quot;) { dist = dist * 0.8684; } return (dist); } N is nautical mile , if u just enter an empty string default distance is in miles</p>
+
+<p><strong><a href="#5275" title="2011-02-07 07:47:08">Karthick</a>:</strong> Excellent, explanation/code. Perfectly matches what I was looking for. Thanks for the blog entry. Whats the license in which the code is released? It is free to use? Thanks, Karhtick</p>
+
+<p><strong><a href="#5278" title="2011-02-09 08:51:50">Robin Nagpal</a>:</strong> Yes, code is free to use ;)</p>
+
+<p><strong><a href="#5560" title="2011-05-09 13:37:08">Ali</a>:</strong> Dear sir, i would like to thank you for this code, which was a helpful to work with wikimapia API to calculate the min and max points in order to fetch near places BR,</p>
+
+<p><strong><a href="#5562" title="2011-05-09 17:16:25">Robin Nagpal</a>:</strong> ohh good to hear that I am able to help somebody</p>
+
+<p><strong><a href="#5461" title="2011-04-13 10:11:22">Sanketh</a>:</strong> Hi, do u have any idea relating to android? am creating an android app in that i want to fetch lat long values from the google map of my id..</p>
+
+<p><strong><a href="#5596" title="2011-05-26 02:21:36">Narinder Kumar</a>:</strong> Hi Robin, Excellent article. Very helpful. I was working with geocoded data and struggling to find something which I can readily use and your code sample just worked out of the box. I have another problem at hand perhaps you have a response for the same as well. Given a LatLong (Point) and a radius, I would like to find various points on the desired Circle, let&#39;s say LatLong of every point on the circumference of the circle at some degree (example 0 deg, 36 deg, 72 deg so on till 360 deg) Again many thanks. Best Regards Narinder</p>
+
+<p><strong><a href="#5550" title="2011-05-04 16:41:07">Robin Nagpal</a>:</strong> The code will surely be similar as it is just mathematics and no functionality. 2+2 =4 will always look similar what ever you do. And yes I don&#39;t think thre can be any licenses to these type of code snippets</p>
+
+<p><strong><a href="#5548" title="2011-05-04 03:22:04">snowb0y</a>:</strong> Your code looks very similar to this. http://www.zipcodeworld.com/samples/distance.java.html .. without the license.</p>
+
+<p><strong><a href="#5928" title="2011-09-20 13:15:54">CH NAGA SUDHA</a>:</strong> Thanku sir</p>
+
+<p><strong><a href="#7751" title="2012-02-24 11:41:40">Khantil patel</a>:</strong> Hi, thanx for this blog your effort have helped me big time.</p>
+
+<p><strong><a href="#9090" title="2012-06-23 04:31:48">Dheeru Mundluru</a>:</strong> Hi Robin, Firstly, thanks for posting your code. However, I am not 100% sure about the accuracy of the miles that is being returned by your method. Following is one test case and your solution seems to be off by almost 50 miles (verified on Google maps - however we cannot probably rely on that as it uses driving distance). I also tried for another sample and it was off by 4 miles. I provided the modified version of the method below and it is only for miles. I have been using this formula (spherical law of cosines) for a long time although in my case it was always coded in SQL (only now I had a need to put it in pure Java and that&#39;s how I stumbled on your code). Multiplying with 3963 (earth radius) is standard. Point p1 = new Point(37.3501, -121.9854); Point p2 = new Point(33.6751, -117.7339); Below method gave: 349.0701120865378 Your formula gave: 302.79328035707783 private static double getDistanceBetweenPoints(Point p1, Point p2) { double theta = p1.longitude - p2.longitude; double dist = Math.sin(deg2rad(p1.latitude)) * Math.sin(deg2rad(p2.latitude)) + Math.cos(deg2rad(p1.latitude)) * Math.cos(deg2rad(p2.latitude)) * Math.cos(deg2rad(theta)); dist = Math.acos(dist); return dist * 3963; } If possible, pls post your thoughts on this. Thanks, -Dheeru</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2010/10/25/working-with-git/" data-toggle="tooltip" data-placement="top" title="Working With Git">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2010/11/01/data-transmission-over-the-network-with-spring-integration/" data-toggle="tooltip" data-placement="top" title="Data Transmission Over The Network With Spring Integration">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

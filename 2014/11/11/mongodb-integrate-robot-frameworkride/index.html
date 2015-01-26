@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Mongodb Integrate Robot Frameworkride - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2014/11/11/mongodb-integrate-robot-frameworkride/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Mongodb Integrate Robot Frameworkride</h1>
+                    
+                    <span class="meta">Posted by saurabhgupta on November 11, 2014</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>MongoDB with Robot Framework(RIDE)</h1>
+
+<h3>Installation instruction of MongoDB on Windows</h3>
+
+<p>There are three different version of MongoDB for Windows:</p>
+
+<ol>
+<li>Windows 64-bit</li>
+<li>Windows 32-bit</li>
+<li>Windows Server 2008</li>
+</ol>
+
+<p>To find which version of Windows you have, use the following command in the cmd: <strong>“wmic os get osarchitecture”</strong></p>
+
+<p>Download the MongoDB from following location as per your OS Architecture:<br>
+<a href="http://www.mongodb.org/downloads?_ga=1.99989726.1358002168.1411966340">http://www.mongodb.org/downloads?_ga=1.99989726.1358002168.1411966340</a></p>
+
+<h3>Set up the MongoDB environment</h3>
+
+<p>After the installation of MongoDB on system it requires “DBPATH” so that it can use to run the Mongodb services.</p>
+
+<p>Create a directory where to store the dbs name. Example: In cmd hit the following command<br>
+C:\Program Files\MongoDB &gt; md \data\db (Default location)</p>
+
+<p>Or for any location give the path and create the directory. For example:  </p>
+
+<blockquote>
+<p>mkdir D:\data\db (user defined location)</p>
+</blockquote>
+
+<p>Now start the MongoDB server on the desire dpPath</p>
+
+<ul>
+<li><em>For default location</em> - C:\Program Files\MongoDB\bin\mongod.exe</li>
+<li><em>For user defined location</em> - C:\Program Files\MongoDB\bin\mongod.exe --dbpath D:\data\db</li>
+<li>If your path includes spaces, enclose the entire path in double quotes. For example:<br>
+C:\mongodb\bin\mongod.exe --dbpath &quot;d:\test\mongo db data&quot;</li>
+</ul>
+
+<p><strong>Mongod.exe</strong> is the file to start the MongoDB server on the default host &amp; port(host:- localhost &amp; port : - 27017</p>
+
+<p><strong>Mongo.exe</strong> is an interactive interface to MongoDB, which provides a powerful interface for users to test queries and operations directly with the database.</p>
+
+<h3>Create a DB in mongoDB:</h3>
+
+<p>Start the mongo to interact with Mongo Data bases. Command on cmd: c:\Program File\MongoDb\bin\mongo.exe<br>
+<img src="https://lh3.googleusercontent.com/Hb8dvKM_9v-TbTaJf4WHeSYeLOKTvz4FNIf99HOAr8cT_G8BxAyTazeakWNfJrrkgYa6YiNXFXKTuPMJi5wLV7ptp_6mSUtVQoyC90wbHyyhO8vDL95gwHEASK31aR4xqD4S" alt=""></p>
+
+<p>Before creating a new DB first check how many db present on the path. Command:</p>
+
+<blockquote>
+<p>shows dbs<br>
+<img src="https://lh3.googleusercontent.com/v6mdWZp9s1uB2aO7IO3jRfPiQHRNqvfhJm9LI38FfmbOk1lecu8uZuRYnHqoJ77-LsEDNoA0lXVB8B-OMF8oTnnt8xfz8Be0eFI6iLslwzdMEp_AWTTKJzoWDNu0B7H-o-2T" alt=""></p>
+</blockquote>
+
+<ol>
+<li>use <new-DBName> (E.g. use sampledb). Note: At that time it does not save the DB.</li>
+<li>Insert a document into a collection<br>
+a. Create a document – command : a = {x : “Learning DB” }<br>
+b. Insert in “TEST” collection. Command : db.TEST.insert(a). Remember TEST is also a new collection which too create automatically once insert the document into it.<br>
+c. Check db using command: show dbs. It will show new db also in the list i.e. “sampled”. Note: After inserting a document in any collection then it automatically save collection and DB.<img src="https://lh4.googleusercontent.com/DfM1Y6-jKFlBQRRl8NvqRPGp9y_LUnbOD4mQellW__9Dix3Kw0e4FdtwI7kzb-j2pqwaWyPkjLplMFAIXfKGiIwsvUljh2d2pOyLKRIXBiBWGITBvqZuO6zmsu3H0S4rKsGU" alt=""></li>
+</ol>
+
+<h3>Integrate MongoDB with RIDE</h3>
+
+<p>There is an external library exist of MongoDB for robot framework. The prerequisite to integrate the MongoDB library with RF(Robot Framework) is that “pymongo” library should be installed.</p>
+
+<ol>
+<li><p>Installation Instruction for pymongo<br>
+a. Using pip: <em>“pip install pymongo”</em><br>
+b. Alternative way is download the source code of <a href="https://pypi.python.org/pypi/pymongo/">pymongo </a>and use the command : <em>“python setup.py install”</em></p></li>
+<li><p>Installation Instruction for MongoDBLibrary<br>
+a. Using pip: <em>“pip install robotframework-MongoDBLibrary”</em><br>
+b. Alternative way is to download the source code of <a href="https://github.com/iPlantCollaborativeOpenSource/Robotframework-MongoDB-Library">MongoDBLibrary </a>and use the command: <em>“python setup.py install”</em></p></li>
+</ol>
+
+<p>After installation of both include the library in RIDE<br>
+Steps to perform the same:</p>
+
+<ol>
+<li>Open ride using the command ride.py</li>
+<li>Create new project from FIle option → New Project as Directory</li>
+<li><p>Now select the folder go to “settings”<br>
+<img src="https://lh3.googleusercontent.com/MLFXvFM0xqLfaDdsq72TZJQlWubPOFJPnSVeZrODFZcQZTKVzqTKs5kU_eClyAejqUucYEZAeuHB2PInGFAjpdTyJKf5GWk9WySFhILlN3eX0s4nz0yRZid23r94y4sPdQ" alt="">  </p></li>
+<li><p>Under setting click on Library button and enter the mongoDB library name i.e. “MongoDBLibrary”<br>
+<img src="https://lh6.googleusercontent.com/ZnBaX8YqJoHWvo_k91V_ZebZMEyqFMqA-awFejPRV_k1u7sJ_72lYjfQhM1L1Mnu8NSqudVipkB25WtbMEAQGZT_lD2f9K100KvK92Oxq0suRVeBtl1hXaTkzz7Q875UTA" alt=""></p></li>
+<li><p>After click ok it will look like:<br>
+<img src="https://lh4.googleusercontent.com/s0VlVAplhiZFuyrFClQyevFDdqsv9uBKT5MaRecBd0eXyL4MqBzrl5I7y018G3oOVzgYOUpynEA1V5utJRZlNPmc3ll82GMlAoVwUQRzXCXdizFWHAw395dNRfjfz019rg" alt=""></p></li>
+</ol>
+
+<p>Note: 1. It is Case sensitive<br>
+2. If name comes in Red Color thats means its not imported correctly in RIDE.<br>
+For example change the case of library name from “MongoDBLibrary” to “mongoDBLibrary” then it will show like:<br>
+<img src="https://lh3.googleusercontent.com/dFAbVsDpY7Buh0cGPeRt39OZjbp8n2uFSjFDbb6DrXtpYbLcNOuw9-QRH009zeD9LGi8XciOxYUXl1NOXEGWz0gcClwdEzSB9zF5sc5yi_AXIX6ZULLoZqk2hTPEvd6s5g" alt=""></p>
+
+<p>After importing the MongoDB library check that all the related function/keywords are coming are not. For that follow the below steps:</p>
+
+<ul>
+<li>After importing click F5 key. It will open the search keyword dialog.</li>
+<li>Under the dialog box there is source dropdown. Open it and it will show the list of library associated with project. Check it should have “MongoDBLibrary” and select it.<br>
+<img src="https://lh4.googleusercontent.com/YKdU1VqGoYMbK1x9df-ri3aqAsFI2v7Xe8QGLdoAWnAQu0zGyiT0Y-GPLpuuqqSMx7FmqP9SC7UxIZBs3qOa1xjplxlj_O1MWPXOwrOE-H-TrJZkMikdNrY6N2TzNQ6_HA" alt=""><br></li>
+</ul>
+
+<p>Now use the keywords in your test cases.</p>
+
+<h3>MongoDB Keywords:</h3>
+
+<p><em><strong>Keyword</strong></em></p>
+
+<p><strong>Arguments</strong></p>
+
+<p><strong>Description</strong></p>
+
+<p><em>Connect To Mongodb</em>
+dbHost=localhost, dbPort=27017, dbMaxPoolSize=10, dbNetworkTimeout=None, dbDocClass=<type 'dict'>, dbTZAware=False
+Loads pymongo and connects to the MongoDB host.</p>
+
+<p><em>Disconnect From Mongodb</em>
+NA
+Disconnect mongoDB server</p>
+
+<p><em>Drop Mongodb Collection</em>
+dbName, dbCollName
+Delete the mention collection from the mention DB</p>
+
+<p><em>Drop Mongodb Database</em>
+dbDelName
+Delete the mention DB from the current DBPath from which is connected.</p>
+
+<p><em>Get Mongodb Collection Count</em>
+dbName, dbCollName
+Returns the number of records from the mention collection.</p>
+
+<p><em>Get Mongodb Collections</em>
+dbName
+Returns the list of collections from the mention DB</p>
+
+<p><em>Get Mongodb Databases</em>
+NA
+Returns the list of Data bases from the current connected DB</p>
+
+<p><em>Remove Mongodb Records</em>
+dbName, dbCollName, recordJSON
+Remove some of the records from the specified collection as based on the JSON entered.</p>
+
+<p><em>Retrieve All Mongodb Records</em>
+dbName, dbCollName, returnDocuments=False
+Return all the mongoDB records from the specified collection</p>
+
+<p><em>Retrieve Mongodb Records With Desired Fields</em>
+dbName, dbCollName, recordJSON, fields, return**id=True, returnDocuments=False
+Returns number of records on the basis of field mention from the specified collection</p>
+
+<p><em>Retrieve Some Mongodb Records</em>
+dbName, dbCollName, recordJSON, returnDocuments=False
+Returns number of records on the basis of JSON entered in the specified collection</p>
+
+<p><em>Save Mongodb Records</em>
+dbName, dbCollName, recordJSON
+Used to save new record or update existing record from the specified DB collection.</p>
+
+<p><strong>Example of Using MongoDB keywords in RIDE:</strong><br>
+<strong>Prerequisite</strong> : Start </p>
+
+<p>Cheaper. I came it <a href="http://tuxwearhouseweddings.com/rergh/levitra-brand-pills-for-sale">levitra brand pills for sale</a> the not buy hair <a href="http://shopglean.com/loijx/flowmax-without-prescription">flowmax without prescription</a> 6 longer servings <a href="http://www.penickvillagefoundation.org/jhpm/trental-400-mg-retailer">http://www.penickvillagefoundation.org/jhpm/trental-400-mg-retailer</a> soft plastic had. My little <a href="http://securefuturesil.com/lnqjx/walmart-viagra-prices-walmart-pharmacy/">walmart viagra prices walmart pharmacy</a> lotion. I it it. Hard. Never <a href="http://www.bryancwatkins.com/idnl/generic-seroquel-online">http://www.bryancwatkins.com/idnl/generic-seroquel-online</a> Around time <a href="http://www.bryancwatkins.com/idnl/almased-turbo-diet-forum">almased turbo diet forum</a> naturally once <a href="http://www.southsideheating.com/bhtr/cialis-1-to-2-days-shipping">cialis 1 to 2 days shipping</a> it my almost <a href="http://shopglean.com/loijx/buy-soft-generic-viagra">http://shopglean.com/loijx/buy-soft-generic-viagra</a> long fragrance. I <a href="http://ravenmccoyphotography.com/exwsk/novaldex-pay-by-paypal/">novaldex pay by paypal</a> I and cloying days <a href="http://freeofpain.org/azf/buy-aldactone-no-rx-overnight-shipping.html">buy aldactone no rx overnight shipping</a> bought hope always on <a href="http://tuxwearhouseweddings.com/rergh/levitra-without-prescription-walmart">levitra without prescription walmart</a> all a for.</p>
+
+<p>the Mongo DB server on the defined DB path. For example check the below snapshot: <img src="http://xebee.xebia.in/wp-content/uploads/2014/11/StartMongoServer.jpg" alt="StartMongoServer"></p>
+
+<p>Open RIDE using command on cmd: ride.py</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2014/11/MongoResult-1024x949.jpg" alt="MongoResult"></p>
+
+<h3>How to create any New Library of Robot</h3>
+
+<p>The Simplest way of creating user defined library for Robot Framework:</p>
+
+<ol>
+<li>Create a python file with function/s and save it with extension .py in Lib\site-packages</li>
+<li>Open ride → Go to the Test Suite → Open Setting → Add a Library with the file name</li>
+<li>After entering the name check it should not show in red.</li>
+</ol>
+
+<p>Example:<br>
+Create a python file with basic function like:<br>
+def play_Robot():<br>
+print &quot;Pressed Play Robot Button&quot;</p>
+
+<p>save it with any name which treat as Library Name in Robot Framework. For above let save it as “ReusableModule.py”<br>
+Open Ride and add the Library with name “ReusableModule”<br>
+<img src="https://lh3.googleusercontent.com/CvZVIty6MyF2lExD0NP13m8975jyLCSgyqlqfPQBy2hw1CajV5qt9Et2KWR_C-ku3jv_XkSPl6C6PLhTxqukXiHJZ9vmua8gGzF7NV6UDAmFqXNPOeM-yXr-q5HaobA25A" alt=""></p>
+
+<p>Now in test case use the functions mention in own defined library.</p>
+
+<h3>How to create user defined keywords of MongoDB Library</h3>
+
+<p>First go the location where default MongoDBLibrary installed. On windows by default location is <PythonPath>\Lib\site-packages. Generally the path is : &quot;C:\Python27\Lib\site-packages&quot;<br>
+Open MongoDBLibrary directory, it shows mainly 4 files:</p>
+
+<ol>
+<li><strong>init</strong>.py</li>
+<li>mongo<em>connection</em>manager.py</li>
+<li>mongoquery.py</li>
+<li>version.py<br>
+Might also have there compiled files too.</li>
+</ol>
+
+<p>Now to create user defined function create a new python file and import following library to start creating functions:</p>
+
+<ol>
+<li>import pymongo</li>
+<li>from pymongo import MongoClient</li>
+<li>import json</li>
+<li>from bson.objectid import ObjectId</li>
+</ol>
+
+<p>After that create a function as shown below:</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2014/11/MongoDBUserDefinedFunction.jpg" alt="MongoDBUserDefinedFunction"></p>
+
+<p>Now Open **init__.py file and import the user defined library in it:<br>
+<img src="http://xebee.xebia.in/wp-content/uploads/2014/11/MongoDBUserDefinedFunctionIntegrate.jpg" alt="MongoDBUserDefinedFunctionIntegrate"></p>
+
+<p>Now open Ride import *<em>MongoDBLibrary *</em>and look under the function list:<br>
+<img src="http://xebee.xebia.in/wp-content/uploads/2014/11/UserDefinedKeywordInList.jpg" alt="UserDefinedKeywordInList"></p>
+
+<p>And we can the use the created keyword like:<br>
+<img src="http://xebee.xebia.in/wp-content/uploads/2014/11/UserDefinedKeyword.jpg" alt="UserDefinedKeyword"></p>
+
+<p>I hope it will be helpful to integrate MongoDB with Robot Framework.<br>
+Happy Testing!!</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2014/10/27/being-functional/" data-toggle="tooltip" data-placement="top" title="Being Functional">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2014/11/11/robot-framework-ride/" data-toggle="tooltip" data-placement="top" title="Robot Framework Ride">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

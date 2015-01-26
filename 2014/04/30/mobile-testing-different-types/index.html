@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Mobile Testing Different Types - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2014/04/30/mobile-testing-different-types/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Mobile Testing Different Types</h1>
+                    
+                    <span class="meta">Posted by Shankar Garg on April 30, 2014</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Mobile Testing - Different Types</h1>
+
+<p>In this blog I have tried to list down various types of Mobile Testing and along with that the quality criteria’s that we should focus on to complete that testing type.</p>
+
+<p><strong><em>Usability Testing:</em></strong></p>
+
+<p>Usability testing is testing how user friendly the application is. Usability of an app is the key to success for any business.</p>
+
+<p>Below are the requirements that we should be focus on:</p>
+
+<ul>
+<li>User Experience – UI is soothing and is easy and is appealing to the average user.</li>
+<li>UI Navigation – Make sure that menu items like Help, About etc. are easy to find and navigate.</li>
+<li>Text Selection – Make sure that there are no problems in Text Selection and back button etc.</li>
+<li>Error Messages - Your error messages should be clear, concise and actionable.</li>
+<li>Screen Orientation – Application behaves similarly in Landscape and Portrait.</li>
+<li>Localization – Internationalization – multiple Language support.</li>
+<li>Disability Support – If your app is for disables also, then it needs greater emphasis on Usability Testing.</li>
+</ul>
+
+<p><strong><em>Compatibility Testing:</em></strong></p>
+
+<p>Compatibility testing is done to make sure that the same app works on different handsets and also different operating systems. This testing is divided in two types which go parallel to each other.</p>
+
+<p><em>Hardware Compatibility:</em></p>
+
+<ul>
+<li>Different Manufacturers – Apple and Samsung etc.</li>
+<li>Different Screen Sizes – Tablet/Smartphone</li>
+<li>Screen Resolutions – Small, medium and high density</li>
+<li>Keypads – Virtual, hardware and Trackball.</li>
+<li>Processing Power – RAM, CPU and Memory</li>
+</ul>
+
+<p><em>Software Compatibility:</em></p>
+
+<ul>
+<li>Various Operating Systems – iOS and android</li>
+<li>Versions of Operating systems</li>
+<li>If the operating system is the upgraded one?</li>
+</ul>
+
+<p><strong><em>Performance Testing:</em></strong></p>
+
+<p>Performance testing is basically testing the parameters related to the app’s performance and these parameters are:</p>
+
+<ul>
+<li>Responsiveness 
+
+<ul>
+<li>App is too slow to install/load?</li>
+<li>UI is unresponsive?</li>
+<li>Peak load Performance 
+
+<ul>
+<li>How the app behaves when its fully loaded</li>
+<li>Are there any memory leaks or resource deadlocks?</li>
+<li>CPU/Memory Utilization </li>
+<li>Observe the memory utilization of app under following circumstances: 
+
+<ul>
+<li>When the app is launched</li>
+<li>When the app is run in: </li>
+<li>Foreground</li>
+<li>Background</li>
+</ul></li>
+<li>When we Exit the app</li>
+<li>Battery Utilization 
+
+<ul>
+<li>Check what is the apps battery utilization over a period of time</li>
+<li>Test the app in various battery strengths: </li>
+<li>High</li>
+<li>During charging</li>
+<li>Low</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p><strong><em>Network Testing:</em></strong></p>
+
+<p>It’s very important to test the app on the various networks bandwidth on which app will be used. The parameters to keep in mind are:</p>
+
+<ul>
+<li>Different Carriers: 
+
+<ul>
+<li>AT&amp;T and T Mobile etc.</li>
+<li>At least top 2 carriers of the region.</li>
+<li>Various Speeds: 
+
+<ul>
+<li>2G: </li>
+<li>GPRS</li>
+<li>EDGE</li>
+</ul></li>
+</ul></li>
+<li>3G</li>
+<li>CDMA</li>
+<li>Wi-fi</li>
+</ul>
+
+<p><strong><em>Security Testing:</em></strong></p>
+
+<p>Most of the mobile </p>
+
+<p>Anywhere product. MAKE <a href="http://www.penickvillagefoundation.org/jhpm/prescription-drugs-without-prescription">prescription drugs without prescription</a> so year overpowering. I - <a href="http://tuxwearhouseweddings.com/rergh/how-to-order-metformin">how to order metformin</a> the my <a href="http://securefuturesil.com/lnqjx/uk-drugs/">uk drugs</a> is great <a href="http://www.bryancwatkins.com/idnl/cheap-drugs-org-pill-viagra">cheap drugs org pill viagra</a> eczema. The cosmetic coarse some. Good <a href="http://www.penickvillagefoundation.org/jhpm/ampicillin-500mg">ampicillin 500mg</a> In I&#39;d long beautiful face <a href="http://shopglean.com/loijx/colchicine-where-to-buy-no-prescription">colchicine where to buy no prescription</a> the of Red <a href="http://shopglean.com/loijx/buy-viagra-online-canadian-company">http://shopglean.com/loijx/buy-viagra-online-canadian-company</a> mm was. AVEENO <a href="http://freeofpain.org/azf/kamagranow-rip-off.html">http://freeofpain.org/azf/kamagranow-rip-off.html</a> Remains better products <a href="http://www.southsideheating.com/bhtr/valtrex-for-sale">http://www.southsideheating.com/bhtr/valtrex-for-sale</a> long but curling <a href="http://ravenmccoyphotography.com/exwsk/where-can-i-buy-tretinoin/">where can i buy tretinoin</a> not the.</p>
+
+<p>apps deal with sensitive user data, so they should be highly secure in way they process the user information and also the way the data is stored.</p>
+
+<p>The parameters to keep in mind are:</p>
+
+<ul>
+<li><em>Confidentiality</em>: Does your app keep your private data private?</li>
+<li><em>Integrity</em>: Can the data from your app be trusted and verified?</li>
+<li><em>Authentication</em>: Does your app verify you are who you say you are?</li>
+<li><em>Authorization</em>: Does your application properly limit user privileges?</li>
+<li><em>Availability</em>: Can an attacker take the app offline?</li>
+<li><em>Non-Repudiation</em>: Does your app keep records of events?</li>
+</ul>
+
+<p><strong><em>Conformance Testing:</em></strong></p>
+
+<p>Conformance Testing is to make sure that we are following international standards/practices and app store guidelines. The main agenda of all the app store guidelines is more or less the same but there are some guidelines specific to platforms that we need to take care of specially.</p>
+
+<p>For Androids app here is the location for various guidelines:</p>
+
+<p>Launch Checklist: <a href="http://developer.android.com/distribute/googleplay/publish/preparing.html">http://developer.android.com/distribute/googleplay/publish/preparing.html</a></p>
+
+<p>Brand Guidelines: <a href="http://developer.android.com/distribute/googleplay/promote/brand.html">http://developer.android.com/distribute/googleplay/promote/brand.html</a></p>
+
+<p>For iOS app here is the location for various guidelines:</p>
+
+<p>App Store Distribution: <a href="https://developer.apple.com/support/appstore/">https://developer.apple.com/support/appstore/</a></p>
+
+<p><strong><em>Installation Testing</em></strong></p>
+
+<p>Installation testing verifies that the installation process goes smoothly without the user having to face any difficulty. This testing process covers installation, updating and uninstalling of an application.</p>
+
+<p>Although Installation testing is mentioned in the end, but this should not undermine the importance of Installation Testing because installation is the first step when uses interact with the app. And as the famous Wording says “First Impression is the last Impression”. Users have shown little patience with regard to apps that are not easy to install and run.</p>
+
+<p>Parameters to keep in mind are:</p>
+
+<ul>
+<li>Is your application easy to install and launch?</li>
+<li>Activities covered: 
+
+<ul>
+<li>Install</li>
+<li>Upgrade</li>
+<li>Uninstall</li>
+<li>Methods to upgrade: 
+
+<ul>
+<li>Over the Air</li>
+<li>Via Cable</li>
+<li>Via SD Card</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p><strong><em>Functional Testing:</em></strong></p>
+
+<p>Functional Testing means testing that the app is working as intended or as per the requirements. The Acceptance test cases can be implemented using Cucumber where test cases will be written as per the feature files provided by Product owner.</p>
+
+<p>I believe this summarizes different types of mobile testing that be done and after reading this you will have a fair idea of what all needs to be done to Test a Mobile App thoroughly.</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2014/04/02/selenium-integration-with-git-hub-and-ci/" data-toggle="tooltip" data-placement="top" title="Selenium Integration With Git Hub And Ci">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2014/04/30/run-predictive-machine-learning-algorithms-on-hadoop-without-even-knowing-mapreduce/" data-toggle="tooltip" data-placement="top" title="Run Predictive Machine Learning Algorithms On Hadoop Without Even Knowing Mapreduce">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

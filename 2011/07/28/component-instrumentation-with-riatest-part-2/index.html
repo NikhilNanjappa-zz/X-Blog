@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Component Instrumentation With Riatest Part 2 - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2011/07/28/component-instrumentation-with-riatest-part-2/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Component Instrumentation With Riatest Part 2</h1>
+                    
+                    <span class="meta">Posted by Amit Sharma on July 28, 2011</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Component Instrumentation with RIATest (Part-2)</h1>
+
+<p>In the first part of this series <a href="http://xebee.xebia.in/2011/07/27/component-instrumentation-with-ria-test-part-1/#more-9326">http://xebee.xebia.in/2011/07/27/component-instrumentation-with-ria-test-part-1/#more-9326</a> , we discussed how RIATest has a default support for automation of TabNavigator component. Now lets apply our learnings and try to automate a third party component SuperTabNavigator(STN) which is a part of FlexLib components. The SuperTabNavigator is an extension of the TabNavigator navigation container and it functions exactly like the TabNavigator, but adds some functionality. Added functionality includes: 1. Draggable, re-orderable tabs 2. Closable tabs 3. Scrolling tab bar if too many tabs are open 4. Drop-down list of tabs.</p>
+
+<p>By looking at the code of SuperTabNavigator, found at <a href="http://code.google.com/p/flexlib/source/browse/trunk/src/flexlib/containers/SuperTabNavigator.as?r=212">http://code.google.com/p/flexlib/source/browse/trunk/src/flexlib/containers/SuperTabNavigator.as?r=212</a> , it becomes evident (hardly any surprises here) that it extends TabNavigator component. Also notice from the code that SuperTabNavigator component dispatches two events namely &#39;tabClose&#39; and &#39;tabReordered&#39;. In this part, we will only focus on the &#39;tabClose&#39; event and the &#39;tabReader&#39; automation is left for the reader as an exercise. The &#39;tabClose&#39; event is dispatched whenever a user clicks the close icon present on the tab. Without automating the STN, we wont be able to record and replay this Event with RIATest. Ok so what do we have to do in order to automate SuperTabNavigator component&#39;s &#39;tabClose&#39; event? Basically we have to perform following three steps in order to enable automation for STN. These are :- 1. Create a SuperTabNavigatorClassInfo.xml containing the ClassInfo details like events to be automated and properties to be verified. You need to create this xml inside a specific folder named &#39;classinfo&#39; inside your RIAtest project Folder.</p>
+
+<p>[sourcecode language=&quot;xml&quot;]</p>
+
+<p><AllClasses><br>
+<ClassInfo Name="SuperTabNavigator" Extends="FlexTabNavigator"><br>
+<Internal Class="flexlib.containers.SuperTabNavigator"/> <Events> <Event Name="tabClose"> <Internal Class="flexlib.events::SuperTabEvent" Type="tabClose"/> <Property Name="tabIndex"> <PropertyType Type="Number"/> </Property> </Event> </Events> <Properties> <Property Name="popUpButtonPolicy" Verify="true"> <PropertyType Type="String" /> </Property> <Property Name="dragEnabled" Verify="true"> <PropertyType Type="Boolean" /> </Property> <Property Name="dropEnabled" Verify="true"> <PropertyType Type="Boolean" /> </Property> <Property Name="closePolicy" Verify="true"> <PropertyType Type="String" /> </Property> </Properties></p>
+
+<p></ClassInfo><br>
+</AllClasses></p>
+
+<p>[/sourcecode]</p>
+
+<p>In the classInfo above, the logical name of the STN is &#39;SuperTabNavigator&#39; which will be used by RIATest engine. It extends &#39;FlexTabNavigator&#39; (understandably so) which is defined in the flex_classes.xml in RIATest installation. The fully qualified name of the SuperTabNavagator is flexlib.containers.SuperTabNavigator. The event we want to automate is of type &#39;tabClose&#39; while the fully qualified name of the Event is flexlib.events::SuperTabEvent. The logical name of the event to be used by RIATest for automation is &#39;tabClose&#39;. The SuperTabEvent (have a look at the code found in automation.swc) needs the tab index as a parameter. So we have a property with name &#39;tabIndex&#39; and type &#39;Number&#39; for the &#39;Event&#39; tag in classInfo. Also we have some properties of the SuperTabNavigator to be verified in the RIATest scripts.</p>
+
+<ol>
+<li>Create a SuperTabNavigatorAutomationImpl class in your Flex Project source which should have the necessary methods overridden for record and replay of the events advertised in its classInfo.</li>
+</ol>
+
+<p>[sourcecode language=&quot;actionscript3&quot;] package com.xebialabs.deployit.riatestdelegates { import flash.display.DisplayObject; import flash.events.Event;</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">import flexlib.containers.SuperTabNavigator;
+import flexlib.controls.SuperTabBar;
+import flexlib.controls.tabBarClasses.SuperTab;
+import flexlib.events.SuperTabEvent;
+
+import mx.automation.Automation;
+import mx.automation.IAutomationObject;
+import mx.automation.IAutomationObjectHelper;
+import mx.automation.delegates.containers.TabNavigatorAutomationImpl;
+import mx.controls.Button;
+import mx.core.mx_internal;
+
+use namespace mx_internal;
+
+[Mixin]
+public class SuperTabNavigatorAutomationImpl extends TabNavigatorAutomationImpl
+{
+
+    private var superTabNavigator:SuperTabNavigator;
+
+    //--------------------------------------------------------------------------
+    //
+    //  Class methods
+    //
+    //--------------------------------------------------------------------------
+
+    /**
+     *  Registers the delegate class for a component class with automation manager.
+     *
+     *  @param root The SystemManger of the application.
+     */
+    public static function init(root:DisplayObject):void
+    {
+        Automation.registerDelegateClass(SuperTabNavigator, SuperTabNavigatorAutomationImpl);
+    }
+
+    public function SuperTabNavigatorAutomationImpl(obj:SuperTabNavigator)
+    {
+        superTabNavigator = obj;
+        super(obj);
+
+    }
+
+    //--------------------------------------------------------------------------
+    //
+    //  Event handlers
+    //
+    //--------------------------------------------------------------------------
+
+    /**
+     *  Method which gets called after the component has been initialized.
+     *  This can be used to access any sub-components and act on the component.
+     */
+    override protected function componentInitialized():void
+    {
+        super.componentInitialized();
+        superTabNavigator.addEventListener(SuperTabEvent.TAB_CLOSE, tabCloseHandler, false, 0, true);
+    }
+
+    private function tabCloseHandler(superTabEvent:SuperTabEvent):void {
+        recordAutomatableEvent(superTabEvent);
+    }
+
+    /**
+     *  Replays SuperTabEvents by dispatching a MouseEvent to the item that was
+     *  clicked. In case of ItemClickEvent it is passed on to the super class to handle.
+     *
+     *  @param interaction The event to replay.
+     *
+     *  @return &amp;lt;code&amp;gt;true&amp;lt;/code&amp;gt; if the replay was successful. Otherwise, returns &amp;lt;code&amp;gt;false&amp;lt;/code&amp;gt;.
+     */
+    override public function replayAutomatableEvent(interaction:Event):Boolean
+    {
+        if(interaction is SuperTabEvent) {
+            var tabCloseEvent:SuperTabEvent = interaction as SuperTabEvent;
+            var help:IAutomationObjectHelper = Automation.automationObjectHelper;
+
+            var replayer:IAutomationObject = superTabNavigator.getTabBar() as IAutomationObject;
+            var superTab:Button = superTabNavigator.getTabAt(tabCloseEvent.tabIndex);
+            var closeButton:DisplayObject;
+            for(var i:int = 0; i&amp;lt; superTab.numChildren; i++) {
+                closeButton = superTab.getChildAt(i);
+                if(closeButton is Button) {
+                    break;
+                }
+            }
+            help.replayClick(closeButton);
+            return true;
+        }else {
+            return super.replayAutomatableEvent(interaction);
+        }
+    }
+}
+</code></pre></div>
+<p>} [/sourcecode]</p>
+
+<p>Since SuperTabNavigator extends TabNavigator, the SuperTabNavigatorAutomationImpl extends TabNavigatorAutomationImpl. We register this class as the automation delegate for the SuperTabNavigator component in the static method init. Notice that we have a [Mixin] metadata tag just above our class. When you put the [Mixin] metadata just above your class definition and add a static init function to the class, like we have in our class, the static init function will be called as soon as your application loads (assuming this class is referenced somewhere in the app). This is useful if you have some code that you want to run before any of the other code in the class.</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#5879" title="2011-08-25 12:20:42">Amar Deep Singh</a>:</strong> Hi Amit, Nice blog, i liked it.</p>
+
+<p><strong><a href="#5880" title="2011-08-25 12:24:28">Amar Deep Singh</a>:</strong> Hi Amit, it was really very interesting and helpful blog</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2011/07/27/component-instrumentation-with-ria-test-part-1/" data-toggle="tooltip" data-placement="top" title="Component Instrumentation With Ria Test Part 1">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2011/07/28/xpressions-iphoneipod-app/" data-toggle="tooltip" data-placement="top" title="Xpressions Iphoneipod App">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

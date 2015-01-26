@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Domain Driven Design An Introduction - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2009/12/02/domain-driven-design-an-introduction/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Domain Driven Design An Introduction</h1>
+                    
+                    <span class="meta">Posted by vgupta on December 2, 2009</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Domain Driven Design : An Introduction</h1>
+
+<p><strong>Introduction</strong></p>
+
+<p><strong>The primary purpose of most software projects is to add value to the customer&#39;s business. This is done by abstracting the complex web of thoughts inside a human mind in the form of a software program. Most software projects cater to a particular domain, and in many software projects, the domain of a software project is not technical. Unfortunately, majority of the technical people do not give enough importance to the domain of the software, and hence, they lack the required domain knowledge. This lack of domain knowledge leads to a situation where **What</strong>(to do?) takes over <strong>Why</strong>(to do?). Generally, in such a scenario, it might be possible to deliver a usable product, but the primary purpose of adding business value is often neglected.**</p>
+
+<p>The above mentioned situation is quite common and there is a continual influx of thoughts, which intend to provide a solution, by various experts. <a href="http://domaindrivendesign.org/about">Eric Evans</a> is one of such experts, who based on his experience, gained by working on complex projects, epitomized his findings in the form of tips, suggestions, patterns and guidelines, and coined a term <strong>Domain Driven Design</strong>, better known as <strong>DDD</strong>. In this blog, I intend to present various aspects of DDD and how it suggests to tackle the complexity of the domain.  <strong>What is DDD?</strong></p>
+
+<p>*<em><img src="http://xebee.xebia.in/wp-content/uploads/2009/12/picture_1000_words1-300x300.jpg" alt="picture_1000_words" title="picture_1000_words"> *</em></p>
+
+<p>A picture is worth a thousand words and, sometimes, is better suited to convey a message. Similarly, a domain model is a simplification of the domain of the software and it abstracts the elements of domain which are relevant to the problem the software intends to solve. A domain model is representation agnostic, i.e., it can be represented as an UML diagram, as written code, as simply plain English, or as a simple diagram. The decision to choose an option depends upon the situation and complexity of the problem. The process of creating, maintaining and enhancing highly expressive domain model by applying objected oriented principles, design patterns is known as <strong>Domain Driven Design(DDD)</strong>. One important point to understand is that DDD is not a one time activity. It is an iterative process and model evolves with the project.</p>
+
+<p>We all know that the process of creating domain model by abstracting from the complexities of a domain is not an easy job. Experienced programmers/thought leaders often compare this job with that of an artist. Few would disagree with them. But, with any art, there are certain principles and practices, which make the process of identifying and representing abstractions simpler. DDD also suggests to employ certain principles and practices, which we may already be doing intuitively, to work with highly expressive domain models. Let&#39;s have a look at some of the principles and practices of DDD.</p>
+
+<p><strong>Getting Started with DDD</strong> There might be several questions, which may be taking shape in the mind right now. Let&#39;s see which DDD principles and practices applies to specific question</p>
+
+<p><strong>Q:</strong> I don&#39;t have the domain knowledge. How will I communicate effectively with the domain experts? <strong>A:</strong> In most projects, there is an interface between the technical people and the domain experts. We may call this expert a Business Analyst, a Product Owner, or with some other name. Sometimes, this interface is not effective to transform the messages between two parties and in the process of message transformation, some relevant details are missed. This leads to a situation where <strong>WHAT</strong> takes over <strong>WHY</strong>.</p>
+
+<p>To overcome this problem, DDD emphasizes to have a close relationship between the domain experts and the developers. Even when a modeler is working with domain experts(DE), he should be hands-on enough to think about design issues while brainstorming with the DE. DDD also suggests DDD developers to pick up key concepts while having conversation with the DE and also educate them about their terminology. This leads to the development of a <strong>Ubiquitous Language(UL)</strong> which forms the basis of development domain model. UL is basically a medium of communication which is used to develop a domain model. It is also used to validate a domain model periodically. The development of UL is an iterative process and is based on mutual agreement between DE and technical people.</p>
+
+<p><strong>Q:</strong> How will I represent my domain model? ** A:** Domain model should be represented in a way which best communicates the intent of the domain knowledge. It can be in the form of a diagram, a UML diagram, plain English, or simply code. Now, when there is freedom to represent something in multiple forms, how to maintain the sanctity of the domain model. I think that&#39;s the job of the skilled developers or domain modelers. It is difficult to provide a rule for everything and we all know that real world is like that. Sometimes we have to break the rules and take pragmatic decisions. DDD realizes that and promotes developers to take pragmatic decisions instead of being bound by the rules.</p>
+
+<p><strong>Q:</strong> How will I layout the architecture of the application with DDD? ** A:** The focus of DDD is to create domain models that are rich in behavior. Typically, an application has several other issues as well which are not concerned with the domain. To work effectively with DDD, we need to isolate those issues from the domain modelling. In order to do so, we can use layered architecture to isolate and group the problems.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2009/12/layering.png" alt="layering" title="layering">In a layered architecture, each layer is aware of the layers below it. In general, a layer at the lower level cannot make calls to the layer above it.</p>
+
+<p><strong>Q:</strong> How will I represent concepts in a domain model? ** A:** Most concepts in domain can be classified into </p>
+
+<ul>
+<li>Something which has an identity: <strong>Entities</strong>. Entities, which are essentially objects, identified by an identity, which does not change. The identity can be a surrogate key or a composite key.</li>
+<li>Something which has an important meaning in larger picture but does not have an identity of it&#39;s own: <strong>Value Objects(VOs)</strong>. VOs represent meaningful concepts and abstracts the details of those concepts but does not have their own entity. For example, a phone number is one such thing, which represent certain information, but does not make any sense if not associated with a person, place, etc.</li>
+<li>Something which relate various concepts with each other: <strong>Cardinality</strong>. Cardinality represents relationship between various entities. DDD advocates to have minimum cardinality between entities.</li>
+<li>Behavior common to various concepts: <strong>Services</strong>. Services are components which provides behavior which is not specific any particular entity. These services are different from the application service, in that, they provide services to the domain layer and not callable from the application layer.
+Apart from the above, DDD also introduces the concept of <strong>Aggregates</strong>, which are essentially small group of related objects. Aggregates have a common root and act as an entry point for outer world to the constituents of the aggregate. This helps in managing the complex web of associations in a domain model.</li>
+</ul>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2009/12/01/art-of-writing-resume/" data-toggle="tooltip" data-placement="top" title="Art Of Writing Resume">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2009/12/02/jboss-migration/" data-toggle="tooltip" data-placement="top" title="Jboss Migration">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Hybrid Automation Framework For Windows File Systems Testing Using Vbscript - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2014/07/14/hybrid-automation-framework-for-windows-file-systems-testing-using-vbscript/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Hybrid Automation Framework For Windows File Systems Testing Using Vbscript</h1>
+                    
+                    <span class="meta">Posted by Msingh on July 14, 2014</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Hybrid Automation Framework for Windows File Systems Testing using Vbscript</h1>
+
+<p><strong>Overview:-</strong></p>
+
+<p>==========</p>
+
+<p>The need for better quality means more pressure on QA (Quality Assurance People) to take care of the quality of the product. When testing process become large and complex specially case of long term project where more regression testing is required due to lot of changes in the product then automation testing comes in picture that help manual testing people so automation can perform their task in fastly &amp; accurate manner. To implement automation In a project require a automation framework means Test Automation Framework, Automation Framework  is nothing its sets of concepts, tools, assumptions and lot of reusable code that provided supports for automated software testing. Mainly main advantage of an automation framework is to reduce maintenance cost &amp; also to reuse the generic code between various modules and scripts.</p>
+
+<p>Hybrid Automation Framework is a concept that mainly consists Keyword &amp; Data Driven Framework inside it and makes automation process is more easy and maintainable. Hybrid Automation Framework uses Data Driven framework concept means we can use various data files for Test Data (Input &amp; Output) purpose and with use of Keyword driven testing we can easily handles the automation of newly added test cases without any change to the Main or Driver Script that actually initiate the automation. We can easily integrate Hybrid Automation Framework with various Functional Testing Tools like HP Quick Test Professional (QTP), IBM Rational Functional Tester (RFT), Open source tools like Selenium etc. Hybrid Automation Framework can easily be developed for Web Based, Windows Based, and Database Based, and Standalone application.</p>
+
+<p><strong>Problem Scope:-</strong></p>
+
+<p>===============</p>
+
+<p>Here we are going to discuss the automation approach for windows file system testing means if we are making any changes in Windows File system and trying to test various file system operation on windows operating system and want to test it quickly to make sure that none of the file operations like create,edit,delete etc has been changed then this framework gives the more flexibility and power to the automation testing.</p>
+
+<p><strong>Requirements for Test Automation Frameworks:-</strong></p>
+
+<p>Automatic test execution is a high level functional requirement for test automation frameworks. Ease of use and maintainability are non-functional in their nature and in general achieving them is harder than simply implementing the functional requirements.</p>
+
+<p>The Hybrid <a href="http://en.wikipedia.org/wiki/Test_Automation_Framework" title="Test Automation Framework">Test Automation Framework</a> is what most frameworks evolve into overtime and multiple projects. The most successful automation frameworks generally accommodate both <a href="http://en.wikipedia.org/wiki/Keyword-driven_testing" title="Keyword-driven testing">Keyword-driven testing</a> as well as <a href="http://en.wikipedia.org/wiki/Data-driven_testing" title="Data-driven testing">Data-driven testing</a>. This allows data driven scripts to take advantage of the powerful libraries and utilities that usually accompany a keyword driven architecture. The framework utilities can make the data driven scripts more compact and less prone to failure than they otherwise would have been. The utilities can also facilitate the gradual and manageable conversion of existing scripts to keyword driven equivalents when and where that appears desirable. On the other hand, the framework can use scripts to perform some tasks that might be too difficult to re-implement in a pure keyword driven approach, or where the keyword driven capabilities are not yet in place.</p>
+
+<p><strong>Framework Capabilities:-</strong></p>
+
+<p>This section explains what capabilities a test automation framework must have.Discussed features can be seen as functional requirements for automation frameworks.</p>
+
+<p>Automatic Test Execution</p>
+
+<p>Ease of Use</p>
+
+<p>Maintainability</p>
+
+<p>Executing Tests Unattended</p>
+
+<p>Starting and Stopping Test Execution</p>
+
+<p>Handling Errors</p>
+
+<p>Verifying Test Results</p>
+
+<p>Assigning Test Status</p>
+
+<p>Handling Expected Failures</p>
+
+<p><strong>Detailed Logging</strong></p>
+
+<p>Test automation framework ought to give enough information to test engineers and developers so that they can investigate failed test cases. Giving only test statuses and short status messages is not enough. Instead more detailed test logs about the</p>
+
+<p><strong>Fail</strong>:-Used to log the status of a failed test case.</p>
+
+<p><strong>Pass: -</strong> Used to log the status of a passed test case.</p>
+
+<p><strong>Error</strong>:-Used when an unexpected error preventing current test’s execution occurs. For example the button to push in a test does not exist.</p>
+
+<p>*<em>Failure: - *</em>Used when the test outcome does not match the expected outcome.</p>
+
+<p><strong>Warning:-</strong>Used when a recoverable error not affecting test execution occurs. For example deleting some temporary file fails Info Used to log normal test execution like starting test and passed verifications.</p>
+
+<p><strong>Framework Structure:-</strong></p>
+
+<p>The requirement for the framework to be either data-driven, keyword-driven, or both means that some kind of system where test data can be designed and created is needed. Multiple requirements for monitoring test execution suggests that another system is needed for monitoring purposes and yet another system is, of course, needed for actually executing test cases. Below are the major parts of the Hybrid Automation Framework.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2014/07/Framework-Strcuture-300x179.png" alt="Framework Strcuture"></p>
+
+<p> </p>
+
+<p><strong>Test Design System:-</strong></p>
+
+<p>Test design system is used for creating new test cases and editing existing ones. It Is test engineers’ and domain experts’ playground and must be easy to use with Minimal training and without programming skills. the created test data can be stored into flat files or databases. A simple solution is using an existing tool like spreadsheet program like Microsoft Excel. A special test design tool made just for this purpose would of course have its benefits but building something like that is out of the reach for most automation projects.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2014/07/Architecture-300x257.png" alt="Architecture"></p>
+
+<p> </p>
+
+<p><strong>Test Execution System:-</strong></p>
+
+<p>Test execution system is the core of the framework. Its main components are driver Scripts, the test library, the test data parser and other utilities like logger and report generator.</p>
+
+<p><strong>Driver Script:-</strong></p>
+
+<p>Test execution is controlled by driver scripts which are started using the test monitoring system or either by the Test Management tool or from an external test utility... Driver scripts are pretty short and simple because they mainly use services provided by Functions libraries and other reusable modules.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2014/07/Driver-Script-300x179.png" alt="Driver Script"></p>
+
+<p> </p>
+
+<p><strong>Function Libraries:-</strong></p>
+
+<p>Function libraries contain all those reusable functions and modules which are used in testing or in activities supporting it. Testing is mainly interacting with the tested system and checking that it behaves correctly. Supporting activities are often related to setting up the test environment and include tasks like copying files, initializing databases and installing software. Functions in the Function library can do their tasks independently but they can also use other functions or even external tools.</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2014/07/12/beginning-with-chef-part-2/" data-toggle="tooltip" data-placement="top" title="Beginning With Chef Part 2">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2014/07/21/nashorn-java-javascript-engine-in-java-8/" data-toggle="tooltip" data-placement="top" title="Nashorn Java Javascript Engine In Java 8">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

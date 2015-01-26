@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Android Ui Development Tools - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2010/10/20/android-ui-development-tools/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Android Ui Development Tools</h1>
+                    
+                    <span class="meta">Posted by sohil on October 20, 2010</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Android UI development tools</h1>
+
+<p>Today I had a pleasure of attending one of Google&#39;s Android Developer Conference by Rajdeep Dua ,Thanks to Rajdeep Dua I came to know some of android tools (by Google as well as third party not integrated with IDE)  available in the market to enhance UI application development.</p>
+
+<p>Before we start looking through the list of tool. Please do have a look at the  <a href="http://developer.android.com/guide/practices/ui_guidelines/index.html" title="UI Guidelines">Android UI Guidelines</a>. If you publish your application on the android App market and would like your application to appear in the featured list you will have to meet the UI guidelines are drawn by above link.Hence do follow the UI guidelines while making your android application if you want Android market guys to consider your application in features list.</p>
+
+<p>Okay , So lets start exploring the available tools. If you have just started learning android using eclipse IDE making a nice UI is not easy using the basic design mode.<a href="http://www.droiddraw.org/" title="DroidDraw">DroidDraw</a> is the alternative to making good and fast graphical user interfaces. DroidDraw is available for (Windows , Mac , Linux) .It helps you to easily create the UI and generate the required xml file.If you would like to quick test your UI as how it looks on the android phone without integrating the code with you core application use <a href="http://www.droiddraw.org/androiddraw.html" title="AnDroidDraw">Androiddraw </a>application.</p>
+
+<p>Well that was droid draw to develop the UI faster. If you have gone through the UI Guidelines they are pretty strict to some extend. I will be difficult to cope up with it all the time.However we have a solution to that also. The next thing we are going to talk about is the<a href="http://code.google.com/p/android-ui-utils/"> Android UI Utils</a> . Android UI utils is the project currently present in google code. We are going to discuss two things Android Asset Studio and UI Prototyping Stencils.</p>
+
+<p><a href="http://android-ui-utils.googlecode.com/hg/asset-studio/dist/index.html">Android Asset Studio</a> is the Utility developed to help programmers create icons easily. Its a pretty handy tool to create different icons with all the variation like (hdpi , ldpi  ,mdpi) .Using this tool you can generate all kind of icons tab, menu launcher and notification icons.</p>
+
+<p>Next is a UI Prototyping Stencil (<a href="http://pencil.evolus.vn/en-US/Home.aspx">Pencil 1.2</a>) , its currently available as a add on in Firefox as well as a standalone .Its a free open source tool used to create quick GUI prototyping images.Pencil provides the rich set of android UI components avaliable for drag and drop to create a fast UI prototyping.</p>
+
+<p>Apart from the above mentioned tools you should also use draw9patch to avoid inappropriate scaling of the images.<a href="http://developer.android.com/guide/developing/tools/draw9patch.html">Draw9Patch</a> program is avaliable in android-sdk-windows\tools directory .A simple png file can be loaded into the application and after applying appropriate patches can be exported to get a NinePatch graphics.</p>
+
+<p>Well that is not all, the last one is a Android NDK (<a href="http://developer.android.com/sdk/ndk/index.html">Native Development Kit</a>). Android NDK is a companion tool that you will have to download if you wish to build performance critical portions of the app in native code. Android NDK helps in embedding the components coded in Native code with Android SDK.</p>
+
+<p>Well these are the few tools that i came across today that i wasn&#39;t aware. Please do leave a comment if you know few more.</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#3134" title="2010-11-04 01:57:11">Eric</a>:</strong> Check out Corona from www.anscamobile.com, you can quickly develop native Android apps without using the Android SDK. Note also the same apps can be cross compiled to iOS.</p>
+
+<p><strong><a href="#5251" title="2011-02-04 09:43:24">Rajkumar</a>:</strong> Thank you Sohil. Pencil project excites me.</p>
+
+<p><strong><a href="#5601" title="2011-05-28 15:18:32">Mariya</a>:</strong> Hi I want to display more than one chart in android... So i am using afreechart jar file to generate the charts... I can generate the charts.. But i can see only one chart which is generated last.. That means the chart has overridden in the view activity.. I am using setContentView to view the charts.. In that i cant append.. So Please guide me... Thanks in advance, Maria</p>
+
+<p><strong><a href="#5684" title="2011-07-07 20:21:27">Rami</a>:</strong> Bit old post, but I think it&#39;s reasonable to add http://crowdin.net as an essential localization tool</p>
+
+<p><strong><a href="#6210" title="2011-11-16 06:15:57">Jason</a>:</strong> At Crank Software we are adding support for Android to our Storyboard UI Development Suite. You can see an early preview of it running on an Android Tablet here : http://cranksoftware.com/blog/?p=1074 Jason</p>
+
+<p><strong><a href="#6410" title="2011-12-18 19:53:29">Jeril</a>:</strong> Hi, I tried using Pencil software. I have the Android items in my Collection also with the help of which I can create a quick good Android UI. Now how do I export it as an xml. Please help</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2010/10/12/flex-increase-your-productivity-while-working-on-a-bigger-application/" data-toggle="tooltip" data-placement="top" title="Flex Increase Your Productivity While Working On A Bigger Application">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2010/10/21/building-a-hadoop-cluster-using-virtualbox/" data-toggle="tooltip" data-placement="top" title="Building A Hadoop Cluster Using Virtualbox">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

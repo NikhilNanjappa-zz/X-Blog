@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Local Notifications In Iphone - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2011/04/13/local-notifications-in-iphone/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Local Notifications In Iphone</h1>
+                    
+                    <span class="meta">Posted by vaibhav sehgal on April 13, 2011</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Local Notifications in iPhone</h1>
+
+<p>Suppose we want to build an iPhone application that alerts the user at a particular point in time or at repeated intervals of time with some custom message, or that the application runs in the background and performs some task, and alerts the user when the task is complete. This can be accomplished in iPhone using <strong>local notifications,</strong> which were introduced in iOS 4.0. Once a local notification is scheduled by an application, iOS takes care of it and presents it at the appropriate time.</p>
+
+<p>This blog aims to show how to set local notifications in an iPhone application and then moves on to specific use cases where they have to be manipulated. We also talk about which methods are called when a notification is received, depending on the state of the application.  The following code shows how to set a local notification that will alert the user at 7:00 a.m. everyday.</p>
+
+<p>[sourcecode lang=&quot;javascript&quot;]</p>
+
+<p>// Create a fire date for the notification by using calendar components</p>
+
+<p>NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar] ;</p>
+
+<p>NSDateComponents *componentsForReferenceDate =</p>
+
+<p>[calendar components:(NSDayCalendarUnit | NSYearCalendarUnit | NSMonthCalendarUnit ) fromDate:[NSDate date]];</p>
+
+<p>[componentsForReferenceDate setDay:1] ; [componentsForReferenceDate setMonth:1] ; [componentsForReferenceDate setYear:2011] ;</p>
+
+<p>NSDate *referenceDate = [calendar dateFromComponents:componentsForReferenceDate] ;</p>
+
+<p>// set components for time 7:00 a.m.</p>
+
+<p>NSDateComponents *componentsForFireDate =</p>
+
+<p>[calendar components:(NSYearCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit| NSSecondCalendarUnit ) fromDate: referenceDate];</p>
+
+<p>[componentsForFireDate setHour: 7] ; [componentsForFireDate setMinute:0] ; [componentsForFireDate setSecond:0] ;</p>
+
+<p>NSDate *fireDateOfNotification = [calendar dateFromComponents: componentsForFireDate];</p>
+
+<p>// Create the notification</p>
+
+<p>UILocalNotification *notification = [[UILocalNotification alloc]  init] ;</p>
+
+<p>notification.fireDate = fireDateOfNotification ; notification.timeZone = [NSTimeZone localTimeZone] ; notification.alertBody = [NSString stringWithFormat: @&quot;Wake up!&quot;] ; notification.userInfo= [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@&quot;Some information&quot;] forKey:@&quot;information&quot;]; notification.repeatInterval= NSDayCalendarUnit ; notification.soundName=UILocalNotificationDefaultSoundName;</p>
+
+<p>[[UIApplication sharedApplication] scheduleLocalNotification:notification] ;</p>
+
+<p>[notification release]; [/sourcecode]</p>
+
+<p>The point to be noted in this example is that the <strong>fireDate</strong> of the notification is 1/1/2011 at 7 a.m. . This means that the notification will first fire at 7 a.m. on January 1 . Moreover, the <strong>repeatInterval</strong> property of the notification is set to <strong>NSDayCalendarUnit</strong> (i.e. the notification will repeat after a time interval of one day). Thus the notification will also fire at 7 a.m. on January 2,January 3 and so on for each day. However, if we check the fireDate property of the notification on January 2, then it will still be 7 a.m. on 1/1/2011. However on January 2,  the &quot;<strong>next fire date</strong>&quot; will be 7 a.m. , 2/1/2011.  Unfortunately we cannot access this &quot;next fire date&quot; property.</p>
+
+<p>A classic example of a situation where this might have been of use, is say, when notifications which repeat daily (say two notifications to remind the user to get food items from the market) have been set with fireDate as January 1, and the user launches the application on January 2 and changes some parameter in the application (say, he indicates that today is a holiday and he can&#39;t get food items from the market), we need to delete the notifications for the current day (i.e. 2/1/2011). The ideal case would have been to isolate all notifications which would fire on January 2 and delete them only. This would mean that the notifications would still fire on January 3 .In this case we cannot use the fireDate property to isolate notifications that have to fire on January 2, since their fireDate is still set to 1/1/2011.</p>
+
+<p>To accomplish this task, we can use the userInfo property of UILocalNotification. We can set a key and corresponding value in the userInfo Dictionary of the notifications that we set.</p>
+
+<p>[sourcecode lang=&quot;javascript&quot;] notification.userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@&quot;Get Food&quot;], @&quot;foodItem&quot;, nil] ; [/sourcecode]</p>
+
+<p>Then, we would first get all scheduled notifications by :</p>
+
+<p>[sourcecode lang=&quot;javascript&quot;] [[UIApplication sharedApplication] scheduledLocalNotifications] ; [/sourcecode]</p>
+
+<p>Now we could loop through this list of scheduled notifications and look for a match according to key. We can thus isolate the notifications and delete them.</p>
+
+<p>[sourcecode lang=&quot;javascript&quot;] NSArray *arrayOfLocalNotifications = [[UIApplication sharedApplication] scheduledLocalNotifications] ;</p>
+
+<p>for (UILocalNotification *localNotification in arrayOfLocalNotifications) {</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">if ([[localNotification.userInfo valueForKey:@&amp;quot;foodItem&amp;quot;] isEqualToString:@&amp;quot;Get Food&amp;quot;]) {
+    [[UIApplication sharedApplication] cancelLocalNotification:localNotification] ; // delete the notification from the system
+}
+</code></pre></div>
+<p>} [/sourcecode]</p>
+
+<p>Further, the SDK also gives us methods to know whether a notification was received : </p>
+
+<ul>
+<li><p>When the user presses the action button on a notification that is received, if the application is running in the <strong>foreground</strong>, or in the <strong>background</strong>, the <strong>application:didReceiveLocalNotification</strong>: method of the application delegate is called.
+[sourcecode lang=&quot;javascript&quot;] - (void)application:(UIApplication _)application didReceiveLocalNotification:(UILocalNotification _)notification { //Do something with the notification or its data. } [/sourcecode] </p></li>
+<li><p>However, if the <strong>application has been killed</strong> and then the user presses the action button on the  notification that is received, the <strong>application:didFinishLaunchingWithOptions</strong>: is called . Here we can access the notification by using the <strong>UIApplicationLaunchOptionsLocalNotificationKey</strong> key.
+[sourcecode lang=&quot;javascript&quot;] - (BOOL)application:(UIApplication _)application didFinishLaunchingWithOptions:(NSDictionary _)launchOptions { UILocalNotification *localNotification = [launchOptions valueForKey:@&quot;UIApplicationLaunchOptionsLocalNotificationKey&quot;] ; // Do something with the notification } [/sourcecode]</p></li>
+</ul>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#5603" title="2011-05-31 16:36:20">Srinivas</a>:</strong> Hi....Vaibhav Sehgal thanks for this information abt local Notification its very helpful to me to complete my project.. i have a small issue is set the sheduleNotification For every Drinking tea at 9.00 am......is there any Method from Startdate to end date:</p>
+
+<p><strong><a href="#5609" title="2011-06-02 16:11:02">sumanth kodi</a>:</strong> very helpfull blog , for me it helped me a lot...,,,,,,</p>
+
+<p><strong><a href="#5970" title="2011-10-03 10:27:18">Ajay</a>:</strong> Hi, Thnx for Nice tutorial. Can I set the my application to Open any View , instead of default UIAlertView when any notifications appears ,in background ?</p>
+
+<p><strong><a href="#5946" title="2011-09-27 17:28:12">Naveen Nagumalli</a>:</strong> Hi Vaibhav, The article about local notification is good but im not able to retrive the local notification user info when cancelling a particular notification.</p>
+
+<p><strong><a href="#6812" title="2012-01-10 18:36:49">manoj</a>:</strong> It was really nice.and i have done local notification with the help of your tutorial. thank u vey much...</p>
+
+<p><strong><a href="#7069" title="2012-01-22 18:29:55">Charlanne Kallay</a>:</strong> I am not a programer but am looking for an APP that would alert me at preset intervals to stand instead of sit or to take a walking break over a particular interval of time after which the standing breaks would initiate again. Such an APP is useful for anyone who gets immersed in computer work but is also beneficial for those who already have back or nerve issues that need this kind of practice to be endurable.</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2011/04/08/whyagile/" data-toggle="tooltip" data-placement="top" title="Whyagile">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2011/04/14/building-editable-gridview-for-iphone-apps/" data-toggle="tooltip" data-placement="top" title="Building Editable Gridview For Iphone Apps">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

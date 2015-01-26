@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>How To Mock Http Endpoints In Mule Functional Test - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2014/03/18/how-to-mock-http-endpoints-in-mule-functional-test/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>How To Mock Http Endpoints In Mule Functional Test</h1>
+                    
+                    <span class="meta">Posted by anirudh.xebia on March 18, 2014</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>How to mock HTTP endpoints in Mule Functional Test</h1>
+
+<p><a href="http://www.mulesoft.org/what-mule-esb">Mule</a> is an enterprise service bus (ESB) and integration framework. In Mule, we define <a href="http://www.mulesoft.org/documentation/display/current/Flows+and+Subflows">flows and sub-flows</a> in order to integrate applications and orchestrate services.These flows contain endpoints to integrate different applications or services. These endpoints can be HTTP, VM, JMS, etc. More details about development in mule can be found <a href="http://www.mulesoft.org/documentation/display/current/Mule+User+Guide">here</a>. Below is a sample flow. <img src="http://xebee.xebia.in/wp-content/uploads/2014/03/Screen-Shot-2014-03-18-at-1.12.54-PM-300x160.png" alt="Screen Shot 2014-03-18 at 1.12.54 PM"></p>
+
+<p>In order to write unit test cases for mule flows, mule provides an abstract JUnit test case called <a href="http://www.mulesoft.org/docs/site/current3/apidocs/org/mule/tck/junit4/FunctionalTestCase.html">org.mule.tck.junit4.FunctionalTestCase</a> that runs Mule inside a test case and manages the lifecycle of the server.More details about can be found <a href="http://www.mulesoft.org/documentation/display/current/Functional+Testing">here</a>.  Now, while writing these test cases, we face an issue when one application makes a call to another application using HTTP endpoint. For our unit test case to run independently, we need to mock this HTTP endpoint. There are few solutions available in the market like <a href="http://confluex.com">Confluex</a>, or <a href="http://wiremock.org">wireMock</a> but I did not want to increase the technology footprint of my application and thought of a simpler in-house solution.</p>
+
+<p>To solve this problem, I used the embedded Jetty Server in my Functional Test Case. [sourcecode] public abstract class BaseTest extends FunctionalTestCase {</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">static Server mockServer;
+protected abstract int getPortNumber();
+
+@Before
+public void createServer() throws Exception {
+    mockServer = new Server(getPortNumber());
+    mockServer.setHandler(new MockHttpRequestHandler());
+    mockServer.start();
+}
+
+@After
+public void stopServer() throws Exception {
+    mockServer.stop();
+}
+
+protected String get(String endpointURL, String contentType)
+        throws URISyntaxException, ClientProtocolException, IOException {
+    HttpClient hc = new DefaultHttpClient();
+    HttpGet get = new HttpGet();
+    get.setURI(new URI(endpointURL));
+    get.setHeader(&amp;quot;Content-Type&amp;quot;, contentType);
+    HttpResponse resp = hc.execute(get);
+    return EntityUtils.toString(resp.getEntity());
+}
+
+protected String post(String payload, String endpointURL, String contentType)
+        throws URISyntaxException, ClientProtocolException, IOException {
+    HttpClient hc = new DefaultHttpClient();
+    HttpPost post = new HttpPost();
+    post.setURI(new URI(endpointURL));
+    post.setHeader(&amp;quot;Content-Type&amp;quot;, contentType);
+    post.setEntity(new StringEntity(payload));
+    HttpResponse resp = hc.execute(post);
+    return EntityUtils.toString(resp.getEntity());
+}
+</code></pre></div>
+<p>} [/sourcecode] Let&#39;s understand this step by step : [sourcecode] public abstract class BaseTest extends FunctionalTestCase { [/sourcecode] To write a functional test case in mule, we need to extend FunctionalTestCase, this will start a mule instance inside the test case. As we have not overridden the method &quot;getConfigFiles()&quot; in this abstract base class, the config xml file required to start mule instance will be used from the class extending this baseTest class.</p>
+
+<p>[sourcecode] static org.eclipse.jetty.server.Server mockServer; [/sourcecode] We make a reference to org.eclipse.jetty.server.Server, which would act as the mock server. [sourcecode] protected abstract int getPortNumber(); [/sourcecode] This method needs to be implemented by the class extending this baseTest class, this is done to externalise the port number, so that multiple tests can be configured using this base class. [sourcecode] @Before public void createServer() throws Exception { mockServer = new Server(getPortNumber()); mockServer.setHandler(new MockHttpRequestHandler()); mockServer.start(); } [/sourcecode] We use this method to create a new instance of the server and define the port number on which it will run. The most important part of the implementation here is declaring handler for the server. Lets discuss about handlers first.</p>
+
+<p><strong>Jetty Handlers :</strong> Handlers in jetty can be used to filter requests and manipulate response and content. Using this api, we can write custom handlers and set them to the server instance. <a href="http://www.eclipse.org/jetty/documentation/current/writing-custom-handlers.html">Here</a> is a wonderful tutorial which talks about creating custom handlers.</p>
+
+<p>In our implementation we have made a class MockHttpRequestHandler extending abstractHandler. [sourcecode] public class MockHttpRequestHandler extends AbstractHandler { @Override public void handle(String targetUri, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">    String contentType = request.getHeader(&amp;quot;Content-Type&amp;quot;);
+    if(targetUri.contains(&amp;quot;/mockTest&amp;quot;)){
+        handleMockTest(response, contentType);
+        baseRequest.setHandled(true);
+    }
+}
+
+private void handleMockTest(HttpServletResponse response,String contentType)throws IOException  {
+
+    InputStream in = this.getClass().getClassLoader()
+            .getResourceAsStream(&amp;quot;/responseMockTest/file/path&amp;quot;);
+    response.setContentType(contentType);
+    String responseString = IOUtils.toString(in);
+    response.setStatus(HttpServletResponse.SC_OK);
+    response.getWriter().print(responseString);
+
+}
+</code></pre></div>
+<p>}</p>
+
+<p>[/sourcecode] As we can see above, AbstractHandler declares a method handle(), which has request, response and uri. These can be used to filter requests ,check the uri and mock the content based on specific request or uri. In the above we test the path and manipulate response accordingly in method handleMockTest. We can see here, we are reading the response from a file in the class path. We are also setting the status and content Type of the response. So, we can mock any response we want for a particular request here.</p>
+
+<p>Also, in the end, one thing to note here is : [sourcecode] baseRequest.setHandled(true); [/sourcecode] Setting it true means, we are telling the server that we have mapped a response for the base Request, setting it to false will return in 404.</p>
+
+<p>We can play around this, generalise this and make a framework for better and easier usage.</p>
+
+<p>Finally, lets see a basic test case, which will use these 2 classes to mock the HTTP endpoint in a mule flow. [sourcecode] public class TestMockHttpEndPoint extends BaseTest {</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">private static final String JSON_PAYLOAD = &amp;quot;{\&amp;quot;Authentication\&amp;quot;{\&amp;quot;client\&amp;quot;:\&amp;quot;10000003\&amp;quot;,\&amp;quot;password\&amp;quot;:\&amp;quot;qbgNqpzQBwB3DfAP\&amp;quot;}}&amp;quot;;
+private static final String JSON_RESPONSE = &amp;quot;{\&amp;quot;status&amp;quot;:\&amp;quot;success\&amp;quot;}&amp;quot;;
+
+@Override
+protected String[] getConfigFiles() {
+    String[] arr = {&amp;quot;mule-unit-test-mock-framework.xml&amp;quot;};
+    return arr;
+}
+
+@Override
+protected int getPortNumber() {
+    return 10002;
+}
+
+@Test
+public void shouldTestPOSTMockFramework() throws ClientProtocolException,
+        URISyntaxException, IOException {
+    Assert.assertEquals(
+            JSON_RESPONSE,
+            post(JSON_PAYLOAD, &amp;quot;http://localhost:10001/mockTest&amp;quot;,
+                    &amp;quot;application/json&amp;quot;));
+}
+
+@Test
+public void shouldTestGETMock() throws ClientProtocolException,
+        URISyntaxException, IOException {
+    get(&amp;quot;http://localhost:10001/mockTest&amp;quot;, &amp;quot;application/json&amp;quot;);
+}
+</code></pre></div>
+<p>} [/sourcecode] Here, the flow &quot;mule-unit-test-mock-framework.xml&quot; is being tested, this mule app has inbound HTTP endpoint running on port 10001 and path /mockTest. We are running our mock Jetty server on path 10002, as seen in the overridden method &quot;getPortNumber()&quot; . This is what happens in the test: </p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#9470" title="2014-03-18 15:11:56">jvanerp</a>:</strong> Can&#39;t you use something like Mike Kotsur&#39;s Restito (https://github.com/mkotsur/restito) for this? It&#39;s a rest/http mocking framework in use at XebiaLabs.</p>
+
+<p><strong><a href="#9471" title="2014-03-18 15:15:23">Anirudh Bhatnagar</a>:</strong> Of Course I can use this framework, I have explored this as well, but there was some strange jar conflict issue with Mule dependencies concerning hamcrest. I could have done some tweaking like excluding them from Mule, but was not sure if that was a great idea.</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2014/03/16/soap-over-jms-with/" data-toggle="tooltip" data-placement="top" title="Soap Over Jms With">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2014/03/24/agile-anti-patterns-sprinting-in-a-waterfall-way/" data-toggle="tooltip" data-placement="top" title="Agile Anti Patterns Sprinting In A Waterfall Way">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

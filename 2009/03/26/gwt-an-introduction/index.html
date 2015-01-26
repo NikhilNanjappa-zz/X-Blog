@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Gwt An Introduction - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2009/03/26/gwt-an-introduction/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Gwt An Introduction</h1>
+                    
+                    <span class="meta">Posted by hgupta on March 26, 2009</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>GWT: An introduction</h1>
+
+<p><strong>Introduction</strong></p>
+
+<p>Google Web Toolkit is a open source java framework to build rich user interface with widgets and panels. It communicates with one technology rather with different technologies, and it works on linux, windows and mac. In GWT code is converted from Java to Java script. GWT can be compared with latest technologies as Flex, Microsoft Silverlight and Java FX. All of these technologies provide rich widget based development but GWT stands apart due to its java script code conversion.</p>
+
+<p>GWT has some interesting features which brings thoughts why GWT is good. Some of these features are integration with browser back button, internationalization, code development in eclipse, fells working in desktop based application and UI code written in java.  Lets compare Flex with GWT and see where GWT is going. In Flex we need to learn new Action script where as in GWT its all java. For integration with backend services you need webservices in Flex while in GWT you can write your own services in java. This gives edge to GWT over Flex.</p>
+
+<p><strong>Installation</strong></p>
+
+<p>GWT can be downloaded from <a href="http://code.google.com/webtoolkit/">http://code.google.com/webtoolkit/</a>.</p>
+
+<p>Installation is simple, unzip the downloaded file with some tool such as WinZip, and add the root folder into path.</p>
+
+<p>On windows vista -</p>
+
+<p>Control Pannel-&gt; System and Maintainence-&gt; System-&gt;Advance System Settings</p>
+
+<p>Click <em>Environment Variable</em> button</p>
+
+<p>From the user variable list find <em>path</em> and click <em>edit</em></p>
+
+<p>add semicolon at the end and add your installed directory(eg ;E:\gwt-windows-1.5.3)</p>
+
+<p><strong>Dummy application</strong></p>
+
+<p>Lets create a project and go through the project created in GWT. </p>
+
+<ul>
+<li>First create a project with the tool applicationCreator provided in the installation directory. Use -eclipse option so that project can be imported in eclipse, -out tells the name of project in eclipse and then the client class full name.
+applicationCreator -eclipse GwtDemo -out School in.xebia.demo.client.GwtDemo</li>
+</ul>
+
+<p>Import the project created in eclipse.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2009/01/import-in-eclipse.jpg" alt=""></p>
+
+<ul>
+<li><p>Add the following jar files in the eclipse project.
+- gwt-user.jar file is in the installation directory of GWT.</p></li>
+<li><p>junit.jar from the junit installation directory </p>
+
+<ul>
+<li>Once the project is imported its time to run the project. There are two modes to run the application, host mode and hosted mode web browser. Hosted mode runs in JVM and inbuilt browser while host mode web browser runs in browser.</li>
+</ul></li>
+</ul>
+
+<p>Applications that run in hosted mode don&#39;t translate into the javascript, by this you can debug your application just like another application.</p>
+
+<p>To run the project just click on shell command script.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2009/01/eclipse-view.jpg" alt=""></p>
+
+<p><strong>Running the demo project</strong></p>
+
+<p>You see two new windows opened. First is the log viewer where you see status and error messages. Second is hosted mode web browser, where the application is running.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2009/01/result.jpg" alt=""></p>
+
+<ul>
+<li><p>There are two files one is html and other is java file that are created by default application ( you just created above). Java class is implementing interface EntryPoint and one method onModuleLoad. In this method write the actual java code which tells whats the behavior of application is when its loaded. This place you create your UI.
+Lets take a tour of existing demo application UI created. It has created button &quot;Click me&quot; </p>
+
+<p>Button button = new Button(&quot;Click me&quot;);</p></li>
+</ul>
+
+<p>An event listener is added to the button to make the feature more advance. </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> button.addClickListener(new ClickListener() {
+      public void onClick(Widget sender) {
+            dialogBox.center();
+            dialogBox.show();
+      }
+ });
+</code></pre></div>
+<p><strong>Deploying project in web server</strong></p>
+
+<ul>
+<li>You can generate the server side code, run the application in shell mode you&#39;ll see the compile button, this will create the javascript file in www. directory.</li>
+</ul>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2009/01/www-directory.jpg" alt=""></p>
+
+<p>The complier names the application directory with full module name. These are static files generated from compiler. These file can be moved to any webserver and deployed on it. The generated code can run in any web browser by loading the generated files.</p>
+
+<p><strong>Conclusion</strong></p>
+
+<p>In this blog I talk about the dummy application created by GWT. I also talk about what code needs to be deployed on web server and how that code is generated in gwt.</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2009/03/06/information-store-is-not-same-as-information-radiator/" data-toggle="tooltip" data-placement="top" title="Information Store Is Not Same As Information Radiator">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2009/04/07/web-20-expo-2009-san-francisco/" data-toggle="tooltip" data-placement="top" title="Web 20 Expo 2009 San Francisco">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

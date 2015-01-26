@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Openshift Express The Future Of Redhat Paas - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2012/01/26/openshift-express-the-future-of-redhat-paas/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Openshift Express The Future Of Redhat Paas</h1>
+                    
+                    <span class="meta">Posted by shekhargulati on January 26, 2012</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>OpenShift Express -- The Future Of RedHat PaaS</h1>
+
+<p>Last couple of days I was at <a href="http://www.jboss.org/events/JUDCon/2012/india">JUDCon India</a> conference held in Bangalore where I gave a session on <a href="http://www.slideshare.net/shekhargulati/a-happy-cloud-friendly-java-developer-with-openshift.">OpenShift</a>. The JUDCon India was the biggest JUDCon conference ever with more than 800 attendees. Sessions were mainly on topics -- Infinispan, JBoss AS7 , OpenShift, CDI, Rules Engine, and other JBoss tools. I was mainly interested in hearing the thoughts of RedHat guys on OpenShift -- its future, comparison with Cloud Foundry, and when it will be open sourced.</p>
+
+<p>The biggest announcement made at the conference was the unification of OpenShift Express and OpenShift Flex Platforms. At first I was disappointed to hear this as I wanted to showcase Flex in my presentation. It was not good to hear one day before the presentation that Flex will not be developed further and will be merged in express.  Someone asked why OpenShift Flex is being abandoned as it has some very good features like AutoScaling, Log Management, MongoDB Replica Sets, Tomcat support,  Cost Calculator and many more. Mark Atwood replied  to this by saying &quot;It was getting difficult to manage two products and two teams which overlap a lot. &quot;. <a href="https://www.redhat.com/openshift/community/author/jimmy-guerrero">Jimmy Guerrero</a> has <a href="http://xebee.xebia.in/2012/01/26/openshift-express-the-future-of-redhat-paas/#comment-7140">commented</a> and shed more light on it. </p>
+
+<blockquote>
+<p>Our motivation for unifying the Flex and Express platforms isn’t because it was difficult to manage two teams and two products, but instead we are being driven by the desire to bring the best features of both platforms into a single user experience called, OpenShift. For us it isn’t the end of Flex, but, rather, the beginning of a single converged solution that is easy to use and has the capabilities that you want.</p>
+
+<p>This way, from the same IDE, GUI or client tools, a user can continue to get the free access to multiple instances and the broad middleware and framework support of Express, coupled with the rich functionality of Flex’s auto-scaling, performance monitoring and log management. And from, your post, it looks like you agree this is best way to go.</p>
+
+<p> </p>
+</blockquote>
+
+<p>In my opinion also this is a right step forward for OpenShift. OpenShift Express has gained more popularity as compared to OpenShift Flex because it is free and easy to use . Express is lightweight, developer oriented, easy to get started with and better suited for creating new applications.  Another reason why I think it is good to have one platform is to avoid porting the applications from one flavor to another. I created a very simple Spring MongoDB application and to make the application run on both platforms I had to change database properties. Also as both the platforms support different cartridges (example RedHat messaging is supported in Flex but not in Express) it would be difficult to port applications across platforms.</p>
+
+<p>Another big news about OpenShift is that it will be open source soon and you will be able to create a private PaaS on your own infrastructure behind company firewalls. I think it is very important for OpenShift if it wants to have the same momentum as Cloud Foundry. This also means that community can add support for cartridges which does not exist in OpenShift.</p>
+
+<p>Overall I think OpenShift is heading in the right direction and it is a wise decision to spend time on it.</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#7142" title="2012-01-26 22:47:04">Shekhar Gulati</a>:</strong> Thanks Jimmy for your comment. I will update the post.</p>
+
+<p><strong><a href="#7140" title="2012-01-26 20:52:10">Jimmy Guerrero</a>:</strong> Shekhar, great post as usual! Just wanted to post a comment to clarify one of Mark&#39;s statements. Our motivation for unifying the Flex and Express platforms isn&#39;t because it was difficult to manage two teams and two products, but instead we are being driven by the desire to bring the best features of both platforms into a single user experience called, OpenShift. For us it isn&#39;t the end of Flex, but, rather, the beginning of a single converged solution that is easy to use and has the capabilities that you want. This way, from the same IDE, GUI or client tools, a user can continue to get the free access to multiple instances and the broad middleware and framework support of Express, coupled with the rich functionality of Flex&#39;s auto-scaling, performance monitoring and log management. And from, your post, it looks like you agree this is best way to go. Look for a blog later today from product management to speak in a little more detail about the exciting plans we have in store in the coming months. Finally, congrats on the well received talk at JUDCon. Hope to see you at Summit this year!</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2012/01/25/what-made-me-to-choose-cxf-over-axis2/" data-toggle="tooltip" data-placement="top" title="What Made Me To Choose Cxf Over Axis2">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2012/02/02/opportunities-and-challenges-in-social-web-data-mining/" data-toggle="tooltip" data-placement="top" title="Opportunities And Challenges In Social Web Data Mining">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

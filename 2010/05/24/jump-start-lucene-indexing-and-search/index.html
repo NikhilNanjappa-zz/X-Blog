@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Jump Start Lucene Indexing And Search - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2010/05/24/jump-start-lucene-indexing-and-search/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Jump Start Lucene Indexing And Search</h1>
+                    
+                    <span class="meta">Posted by ankitk on May 24, 2010</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Jump-start Lucene: Indexing and Search</h1>
+
+<p>This is a blog explaining what Apache Lucene is, how it works and some of its useful features. This information can be useful for someone who wants to quickly start on Lucene and also for someone who has used Lucene earlier but would like to gain from our experience on Lucene v2.4.1.</p>
+
+<h1>Introduction</h1>
+
+<p>Apache Lucene is an open source Java based indexing and searching technology. It is a technology suitable for any application that requires <a href="http://en.wikipedia.org/wiki/Full_text_search">full-text search</a>, especially cross-platform. Lucene works by first indexing the data to be searched and then using the index for searching.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2010/05/lucenediagram-291x300.jpg" alt="lucenediagram" title="lucenediagram"></p>
+
+<h1>Lucene Indexing Basics</h1>
+
+<p>Indexing is a process of converting text data into a format that facilitates rapid searching. Lucene stores the data in the form of an inverted index. An analogy is an index at the end of a book; the index points to the location of topics that appear in the book.</p>
+
+<p>There will be “Terms” created from the input which will point to the “Documents”. “Terms” are indexed and any search is performed on “Terms” and the related “Documents” are fetched.</p>
+
+<p>Lucene index is built over an implementation of the Directory class. Lucene supports multiple Directory implementations: - </p>
+
+<ul>
+<li><p><em>RAMDirectory</em>: Complete index is kept in memory.</p></li>
+<li><p><em>FSDirectory</em>: Complete index is stored on file system. Some part of index is kept in cache.</p></li>
+<li><p><em>NIOFSDirectory</em>: Supports multiple threads on FSDirectory.</p></li>
+</ul>
+
+<p>The “Terms” to be created for the indexing can be governed by something called “Analyzers”. Lets see what they are.</p>
+
+<h3>Analysis</h3>
+
+<p>The input to be indexed can be analyzed to extract the terms on which the searching can be done, like extracting the words, removing common words, changing words to lowercase, etc. Analyzers are used both at indexing time and search time. It is highly recommended to use the same analyzers both at index creation and searching time so that tokens created for searching are created in the same way the data was indexed.</p>
+
+<p>Analyzers internally use Tokenizers and Filters. Analyzers take a string as input and returns back a stream of tokens.</p>
+
+<p>Lucene provides some out of the box analyzers which come handy. In addition custom analyzers can also be created. Lets have a look at some of the Analyzers/Tokenizers/Filters provided by Lucene.</p>
+
+<h3>Useful Analyzers and Filters</h3>
+
+<p><strong>SimpleAnalyzer</strong></p>
+
+<p>Tokenize the string to a set of words and converts them to lower case. </p>
+
+<p><strong>StandardAnalyzer</strong></p>
+
+<p>Tokenize the string to a set of words identifying acronyms, email addresses, host names, etc., discarding the basic English <em>stop words</em> (a, an, the, to) and stemming the words. </p>
+
+<p><strong>WhitspaceAnalyzer</strong></p>
+
+<p>Tokenize the data on white spaces.</p>
+
+<p><strong>NgramTokenFilter (quite useful for fuzzy searches)</strong></p>
+
+<p>Tokenize the input into n-grams of the given size. It is used for fuzzy matching. This helps in matching when the search input text has spelling mistakes. For e.g. input text &quot;Lucene&quot; for ngram size 3 will have tokens &quot;Luc&quot;,&quot;uce&quot;,&quot;cen&quot; and &quot;ene&quot;, if the user entered &quot;Tucene&quot; while searching still word &quot;Lucene&quot; will be shown as a suggestion since &quot;Tucene&quot; has similar tokens &quot;uce&quot;,&quot;cen&quot; and &quot;ene&quot; which point to the Document &quot;Lucene&quot; in the knowledge.</p>
+
+<p><strong>EdgeNGramTokenFilter</strong></p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2010/05/24/jboss-drools-effective-usage/" data-toggle="tooltip" data-placement="top" title="Jboss Drools Effective Usage">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2010/05/31/installer-testing/" data-toggle="tooltip" data-placement="top" title="Installer Testing">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

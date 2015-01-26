@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Hdfc Bank Website Vulnerable To Id Theft And Accounts Blockade - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2013/03/19/hdfc-bank-website-vulnerable-to-id-theft-and-accounts-blockade/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Hdfc Bank Website Vulnerable To Id Theft And Accounts Blockade</h1>
+                    
+                    <span class="meta">Posted by jitens on March 19, 2013</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Blocking Net-Banking Accounts En Masse</h1>
+
+<p><strong>HDFC Bank Website Vulnerable to ID Theft and Accounts Blockade.</strong></p>
+
+<p>The NetBanking service of HDFC Bank, which is one of the largest and most reputed Banks in India, is completely vulnerable to ID theft, Targeted phishing and Mass Account Blockade. HDFC bank has implemented an extra security solution called &#39;Secure Access&#39; on its website but instead it has given a hidden door to hackers to block all HDFC NetBanking accounts. &#39;Secure Access&#39; is an additional layer of security implement on HDFC Bank website is essentially a solution protecting your account from hackers and fraudsters. Secure Access, an online security initiative is intended to make NetBanking transactions safer by protecting users from phishing websites and Hackers and help users authenticate original HDFC website. HDFC Bank&#39;s NetBanking login is now a two-step process with Secure Access image and text verification. Let us take you through the steps involved in Secure Access and how it intends to protect NetBanking account of HDFC customers.</p>
+
+<p>1) In First Step User has to provide his customer-id (User Id) on the first screen</p>
+
+<p>2) User is then taken to the next screen where he is shown his personalized picture and message and asked to enter his IPIN (password).</p>
+
+<p>[caption id=&quot;attachment_16177&quot; align=&quot;aligncenter&quot; width=&quot;514&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2013/03/hdfc-1.png" alt="HDFC NetBanking Login page" title="HDFC NetBanking Login page"> HDFC NetBanking Login page[/caption]</p>
+
+<p>Demo presentation of secure access work can be seen on HDFC website at following URL <http://www.hdfcbank.com/assets/demo/secure_access.swf > Secure Access which is claimed to be Multi-layered Authentication Process mandatorily requires HDFC NetBanking users to register for it if they want to conduct ANY Third Party Transactions like Transferring Money, booking movie tickers, recharging phone.</p>
+
+<p>During the research conducted in December on HDFC Mobile Banking application and NetBanking Portal it was discovered that while implementing Secure Access HDFC Bank has compromised on the first and foremost principle of user authentication on any Banking website i.e. Never reveal whether its User Name or the password which is incorrect in case wrong combination is entered. Since Secure access implementation requires user to only enter his Customer ID (The fixed user name in case of HDFC bank NetBanking users. The system then checks at the backend if the user is registered for Secure Access or NetBanking, if user is not a registered or valid user, Customer id is asked again. But in case if the customer id is found to be correct and registered, user is taken to second step and shown his secure access image and text he selected and asked to enter is password.</p>
+
+<ol>
+<li>Now this 1st step of verifying customer id and showing personalized secure access image and text has made HDFC Bank vulnerable to Blind customer id collection. We exploited this vulnerability by running an automated suite with by generating random customer ids in a sequence (example from 434XXXX to 515XXXXXX) and logged on HDFC NetBanking website using them. The customer ids which showed secure access and image and text were noted and rest were discarded. The secure Access images and text which was shown for valid customer ids were also saved. Now by the process above we were able to achieve 3 things. It was shocking to see that secure text was displayed as simple text and not a text image.</li>
+</ol>
+
+<p>By this automated first step of Login, we were able to create a Database of several customer Ids of HDFC NetBanking users. We could have made a complete database of every NetBanking users but since this trial was conducted with a motive of checking security on banking site, only a sample data was collected. We decided to destroy this data later after completing this Demonstration.</p>
+
+<p><strong>HDFC Phishing Mobile App using our database of secure Access images and Text</strong></p>
+
+<p>[caption id=&quot;attachment_16180&quot; align=&quot;aligncenter&quot; width=&quot;349&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2013/03/hdfc.png" alt="HDFC Mobile App"> <strong>HDFC Mobile App</strong>[/caption]</p>
+
+<p><strong>Customer Id, Personalized Image and Text of Customer in above Screenshots has been hidden for security</strong></p>
+
+<p>[caption id=&quot;attachment_16178&quot; align=&quot;aligncenter&quot; width=&quot;515&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2013/03/hdfc.jpg" alt="HDFC Login Page Second Step" title="HDFC Login Page Second Step"> <strong>HDFC Login Page Second Step</strong>[/caption]</p>
+
+<p>2) We then setup a phishing portal for HDFC Net banking and created a fake HDFC NetBanking Mobile app and tried it on some people. In our fake HDFC mobile application and phishing portal we were able to replicate exactly same Secure Access behaviour like on original HDFC website using the database of Customer IDs of NetBanking users and their secure Access image and text we had created earlier. Since our site was showing the same secure Access images and text on entering customer ids we used their security feature to provide more authentic look to our phishing website and Mobile application. The Situation was worse for fake mobile app since Mobile users could not even see the URL, setting aside any chance of doubt in mind of user. Several users trusted our phishing site and mobile app and tried to log in with their passwords. 3) Now in a third Killing step we launched denial of service attack on website the by blocking some user accounts. Since Secure Access authentication vulnerability has helped us create the database of customer ids of HDFC NetBanking users we launched another program which simple went on HDFC NetBanking website and provided customer id from our database on HDFC NetBanking login page. As we were providing valid Customer Id&#39;s, when asked for IPIN/Password we entered it incorrectly 5 times which resulted in those customers being blocked from NetBanking. We used chain proxy to bypass time and Sequence checks but were surprised to find out that HDFC site had NONE and we were able to easily block several user accounts.</p>
+
+<p>[caption id=&quot;attachment_16179&quot; align=&quot;aligncenter&quot; width=&quot;565&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2013/03/HDFC2.jpg" alt="HDFC Account Blocked"> <strong>HDFC Account Blocked</strong>[/caption]</p>
+
+<p>Since we were guided by ideology of ethical hacking we conducted above research on a sample data But This flaw in authentication can be easily used by anyone to generate a Database of Customer Ids of HDFC NetBanking Users and completely Block all NetBanking accounts of all HDFC NetBanking users. The same may be the used by the miscreants or competitors of HDFC bank to hold literally entire NetBanking service of HDFC bank for ransom by repeatedly blocking accounts even if they are enabled again. This vulnerability also raises a big question, Are We forgetting basic principles of Security in race of trying security solution?</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/03/07/reporting-with-jasperreports/" data-toggle="tooltip" data-placement="top" title="Reporting With Jasperreports">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/03/19/supervised-machine-learning-way-to-intelligent-computing/" data-toggle="tooltip" data-placement="top" title="Supervised Machine Learning Way To Intelligent Computing">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

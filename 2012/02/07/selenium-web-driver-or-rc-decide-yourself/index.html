@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Selenium Web Driver Or Rc Decide Yourself - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2012/02/07/selenium-web-driver-or-rc-decide-yourself/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Selenium Web Driver Or Rc Decide Yourself</h1>
+                    
+                    <span class="meta">Posted by ngaur on February 7, 2012</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Selenium Web-Driver OR RC decide yourself?</h1>
+
+<p>I have dealt with automation of multiple types of applications at its core level whether its desktop app, Silverlight app,or windows application.</p>
+
+<p>When we talk about web application automation, the most widely used automation tool is Selenium. Selenium is open-source tool and this makes selenium more powerful than any other tool.</p>
+
+<p>Now as Selenium-Webdriver (Selenium 2) has been released, everybody ask one question whether to switch to Webdriver from Selenium-Remote Control. So I would be discussing here the core technical differences between the two, as basic differences are already available at various places.  <strong>Following are some technical differences between Selenium&#39;s two flavor ie.WebDriver and RC.</strong></p>
+
+<ul>
+<li><p>Web Driver is designed to accurately simulate the way that a user will interact with a web application.A common approach for simulating user input is to make use of JavaScript to synthesize and fire the series of events that an app would see if a real user were to perform the same interaction.This &quot;synthesized events&quot; approach is fraught with difficulties as each browser, and sometimes different versions of the same browser, fire slightly different events with slightly different values.To complicate matters, most browsers won&#39;t allow a user to interact in this way with form elements such as file input elements for security reasons.Where possible Web Driver uses the alternative approach of firing events at the OS level. As these &quot;native events&quot; aren&#39;t generated by the browser this approach circumvents the security restrictions placed on synthesized events and, because they are OS specific, once they are working for one browser on a particular platform reusing the code in another browser is relatively easy.</p></li>
+<li><p>The WebDriver developers lean more towards finding and isolating the complexity in a few places rather than spreading it out. One reason for this is users. As an example, consider the following methods from the original Selenium API, each of which can be used to set the value of an input element : type, typeKeys, typeKeysNative, keydown,keypress,keyup,keydownNative,keypressNative,keyupNative,attachFile. Here&#39;s the equivalent in the WebDriver API: sendKeys</p></li>
+<li><p><strong>WebDriver Design</strong> : The Webdriver team refers to WebDriver&#39;s API as being &quot;object-based&quot;. The interfaces are clearly defined and try to adhere to having only a single role or responsibility,but rather than modeling every single possible HTML tag as its own class webdriver developer only have a single WebElement interface. The result is that coding sessions may look like this (in Java):</p></li>
+</ul>
+
+<blockquote>
+<p>WebDriver driver = new FirefoxDriver();</p>
+
+<p>driver.<user hits space></p>
+
+<p>At this point, a relatively short list of 13 methods to pick from appears. The user selects one:</p>
+
+<p>driver.findElement(<user hits space>)</p>
+
+<p>While RC doesn&#39;t define a webelement rather it get the object at run time based on the locator given by user. This result in coding session like this</p>
+
+<p>Selenium selenium = new defaultSelenium(<host>,<port>,<browser>,<url>);</p>
+
+<p>selenium.click(<locator>);</p>
+
+<p>Apart from cleaner Api,this webdriver approach allow user to do lot of manipulations based on requirements with Object before performing actual operation on test  object.</p>
+</blockquote>
+
+<ul>
+<li>Selenium makes use of a layered set of libraries as a mechanism to interrogate the DOM. The bottom layer is Google&#39;s Closure Library, which supplies primitives and a modularization mechanism allowing source files to be kept focused and as small as possible.. Within the project, these are viewed as offering the smallest units of browser automation, and so are called Browser Automation Atoms or atoms. Finally, there are adapter layers that compose atoms in order to meet the API contracts of both WebDriver and Core.</li>
+</ul>
+
+<p>﻿<img src="http://xebee.xebia.in/wp-content/uploads/2012/02/Untitled.png" alt=""></p>
+
+<p>Due to Atoms ,a layer emulating the existing RC implementation but backed by WebDriver is an important tool for teams looking to migrate in a controlled fashion to the newer WebDriver APIs.</p>
+
+<p><strong>Looking future of Webdriver:</strong></p>
+
+<p>There will always be browsers that WebDriver can&#39;t integrate tightly to, so there will always be a need for Selenium Core. Migrating this from its current traditional design to a more modular design based on the same Closure Library that the atoms are using is underway. Webdriver developer also expect to embed the atoms more deeply within the existing WebDriver implementations .</p>
+
+<p>More details can be accessed from &quot;<a href="http://www.aosabook.org/en/selenium.html">http://www.aosabook.org/en/selenium.html</a>&quot;.</p>
+
+<p>In  next blog post, most probably I would be discussing on Webdriver&#39;s best usage to make automation reliable.</p>
+
+<p>Thanks :)</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#7578" title="2012-02-16 17:06:19">Abhishek</a>:</strong> Thanks a lot!</p>
+
+<p><strong><a href="#7603" title="2012-02-17 22:40:45">Kartik</a>:</strong> Very nice info. Thumbs up for WebDriver... ;)</p>
+
+<p><strong><a href="#9352" title="2013-04-19 15:30:11">vijay.pidds</a>:</strong> Great job........thank much (y)</p>
+
+<p><strong><a href="#7442" title="2012-02-07 18:10:51">Neeraj Pandey</a>:</strong> Thanks for providing such a useful information.It will really helps me a lot..Hope for a lot more.</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2012/02/07/nodemap-first-product-of-my-nodejs-playground/" data-toggle="tooltip" data-placement="top" title="Nodemap First Product Of My Nodejs Playground">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2012/02/08/semantic-based-web-search-engines-changing-the-world-of-search/" data-toggle="tooltip" data-placement="top" title="Semantic Based Web Search Engines Changing The World Of Search">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

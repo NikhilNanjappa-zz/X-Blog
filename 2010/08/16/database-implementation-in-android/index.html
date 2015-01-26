@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Database Implementation In Android - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2010/08/16/database-implementation-in-android/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Database Implementation In Android</h1>
+                    
+                    <span class="meta">Posted by pranjan on August 16, 2010</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Database implementation in Android</h1>
+
+<p>Android uses SQLLite, which is an open source SQL database system for storing persistent data. The database that you create for an application is only accessible to itself, others applications won’t be able to access it. Android provides API’s to interact with the database which are quite easy to use. The performance of the database also seems to be good.</p>
+
+<p>In this post we will be creating the DatabaseUtility classes which will encapsulate the database centric functionality. Then we will use the utility to create more specific DAO classes which will encapsulate more fine grained functions of talking to the database.</p>
+
+<p>Let&#39;s start with the creation of the database utility. First of all we need to extend the SQLiteOpenHelper class.</p>
+
+<blockquote>
+<p>[sourcecode language=&quot;java&quot;] public class DatabaseHelper extends SQLiteOpenHelper { static final String DATABASE<em>NAME = &quot;records&quot;; static final int DATABASE</em>VERSION = 1; static final String TABLE<em>CREATE = &quot;create table address (id integer primary key autoincrement, &quot; + &quot;city text not null, street text not null,     &quot; + &quot;country text not null);&quot;; DatabaseHelper(Context context) { super(context, DATABASE</em>NAME, null, DATABASE<em>VERSION); } @Override public void onCreate(SQLiteDatabase db) { db.execSQL(TABLE</em>CREATE); } @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { db.execSQL(&quot;DROP TABLE IF EXISTS address&quot;); onCreate(db); } } [/sourcecode] </p>
+</blockquote>
+
+<p>It requires a constructor taking a context. The context in our case will be the Activity from which the DatabaseHelper will be created.  The super constructor is called with the database name and database version. If the database asked does not exists, then a new database is created. The onCreate() and onUpgrade() methods are also needed. The onCreate() method is a callback method used to create the database and the other callback method onUpgrade() is used to delete the old table and create new if a new version of database is specified.</p>
+
+<p>The onCreate() here simply executes a sql query to create the table. The onUpgrade() drops the already existing table and creates a new one.</p>
+
+<p>Now we have a database and table created. We will proceed to insert data into the table. For this we will create an AddressDAO class which will operate on the address table created using the DatabaseHelper class.</p>
+
+<blockquote>
+<p>[sourcecode language=&quot;java&quot;] public class AddressDAO { static final String TABLE_NAME = &quot;address&quot;; static final String ID = &quot;id&quot;; static final String CITY = &quot;city&quot;; static final String STREET = &quot;street&quot;; static final String COUNTRY = &quot;country&quot;; private final Context androidContext; private DatabaseHelper databaseHelper; private SQLiteDatabase db; public AddressDAO(Context ctx) { this.androidContext = ctx; databaseHelper = new DatabaseHelper(androidContext); } ... } [/sourcecode]</p>
+</blockquote>
+
+<p>Here we have created variables like table name, column names , the context and a constructor used to instantiate the DatabaseHelper. The DatabaseHelper’s instantiation ensures the presense of an address table.</p>
+
+<p>Now we can insert utility methods in the AddressDAO. Let’s start with opening the databse. The open() simple gets a writeble database using the DatabaseHelper’s superclass’s methods. The close simply closes the writeble database.</p>
+
+<blockquote>
+<p>[sourcecode language=&quot;java&quot;] public void open() throws SQLException { db = databaseHelper.getWritableDatabase(); } [/sourcecode] [sourcecode language=&quot;java&quot;] public void close() { databaseHelper.close(); } [/sourcecode]</p>
+</blockquote>
+
+<p>The insert method will insert city,street, and country in their respective columns. It uses ContentValues classes which stores data as key value pairs. The key being the column name and the value being the data to be stored in that column. It uses databaseHelper’s insert method, which asks for the table name and the values to be inserted.</p>
+
+<blockquote>
+<p>[sourcecode language=&quot;java&quot;] public long insert(String city, String street, String country) { ContentValues values = new ContentValues(); values.put(CITY, city); values.put(STREET, street); values.put(COUNTRY, country); return db.insert(TABLE_NAME, null, values); } [/sourcecode]</p>
+</blockquote>
+
+<p>Next we will implement the delete method. The delete method needs the table name, and the where clause. In our case we delete by id. </p>
+
+<blockquote>
+<p>[sourcecode language=&quot;java&quot;]</p>
+
+<p>public boolean delete(long id) { String whereClause = ID + &quot;=&quot; + id; return db.delete(TABLE_NAME, whereClause, null) &gt; 0; }</p>
+
+<p>[/sourcecode]</p>
+</blockquote>
+
+<p>Now we will implement the get method. It takes the id as parameter and gets by id. The columns to be extracted can be specified in a String array. It also has a where clause. The query method returns a Cursor object. The cursor.moveToFirst() method ensures that it points to the object found, if it has.</p>
+
+<blockquote>
+<p>[sourcecode language=&quot;java&quot;] public Cursor get(long id) throws SQLException { String[] columns = new String[] { ID, CITY, STREET, COUNTRY }; String whereClause = ID + &quot;=&quot; + id; Cursor mCursor = db.query(true, TABLE_NAME, columns, whereClause, null, null, null, null, null); if (mCursor != null) { mCursor.moveToFirst(); } return mCursor; } [/sourcecode]</p>
+</blockquote>
+
+<p>The getAll method is same as get() other than it doesn’t has any where clause. The Cursor object returned has methods like moveToFirst(), moveToNext(), moveToLast() which can be used to iterate over the list obtained.</p>
+
+<blockquote>
+<p>[sourcecode language=&quot;java&quot;] public Cursor getAll() { String[] columns = new String[] { ID, CITY, STREET, COUNTRY }; return db.query(TABLE_NAME, columns, null, null, null, null, null); } [/sourcecode]</p>
+</blockquote>
+
+<p>The update method is same as the insert method, other than that it has a where clause. </p>
+
+<blockquote>
+<p>[sourcecode language=&quot;java&quot;]</p>
+
+<p>public boolean update(long id, String city, String street, String country) { ContentValues values = new ContentValues(); values.put(CITY, city); values.put(STREET, street); values.put(COUNTRY, country); String whereClause = ID + &quot;=&quot; + id; return db.update(TABLE_NAME, values, whereClause, null) &gt; 0; }</p>
+
+<p>[/sourcecode]</p>
+</blockquote>
+
+<p>To test this code you can create an Activity which uses its onCreate() to initialize the AddressDao. Then insert, get and delete an object using the AddressDAO. </p>
+
+<blockquote>
+<p>[sourcecode language=&quot;java&quot;]</p>
+
+<p>public class AddressActivity extends Activity {</p>
+
+<p>@Override public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); setContentView(R.layout.main); AddressDAO addressDAO = new AddressDAO(this); insert(addressDAO); get(addressDAO); delete(addressDAO); }</p>
+
+<p>private void insert(AddressDAO addressDAO) { addressDAO.open(); long id = addressDAO.insert(&quot;Gurgaon&quot;, &quot;Sector 14&quot;, &quot;India&quot;); addressDAO.close(); }</p>
+
+<p>private void get(AddressDAO addressDAO) { addressDAO.open(); Cursor c = addressDAO.get(1); if (c.moveToFirst()) DisplayAddress(c); else Toast.makeText(this, &quot;No address found&quot;, Toast.LENGTH_LONG).show(); addressDAO.close(); }</p>
+
+<p>private void delete(AddressDAO addressDAO) { addressDAO.open(); if (addressDAO.delete(1)) Toast.makeText(this, &quot;Delete successful.&quot;, Toast.LENGTH<em>LONG).show(); else Toast.makeText(this, &quot;Delete failed.&quot;, Toast.LENGTH</em>LONG).show();</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> addressDAO.close();
+</code></pre></div>
+<p>}</p>
+</blockquote>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#3070" title="2010-10-27 17:02:53">Sandeep</a>:</strong> * public boolean onCreate() { 10 DatabaseHelper dbHelper = new DatabaseHelper(getContext()); 11 db = dbHelper.getWritableDatabase(); 12 return (db == null) ? false : true; 13 } */ Change the line number 11. call dbHelper.open() instead of dbHelper.getWritableDatabase()</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2010/08/13/content-and-metadata-extraction-with-apache-tika/" data-toggle="tooltip" data-placement="top" title="Content And Metadata Extraction With Apache Tika">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2010/08/17/performace-testing-made-easy-using-badboy-and-jmeter/" data-toggle="tooltip" data-placement="top" title="Performace Testing Made Easy Using Badboy And Jmeter">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

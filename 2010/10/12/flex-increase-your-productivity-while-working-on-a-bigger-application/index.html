@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Flex Increase Your Productivity While Working On A Bigger Application - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2010/10/12/flex-increase-your-productivity-while-working-on-a-bigger-application/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Flex Increase Your Productivity While Working On A Bigger Application</h1>
+                    
+                    <span class="meta">Posted by sohil on October 12, 2010</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Flex :  Increase your productivity while working on a bigger application</h1>
+
+<p>Once the project starts growing you repeatably spend your time performing same actions e.g. Login ,  fill form,etc . Lets consider following use case I have to add two new validation in the current form which takes more than 5-6 inputs fields. Also to open the form i will have to perform 4-5 steps like login , go to settings page , click on link , click on create button and wait for the form to open , fill all the fields and once you are done with all the required fields fill the two new fields and validate.<br>
+Whoops there is a error, something didn&#39;t work while saving the form try again :) .This approach can be pretty nasty as you spend a lot of developer time doing the repetitive steps</p>
+
+<p>One of the approach is you hard code field (username , password) the values inside the form and once the application starts click on appropriate buttons and continue with you test. This approach might work for some but is a little dangerous, last thing you wanna know is that the username and password is committed into the code.</p>
+
+<p>We had a similar condition , while working we had to go deep down to a particular container follow the same inputs repeatably and then continue our work.<br>
+This is where flex conditional compiling came to rescue.Using flex conditional compiling we could add in all the code that we did not want<br>
+to go to production and still have it in the Application. In the example below we will see a simpler way to add flex conditional compiling code.</p>
+
+<p>In Flex , you can pass additional constants during compile time using the  -define as  compiler argument. Following is the syntax you add to your compiler</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">[sourcecode language=&quot;java&quot;]
+
+
+
+
+-define=NAMESPACE::variable,value
+
+
+
+
+[/sourcecode]
+</code></pre></div>
+<p>Where the namespace can be anything like DEBUG , RELEASE and value of the variable can be Boolean, String, or Number, or an expression that can be evaluated in ActionScript at compile time.In the below example we are going to create a namespace DEBUG and pass the variable insertCode as BooleanOnce you have passed the variable as compiler argument this can be further used in the flex code using</p></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">[sourcecode language=&quot;java&quot;]DEBUG::insertCode[/sourcecode]
+</code></pre></div>
+<p>In flex to allow a block</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">[sourcecode language=&quot;java&quot;]
+    { 
+
+
+
+
+
+}
+</code></pre></div>
+<p>[/sourcecode]</p>
+
+<p>to be complied or not is decided by the  evaluating expression before the block. If the expression evaluated to be true the block is add to the compile code</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">[sourcecode language=&quot;java&quot;]
+
+
+
+
+expression{
+
+
+
+
+}
+
+
+
+
+[/sourcecode]
+</code></pre></div>
+<p>Below is the example showing how I use conditional compiling to speedup the application development. Click on this link  <a href="http://xebee.xebia.in/wp-content/uploads/2010/10/ConditionalCompiling.zip">ConditionalCompiling</a> to download the project and check it out.</p>
+
+<p>Following is the video demonstrating the use of conditional compiling</p>
+
+<p>Video tutorial <a href="http://xebee.xebia.in/wp-content/uploads/2010/10/Flex_Conditional_Compiling.swf">Flex<em>Conditional</em>Compiling</a></p>
+
+<p>Please do let me know your reviews for the blogs.</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#3021" title="2010-10-12 22:45:45">Abbas</a>:</strong> Nice post</p>
+
+<p><strong><a href="#3024" title="2010-10-13 10:15:03">Sohil</a>:</strong> Thanks Abbas :)</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2010/10/11/seam-ing-flex-for-cairngorm-lovers/" data-toggle="tooltip" data-placement="top" title="Seam Ing Flex For Cairngorm Lovers">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2010/10/20/android-ui-development-tools/" data-toggle="tooltip" data-placement="top" title="Android Ui Development Tools">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>

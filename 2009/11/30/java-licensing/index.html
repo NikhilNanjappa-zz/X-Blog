@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts on latest technologies">
+
+    <title>Java Licensing - Xebia Blog</title>
+
+    <link rel="canonical" href="http://xebia.com/2009/11/30/java-licensing/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Xebia Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/default-blog-pic.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Java Licensing</h1>
+                    
+                    <span class="meta">Posted by nsharma on November 30, 2009</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+				<h1>Java Licensing</h1>
+
+<p>In my current project, we had to provide a licencing solution to our client. This made me look into the True Licencing API(url).</p>
+
+<p>Before we delve into the details of using the API lets have a brief look at the various concepts associated with licencing.</p>
+
+<p>Private Key:</p>
+
+<p>Public Key:</p>
+
+<p>Certificate:</p>
+
+<p>For my current project, we had to provide a licencing solution to our client.This made me look into the<a href="https://truelicense.dev.java.net/tutorial.html"> True Licensing API(TLC)</a>.</p>
+
+<p>To understand the concept of licensing, it is imperative to know the concept of digital signing using a private key at the sender&#39;s end and recieving at the receiver&#39;s end using a public key. The sender generally sends this public key certificate. A number of intensive tutorials can be found explaining these concepts in detail. One of them by sun can be found <a href="http://java.sun.com/docs/books/tutorial/security/sigcert/index.html">here</a>.</p>
+
+<p><strong>Use Story</strong>: I have a jar file which needs to be protected by a license.  Also I have to generate licenses for authentic users so that they can use my jar file.</p>
+
+<p><strong>Solution</strong> : As the owner of the JAR file I need to have a keystore in place and then sign my JAR with a private key in my keystore. Using this keystore I have to generate licenses which would be then given to authentic users. Now lets look at each step one by one.</p>
+
+<p><em><strong>1</strong></em><strong>: Generate KeyStore using  java keytool-genkey command</strong></p>
+
+<p>[java] keytool -genkey -alias <aliasForYourPrivateKey> -keypass <privateKeyPwd> -keystore <keystoreName> -storepass <keystorePwd> [/java]</p>
+
+<p>Keeping the above syntax in mind I create the keystore with the following details :</p>
+
+<p>[java] keytool -genkey -alias signedJar -keypass nancy456 -keystore nancyStore -storepass nancy123 [/java]</p>
+
+<p>Here, I am creating a keystore with the following details:  ● keystore name : nancyStore  ● password : nancy123</p>
+
+<p>A keystore file &quot;nancyStore&quot; would be created at your system&#39;s home. In this keystore I am creating a key(which is my private key) with an alias of signedJar. This key is further protected with a password nancy456. When you run this command on the command line, it prompts you for some details. The screen output is shown here: <img src="http://xebee.xebia.in/wp-content/uploads/2009/11/keytoolOutput.jpg" alt="keytoolOutput" title="keytoolOutput"> When using the TLC you need to provide two Java key stores:             ● One to be distributed with your application, containing your public key.             ● The other, your personal and private key store, containing your private key. The file holding the license key is signed with your private key, then encrypted and distributed to your application users. What we have created here is the private key store. Your public key, in the distributed key store, is used to test the validity of the license key in the file once it has been decrypted. You should never distribute the key store containing your private key. TLC enforces this by throwing an exception if a private key is found in the key store entry when verifying a license key.</p>
+
+<p>[java] keytool -export -alias signedJar -file certfile.cer -keystore nancyStore [/java]</p>
+
+<p>Here we export the public key from the private key with an alias &quot;signedJar&quot; in nancyStore to a file called &quot;certfile.cert&quot;. This certificate file is used for transporting the public key to the keystore that will be distributed with the application.</p>
+
+<p>[java] keytool -import -alias publiccert -file certfile.cer -keystore publicCerts.store [/java]</p>
+
+<p>publicCerts.store is your public keystore which should be distributed with the application.</p>
+
+<p><strong>2. Sign your JAR file : java jarsigner tool</strong></p>
+
+<p>[java]jarsigner -keystore nancystore -signedjar sCount.jar Count.jar signedJar[/java]</p>
+
+<p>This would prompt you for the store password(nancy123) and private key password(nancy456). The jarsigner tool extracts the certificate from the keystore entry with an alias signerJar and attaches it to the generated signature of the signed JAR file.</p>
+
+<p>If you look into the Manifest file in sCount.jar you would see an entry of the digital signature.</p>
+
+<p>[java] Manifest-Version: 1.0 Created-By: 1.5.0_10 (Sun Microsystems Inc.)</p>
+
+<p>Name: Count.class SHA1-Digest: /x1MdqhZ+NJgZXjiGQrufnleE4k= [/java]</p>
+
+<p>Now I have my keystore in place and my jar file is locked. Im left with generating licenses for my users so that they can unlock the jar file and use it.</p>
+
+<p><strong>3. Generating Licenses - Using the API</strong> <em>Required Jars</em>: truelicense.jar, truexml.jar and commons-codec.jar</p>
+
+<p>While going through the <a href="https://truelicense.dev.java.net/nonav/javadoc/index.html">javadoc</a> for this API you come across a class called LicenseManager. Important method to look here is:</p>
+
+<p>[java] public final void store(LicenseContent content, File keyfile) { throws Exception } [/java]</p>
+
+<p>LicenseContent is an interface needed to build the content of the license. Looking at the constructor for this manager class we need to provide a LicenceParam object. This is again an interface to configure parameters for the license. With the help of the javadoc we start coding to these interfaces. First in the tasks is to prepare the LicenseParam object. The code looks like this:</p>
+
+<p>[java] import java.io.FileInputStream; import java.io.FileNotFoundException; import java.io.IOException; import java.io.InputStream; import de.schlichtherle.license.KeyStoreParam;</p>
+
+<p>public class KeyStoreParamImpl implements KeyStoreParam { public InputStream getStream() throws IOException { private static final String KEY<em>STORE</em>LOC = &quot;C:/Users/nsharma/privateKeys.store&quot;; FileInputStream fis = new FileInputStream(KEY<em>STORE</em>LOC); if (fis == null) throw new FileNotFoundException(KEY<em>STORE</em>LOC); return fis; } public String getAlias() { return &quot;signedJar&quot;; } public String getKeyPwd() { return &quot;nancy456&quot;; } public String getStorePwd() { return &quot;nancy123&quot;; } } [/java]</p>
+
+<p>Now KeystoreParam and CipherParam are again interfaces required to build this object. So we move on to building these interfaces:</p>
+
+<p>[java] import de.schlichtherle.license.CipherParam;</p>
+
+<p>public class CipherParamImpl implements CipherParam { public String getKeyPwd() { return &quot;passwor987&quot;; } } [/java]</p>
+
+<p>[java] import java.util.prefs.Preferences; import de.schlichtherle.license.CipherParam; import de.schlichtherle.license.KeyStoreParam; import de.schlichtherle.license.LicenseParam;</p>
+
+<p>public class LicenseParamImpl implements LicenseParam {</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">public CipherParam getCipherParam() {
+    return new CipherParamImpl();
+}
+
+public KeyStoreParam getKeyStoreParam() {
+    return new KeyStoreParamImpl();
+}
+
+public Preferences getPreferences() {
+    return Preferences.userNodeForPackage(GenerateLicense.class);
+}
+
+public String getSubject() {
+    return &amp;quot; counting application&amp;quot;;// The artifact being licensed.Also used in LicenseContentInfo
+}
+</code></pre></div>
+<p>} [/java]</p>
+
+<p>Now let&#39;s move on to building our licence content.</p>
+
+<p>[java] import java.util.Calendar; import java.util.Date; import javax.security.auth.x500.X500Principal; import de.schlichtherle.license.LicenseContent;</p>
+
+<p>public class LicenseContentInfo { public de.schlichtherle.license.LicenseContent createLicenseContent() {</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#5263" title="2011-02-04 20:36:36">Nancy Sharma</a>:</strong> Thanks Fred. The second part is in progress. Should be available in a few days time.</p>
+
+<p><strong><a href="#5261" title="2011-02-04 19:28:56">fred</a>:</strong> Thanks Nancy, this post about TrueLicense was very clear and helpful! I can&#39;t seem to find the second part though!?</p>
+
+<p><strong><a href="#6426" title="2011-12-21 13:12:58">Vova</a>:</strong> Hi. Good aticle!!! Did you write second path?</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2009/11/26/accessing-jboss-managed-resources-using-mbeans/" data-toggle="tooltip" data-placement="top" title="Accessing Jboss Managed Resources Using Mbeans">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2009/12/01/art-of-writing-resume/" data-toggle="tooltip" data-placement="top" title="Art Of Writing Resume">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://twitter.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://www.facebook.com/XebiaIndia">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://github.com/xebiaww">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Xebia Blog 2015</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+</body>
+
+</html>
