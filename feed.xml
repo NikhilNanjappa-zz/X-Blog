@@ -5,8 +5,8 @@
     <description>Thoughts on latest technologies</description>
     <link>http://blog.xebia.in/</link>
     <atom:link href="http://blog.xebia.in/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 12 Feb 2015 09:58:02 +0530</pubDate>
-    <lastBuildDate>Thu, 12 Feb 2015 09:58:02 +0530</lastBuildDate>
+    <pubDate>Thu, 12 Feb 2015 18:20:45 +0530</pubDate>
+    <lastBuildDate>Thu, 12 Feb 2015 18:20:45 +0530</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -18,6 +18,20 @@
         <pubDate>Thu, 12 Feb 2015 00:00:00 +0530</pubDate>
         <link>http://blog.xebia.in/2015/02/12/writing-your-first-blog/</link>
         <guid isPermaLink="true">http://blog.xebia.in/2015/02/12/writing-your-first-blog/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>My Blog</title>
+        <description>&lt;h1&gt;My first blog&lt;/h1&gt;
+
+&lt;h2&gt;Please read the README.md&lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git clone cdnfnm.git
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        <pubDate>Wed, 11 Feb 2015 00:00:00 +0530</pubDate>
+        <link>http://blog.xebia.in/2015/02/11/my-blog/</link>
+        <guid isPermaLink="true">http://blog.xebia.in/2015/02/11/my-blog/</guid>
         
         
       </item>
@@ -896,129 +910,6 @@ So whats the Solution. Solution is to find a tool that can give us both of these
         <pubDate>Sun, 16 Nov 2014 00:00:00 +0530</pubDate>
         <link>http://blog.xebia.in/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</link>
         <guid isPermaLink="true">http://blog.xebia.in/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Robot Framework Ride</title>
-        <description>&lt;h1&gt;ROBOT Framework &amp;amp; RIDE&lt;/h1&gt;
-
-&lt;h2&gt;&lt;strong&gt;What is Robot Framework?&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;•It’s a general test automation framework(open source from Nokia and hosted on Google)&lt;/p&gt;
-
-&lt;p&gt;•Focus of automation is generally on acceptance tests.&lt;/p&gt;
-
-&lt;p&gt;•Uses a Keyword driven automation approach&lt;/p&gt;
-
-&lt;p&gt;•Testing capabilities can be extended using Python or Java&lt;/p&gt;
-
-&lt;p&gt;•Can create tests in natural language for ease of understanding. &lt;/p&gt;
-
-&lt;h2&gt;&lt;strong&gt;Keyword Driven approach&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;•Higher-level keywords: Those are really testing a concrete aspect of the business logic of the system under test.&lt;/p&gt;
-
-&lt;p&gt;•Lower-level keywords: To keep the implementation of the higher-level keywords at a decent size one is often breaking down the required functionality to several lower-level keywords.&lt;/p&gt;
-
-&lt;p&gt;[caption id=&amp;quot;attachment_19124&amp;quot; align=&amp;quot;aligncenter&amp;quot; width=&amp;quot;453&amp;quot;]&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/RF_Keyword_Approach.png&quot; alt=&quot;Keyword Approach&quot;&gt; RF Keyword Approach[/caption] &lt;/p&gt;
-
-&lt;h2&gt;&lt;strong&gt;Architecture&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/RF_Architecture.png&quot; alt=&quot;RF_Architecture&quot;&gt;&lt;/p&gt;
-
-&lt;h2&gt;&lt;strong&gt;Installation- Steps&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Installation step of Python&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;1.Install Python 2.x using the windows MSI installer:&lt;a href=&quot;http://www.python.org/download/&quot;&gt;http://www.python.org/download/&lt;/a&gt; (because Robot Framework only support python 2.x version. Robot Framework is currently not compatible with Python 3.x versions)&lt;/p&gt;
-
-&lt;p&gt;2.After installation check in the Environment settings for “path”. If python script path not exists then append the following path&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Open Start &amp;gt; Settings &amp;gt; Control Panel &amp;gt; System &amp;gt; Advanced &amp;gt; Environment Variables. There are User variables and System variables and the difference between them is that User variables affect only the current users, whereas System variables affect all users.&lt;/li&gt;
-&lt;li&gt;To edit existing PATH, select Edit and add ;&lt;InterpreterInstallationDir&gt;;&lt;InterpreterInstallationDir&gt;\Scripts\ at the end of the value. Note that the leading colon (;) is important, as it separates different entries. To add a new value, select New and provide both the name and the value, this time without the leading colon.  &lt;/li&gt;
-&lt;li&gt;Start a new command prompt for the changes to effect. 
-&lt;strong&gt;Installation step of Robot Framework&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;1.Using PIP:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Install PIP: download the “get-pip.py” file from&lt;a href=&quot;https://bootstrap.pypa.io/get-pip.py&quot;&gt;https://bootstrap.pypa.io/get-pip.py&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Open command prompt go to the directory where the #a file downloaded. E.g. cd c:\main\downloads&lt;/li&gt;
-&lt;li&gt;After that hit the command: python get-pip.py&lt;/li&gt;
-&lt;li&gt;After pip installation hit the following command in cmd to install robot framework:&lt;/li&gt;
-&lt;li&gt;“&lt;em&gt;pip install robotframework&lt;/em&gt;”&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;2 .Another way is to get the Robot Framework source code by downloading the source distribution from following location:&lt;a href=&quot;https://pypi.python.org/pypi/robotframework&quot;&gt;https://pypi.python.org/pypi/robotframework&lt;/a&gt;   or&lt;a href=&quot;https://github.com/robotframework/robotframework&quot;&gt;https://github.com/robotframework/robotframework&lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;First download the source code &lt;/li&gt;
-&lt;li&gt;Open command prompt go to the directory where the #a file downloaded. E.g. cd c:\main\downloads &lt;/li&gt;
-&lt;li&gt;After that hit the command: python setup.py install
-&lt;strong&gt;Installation step of RIDE:&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;****To install RIDE below things should installed before” &lt;/p&gt;
-
-&lt;p&gt;1.Python&lt;/p&gt;
-
-&lt;p&gt;2.Wxpython&lt;/p&gt;
-
-&lt;p&gt;3.Robot Framework&lt;/p&gt;
-
-&lt;p&gt;Steps for Python and Robot Framework are already present in the document and for Wxpython follow the below steps:&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Installation of wxpython&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;For windows: &lt;a href=&quot;http://sourceforge.net/projects/wxpython/files/wxPython/2.8.12.1/&quot;&gt;http&lt;/a&gt;&lt;a href=&quot;http://sourceforge.net/projects/wxpython/files/wxPython/2.8.12.1/&quot;&gt;://sourceforge.net/projects/wxpython/files/wxPython/2.8.12.1/&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;strong&gt;Installation Instruction for RIDE:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;On windows download the executable site from &lt;a href=&quot;https://code.google.com/p/robotframework-ride/downloads/list&quot;&gt;https&lt;/a&gt;&lt;a href=&quot;https://code.google.com/p/robotframework-ride/downloads/list&quot;&gt;://code.google.com/p/robotframework-ride/downloads/list&lt;/a&gt;   and install it&lt;/li&gt;
-&lt;li&gt;Alternative way to install using the pip command : “pip install robotframework-ride” &lt;/li&gt;
-&lt;li&gt;Another way is to download the source code from :&lt;a href=&quot;https://pypi.python.org/pypi/robotframework-ride&quot;&gt;https://pypi.python.org/pypi/robotframework-ride&lt;/a&gt;   and use the command : python setup.py install&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;To open the Ride just open the cmd and hit the command “ride.py” or just call the same command on run(win+r). &lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Introduction To RIDE&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The Robot Framework IDE (RIDE) is the integrated development environment to implement automated tests for the Robot Framework. &lt;em&gt;How to open RIDE&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Type ride.py in start menu of system and press enter&lt;/li&gt;
-&lt;li&gt;Double click on RIDE shortcut(if created while installation)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2&gt;&lt;strong&gt;Test Libraries&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;Test libraries contain those lowest-level keywords, often called library keywords, which actually interact with the system under test. All test cases always use keywords from some library, often through higher-level user keywords.&lt;/p&gt;
-
-&lt;p&gt;Different Types of Libraries available &lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Standard Libraries&lt;/li&gt;
-&lt;li&gt;External Libraries
-&lt;em&gt;&lt;strong&gt;Standard Libraries&lt;/strong&gt;&lt;/em&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Some test libraries are distributed with Robot Framework and these libraries are called standard libraries. These are the available standard libraries: &lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://robotframework.googlecode.com/hg/doc/userguide/RobotFrameworkUserGuide.html?r=2.7.6#builtin-library&quot;&gt;BuiltIn&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://robotframework.googlecode.com/hg/doc/userguide/RobotFrameworkUserGuide.html?r=2.7.6#operatingsystem-library&quot;&gt;OperatingSystem&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Tue, 11 Nov 2014 00:00:00 +0530</pubDate>
-        <link>http://blog.xebia.in/2014/11/11/robot-framework-ride/</link>
-        <guid isPermaLink="true">http://blog.xebia.in/2014/11/11/robot-framework-ride/</guid>
         
         
       </item>
