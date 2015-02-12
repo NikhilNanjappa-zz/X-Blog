@@ -5,36 +5,9 @@
     <description>Thoughts on latest technologies</description>
     <link>http://blog.xebia.in/</link>
     <atom:link href="http://blog.xebia.in/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 12 Feb 2015 18:20:45 +0530</pubDate>
-    <lastBuildDate>Thu, 12 Feb 2015 18:20:45 +0530</lastBuildDate>
+    <pubDate>Thu, 12 Feb 2015 19:28:01 +0530</pubDate>
+    <lastBuildDate>Thu, 12 Feb 2015 19:28:01 +0530</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
-    
-      <item>
-        <title>Writing Your First Blog</title>
-        <description>&lt;h1&gt;Writing your first blog&lt;/h1&gt;
-
-&lt;p&gt;This blog will help you get started with blogging on Xebia&amp;#39;s official blog.&lt;/p&gt;
-</description>
-        <pubDate>Thu, 12 Feb 2015 00:00:00 +0530</pubDate>
-        <link>http://blog.xebia.in/2015/02/12/writing-your-first-blog/</link>
-        <guid isPermaLink="true">http://blog.xebia.in/2015/02/12/writing-your-first-blog/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>My Blog</title>
-        <description>&lt;h1&gt;My first blog&lt;/h1&gt;
-
-&lt;h2&gt;Please read the README.md&lt;/h2&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git clone cdnfnm.git
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
-        <pubDate>Wed, 11 Feb 2015 00:00:00 +0530</pubDate>
-        <link>http://blog.xebia.in/2015/02/11/my-blog/</link>
-        <guid isPermaLink="true">http://blog.xebia.in/2015/02/11/my-blog/</guid>
-        
-        
-      </item>
     
       <item>
         <title>Sql Over Hbase Using Apache Pheonix</title>
@@ -910,6 +883,369 @@ So whats the Solution. Solution is to find a tool that can give us both of these
         <pubDate>Sun, 16 Nov 2014 00:00:00 +0530</pubDate>
         <link>http://blog.xebia.in/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</link>
         <guid isPermaLink="true">http://blog.xebia.in/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Robot Framework Ride</title>
+        <description>&lt;h1&gt;ROBOT Framework &amp;amp; RIDE&lt;/h1&gt;
+
+&lt;h2&gt;&lt;strong&gt;What is Robot Framework?&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;•It’s a general test automation framework(open source from Nokia and hosted on Google)&lt;/p&gt;
+
+&lt;p&gt;•Focus of automation is generally on acceptance tests.&lt;/p&gt;
+
+&lt;p&gt;•Uses a Keyword driven automation approach&lt;/p&gt;
+
+&lt;p&gt;•Testing capabilities can be extended using Python or Java&lt;/p&gt;
+
+&lt;p&gt;•Can create tests in natural language for ease of understanding. &lt;/p&gt;
+
+&lt;h2&gt;&lt;strong&gt;Keyword Driven approach&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;•Higher-level keywords: Those are really testing a concrete aspect of the business logic of the system under test.&lt;/p&gt;
+
+&lt;p&gt;•Lower-level keywords: To keep the implementation of the higher-level keywords at a decent size one is often breaking down the required functionality to several lower-level keywords.&lt;/p&gt;
+
+&lt;p&gt;[caption id=&amp;quot;attachment_19124&amp;quot; align=&amp;quot;aligncenter&amp;quot; width=&amp;quot;453&amp;quot;]&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/RF_Keyword_Approach.png&quot; alt=&quot;Keyword Approach&quot;&gt; RF Keyword Approach[/caption] &lt;/p&gt;
+
+&lt;h2&gt;&lt;strong&gt;Architecture&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/RF_Architecture.png&quot; alt=&quot;RF_Architecture&quot;&gt;&lt;/p&gt;
+
+&lt;h2&gt;&lt;strong&gt;Installation- Steps&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Installation step of Python&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;1.Install Python 2.x using the windows MSI installer:&lt;a href=&quot;http://www.python.org/download/&quot;&gt;http://www.python.org/download/&lt;/a&gt; (because Robot Framework only support python 2.x version. Robot Framework is currently not compatible with Python 3.x versions)&lt;/p&gt;
+
+&lt;p&gt;2.After installation check in the Environment settings for “path”. If python script path not exists then append the following path&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Open Start &amp;gt; Settings &amp;gt; Control Panel &amp;gt; System &amp;gt; Advanced &amp;gt; Environment Variables. There are User variables and System variables and the difference between them is that User variables affect only the current users, whereas System variables affect all users.&lt;/li&gt;
+&lt;li&gt;To edit existing PATH, select Edit and add ;&lt;InterpreterInstallationDir&gt;;&lt;InterpreterInstallationDir&gt;\Scripts\ at the end of the value. Note that the leading colon (;) is important, as it separates different entries. To add a new value, select New and provide both the name and the value, this time without the leading colon.  &lt;/li&gt;
+&lt;li&gt;Start a new command prompt for the changes to effect. 
+&lt;strong&gt;Installation step of Robot Framework&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;1.Using PIP:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Install PIP: download the “get-pip.py” file from&lt;a href=&quot;https://bootstrap.pypa.io/get-pip.py&quot;&gt;https://bootstrap.pypa.io/get-pip.py&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Open command prompt go to the directory where the #a file downloaded. E.g. cd c:\main\downloads&lt;/li&gt;
+&lt;li&gt;After that hit the command: python get-pip.py&lt;/li&gt;
+&lt;li&gt;After pip installation hit the following command in cmd to install robot framework:&lt;/li&gt;
+&lt;li&gt;“&lt;em&gt;pip install robotframework&lt;/em&gt;”&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;2 .Another way is to get the Robot Framework source code by downloading the source distribution from following location:&lt;a href=&quot;https://pypi.python.org/pypi/robotframework&quot;&gt;https://pypi.python.org/pypi/robotframework&lt;/a&gt;   or&lt;a href=&quot;https://github.com/robotframework/robotframework&quot;&gt;https://github.com/robotframework/robotframework&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;First download the source code &lt;/li&gt;
+&lt;li&gt;Open command prompt go to the directory where the #a file downloaded. E.g. cd c:\main\downloads &lt;/li&gt;
+&lt;li&gt;After that hit the command: python setup.py install
+&lt;strong&gt;Installation step of RIDE:&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;****To install RIDE below things should installed before” &lt;/p&gt;
+
+&lt;p&gt;1.Python&lt;/p&gt;
+
+&lt;p&gt;2.Wxpython&lt;/p&gt;
+
+&lt;p&gt;3.Robot Framework&lt;/p&gt;
+
+&lt;p&gt;Steps for Python and Robot Framework are already present in the document and for Wxpython follow the below steps:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Installation of wxpython&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;For windows: &lt;a href=&quot;http://sourceforge.net/projects/wxpython/files/wxPython/2.8.12.1/&quot;&gt;http&lt;/a&gt;&lt;a href=&quot;http://sourceforge.net/projects/wxpython/files/wxPython/2.8.12.1/&quot;&gt;://sourceforge.net/projects/wxpython/files/wxPython/2.8.12.1/&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Installation Instruction for RIDE:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;On windows download the executable site from &lt;a href=&quot;https://code.google.com/p/robotframework-ride/downloads/list&quot;&gt;https&lt;/a&gt;&lt;a href=&quot;https://code.google.com/p/robotframework-ride/downloads/list&quot;&gt;://code.google.com/p/robotframework-ride/downloads/list&lt;/a&gt;   and install it&lt;/li&gt;
+&lt;li&gt;Alternative way to install using the pip command : “pip install robotframework-ride” &lt;/li&gt;
+&lt;li&gt;Another way is to download the source code from :&lt;a href=&quot;https://pypi.python.org/pypi/robotframework-ride&quot;&gt;https://pypi.python.org/pypi/robotframework-ride&lt;/a&gt;   and use the command : python setup.py install&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;To open the Ride just open the cmd and hit the command “ride.py” or just call the same command on run(win+r). &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Introduction To RIDE&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The Robot Framework IDE (RIDE) is the integrated development environment to implement automated tests for the Robot Framework. &lt;em&gt;How to open RIDE&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Type ride.py in start menu of system and press enter&lt;/li&gt;
+&lt;li&gt;Double click on RIDE shortcut(if created while installation)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;&lt;strong&gt;Test Libraries&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;Test libraries contain those lowest-level keywords, often called library keywords, which actually interact with the system under test. All test cases always use keywords from some library, often through higher-level user keywords.&lt;/p&gt;
+
+&lt;p&gt;Different Types of Libraries available &lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Standard Libraries&lt;/li&gt;
+&lt;li&gt;External Libraries
+&lt;em&gt;&lt;strong&gt;Standard Libraries&lt;/strong&gt;&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Some test libraries are distributed with Robot Framework and these libraries are called standard libraries. These are the available standard libraries: &lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://robotframework.googlecode.com/hg/doc/userguide/RobotFrameworkUserGuide.html?r=2.7.6#builtin-library&quot;&gt;BuiltIn&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://robotframework.googlecode.com/hg/doc/userguide/RobotFrameworkUserGuide.html?r=2.7.6#operatingsystem-library&quot;&gt;OperatingSystem&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Tue, 11 Nov 2014 00:00:00 +0530</pubDate>
+        <link>http://blog.xebia.in/2014/11/11/robot-framework-ride/</link>
+        <guid isPermaLink="true">http://blog.xebia.in/2014/11/11/robot-framework-ride/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Mongodb Integrate Robot Frameworkride</title>
+        <description>&lt;h1&gt;MongoDB with Robot Framework(RIDE)&lt;/h1&gt;
+
+&lt;h3&gt;Installation instruction of MongoDB on Windows&lt;/h3&gt;
+
+&lt;p&gt;There are three different version of MongoDB for Windows:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Windows 64-bit&lt;/li&gt;
+&lt;li&gt;Windows 32-bit&lt;/li&gt;
+&lt;li&gt;Windows Server 2008&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;To find which version of Windows you have, use the following command in the cmd: &lt;strong&gt;“wmic os get osarchitecture”&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Download the MongoDB from following location as per your OS Architecture:&lt;br&gt;
+&lt;a href=&quot;http://www.mongodb.org/downloads?_ga=1.99989726.1358002168.1411966340&quot;&gt;http://www.mongodb.org/downloads?_ga=1.99989726.1358002168.1411966340&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;Set up the MongoDB environment&lt;/h3&gt;
+
+&lt;p&gt;After the installation of MongoDB on system it requires “DBPATH” so that it can use to run the Mongodb services.&lt;/p&gt;
+
+&lt;p&gt;Create a directory where to store the dbs name. Example: In cmd hit the following command&lt;br&gt;
+C:\Program Files\MongoDB &amp;gt; md \data\db (Default location)&lt;/p&gt;
+
+&lt;p&gt;Or for any location give the path and create the directory. For example:  &lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;mkdir D:\data\db (user defined location)&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Now start the MongoDB server on the desire dpPath&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;For default location&lt;/em&gt; - C:\Program Files\MongoDB\bin\mongod.exe&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;For user defined location&lt;/em&gt; - C:\Program Files\MongoDB\bin\mongod.exe --dbpath D:\data\db&lt;/li&gt;
+&lt;li&gt;If your path includes spaces, enclose the entire path in double quotes. For example:&lt;br&gt;
+C:\mongodb\bin\mongod.exe --dbpath &amp;quot;d:\test\mongo db data&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Mongod.exe&lt;/strong&gt; is the file to start the MongoDB server on the default host &amp;amp; port(host:- localhost &amp;amp; port : - 27017&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Mongo.exe&lt;/strong&gt; is an interactive interface to MongoDB, which provides a powerful interface for users to test queries and operations directly with the database.&lt;/p&gt;
+
+&lt;h3&gt;Create a DB in mongoDB:&lt;/h3&gt;
+
+&lt;p&gt;Start the mongo to interact with Mongo Data bases. Command on cmd: c:\Program File\MongoDb\bin\mongo.exe&lt;br&gt;
+&lt;img src=&quot;https://lh3.googleusercontent.com/Hb8dvKM_9v-TbTaJf4WHeSYeLOKTvz4FNIf99HOAr8cT_G8BxAyTazeakWNfJrrkgYa6YiNXFXKTuPMJi5wLV7ptp_6mSUtVQoyC90wbHyyhO8vDL95gwHEASK31aR4xqD4S&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Before creating a new DB first check how many db present on the path. Command:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;shows dbs&lt;br&gt;
+&lt;img src=&quot;https://lh3.googleusercontent.com/v6mdWZp9s1uB2aO7IO3jRfPiQHRNqvfhJm9LI38FfmbOk1lecu8uZuRYnHqoJ77-LsEDNoA0lXVB8B-OMF8oTnnt8xfz8Be0eFI6iLslwzdMEp_AWTTKJzoWDNu0B7H-o-2T&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ol&gt;
+&lt;li&gt;use &lt;new-DBName&gt; (E.g. use sampledb). Note: At that time it does not save the DB.&lt;/li&gt;
+&lt;li&gt;Insert a document into a collection&lt;br&gt;
+a. Create a document – command : a = {x : “Learning DB” }&lt;br&gt;
+b. Insert in “TEST” collection. Command : db.TEST.insert(a). Remember TEST is also a new collection which too create automatically once insert the document into it.&lt;br&gt;
+c. Check db using command: show dbs. It will show new db also in the list i.e. “sampled”. Note: After inserting a document in any collection then it automatically save collection and DB.&lt;img src=&quot;https://lh4.googleusercontent.com/DfM1Y6-jKFlBQRRl8NvqRPGp9y_LUnbOD4mQellW__9Dix3Kw0e4FdtwI7kzb-j2pqwaWyPkjLplMFAIXfKGiIwsvUljh2d2pOyLKRIXBiBWGITBvqZuO6zmsu3H0S4rKsGU&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3&gt;Integrate MongoDB with RIDE&lt;/h3&gt;
+
+&lt;p&gt;There is an external library exist of MongoDB for robot framework. The prerequisite to integrate the MongoDB library with RF(Robot Framework) is that “pymongo” library should be installed.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Installation Instruction for pymongo&lt;br&gt;
+a. Using pip: &lt;em&gt;“pip install pymongo”&lt;/em&gt;&lt;br&gt;
+b. Alternative way is download the source code of &lt;a href=&quot;https://pypi.python.org/pypi/pymongo/&quot;&gt;pymongo &lt;/a&gt;and use the command : &lt;em&gt;“python setup.py install”&lt;/em&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Installation Instruction for MongoDBLibrary&lt;br&gt;
+a. Using pip: &lt;em&gt;“pip install robotframework-MongoDBLibrary”&lt;/em&gt;&lt;br&gt;
+b. Alternative way is to download the source code of &lt;a href=&quot;https://github.com/iPlantCollaborativeOpenSource/Robotframework-MongoDB-Library&quot;&gt;MongoDBLibrary &lt;/a&gt;and use the command: &lt;em&gt;“python setup.py install”&lt;/em&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;After installation of both include the library in RIDE&lt;br&gt;
+Steps to perform the same:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Open ride using the command ride.py&lt;/li&gt;
+&lt;li&gt;Create new project from FIle option → New Project as Directory&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Now select the folder go to “settings”&lt;br&gt;
+&lt;img src=&quot;https://lh3.googleusercontent.com/MLFXvFM0xqLfaDdsq72TZJQlWubPOFJPnSVeZrODFZcQZTKVzqTKs5kU_eClyAejqUucYEZAeuHB2PInGFAjpdTyJKf5GWk9WySFhILlN3eX0s4nz0yRZid23r94y4sPdQ&quot; alt=&quot;&quot;&gt;  &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Under setting click on Library button and enter the mongoDB library name i.e. “MongoDBLibrary”&lt;br&gt;
+&lt;img src=&quot;https://lh6.googleusercontent.com/ZnBaX8YqJoHWvo_k91V_ZebZMEyqFMqA-awFejPRV_k1u7sJ_72lYjfQhM1L1Mnu8NSqudVipkB25WtbMEAQGZT_lD2f9K100KvK92Oxq0suRVeBtl1hXaTkzz7Q875UTA&quot; alt=&quot;&quot;&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;After click ok it will look like:&lt;br&gt;
+&lt;img src=&quot;https://lh4.googleusercontent.com/s0VlVAplhiZFuyrFClQyevFDdqsv9uBKT5MaRecBd0eXyL4MqBzrl5I7y018G3oOVzgYOUpynEA1V5utJRZlNPmc3ll82GMlAoVwUQRzXCXdizFWHAw395dNRfjfz019rg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Note: 1. It is Case sensitive&lt;br&gt;
+2. If name comes in Red Color thats means its not imported correctly in RIDE.&lt;br&gt;
+For example change the case of library name from “MongoDBLibrary” to “mongoDBLibrary” then it will show like:&lt;br&gt;
+&lt;img src=&quot;https://lh3.googleusercontent.com/dFAbVsDpY7Buh0cGPeRt39OZjbp8n2uFSjFDbb6DrXtpYbLcNOuw9-QRH009zeD9LGi8XciOxYUXl1NOXEGWz0gcClwdEzSB9zF5sc5yi_AXIX6ZULLoZqk2hTPEvd6s5g&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;After importing the MongoDB library check that all the related function/keywords are coming are not. For that follow the below steps:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;After importing click F5 key. It will open the search keyword dialog.&lt;/li&gt;
+&lt;li&gt;Under the dialog box there is source dropdown. Open it and it will show the list of library associated with project. Check it should have “MongoDBLibrary” and select it.&lt;br&gt;
+&lt;img src=&quot;https://lh4.googleusercontent.com/YKdU1VqGoYMbK1x9df-ri3aqAsFI2v7Xe8QGLdoAWnAQu0zGyiT0Y-GPLpuuqqSMx7FmqP9SC7UxIZBs3qOa1xjplxlj_O1MWPXOwrOE-H-TrJZkMikdNrY6N2TzNQ6_HA&quot; alt=&quot;&quot;&gt;&lt;br&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now use the keywords in your test cases.&lt;/p&gt;
+
+&lt;h3&gt;MongoDB Keywords:&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Keyword&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Arguments&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Description&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Connect To Mongodb&lt;/em&gt;
+dbHost=localhost, dbPort=27017, dbMaxPoolSize=10, dbNetworkTimeout=None, dbDocClass=&lt;type &#39;dict&#39;&gt;, dbTZAware=False
+Loads pymongo and connects to the MongoDB host.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Disconnect From Mongodb&lt;/em&gt;
+NA
+Disconnect mongoDB server&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Drop Mongodb Collection&lt;/em&gt;
+dbName, dbCollName
+Delete the mention collection from the mention DB&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Drop Mongodb Database&lt;/em&gt;
+dbDelName
+Delete the mention DB from the current DBPath from which is connected.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Get Mongodb Collection Count&lt;/em&gt;
+dbName, dbCollName
+Returns the number of records from the mention collection.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Get Mongodb Collections&lt;/em&gt;
+dbName
+Returns the list of collections from the mention DB&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Get Mongodb Databases&lt;/em&gt;
+NA
+Returns the list of Data bases from the current connected DB&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Remove Mongodb Records&lt;/em&gt;
+dbName, dbCollName, recordJSON
+Remove some of the records from the specified collection as based on the JSON entered.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Retrieve All Mongodb Records&lt;/em&gt;
+dbName, dbCollName, returnDocuments=False
+Return all the mongoDB records from the specified collection&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Retrieve Mongodb Records With Desired Fields&lt;/em&gt;
+dbName, dbCollName, recordJSON, fields, return**id=True, returnDocuments=False
+Returns number of records on the basis of field mention from the specified collection&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Retrieve Some Mongodb Records&lt;/em&gt;
+dbName, dbCollName, recordJSON, returnDocuments=False
+Returns number of records on the basis of JSON entered in the specified collection&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Save Mongodb Records&lt;/em&gt;
+dbName, dbCollName, recordJSON
+Used to save new record or update existing record from the specified DB collection.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Example of Using MongoDB keywords in RIDE:&lt;/strong&gt;&lt;br&gt;
+&lt;strong&gt;Prerequisite&lt;/strong&gt; : Start &lt;/p&gt;
+
+&lt;p&gt;Cheaper. I came it &lt;a href=&quot;http://tuxwearhouseweddings.com/rergh/levitra-brand-pills-for-sale&quot;&gt;levitra brand pills for sale&lt;/a&gt; the not buy hair &lt;a href=&quot;http://shopglean.com/loijx/flowmax-without-prescription&quot;&gt;flowmax without prescription&lt;/a&gt; 6 longer servings &lt;a href=&quot;http://www.penickvillagefoundation.org/jhpm/trental-400-mg-retailer&quot;&gt;http://www.penickvillagefoundation.org/jhpm/trental-400-mg-retailer&lt;/a&gt; soft plastic had. My little &lt;a href=&quot;http://securefuturesil.com/lnqjx/walmart-viagra-prices-walmart-pharmacy/&quot;&gt;walmart viagra prices walmart pharmacy&lt;/a&gt; lotion. I it it. Hard. Never &lt;a href=&quot;http://www.bryancwatkins.com/idnl/generic-seroquel-online&quot;&gt;http://www.bryancwatkins.com/idnl/generic-seroquel-online&lt;/a&gt; Around time &lt;a href=&quot;http://www.bryancwatkins.com/idnl/almased-turbo-diet-forum&quot;&gt;almased turbo diet forum&lt;/a&gt; naturally once &lt;a href=&quot;http://www.southsideheating.com/bhtr/cialis-1-to-2-days-shipping&quot;&gt;cialis 1 to 2 days shipping&lt;/a&gt; it my almost &lt;a href=&quot;http://shopglean.com/loijx/buy-soft-generic-viagra&quot;&gt;http://shopglean.com/loijx/buy-soft-generic-viagra&lt;/a&gt; long fragrance. I &lt;a href=&quot;http://ravenmccoyphotography.com/exwsk/novaldex-pay-by-paypal/&quot;&gt;novaldex pay by paypal&lt;/a&gt; I and cloying days &lt;a href=&quot;http://freeofpain.org/azf/buy-aldactone-no-rx-overnight-shipping.html&quot;&gt;buy aldactone no rx overnight shipping&lt;/a&gt; bought hope always on &lt;a href=&quot;http://tuxwearhouseweddings.com/rergh/levitra-without-prescription-walmart&quot;&gt;levitra without prescription walmart&lt;/a&gt; all a for.&lt;/p&gt;
+
+&lt;p&gt;the Mongo DB server on the defined DB path. For example check the below snapshot: &lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/StartMongoServer.jpg&quot; alt=&quot;StartMongoServer&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Open RIDE using command on cmd: ride.py&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/MongoResult-1024x949.jpg&quot; alt=&quot;MongoResult&quot;&gt;&lt;/p&gt;
+
+&lt;h3&gt;How to create any New Library of Robot&lt;/h3&gt;
+
+&lt;p&gt;The Simplest way of creating user defined library for Robot Framework:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Create a python file with function/s and save it with extension .py in Lib\site-packages&lt;/li&gt;
+&lt;li&gt;Open ride → Go to the Test Suite → Open Setting → Add a Library with the file name&lt;/li&gt;
+&lt;li&gt;After entering the name check it should not show in red.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Example:&lt;br&gt;
+Create a python file with basic function like:&lt;br&gt;
+def play_Robot():&lt;br&gt;
+print &amp;quot;Pressed Play Robot Button&amp;quot;&lt;/p&gt;
+
+&lt;p&gt;save it with any name which treat as Library Name in Robot Framework. For above let save it as “ReusableModule.py”&lt;br&gt;
+Open Ride and add the Library with name “ReusableModule”&lt;br&gt;
+&lt;img src=&quot;https://lh3.googleusercontent.com/CvZVIty6MyF2lExD0NP13m8975jyLCSgyqlqfPQBy2hw1CajV5qt9Et2KWR_C-ku3jv_XkSPl6C6PLhTxqukXiHJZ9vmua8gGzF7NV6UDAmFqXNPOeM-yXr-q5HaobA25A&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Now in test case use the functions mention in own defined library.&lt;/p&gt;
+
+&lt;h3&gt;How to create user defined keywords of MongoDB Library&lt;/h3&gt;
+
+&lt;p&gt;First go the location where default MongoDBLibrary installed. On windows by default location is &lt;PythonPath&gt;\Lib\site-packages. Generally the path is : &amp;quot;C:\Python27\Lib\site-packages&amp;quot;&lt;br&gt;
+Open MongoDBLibrary directory, it shows mainly 4 files:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;init&lt;/strong&gt;.py&lt;/li&gt;
+&lt;li&gt;mongo&lt;em&gt;connection&lt;/em&gt;manager.py&lt;/li&gt;
+&lt;li&gt;mongoquery.py&lt;/li&gt;
+&lt;li&gt;version.py&lt;br&gt;
+Might also have there compiled files too.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Now to create user defined function create a new python file and import following library to start creating functions:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;import pymongo&lt;/li&gt;
+&lt;li&gt;from pymongo import MongoClient&lt;/li&gt;
+&lt;li&gt;import json&lt;/li&gt;
+&lt;li&gt;from bson.objectid import ObjectId&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;After that create a function as shown below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/MongoDBUserDefinedFunction.jpg&quot; alt=&quot;MongoDBUserDefinedFunction&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Now Open **init__.py file and import the user defined library in it:&lt;br&gt;
+&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/MongoDBUserDefinedFunctionIntegrate.jpg&quot; alt=&quot;MongoDBUserDefinedFunctionIntegrate&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Now open Ride import *&lt;em&gt;MongoDBLibrary *&lt;/em&gt;and look under the function list:&lt;br&gt;
+&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/UserDefinedKeywordInList.jpg&quot; alt=&quot;UserDefinedKeywordInList&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;And we can the use the created keyword like:&lt;br&gt;
+&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/UserDefinedKeyword.jpg&quot; alt=&quot;UserDefinedKeyword&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;I hope it will be helpful to integrate MongoDB with Robot Framework.&lt;br&gt;
+Happy Testing!!&lt;/p&gt;
+</description>
+        <pubDate>Tue, 11 Nov 2014 00:00:00 +0530</pubDate>
+        <link>http://blog.xebia.in/2014/11/11/mongodb-integrate-robot-frameworkride/</link>
+        <guid isPermaLink="true">http://blog.xebia.in/2014/11/11/mongodb-integrate-robot-frameworkride/</guid>
         
         
       </item>
