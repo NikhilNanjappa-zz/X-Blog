@@ -108,50 +108,51 @@
 
 <p>IKVM can convert the Java jar files to .NET dll files, which you can import as a reference in your .NET project and start using them like how you use Java classes.</p>
 
-<p>For instance, The Apache FOP jars after being converted in to .ddl can be used like .. [vbnet] Try AppDomain.CurrentDomain.Load(&quot;xercesImpl-2.2.1&quot;) AppDomain.CurrentDomain.Load(&quot;batik&quot;) java.lang.System.setProperty(&quot;javax.xml.parsers.SAXParserFactory&quot;, &quot;org.apache.xerces.jaxp.SAXParserFactoryImpl&quot;) Dim filename As String = generateXSLFO() Dim isrc As org.xml.sax.InputSource = New org.xml.sax.InputSource(filename &amp; &quot;.fo&quot;) Dim fs As java.io.FileOutputStream = New java.io.FileOutputStream(filename &amp; &quot;.pdf&quot;) Dim driver As Driver = New Driver(isrc, fs) &#39;driver.setLogger(cl) driver.setRenderer(driver.RENDER_PDF) driver.run() fs.close() Label1.Text = &quot;done&quot; System.IO.File.Delete(filename &amp; &quot;.xml&quot;) System.IO.File.Delete(filename &amp; &quot;.fo&quot;) Catch ex As Exception Label1.Text = ex.ToString End Try [/vbnet]</p>
-
+<p>For instance, The Apache FOP jars after being converted in to .ddl can be used like ..</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Try AppDomain.CurrentDomain.Load(&quot;xercesImpl-2.2.1&quot;) AppDomain.CurrentDomain.Load(&quot;batik&quot;) java.lang.System.setProperty(&quot;javax.xml.parsers.SAXParserFactory&quot;, &quot;org.apache.xerces.jaxp.SAXParserFactoryImpl&quot;) Dim filename As String = generateXSLFO() Dim isrc As org.xml.sax.InputSource = New org.xml.sax.InputSource(filename &amp; &quot;.fo&quot;) Dim fs As java.io.FileOutputStream = New java.io.FileOutputStream(filename &amp; &quot;.pdf&quot;) Dim driver As Driver = New Driver(isrc, fs) &#39;driver.setLogger(cl) driver.setRenderer(driver.RENDER_PDF) driver.run() fs.close() Label1.Text = &quot;done&quot; System.IO.File.Delete(filename &amp; &quot;.xml&quot;) System.IO.File.Delete(filename &amp; &quot;.fo&quot;) Catch ex As Exception Label1.Text = ex.ToString End Try
+</code></pre></div>
 <p>The first step to use Jfreechart in .NET is to convert them to .dll&#39;s. For this, please download and install the ikvm on your PC. Also download the jfreechart lib&#39;s on your pc.</p>
 
 <p>Go to bin directory of ikvm installation and run the following commands.</p>
 
 <p>(For the command to work, i assume that the files like jfreechart-1.0.5.jar, servlet.jar and jcommon-1.0.9.jar were in the bin directory) .</p>
-
-<p>[as]ikvmc -target:library -reference:/usr/lib/IKVM.GNU.Classpath.dll servlet.jar ikvmc -target:library -reference:/usr/lib/IKVM.GNU.Classpath.dll -reference:servlet.dll jcommon-1.0.9.jar ikvmc -target:library -reference:/usr/lib/IKVM.GNU.Classpath.dll -reference:servlet.dll reference:jcommon-1.0.9.dll jfreechart-1.0.5.jar[/as]</p>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">ikvmc -target:library -reference:/usr/lib/IKVM.GNU.Classpath.dll servlet.jar ikvmc -target:library -reference:/usr/lib/IKVM.GNU.Classpath.dll -reference:servlet.dll jcommon-1.0.9.jar ikvmc -target:library -reference:/usr/lib/IKVM.GNU.Classpath.dll -reference:servlet.dll reference:jcommon-1.0.9.dll jfreechart-1.0.5.jar
+</code></pre></div>
 <p>This will generate .dll files of jfreechart, jcommon and servlet.</p>
 
 <p>Now in your VS.NET IDE, Start a new asp.net web application project with C# as backend code. Add the newly generated dll as references to the project. Also add the dll files <strong>IKVM.AWT.WinForms.dll IKVM.GNU.Classpath.dll IKVM.Runtime.dll</strong> as reference to your project. If you want to see the screenshot of my IDE(VS.NET 2003) with references added, please <a href="http://xebee.xebia.in/wp-content/uploads/2007/04/csjfree.gif">click here</a>.</p>
 
 <p>Once you are done with the above tasks, start writing the C# code to call the Jfreechart from .NET.</p>
 
-<p>Here is the code snippet that will be called on button click event of a web page. [csharp] using ikvm.lang; using org.jfree.chart; using javax.servlet.http; using org.jfree.data.category; using ikvm.awt; using ikvm.@internal;</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    private void Button1_Click(object sender, System.EventArgs e)
-    {
-        try
-        {
-            AppDomain.CurrentDomain.Load(&quot;jcommon-1.0.9&quot;);
-            org.jfree.data.general.DefaultPieDataset myDataSet=new org.jfree.data.general.DefaultPieDataset();
-            myDataSet.setValue(&quot;Accepted&quot;, 100);
-            myDataSet.setValue(&quot;Rejected&quot;, 200);
-            JFreeChart pieChart=ChartFactory.createPieChart(&quot;Total requests: 300&quot;, myDataSet,true,true,true);
-            pieChart.setBackgroundPaint(java.awt.Color.white);
-            pieChart.setBorderVisible(false);
-            ChartRenderingInfo thisImageMapInfo=new ChartRenderingInfo();
-            java.io.OutputStream jos = new java.io.FileOutputStream(&quot;C:/Inetpub/wwwroot/csharp_jfree/test.jpeg&quot;);
-            ChartUtilities.writeChartAsJPEG(jos,100,pieChart,240,230,thisImageMapInfo);
+<p>Here is the code snippet that will be called on button click event of a web page.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">using ikvm.lang; using org.jfree.chart; using javax.servlet.http; using org.jfree.data.category; using ikvm.awt; using ikvm.@internal;
 
 
-            Label1.Text = &quot;ok&quot;;
-        }
-        catch(Exception exp)
+        private void Button1_Click(object sender, System.EventArgs e)
         {
-            Label1.Text = exp.ToString();
+            try
+            {
+                AppDomain.CurrentDomain.Load(&quot;jcommon-1.0.9&quot;);
+                org.jfree.data.general.DefaultPieDataset myDataSet=new org.jfree.data.general.DefaultPieDataset();
+                myDataSet.setValue(&quot;Accepted&quot;, 100);
+                myDataSet.setValue(&quot;Rejected&quot;, 200);
+                JFreeChart pieChart=ChartFactory.createPieChart(&quot;Total requests: 300&quot;, myDataSet,true,true,true);
+                pieChart.setBackgroundPaint(java.awt.Color.white);
+                pieChart.setBorderVisible(false);
+                ChartRenderingInfo thisImageMapInfo=new ChartRenderingInfo();
+                java.io.OutputStream jos = new java.io.FileOutputStream(&quot;C:/Inetpub/wwwroot/csharp_jfree/test.jpeg&quot;);
+                ChartUtilities.writeChartAsJPEG(jos,100,pieChart,240,230,thisImageMapInfo);
+
+
+                Label1.Text = &quot;ok&quot;;
+            }
+            catch(Exception exp)
+            {
+                Label1.Text = exp.ToString();
+            }
         }
-    }
 </code></pre></div>
-<p>[/csharp]</p>
-
-<p>Once you compile and deploy the web application, please click the button that will execute the code to generate the JfreeChart. Executing the code will throw the below error saying.. </p>
+<p>Once you compile and deploy the web application, please click the button that will execute the code to generate the JfreeChart. Executing the code will throw the below error saying..</p>
 
 <blockquote>
 <p>System.NotImplementedException: The method or operation is not implemented. at ikvm.awt.NetGraphicsEnvironment.createGraphics(BufferedImage bi) at java.awt.image.BufferedImage.createGraphics() at org.jfree.chart.JFreeChart.createBufferedImage(Int32 width, Int32 height, Int32 imageType, ChartRenderingInfo info) at org.jfree.chart.JFreeChart.createBufferedImage(Int32 width, Int32 height, ChartRenderingInfo info) at org.jfree.chart.ChartUtilities.writeChartAsJPEG(OutputStream out, Single quality, JFreeChart chart, Int32 width, Int32 height, ChartRenderingInfo info) at csjfree.WebForm1.Button1_Click(Object sender, EventArgs e) in c:\inetpub\wwwroot\csjfree\webform1.aspx.cs:line 72</p>
@@ -159,10 +160,10 @@
 
 <p>The problem is IKVM.AWT is not fully implemented with Java AWT features. The author of IKVM acclaims this in his website as well.</p>
 
-<p>Now i am wondering how to get ride of this error and make use of jfreechart in asp.net. I was thinking like </p>
+<p>Now i am wondering how to get ride of this error and make use of jfreechart in asp.net. I was thinking like</p>
 
 <ul>
-<li>replacing ikvm.awt dll with another equivalent java Awt dll. </li>
+<li>replacing ikvm.awt dll with another equivalent java Awt dll.</li>
 <li>Make use of .NET MFC image rendering and give it to Jfree chart (don&#39;t know how to do it)</li>
 </ul>
 
