@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Performance Testing Using Jmeter Part 1</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/Ravinder Singh">Ravinder Singh</a> on </span>
+                  <span class="date">16 February 2015</span>
+                </div>
+                <div class="content">
+                    <h1>Performance Testing using JMeter (Part 1)- Start with Recording a Test Script</h1>
+
+<p>These days it is expected that every functional or non-functional automation tool should provide record and playback functionality so that testers can write tests that closely mimic a real user interaction with the system. JMeter is an open source, powerful load testing tool that provides functionality to record both HTTP and HTTPS requests..</p>
+
+<p>In this blog, I will explain all the steps you need to perform to record both http and https requests.</p>
+
+<h2>Browser Configurations: -</h2>
+
+<p>Before Starting with the recording process, we need to change some configuration settings of the browser. Here, I am explaining all those settings for <strong>Firefox</strong> browser.</p>
+
+<ul>
+<li>Open Preferences for Firefox (using <strong>Firefox-&gt;Preferences</strong> on Mac and
+<strong>Tools-&gt;Options</strong> on Windows)</li>
+<li>  Open Network Tab by clicking on <strong>Advanced-&gt;Network</strong></li>
+</ul>
+
+<p><img src="/img/JMeter/firefox_network.jpg" alt="Firefox Network Settings"></p>
+
+<ul>
+<li>  Click on <strong>Settings</strong> Button and update proxy setting to <strong>localhost: 8080</strong>, as shown below: -</li>
+</ul>
+
+<p><img src="/img/JMeter/firefox_network_settings.jpg" alt="HTTP Proxy Settings"></p>
+
+<ul>
+<li>  Click <strong>OK</strong> Button to save all Settings.</li>
+</ul>
+
+<h2>JMeter Configurations: -</h2>
+
+<p>Now that we are done with the configuration settings for Internet proxy, we will proceed with JMeter steps.</p>
+
+<ul>
+<li>  Add a new <strong>Thread Group</strong> by right clicking on <strong>Test Plan -&gt; Add -&gt; Threads -&gt; Threads Group</strong>, as shown below: -</li>
+</ul>
+
+<p><img src="/img/JMeter/New_ThreadGroup.jpg" alt="Add New Thread Group"></p>
+
+<ul>
+<li>  Add config element <strong>HTTP Request Defaults</strong> by right clicking on
+<strong>Thread Group -&gt; Config element -&gt; HTTP Request Defaults</strong></li>
+</ul>
+
+<p><img src="/img/JMeter/New_Http_Request_Default.jpg" alt="Add New HTTP Request Defaults"></p>
+
+<ul>
+<li>  Specify the <strong>Server Name</strong> (website host name) or <strong>IP</strong> of the server for which you want to record Http requests</li>
+<li>  In the Path specify the relative path of the webpage for which you wan to record Http request. If it’s the home page of the , just specify <strong>slash(/)</strong> in the path, as shown below:-</li>
+</ul>
+
+<p><img src="/img/JMeter/Http_Request_Default_Settings.jpg" alt="Path Settings for Home Page"></p>
+
+<ul>
+<li>  Add <strong>Recording Controller</strong> by right clicking on <strong>Thread Group -&gt; Add -&gt; Logic Controller -&gt; Recording Controller</strong> as shown below :-</li>
+</ul>
+
+<p><img src="/img/JMeter/New_Recording_Controller.jpg" alt="Add New Recording Controller"></p>
+
+<ul>
+<li>  Add <strong>HTTP Test Script Recorder</strong> by right clicking on <strong>WorkBench - &gt; Add -&gt; Non Test Elements -&gt; HTTP(S) Test Script Recorder</strong> as shown below :-</li>
+</ul>
+
+<p><img src="/img/JMeter/New_Http_Test_Script_Recorder.jpg" alt="Add New HTTP(S) Test Script Recorder"></p>
+
+<ul>
+<li>  To record HTTP request only for HTML pages, on panel <strong>HTTP(S) Test Script Recorder</strong> click on <strong>Add suggested Excludes</strong> . This will add the URL patterns that we want to exclude from recording.</li>
+<li>Now click on <strong>Add</strong> Button in <strong>URL Patterns to Include</strong> section and type <strong>.*\.html</strong> as shown below :-</li>
+</ul>
+
+<p><img src="/img/JMeter/Http_Test_Script_Recorder_Settings.jpg" alt="Patterns to include and exclude from Recording"></p>
+
+<p>And now you are ready with all the needed configurations to start recording.</p>
+
+<ul>
+<li>  Click on the <strong>Start</strong> Button on <strong>HTTP(S) Test Script Recorder</strong> panel. But what, instead of starting recording, JMeter shows a pop-up regarding creation of a certificate as shown below: -</li>
+</ul>
+
+<p><img src="/img/JMeter/security_Certificate_Recording.jpg" alt="JMeter Security Certificate"></p>
+
+<ul>
+<li>  Actually, all HTTPS connections use certificates to authenticate the connection between the browser and the web server. When connecting via HTTPS, the server presents the certificate to the browser. To authenticate the certificate, the browser checks that the server certificate is signed by a Certificate Authority (CA) which is linked to one of its in-built root CAs.
+For versions of JMeter from 2.10 onwards, JMeter will generate its own certificate(s), which can be imported in the browser to enable the trust.</li>
+</ul>
+
+<p>•    So, When a pop-up as above for certificate appears, it will create a file named <strong>“ApacheJMeterTemporaryRootCA.crt”</strong> in bin directory of JMeter</p>
+
+<p>Now we need to install this certificate in the browser.</p>
+
+<p>We will perform the steps to import the security certificate in Firefox.</p>
+
+<ul>
+<li>From the <strong>“Certificates”</strong> tab click on <strong>“View Certificates”</strong> and import the certificate created in the above step as shown below: -</li>
+</ul>
+
+<p><img src="/img/JMeter/firefox_Install_Certificates.jpg" alt="Importing Security Certificate in Firefox"></p>
+
+<p>And now we are all set to start recording.</p>
+
+<ul>
+<li>  <strong>Ideally, to start recording, use private browsing mode when recording the session. This should ensure that the browser starts with no stored cookies, and prevents certain changes from being saved.</strong></li>
+</ul>
+
+<p>So start firefox in <strong>Private Browsing</strong> mode with url as http://jmeter.apache.org/.</p>
+
+<p>Click on different links, which you want to record in your test plan.</p>
+
+<p>You will see that the links that you click in the browser, starts recording as <strong>“Http Request”</strong> under the <strong>“Recording Controller”</strong> as shown below :-</p>
+
+<p><img src="/img/JMeter/recorded_Http_Requests.jpg" alt="Recorded Http Samplers"></p>
+
+<p>Now, you can use these Http samplers with other components of JMeter to create your full-fledged test plans.</p>
+
+<p>So, we are done with first step of JMeter, where we are having all the needed Http Requests ready.</p>
+
+<p>We will discuss about using these Https requests and their collaboration with other JMeter components in further series of blogs.</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2015/02/16/Performance-Testing-Using-JMeter-Part-1/&t=Performance Testing Using Jmeter Part 1" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2015/02/16/Performance-Testing-Using-JMeter-Part-1/&text=Performance Testing Using Jmeter Part 1&url=http://blog.xebia.in/2015/02/16/Performance-Testing-Using-JMeter-Part-1/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2015/02/16/Performance-Testing-Using-JMeter-Part-1/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2015/01/02/sql-over-hbase-using-apache-pheonix/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+
