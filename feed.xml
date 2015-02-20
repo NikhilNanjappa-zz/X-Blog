@@ -3,10 +3,10 @@
   <channel>
     <title>Xebia Blog</title>
     <description>Thoughts on latest technologies</description>
-    <link>http://blog.xebia.in/</link>
-    <atom:link href="http://blog.xebia.in/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 16 Feb 2015 12:15:11 +0530</pubDate>
-    <lastBuildDate>Mon, 16 Feb 2015 12:15:11 +0530</lastBuildDate>
+    <link>/</link>
+    <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Fri, 20 Feb 2015 18:23:46 +0530</pubDate>
+    <lastBuildDate>Fri, 20 Feb 2015 18:23:46 +0530</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -85,15 +85,15 @@
 
 &lt;p&gt;Step 1:Specify the Hadoop Version and choose Hbase in application to be installed.&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&quot;class&quot; src=&quot;http://xebee.xebia.in/wp-content/uploads/2015/01/1.png&quot; width=&quot;600&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2015/01/1-300x113.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;Step 2: Specify the following in the Bootstrap portion of Cluster configuration.&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&quot;class&quot; src=&quot;http://xebee.xebia.in/wp-content/uploads/2015/01/2.png&quot; width=&quot;600&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2015/01/2-300x93.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;Once the cluster is running, you can login to the master node using ssh and check your Phoenix configuration.&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&quot;class&quot; src=&quot;http://xebee.xebia.in/wp-content/uploads/2015/01/3.png&quot; width=&quot;600&quot;&gt;&lt;/p&gt;
+&lt;p&gt;![](http://xebee.xebia.in/wp-content/uploads/2015/01/3-300x224.png&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Operations not supported in Apache Phoenix:&lt;/strong&gt;&lt;/p&gt;
 
@@ -113,8 +113,14 @@
 &lt;p&gt;Widespread knowledge of SQL increases the usefulness of Phoenix and related tools like CQL (in case of Cassandra) and Phoenix(in case of Hbase)&lt;/p&gt;
 </description>
         <pubDate>Fri, 02 Jan 2015 00:00:00 +0530</pubDate>
-        <link>http://blog.xebia.in/2015/01/02/sql-over-hbase-using-apache-pheonix/</link>
-        <guid isPermaLink="true">http://blog.xebia.in/2015/01/02/sql-over-hbase-using-apache-pheonix/</guid>
+        <link>/2015/01/02/sql-over-hbase-using-apache-pheonix/</link>
+        <guid isPermaLink="true">/2015/01/02/sql-over-hbase-using-apache-pheonix/</guid>
+        
+        <category>nosql</category>
+        
+        <category>hbase</category>
+        
+        <category>phoenix</category>
         
         
       </item>
@@ -168,8 +174,8 @@
 &lt;p&gt;Interactively rebase and squashing your commits prior to creating PR can be very helpful to create clean commits and keep project history clean.  It also helps to get rid for merge commits.&lt;/p&gt;
 </description>
         <pubDate>Tue, 09 Dec 2014 00:00:00 +0530</pubDate>
-        <link>http://blog.xebia.in/2014/12/09/useful-guidelines-for-contributing-to-a-project-managed-using-git/</link>
-        <guid isPermaLink="true">http://blog.xebia.in/2014/12/09/useful-guidelines-for-contributing-to-a-project-managed-using-git/</guid>
+        <link>/2014/12/09/useful-guidelines-for-contributing-to-a-project-managed-using-git/</link>
+        <guid isPermaLink="true">/2014/12/09/useful-guidelines-for-contributing-to-a-project-managed-using-git/</guid>
         
         
       </item>
@@ -240,8 +246,8 @@ Option                                      
 &lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;** : **These tools are available in version 0.8 , not prior versions.&lt;/p&gt;
 </description>
         <pubDate>Thu, 04 Dec 2014 00:00:00 +0530</pubDate>
-        <link>http://blog.xebia.in/2014/12/04/how-to-manage-and-balance-huge-data-load-for-big-kafka-clusters/</link>
-        <guid isPermaLink="true">http://blog.xebia.in/2014/12/04/how-to-manage-and-balance-huge-data-load-for-big-kafka-clusters/</guid>
+        <link>/2014/12/04/how-to-manage-and-balance-huge-data-load-for-big-kafka-clusters/</link>
+        <guid isPermaLink="true">/2014/12/04/how-to-manage-and-balance-huge-data-load-for-big-kafka-clusters/</guid>
         
         
       </item>
@@ -342,8 +348,8 @@ $ cd kafka_2.9.2-0.8.1.1
 &lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; : You have to kill the consumer(^C) yourself , else it will keep running and waiting for the messages to be consumed. You can verify it by sending new messages if you have producer open in other terminal.&lt;/p&gt;
 </description>
         <pubDate>Wed, 03 Dec 2014 00:00:00 +0530</pubDate>
-        <link>http://blog.xebia.in/2014/12/03/quick-steps-have-a-kafka-cluster-up-running-in-3-minutes/</link>
-        <guid isPermaLink="true">http://blog.xebia.in/2014/12/03/quick-steps-have-a-kafka-cluster-up-running-in-3-minutes/</guid>
+        <link>/2014/12/03/quick-steps-have-a-kafka-cluster-up-running-in-3-minutes/</link>
+        <guid isPermaLink="true">/2014/12/03/quick-steps-have-a-kafka-cluster-up-running-in-3-minutes/</guid>
         
         
       </item>
@@ -438,8 +444,8 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
 &lt;p&gt;This will implicitly add date-picker and all the associated options.Also you need not to worry for the date format in every controller. Date format that will be displayed is dd-MM-yyyy and the output format will be yyyy-MM-dd. Similarly you can customize your other directives as well. Happy coding....&lt;/p&gt;
 </description>
         <pubDate>Wed, 26 Nov 2014 00:00:00 +0530</pubDate>
-        <link>http://blog.xebia.in/2014/11/26/customizing-angular-directives/</link>
-        <guid isPermaLink="true">http://blog.xebia.in/2014/11/26/customizing-angular-directives/</guid>
+        <link>/2014/11/26/customizing-angular-directives/</link>
+        <guid isPermaLink="true">/2014/11/26/customizing-angular-directives/</guid>
         
         
       </item>
@@ -563,8 +569,8 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
 &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://xebee.xebia.in/index.php/tag/alfresco/&quot;&gt;For more hacks about alfresco visit&lt;/a&gt;..................&lt;/strong&gt;&lt;/p&gt;
 </description>
         <pubDate>Wed, 26 Nov 2014 00:00:00 +0530</pubDate>
-        <link>http://blog.xebia.in/2014/11/26/alfresco-working-with-aspects-in-cmis/</link>
-        <guid isPermaLink="true">http://blog.xebia.in/2014/11/26/alfresco-working-with-aspects-in-cmis/</guid>
+        <link>/2014/11/26/alfresco-working-with-aspects-in-cmis/</link>
+        <guid isPermaLink="true">/2014/11/26/alfresco-working-with-aspects-in-cmis/</guid>
         
         
       </item>
@@ -866,8 +872,8 @@ We have made these custom field visible on alfresco share.&lt;/p&gt;
 &lt;p&gt;this query is to search for serial number only if you want to add more field to search you have to dynamically append it to the query string.&lt;/p&gt;
 </description>
         <pubDate>Thu, 20 Nov 2014 00:00:00 +0530</pubDate>
-        <link>http://blog.xebia.in/2014/11/20/alfresco-custom-field-search-in-cmis-approach/</link>
-        <guid isPermaLink="true">http://blog.xebia.in/2014/11/20/alfresco-custom-field-search-in-cmis-approach/</guid>
+        <link>/2014/11/20/alfresco-custom-field-search-in-cmis-approach/</link>
+        <guid isPermaLink="true">/2014/11/20/alfresco-custom-field-search-in-cmis-approach/</guid>
         
         
       </item>
@@ -941,8 +947,8 @@ So whats the Solution. Solution is to find a tool that can give us both of these
 &lt;p&gt;&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/PageObject1-300x269.png&quot; alt=&quot;PageObject1&quot;&gt; &lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/PageObject2-300x116.png&quot; alt=&quot;PageObject2&quot;&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 16 Nov 2014 00:00:00 +0530</pubDate>
-        <link>http://blog.xebia.in/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</link>
-        <guid isPermaLink="true">http://blog.xebia.in/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</guid>
+        <link>/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</link>
+        <guid isPermaLink="true">/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</guid>
         
         
       </item>
@@ -1064,8 +1070,8 @@ So whats the Solution. Solution is to find a tool that can give us both of these
 &lt;/ul&gt;
 </description>
         <pubDate>Tue, 11 Nov 2014 00:00:00 +0530</pubDate>
-        <link>http://blog.xebia.in/2014/11/11/robot-framework-ride/</link>
-        <guid isPermaLink="true">http://blog.xebia.in/2014/11/11/robot-framework-ride/</guid>
+        <link>/2014/11/11/robot-framework-ride/</link>
+        <guid isPermaLink="true">/2014/11/11/robot-framework-ride/</guid>
         
         
       </item>
@@ -1304,8 +1310,8 @@ Might also have there compiled files too.&lt;/li&gt;
 Happy Testing!!&lt;/p&gt;
 </description>
         <pubDate>Tue, 11 Nov 2014 00:00:00 +0530</pubDate>
-        <link>http://blog.xebia.in/2014/11/11/mongodb-integrate-robot-frameworkride/</link>
-        <guid isPermaLink="true">http://blog.xebia.in/2014/11/11/mongodb-integrate-robot-frameworkride/</guid>
+        <link>/2014/11/11/mongodb-integrate-robot-frameworkride/</link>
+        <guid isPermaLink="true">/2014/11/11/mongodb-integrate-robot-frameworkride/</guid>
         
         
       </item>
