@@ -54,7 +54,7 @@
 
             <div class="post-body">
                 <div class="meta">
-                  <span class="meta">Posted by <a href="/author/SOURABH AGGARWAL">SOURABH AGGARWAL</a> on </span>
+                  <span class="meta">Posted by <a href="/author/Sourabh Aggarwal">Sourabh Aggarwal</a> on </span>
                   <span class="date">02 September 2014</span>
                 </div>
                 <div class="content">
@@ -62,7 +62,22 @@
 
 <p>Engineering drawing is one of the most widely used content with Extension .DWG or .DXF .</p>
 
-<p>First thing to know about is that what is DWG file?</p>
+<h1>Table of Contents</h1>
+
+<ul>
+<li><a href="#what-is-dwg-file">What is DWG file?</a></li>
+<li><a href="#content-transformer">Content Transformer :</a></li>
+<li><a href="#complex-transformer">COMPLEX TRANSFORMER :</a></li>
+<li><a href="#use-cases">Use Cases:</a></li>
+<li><a href="#starting-with-example">Starting with Example :</a>
+
+<ul>
+<li><a href="#first">First : :</a></li>
+<li><a href="#second">Second : :</a></li>
+</ul></li>
+</ul>
+
+<h2>What is DWG file? <a id="what-is-dwg-file"></a></h2>
 
 <p>DWG file is binary file which is being used to store two and three dimensional design or data. There are some other format that belong to the same format like .BAK, .DWS, .DWT, .SV$ etc. but DWG is the native format for most of the CAD software used like IntelliCAD, AotoCAD etc.</p>
 
@@ -82,11 +97,11 @@
 
 <p>First I will explain you how alfresco content transformer and complex transformer works.</p>
 
-<p><strong>CONTENT TRANSFORMER :-</strong></p>
+<h2>Content Transformer : <a id="content-transformer"></a></h2>
 
 <p>Content transformer is used in alfresco to transform one file type to another using some tools already configured with alfresco or some external tools that are integrated with alfresco.</p>
 
-<p>Like :- I take an example of JPG file that is being converted to PDF file. </p>
+<p><strong>Like :-</strong> I take an example of JPG file that is being converted to PDF file.</p>
 
 <p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/C1-300x269.png" alt="C1"></p>
 
@@ -94,34 +109,105 @@
 
 <p>By integrating any OCR(Optical character recognition) tool that can convert JPG to TXT we overcome that problem.</p>
 
-<p><strong>COMPLEX TRANSFORMER :-</strong></p>
+<h2>COMPLEX TRANSFORMER : <a id="complex-transformer"></a></h2>
 
-<p>Complex transformer also work in the same manner as content transformer the difference between those two is that there is intermediate file in between transformation process. </p>
+<p>Complex transformer also work in the same manner as content transformer the difference between those two is that there is intermediate file in between transformation process.</p>
 
 <p>File there are chain of transformer being employed to transform one file to another file.</p>
 
-<p>Like :- I take an example of JPG file that is being converted into SWF(Flash File) file(there may be a case when there is one tool used to convert JPG to SWF I am not taking that in consideration).</p>
+<p><strong>Like :-</strong> I take an example of JPG file that is being converted into SWF(Flash File) file(there may be a case when there is one tool used to convert JPG to SWF I am not taking that in consideration).</p>
 
 <p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/CU-300x140.png" alt="CU"></p>
 
 <p>Here the JPG image is first convert into PDF image using JPG to PDF converter configured with Alfresco system and then PDF generated will be again converted into SWF file using PDF to SWF converter configured. Note that if there is director converter for transforming JPG to SWF configured with Alfresco then its not a complex transformation process.</p>
 
-<p>I start with my example:</p>
+<h2>Use Cases: <a id="use-cases"></a></h2>
+
+<p><strong>1.</strong> This approach can be used when you had to create extension for searching and previewing DWG file which is an image file in alfresco share.</p>
+
+<p><strong>2.</strong> Approach can be used for creating plugin for searching image in Alfresco using its inner content.</p>
+
+<p>There can be multiple use cases.</p>
+
+<h2>Starting with Example : <a id="starting-with-example"></a></h2>
 
 <p>First of all up to Alfresco 4.0 SWF previewer is used to preview document by converted into SWF flash File from Alfresco 5.0 PDF previewer is used instead of SWF flash previewer used to preview document by converting it into PDF file so to make rendition process fast.</p>
 
 <p>For our DWG previewer with Full text generation process we need two transformation process.</p>
 
-<p>1. DWG file to PDF file or DWG file to SWF file - Used for previewing DWG file in browser.</p>
+<p><strong>1.</strong> DWG file to PDF file or DWG file to SWF file - Used for previewing DWG file in browser.</p>
 
-<p>2. DWG file to TXT file – Used for full text search inside DWG file.</p>
+<p><strong>2.</strong> DWG file to TXT file – Used for full text search inside DWG file.</p>
 
-<p><strong>First :-</strong></p>
+<h2>First : <a id="first"></a></h2>
+
+<p>We will focus on viewing DWG over browser for that purpose we need to convert DWG file to SWF flash file for that purpose we can use direct tool to transform DWG to SWF there is no open source tool available in the market for same so we make use of complex transformation process where we first convert our file to SVG file which is an image file then we will convert that image file to PDF file then again PDF to SWF flash file.</p>
+
+<p><strong>FOR ALFRESCO 4.0 :</strong></p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/HH.png" alt="C"></p>
+
+<p><strong>Here we convert</strong></p>
+
+<p><strong>1.</strong> DWG to SVG file.</p>
+
+<p><strong>2.</strong> SVG to PDF file.</p>
+
+<p><strong>3.</strong> PDF file to SWF file.</p>
+
+<p><strong>FOR ALFRESCO 5.0 :</strong></p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/HH1.png" alt="C"></p>
+
+<p><strong>Here we convert</strong></p>
+
+<p><strong>1.</strong> DWG to SVG file.</p>
+
+<p><strong>2.</strong> SVG to PDF file.</p>
+
+<h2>Second : <a id="second"></a></h2>
+
+<p>We will focus on converting DWG file to TXT file so that search index for the same file can be generated using inside content for that we will convert our DWG file to DXF then DXF file to TXT file again to generating text.</p>
+
+<p><strong>FOR ALFRESCO 4.0 :</strong></p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/mm.png" alt="C"></p>
+
+<p><strong>Here we convert</strong></p>
+
+<p><strong>1.</strong> DWG to DXF file.</p>
+
+<p><strong>2.</strong> DXF to TXT file.</p>
+
+<p><strong>FOR ALFRESCO 5.0 :</strong></p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/mm.png" alt="C"></p>
+
+<p><strong>Here we convert</strong></p>
+
+<p><strong>1.</strong> DWG to DXF file.</p>
+
+<p><strong>2.</strong> DXF to TXT file.</p>
+
+<p>Now with combination of both we will be able to get complete solution that will be able to preview as well as search inside the DWG image that makes it a perfect solution.</p>
+
+<p>Most of the solution available in the market doesn&#39;t care about the searching area inside the DWG image but our aim is to provide the complete solution that can preview as well as search document completing its functionality.</p>
+
+<p><strong><a href="http://blog.xebia.in/tag/alfresco/">For more hacks about alfresco visit</a></strong></p>
 
                 </div>
             </div>
             <div class="post-tags">
                 <i class="fa fa-tags"></i>
+                
+                <a class="tag_list_link" href="/tag/alfesco">alfesco</a>
+                <span class="seperator">,</span>
+                
+                <a class="tag_list_link" href="/tag/Dwg full text search">Dwg full text search</a>
+                <span class="seperator">,</span>
+                
+                <a class="tag_list_link" href="/tag/Dwg previewer with full text search">Dwg previewer with full text search</a>
+                <span class="seperator">,</span>
                 
             </div>
             <ul class="post-socials">

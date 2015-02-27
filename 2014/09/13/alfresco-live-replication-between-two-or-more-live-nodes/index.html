@@ -54,7 +54,7 @@
 
             <div class="post-body">
                 <div class="meta">
-                  <span class="meta">Posted by <a href="/author/SOURABH AGGARWAL">SOURABH AGGARWAL</a> on </span>
+                  <span class="meta">Posted by <a href="/author/Sourabh Aggarwal">Sourabh Aggarwal</a> on </span>
                   <span class="date">13 September 2014</span>
                 </div>
                 <div class="content">
@@ -62,110 +62,148 @@
 
 <p>Alfresco server configuration checked for version 3.4, 4.0 and 5.0 community.</p>
 
+<h1>Table of Contents</h1>
+
+<ul>
+<li><a href="#what-is-alfresco">What is Alfresco?</a></li>
+<li><a href="#what-is-replication">What is Replication and what it means?</a></li>
+<li><a href="#types-of-replication">Types of replication:</a></li>
+<li><a href="#use-cases">Use Cases:</a></li>
+<li><a href="#load-balance-env-setup">Load balance environment setup:</a></li>
+<li><a href="#ways-to-setup-replication">Ways to setup replication.</a></li>
+<li><a href="#replication-using-alfresco-live-configuration">Replication using alfresco live configuration.</a></li>
+</ul>
+
+<h2>What is Alfresco? <a id="what-is-alfresco"></a></h2>
+
 <p>Alfresco is the DMS product and in all these type of system we don&#39;t want to loose our document either by hardware or software failure for that very purpose we need to have some solid product with replication feature inbuilt that will take care for same.</p>
 
 <p>Alfresco content management system come with the same idea to serve you with better replication mechanism with very little configuration at user or administrator end.</p>
 
-<p><strong>First of all we have to know what is Replication and what is it original meaning?</strong></p>
+<h2>What is Replication and what it means? <a id="what-is-replication"></a></h2>
 
-<p>Original meaning of Replication is <strong>R</strong><strong>eproducibility</strong> in which we are creating duplicate of either any object, data etc to be used for the same purpose as original one.</p>
+<p>Original meaning of Replication is <strong>Reproducibility</strong> in which we are creating duplicate of either any object, data etc to be used for the same purpose as original one.</p>
 
-<p><strong>There are basically two type of replication of data within the content store.</strong></p>
+<h2>Types of replication: <a id="types-of-replication"></a></h2>
 
-<ol>
-<li><p><strong>Hot :</strong> In which there is no need to restart server for replicating data.</p></li>
-<li><p><strong>Cold :</strong> In which server needed to be restarted for replication job to be done.</p></li>
-</ol>
+<p>There are basically two type of replication of data within the content store.</p>
 
-<p><strong>There are many practical cases where we need the replication of data among the various server</strong></p>
+<p><strong>1.</strong> <strong>Hot :</strong> In which there is no need to restart server for replicating data.</p>
 
-<p>1. In the Load balancing environment we have more than one live node so there  we need to keep data in shrink with two or more nodes so that if one node is down other should be there to serve the request.</p>
+<p><strong>2.</strong> <strong>Cold :</strong> In which server needed to be restarted for replication job to be done.</p>
 
-<p>2. Recovery of the lost data from the live instance.</p>
+<h2>Use Cases : <a id="use-cases"></a></h2>
 
-<p>There are some more cases where we need replication....</p>
+<p>There are many practical cases where we need the replication of data among the various server.</p>
+
+<p><strong>1.</strong> In the Load balancing environment we have more than one live node so there  we need to keep data in shrink with two or more nodes so that if one node is down other should be there to serve the request.</p>
+
+<p><strong>2.</strong> Recovery of the lost data from the live instance.</p>
+
+<p>There are many cases where we need replication....</p>
+
+<h1>Load balance environment setup: <a id="load-balance-env-setup"></a></h1>
 
 <p>For setup the load balance environment we have many blogs that serve you with better dish but our main concern is not have a load balanced environment here.</p>
 
 <p>Here we give you an idea how we can replicate data between two or more live nodes at run time and how you will configure live replication between two or more Alfresco server.</p>
 
-<p><strong>There are many ways how we can setup replication between two or more nodes using Alfresco server two out of them are.</strong></p>
+<h1>Ways to setup replication. <a id="ways-to-setup-replication"></a></h1>
 
-<p>1. Replication using alfresco live configuration.</p>
+<p>There are many ways how we can setup replication between two or more nodes using Alfresco server two out of them are.</p>
 
-<ol>
-<li>Replication using database and repository replication.</li>
-</ol>
+<p><strong>1.</strong> Replication using alfresco live configuration.</p>
+
+<p><strong>2.</strong> Replication using database and repository replication.</p>
 
 <p>Here in this blog we share configuration how to setup live replication between two alfresco instances working on same or different server.</p>
 
-<p><strong>Replication using alfresco live configuration.</strong></p>
+<h1>Replication using alfresco live configuration. <a id="replication-using-alfresco-live-configuration"></a></h1>
 
-<ol>
-<li>First of all we have to make replication active for both of the Alfresco server using alfresco-global.properties file located in {alfresco}/tomcat/shared/classes/ folder by adding following line at the end of the file. </li>
-</ol>
+<p><strong>1.</strong> First of all we have to make replication active for both of the Alfresco server using alfresco-global.properties file located in {alfresco}/tomcat/shared/classes/ folder by adding following line at the end of the file.</p>
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">replication.enabled</span><span class="o">=</span><span class="s">true</span>
+</code></pre></div>
+<p><strong>2.</strong> Restart your server. Now replication is active on each of the Alfresco server installation.</p>
 
-<p>replication.enabled=true</p>
+<p><strong>3.</strong> Login as admin user on source alfresco server.</p>
 
-<ol>
-<li><p>Restart your server. Now replication is active on each of the Alfresco server installation.</p></li>
-<li><p>Login as admin user on source alfresco server.</p></li>
-<li><p>Now we have to create destination target on source alfresco server for that we have to create new folder in Repository&gt; Data Dictionary&gt; Transfers&gt; Transfer Target Groups&gt; Default Group folder like.</p></li>
-</ol>
+<p><strong>4.</strong> Now we have to create destination target on source alfresco server for that we have to create new folder in Repository&gt; Data Dictionary&gt; Transfers&gt; Transfer Target Groups&gt; Default Group folder like.</p>
 
 <p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/Insert_image_1-300x168.png" alt="Insert_image_1"></p>
 
 <p>all the folder that are created in Default Group is of type trx:transferTarget because rule is already set on Default Group to transform all the folder created init into trx:transferTarget type.</p>
 
-<ol>
-<li>Now we have to add some properties like Host-name, Port, User-name and Password of remote Alfresco server etc. Just Go  to edit properties of new target folder created and add Target Host-name, port, Username, Password, Enable or not just like shown in image.</li>
-</ol>
+<p><strong>5.</strong> Now we have to add some properties like Host-name, Port, User-name and Password of remote Alfresco server etc. Just Go  to edit properties of new target folder created and add Target Host-name, port, Username, Password, Enable or not just like shown in image.</p>
 
 <p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/image_2-300x168.png" alt="image_2"></p>
 
-<ol>
-<li>If all is done. Now create new transformation job using Admin Tools in Alfresco 5.0 and Tools option in Alfresco 4.0. Then go to Replication Jobs Option and click on Create Job.</li>
-</ol>
+<p><strong>6.</strong> If all is done. Now create new transformation job using Admin Tools in Alfresco 5.0 and Tools option in Alfresco 4.0. Then go to Replication Jobs Option and click on Create Job.</p>
 
 <p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/image_3-300x168.png" alt="image_3"></p>
 
-<ol>
-<li>Add details required like Job Name, Description, Source Item to be replicated, Locate Transfer target we just created in above step, Schedule Job with start date, time and repeat interval, Enabled or not just like image attached.</li>
-</ol>
+<p><strong>7.</strong> Add details required like Job Name, Description, Source Item to be replicated, Locate Transfer target we just created in above step, Schedule Job with start date, time and repeat interval, Enabled or not just like image attached.</p>
 
 <p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/image_4-300x168.png" alt="image_4"></p>
 
-<ol>
-<li>Now click on the Run Job to start replication job.</li>
-</ol>
+<p><strong>8.</strong> Now click on the Run Job to start replication job.</p>
 
 <p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/image_5-300x168.png" alt="image_5"></p>
 
-<ol>
-<li>Check whether replication job working or not if there is error then please rectify error if not then go to the Target Alfresco server login as Admin then check whether same folder set in the replication job is created on Target server or not. </li>
-</ol>
+<p><strong>9.</strong> Check whether replication job working or not if there is error then please rectify error if not then go to the Target Alfresco server login as Admin then check whether same folder set in the replication job is created on Target server or not.</p>
 
 <p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/image_6-300x168.png" alt="image_6"></p>
 
-<ol>
-<li>Now upload some content in same folder set for replication in source folder and check if its replicated on target server. </li>
-</ol>
+<p><strong>10.</strong> Now upload some content in same folder set for replication in source folder and check if its replicated on target server.</p>
 
 <p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/image_7-300x168.png" alt="image_7"></p>
 
 <p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/image_8-300x168.png" alt="image_8"></p>
 
-<ol>
-<li><p>This is how live replication works in Alfreso in my case i have two alfresco installation on same server we can have different installation on different server in same case also that do work in same manner.</p></li>
-<li><p>Document that is replicated on remote server is view only we can&#39;t edit document or folder replicated for that to work we have to change configuration in share-config-custom.xml file located at {alfresco}/tomcat/shared/classes/alfresco/web-extension/ folder at target server end. </p></li>
-</ol>
+<p><strong>11.</strong> This is how live replication works in Alfreso in my case i have two alfresco installation on same server we can have different installation on different server in same case also that do work in same manner.</p>
 
-<p><config evaluator="string-compare" condition="Replication"> <share-urls> &lt;!-- To discover a Repository Id, browse to the remote server&#39;s CMIS landing page at: http://{server}:{port}/alfresco/service/cmis/index.html</p>
+<p><strong>12.</strong> Document that is replicated on remote server is view only we can&#39;t edit document or folder replicated for that to work we have to change configuration in share-config-custom.xml file located at {alfresco}/tomcat/shared/classes/alfresco/web-extension/ folder at target server end.</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;config</span> <span class="na">evaluator=</span><span class="s">&quot;string-compare&quot;</span> <span class="na">condition=</span><span class="s">&quot;Replication&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;share-urls&gt;</span>
+<span class="c">&lt;!--</span>
+<span class="c">To discover a Repository Id, browse to the remote server&#39;s CMIS landing page at:</span>
+<span class="c">http://{server}:{port}/alfresco/service/cmis/index.html</span>
+<span class="c">The Repository Id field is found under the &quot;CMIS Repository Information&quot; expandable panel.</span>
+
+<span class="c">Example config entry:</span>
+<span class="c">&lt;share-url repositoryId=&quot;622f9533-2a1e-48fe-af4e-ee9e41667ea4&quot;&gt;http://new-york-office:8080/share/&lt;/share-url&gt;</span>
+<span class="c">--&gt;</span>
+<span class="nt">&lt;/share-urls&gt;</span>
+<span class="nt">&lt;/config&gt;</span>
+
+<span class="nt">&lt;config</span> <span class="na">evaluator=</span><span class="s">&quot;string-compare&quot;</span> <span class="na">condition=</span><span class="s">&quot;Replication&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;share-urls&gt;</span>
+<span class="nt">&lt;share-url</span> <span class="na">repositoryId=</span><span class="s">&quot;2490a26b-dc4f-4d3c-8379-c067d8b1103a&quot;</span><span class="nt">&gt;</span>http://{sourceServerHOST}:{sourceServerPORT}/share/<span class="nt">&lt;/share-url&gt;</span>
+<span class="nt">&lt;/share-urls&gt;</span>
+<span class="nt">&lt;/config&gt;</span>
+</code></pre></div>
+<p>where repositoryId is the source server cmis repository ID which we can get by hitting URL http://{sourceServerHOST}:{sourceServerPORT}/alfresco/service/cmis/index.html as shown in image.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2014/09/image_9.png" alt="image_9"></p>
+
+<p><strong>13.</strong> Restart Your target alfresco server for making configuration active.</p>
+
+<p><strong>14.</strong> Now check whether you have edit rights on folder and document replicate to target folder.</p>
+
+<p><strong><a href="http://blog.xebia.in/tag/alfresco/">For more hacks about alfresco visit</a></strong></p>
 
                 </div>
             </div>
             <div class="post-tags">
                 <i class="fa fa-tags"></i>
+                
+                <a class="tag_list_link" href="/tag/alfesco">alfesco</a>
+                <span class="seperator">,</span>
+                
+                <a class="tag_list_link" href="/tag/Alfresco live replication between two nodes">Alfresco live replication between two nodes</a>
+                <span class="seperator">,</span>
+                
+                <a class="tag_list_link" href="/tag/Alfresco live backup">Alfresco live backup</a>
+                <span class="seperator">,</span>
                 
             </div>
             <ul class="post-socials">

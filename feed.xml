@@ -5,8 +5,8 @@
     <description>Thoughts on latest technologies</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 27 Feb 2015 06:23:31 +0530</pubDate>
-    <lastBuildDate>Fri, 27 Feb 2015 06:23:31 +0530</lastBuildDate>
+    <pubDate>Fri, 27 Feb 2015 06:33:05 +0530</pubDate>
+    <lastBuildDate>Fri, 27 Feb 2015 06:33:05 +0530</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -315,6 +315,351 @@ You can easily get these values using the &lt;strong&gt;Network traffic analyzer
         <category>Performance Testing</category>
         
         <category>JMeter</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Playing With Alfresco Repository Using Cmis</title>
+        <description>&lt;h1&gt;Playing with Alfresco repository using CMIS&lt;/h1&gt;
+
+&lt;p&gt;Before starting with this blog we need to know only one thing why we are using alfresco with CMIS for content access.&lt;/p&gt;
+
+&lt;h1&gt;Table of Content :&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#what-is-alfresco&quot;&gt;What is alfresco and why we are using it?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#what-is-cmis&quot;&gt;What is CMIS why we are using it with alfresco?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#type-of-cmis-binding-in-alfresco&quot;&gt;Type of CMIS binding in Alfresco :&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#getting-repository-id-and-cmis-atom-pub-URL&quot;&gt;Get alfresco CMIS repository ID and CMIS Atom Pub binding URL :&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#getting-repository-id&quot;&gt;Getting repository ID for alfresco installation.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#cmis-binding-url&quot;&gt;Alfresco CMIS AtomPub binding URL.&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#how-to-create-session&quot;&gt;How to create create session using Apache CMIS and Alfresco open CMIS ?&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#create-apache-cmis-session&quot;&gt;Creating apache CMIS session :&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#create-alfresco-cmis-session&quot;&gt;Creating Alfresco Cmis session :&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#use-ticket-instead-of-username-and-password&quot;&gt;Use login Ticket instead of username and password :&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#simple-and-complex-file-operation&quot;&gt;Simple and Complex File operations?&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#type-of-file-object&quot;&gt;Type of file Objects in Alfresco using CMIS approach&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#document-object&quot;&gt;Document Object.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#alfrescodocument-object&quot;&gt;AlfrescoDocument Object.&lt;/a&gt;&lt;br&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#create-alfresco-cmis-session&quot;&gt;Create New Document :&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#getting-existing-document&quot;&gt;Getting existing document :&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#update-document&quot;&gt;Update document :&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#delete-old-file&quot;&gt;Delete old file :&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#update-document&quot;&gt;Folder Operations in Alfresco :&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#type-of-folder-object&quot;&gt;Type of Folder Objects in Alfresco using CMIS approach&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#folder-object&quot;&gt;Folder Object.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#alfrescofolder-object&quot;&gt;AlfrescoFolder Object.&lt;/a&gt;&lt;br&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;What is alfresco and why we are using it? &lt;a id=&quot;what-is-alfresco&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Alfresco means Open Air. Alfresco is the one of the most popular Open Source Content Management Platform. Alfresco gain its popularity from 2005 on-wards.
+Alfresco can be used for the wide variety of operation like
++ Record Management
++ Content Management or Document Management
++ For Version control repository
++ For simple and complex business process management
++ For digitization of documents
++ For mail room automation
++ For collaboration
++ Access control management system
+ many more....
+Its all our choice how and where we are use Alfresco for our usability.&lt;/p&gt;
+
+&lt;h2&gt;What is CMIS why we are using it with alfresco? &lt;a id=&quot;what-is-cmis&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;CMIS stands for Content Management Interoperability Services. CMIS is used when we want to access different content repository that follows CMIS standard within one complete system written on top of them or when we want different content repository follows CMIS standard to interact or exchange there data with each others permission. CMIS is the open standard its not given by Alfresco community its given by OASIS for accessing content repository. We will start how to use Apache Chemistry and Alfresco Open CMIS for respective operation:&lt;/p&gt;
+
+&lt;p&gt;One most important thing before starting with CMIS in alfresco you should use apache CMIS library along with alfresco open cmis library. But its not necessary if you are not dealing with alfresco session and objects.&lt;/p&gt;
+
+&lt;h2&gt;Type of CMIS binding in Alfresco : &lt;a id=&quot;type-of-cmis-binding-in-alfresco&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;There are three type of CMIS binding which alfresco support:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;CMIS Web Services binding.&lt;/li&gt;
+&lt;li&gt;CMIS AtomPub binding.&lt;/li&gt;
+&lt;li&gt;CMIS Local binding.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We are using CMIS AtomPub binding in this case  we can use other also the only difference is in how we create session in each case else all operation are same. Lets start coding...........&lt;/p&gt;
+
+&lt;h2&gt;Get alfresco CMIS repository ID and CMIS Atom Pub binding URL : &lt;a id=&quot;getting-repository-id-and-cmis-atom-pub-URL&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Below is how we can get Alfresco repository ID and atom pub binding URL&lt;/p&gt;
+
+&lt;h2&gt;Getting repository ID for alfresco installation. &lt;a id=&quot;getting-repository-id&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;** For Getting repository ID for alfresco installation follow following steps :**&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Hit URL for alfresco installation http://{server}:{post}/alfresco/service/cmis.&lt;/li&gt;
+&lt;li&gt;Enter your admin user name and password in login popup.&lt;/li&gt;
+&lt;li&gt;If user have appropriate permission New file xml is downloaded with name cmis.&lt;/li&gt;
+&lt;li&gt;Open file and get CMIS repository ID in &lt;a href=&quot;cmisra:repositoryInfo&quot;&gt;cmisra:repositoryInfo&lt;/a&gt; between &lt;a href=&quot;cmis:repositoryId&quot;&gt;cmis:repositoryId&lt;/a&gt; tags.&lt;/li&gt;
+&lt;li&gt;In my case it is 6fc907f9-6790-46b5-9c25-d6855ff8ff5c.
+CMIS atom pub URL is same following URL pattern :&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Alfresco CMIS AtomPub binding URL. &lt;a id=&quot;cmis-binding-url&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;http://{server}:{port}/alfresco/service/cmis&lt;/p&gt;
+
+&lt;h2&gt;How to create create session using Apache CMIS and Alfresco open CMIS ? &lt;a id=&quot;how-to-create-session&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;The main reason for creating alfresco session as we can&amp;#39;t user things or standard in alfresco that are not related to CMIS using simple CMIS session like aspects can&amp;#39;t be used using simple CMIS session.&lt;/p&gt;
+
+&lt;h2&gt;Creating apache CMIS session :&lt;a id=&quot;create-apache-cmis-session&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// default factory implementation&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SessionFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;factory&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SessionFactoryImpl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// map to contain connection parameter any cmis repository using atom pub&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SessionParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;USER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;admin&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SessionParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;PASSWORD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;admin&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SessionParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ATOMPUB_URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;http://localhost:9090/alfresco/service/cmis&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SessionParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;BINDING_TYPE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BindingType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ATOMPUB&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SessionParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;REPOSITORY_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;6fc907f9-6790-46b5-9c25-d6855ff8ff5c&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// getting Instance from User Credential&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// create session&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Session&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;factory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createSession&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printStackTrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Creating Alfresco Cmis session :&lt;a id=&quot;create-alfresco-cmis-session&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// default factory implementation&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SessionFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;factory&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SessionFactoryImpl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// map to contain connection parameter for Alfresco repository using AtomPub Map&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SessionParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;USER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;admin&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SessionParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;PASSWORD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;admin&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SessionParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ATOMPUB_URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;http://localhost:9090/alfresco/service/cmis&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SessionParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;BINDING_TYPE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BindingType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ATOMPUB&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SessionParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;REPOSITORY_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;6fc907f9-6790-46b5-9c25-d6855ff8ff5c&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SessionParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;OBJECT_FACTORY_CLASS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.alfresco.cmis.client.impl.AlfrescoObjectFactoryImpl&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// getting Instance from User Credential&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// create session Session session = factory.createSession(parameter);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printStackTrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Use login Ticket instead of username and password :&lt;a id=&quot;use-ticket-instead-of-username-and-password&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;username :  ROLE&lt;em&gt;TICKET
+password : {USER&lt;/em&gt;LOGIN_TICKET}&lt;/p&gt;
+
+&lt;p&gt;You can get login ticket by using Alfresco login service http://{server}:{port}/alfresco/service/api/login?u={username}&amp;amp;pw={password?}&lt;/p&gt;
+
+&lt;h2&gt;Simple and Complex File operations?&lt;a id=&quot;simple-and-complex-file-operation&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;There are many operation related to file or content we list some of the most rapidly used:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Create new document.&lt;/li&gt;
+&lt;li&gt;Getting existing document.&lt;/li&gt;
+&lt;li&gt;Update document.&lt;/li&gt;
+&lt;li&gt;Delete old file.&lt;/li&gt;
+&lt;li&gt;Create new document :&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Type of file Objects in Alfresco using CMIS approach.&lt;a id=&quot;type-of-file-object&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; Document Object.
+&lt;strong&gt;2.&lt;/strong&gt; AlfrescoDocument Object.&lt;/p&gt;
+
+&lt;h2&gt;Document Object.&lt;a id=&quot;document-object&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;This object is common in all CMIS approach whether it is alfresco or any other CMIS supported content repository. This Document object can&amp;#39;t be used for dealing alfresco related operations on Document Like :- aspects etc&lt;/p&gt;
+
+&lt;h1&gt;AlfrescoDocument Object.&lt;a id=&quot;alfrescodocument-object&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;This object is related to Alfresco content repository we have to explicity convert CMIS Document Object to AlfescoDocument object when dealing with alfresco related operation using Alfresco open CMIS extension JAR.&lt;/p&gt;
+
+&lt;h2&gt;Create New Document :&lt;a id=&quot;create-alfresco-cmis-session&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; First we need to follow code for creating Alfresco session.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2.&lt;/strong&gt; Create object for Alfresco folder or CMIS folder Object for storing document.&lt;/p&gt;
+
+&lt;p&gt;Folder path could be any path within alfresco content repository for which user who is accessing it should have permission.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Folder&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;retriveCMISFolder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Session&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;folderPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;session&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SuccessCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;UnauthorisedAccess&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;NUll or empty Session Object&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;folderPath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;folderPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()){&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SuccessCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ApiError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;NUll or empty Folder Path&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;folderPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;startsWith&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)){&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SuccessCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ApiError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Invalid folder path must start and end with /&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;OperationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createOperationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setRenditionFilterString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cmis:thumbnail&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Folder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getObjectByPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;folderPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SuccessCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ApiError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Unable to created folder object with path = &amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;folderPath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot; Expected Cause =&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;3.&lt;/strong&gt; Create document in alfresco folder for which object is created in step 2.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Document&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;createNewDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentTitle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentDescription&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mimeType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Folder&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;folder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InputStream&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oInputStream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;documentName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()){&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SuccessCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ApiError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Document name is mandatory&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;documentTitle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentTitle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()){&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;documentTitle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;documentDescription&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentDescription&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()){&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;documentDescription&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oInputStream&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;oInputStream&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CreatePdfFile&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createPdfFile&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;documentName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentDescription&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mimeType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mimeType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()){&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mimeType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;application/pdf&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//trying to create new document&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Setting properties for new document to be created within repository&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PropertyIds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PropertyIds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;OBJECT_TYPE_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;cmis:document,P:cm:titled&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm:title&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentTitle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm:description&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentDescription&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Reading the content in Bytes stream and Writing it to new file in&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ContentStream&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;contentStream&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ContentStreamImpl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;documentName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mimeType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oInputStream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// creating document with name title and description&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;folder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;contentStream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;VersioningState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MAJOR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SuccessCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ApiError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Unable to create document &amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;. &amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Getting existing document :&lt;a id=&quot;getting-existing-document&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;FileNode is the node Id of document which we have for all document in Alfresco. We have different node Id for each document in alfresco repository. For getting document node Id we can get all child document under any Folder in repository. There can be other way also to get document in Folder like using name etc.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AlfrescoDocument&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;retriveAlfrescoDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Session&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fileNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;session&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SuccessCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;UnauthorisedAccess&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;NUll or empty Session Object&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fileNode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fileNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()){&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SuccessCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ApiError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;NUll or empty file Node&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AlfrescoDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fileNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SuccessCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ApiError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;unable to convert cmis folder to alfresco folder = &amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Update document :&lt;a id=&quot;update-document&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// getting Instance from User Credential&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Session&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//creating session we did it above&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// getting alfresco document&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;AlfrescoDocument&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alfrescoDocument&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;retriveAlfrescoDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// try to edit document description&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Map to contain document properties&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Utils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isBlank&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;documentName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)){&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PropertyIds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PropertyIds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;OBJECT_TYPE_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;cmis:document,P:cm:titled&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Utils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isBlank&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;documentTitle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)){&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm:title&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentTitle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Utils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isBlank&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;documentDescription&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)){&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cm:description&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;documentDescription&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// updating document property&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;CmisObject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateDocument&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alfrescoDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;updateProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// return document properties&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updateDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SuccessCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ApiError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;unable to edit document with name &amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alfrescoDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Delete old file :&lt;a id=&quot;delete-old-file&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//creating new session object&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Session&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//Create session we did it above&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//alfresco document object&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;AlfrescoDocument&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alfrescoDocument&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;retriveAlfrescoDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fileNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// try to delete document object&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// deleting File with given File ID from repository&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;alfrescoDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;delete&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//return property map for deleting document&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Document deleted successfully&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ServiceException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SuccessCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ApiError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Unable to delete document with name &amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;So these are the file operation we can have in Alfresco there could be more.&lt;/p&gt;
+
+&lt;h2&gt;Folder Operations in Alfresco?&lt;a id=&quot;folder-operations-in-alfresco&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;We can have two type of folder object in CMIS approach :&lt;/p&gt;
+
+&lt;h2&gt;Type of folder Objects in Alfresco using CMIS approach.&lt;a id=&quot;type-of-folder-object&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; Folder Object.
+&lt;strong&gt;2.&lt;/strong&gt; AlfrescoFolder Object.&lt;/p&gt;
+
+&lt;h2&gt;Folder Object.&lt;a id=&quot;folder-object&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;This object is common in all CMIS approach whether it is alfresco or any other CMIS supported content repository. This folder object can&amp;#39;t be used for dealing alfresco related operations on folders Like :- aspects etc&lt;/p&gt;
+
+&lt;h1&gt;AlfrescoFolder Object.&lt;a id=&quot;alfrescofolder-object&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;This object is related to Alfresco content repository we have to explicitly convert CMIS Folder Object to AlfescoFolder object when dealing with alfresco related operation using Alfresco open CMIS extension JAR.&lt;/p&gt;
+
+&lt;p&gt;For code on Alfresco Folder operations we are creating separate bog.&lt;/p&gt;
+
+&lt;h2&gt;Full index and metadata search of document using CMIS?&lt;a id=&quot;full-index-metadata-search-in-alfresco&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;For working with alfresco document search visit our blog &lt;strong&gt;&lt;a href=&quot;http://blog.xebia.in/2014/11/20/alfresco-custom-field-search-in-cmis-approach/&quot;&gt;Alfresco custom field search in CMIS approach&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://blog.xebia.in/tag/alfresco/&quot;&gt;For more hacks about alfresco visit&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+</description>
+        <pubDate>Thu, 12 Feb 2015 00:00:00 +0530</pubDate>
+        <link>/2015/02/12/playing-with-alfresco-repository-using-cmis/</link>
+        <guid isPermaLink="true">/2015/02/12/playing-with-alfresco-repository-using-cmis/</guid>
+        
+        <category>alfesco</category>
+        
+        <category>CMIS operations</category>
+        
+        <category>CMIS file, folder and search operations</category>
         
         
       </item>
@@ -762,7 +1107,20 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
     
       <item>
         <title>Alfresco Working With Aspects In Cmis</title>
-        <description>&lt;h1&gt;Alfresco working with aspects in CMIS&lt;/h1&gt;
+        <description>&lt;h1&gt;Table of Contents&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#Alfresco-working-with-aspects-in-CMIS&quot;&gt;Alfresco working with aspects in CMIS.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#What-are-aspects&quot;&gt;What are aspects?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#Why-aspects-are-used&quot;&gt;Why aspects are used?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#use-cases&quot;&gt;Use Cases:&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#creating-alfresco-cmis-session&quot;&gt;Creating alfresco CMIS session.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#getting-existing-folder-object&quot;&gt;Get the existing folder object : It can be AlfrescoFolder or cmis Folder object.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#creating-document-in-existing-folder&quot;&gt;Creating document in the existing folder.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#verify&quot;&gt;Verify :&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Alfresco working with aspects in CMIS. &lt;a id=&quot;Alfresco-working-with-aspects-in-CMIS&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;Alfresco is one of the most popular and widely used open source content management system.&lt;/p&gt;
 
@@ -770,14 +1128,13 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
 
 &lt;p&gt;Before starting with this blog all should be familiar with CMIS and how to use CMIS along with alfresco. For getting started with CMIS with alfresco and other content repository you must first read our blog on&lt;strong&gt;&lt;a href=&quot;http://blog.xebia.in/2015/02/12/playing-with-alfresco-repository-using-cmis/&quot;&gt; Alfresco working with CMIS (File, Folder and Search operation)&lt;/a&gt;. &lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;First of all what is aspects?&lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;What are aspects? &lt;a id=&quot;What-are-aspects&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
 
-&lt;ul&gt;
-&lt;li&gt;Aspects most likely related to content modeling in Alfresco which itself is one of the biggest feature of the alfresco system. Aspects as the like the additional information that we can dynamically attach to any content within the alfresco repository. Aspects scan be linked to the content individually to add aspect properties to the content or can be called within or used within the types in alfresco content model to add the properties that aspect is holding.&lt;/li&gt;
-&lt;li&gt;Alfresco comes with many aspects by default we can create our own aspects as per requirement.&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;Aspects most likely related to content modeling in Alfresco which itself is one of the biggest feature of the alfresco system. Aspects as the like the additional information that we can dynamically attach to any content within the alfresco repository. Aspects scan be linked to the content individually to add aspect properties to the content or can be called within or used within the types in alfresco content model to add the properties that aspect is holding.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Why aspects are used?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Alfresco comes with many aspects by default we can create our own aspects as per requirement.&lt;/p&gt;
+
+&lt;h2&gt;Why aspects are used? &lt;a id=&quot;Why-aspects-are-used&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;Aspects basically used to add dynamicity to the content modelling in alfresco means aspects can be dynamically added and removed from the content or folder within the alfresco repository. Aspects are much like the super class in java which are used by its sub classes to add all the functionality that super class holding.&lt;/p&gt;
 
@@ -785,19 +1142,21 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
 
 &lt;p&gt;For using alfresco aspects in CMIS we have to use alfresco-opencmis-extension-0.3.jar along with CMIS library for content repository access.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Use Cases :-&lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;Use Cases : &lt;a id=&quot;use-cases&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;*&lt;em&gt;I will take two best use case around the same approach : *&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;1. This approach can be used to create plugin/project in which we have 10 documents of different type mimetype like(application/pdf, image/png, image/jpg, application/text etc) and we have to create these document with different metadata at the time document is uploaded.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; This approach can be used to create plugin/project in which we have 10 documents of different type mimetype like(application/pdf, image/png, image/jpg, application/text etc) and we have to create these document with different metadata at the time document is uploaded.&lt;/p&gt;
 
-&lt;p&gt;2. Create project that support cmis approach to link alfresco repository to dynamically assign metadata to each document of different type.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2.&lt;/strong&gt; Create project that support cmis approach to link alfresco repository to dynamically assign metadata to each document of different type.&lt;/p&gt;
 
 &lt;p&gt;There can be more use case where you can use same example.&lt;/p&gt;
 
 &lt;p&gt;First we have to create session that can be used to access aspects and apply aspects to the new content if not already having that aspect.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;1. Creating alfresco CMIS session : &lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;Creating alfresco CMIS session. &lt;a id=&quot;creating-alfresco-cmis-session&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Below is the code to create CMIS session but by using alfresco factory class (org.alfresco.cmis.client.impl.AlfrescoObjectFactoryImpl) because aspects are related to alfresco.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// default factory implementation&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;SessionFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;factory&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SessionFactoryImpl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;// map to contain connection parameter any cmis repository using atom pub&lt;/span&gt;
@@ -824,7 +1183,7 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;to deal with aspects, alfrescoDocument or AlfrescoFolder etc.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;2. Get the existing folder object it can be AlfrescoFolder or cmis Folder object.&lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;Get the existing folder object : It can be AlfrescoFolder or cmis Folder object. &lt;a id=&quot;getting-existing-folder-object&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;OperationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createOperationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setRenditionFilterString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;cmis:thumbnail&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
@@ -836,7 +1195,7 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Now you can either create the new folder and create new document within that folder or use existing folder for document creation. But make sure that user creating document must have access to that particular folder.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;3. Creating document in the existing folder.&lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;Creating document in the existing folder. &lt;a id=&quot;creating-document-in-existing-folder&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Setting properties for new document to be created within repository&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PropertyIds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;test_Aspect.pdf&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;propertiesDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PropertyIds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;OBJECT_TYPE_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;cmis:document&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;FileInputStream&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oInputStream&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;FileInputStream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/home/sourabh/Desktop/test_aspects.pdf&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
@@ -847,7 +1206,7 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Now new document is uploaded with name test_aspects.pdf in the root directory. You  can get complete detail for the document uploaded from the document object.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;4. Check for aspect whether applied to new document or not if no apply custom aspect to document created.&lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;Check for aspect whether applied to new document or not if no apply custom aspect to document created. &lt;a id=&quot;check-for-aspects-if-applied&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;For this we have to first convert CMIS Document to AlfrescoDocument object then we have add aspect for that document.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// converting cmis document to alfresco document&lt;/span&gt;
@@ -872,15 +1231,25 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
     &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;document already updated&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Document is updated with our custom aspect we can add already defined aspects also to the document.&lt;/p&gt;
+&lt;p&gt;Document is updated with our custom aspect we can also add already defined aspects to the document in alfresco repository in same way as we did for custom aspect.&lt;/p&gt;
 
 &lt;p&gt;In this we have checked whether our custom aspects is already linked with document or not if not then add custom aspect to document and then update custom properties for document.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://xebee.xebia.in/index.php/tag/alfresco/&quot;&gt;For more hacks about alfresco visit&lt;/a&gt;..................&lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;Verify: &lt;a id=&quot;verify&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;To verify check document with same nodeId in alfresco repository and verify its metadata. New properties must be added to same document which are linked with aspect.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://blog.xebia.in/tag/alfresco/&quot;&gt;For more hacks about alfresco visit&lt;/a&gt;..................&lt;/strong&gt;&lt;/p&gt;
 </description>
         <pubDate>Wed, 26 Nov 2014 00:00:00 +0530</pubDate>
         <link>/2014/11/26/alfresco-working-with-aspects-in-cmis/</link>
         <guid isPermaLink="true">/2014/11/26/alfresco-working-with-aspects-in-cmis/</guid>
+        
+        <category>alfesco</category>
+        
+        <category>custom aspects</category>
+        
+        <category>cmis adding custom aspects</category>
         
         
       </item>
@@ -931,11 +1300,11 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
 
 &lt;p&gt;Now this is an practical example to create an custom model within alfresco. For creating custom model in alfresco(community version) we need to create two file one is custom model file and other is context file which contain registry for custom model these two files are mandatory for creating new model there are other files also which are created based on requirements.&lt;/p&gt;
 
-&lt;p&gt;There are two ways of creating new model in alfresco one is by using aspects and other is by using types. We are using the aspects for each the new model in alfresco as aspects are dynamic and reusable while types are not reusable component.&lt;/p&gt;
+&lt;p&gt;There are two ways of creating new metadata in alfresco one is by using aspects and other is by using types. We are using aspects for adding new metadata in alfresco as aspects are dynamic and reusable while types are not reusable component.&lt;/p&gt;
 
 &lt;h2&gt;USE CASES : &lt;a id=&quot;use-cases&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
 
-&lt;p&gt;We take three use cases where same example can be used :&lt;/p&gt;
+&lt;p&gt;We take three use cases where we can use same example :&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; When we have to create our custom field search without using Alfresco default web script search within alfresco share portal.&lt;/p&gt;
 
@@ -1281,86 +1650,17 @@ We have made these custom field visible on alfresco share.&lt;/p&gt;
   &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://xebee.xebia.in/index.php/tag/alfresco/&quot;&gt;For more hacks about alfresco visit&lt;/a&gt;..................&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://blog.xebia.in/tag/alfresco/&quot;&gt;For more hacks about alfresco visit&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 </description>
         <pubDate>Thu, 20 Nov 2014 00:00:00 +0530</pubDate>
         <link>/2014/11/20/alfresco-custom-field-search-in-cmis-approach/</link>
         <guid isPermaLink="true">/2014/11/20/alfresco-custom-field-search-in-cmis-approach/</guid>
         
+        <category>alfesco</category>
         
-      </item>
-    
-      <item>
-        <title>Mobile App Automation Android And Ios App Automation Via One Test Case Using Appium</title>
-        <description>&lt;h1&gt;Mobile App Automation: Android and iOS app automation via one Test Case using Appium&lt;/h1&gt;
-
-&lt;p&gt;Agenda of this blog is to come up with a solution to use only one test case and execute it on both android and iOS. Lets first focus on why we would need something like this.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;First Lets try to answer why Organisations launch their apps on multiple platforms. Reason is:&lt;/em&gt; When an Organisation plans to launch an app, their main objective is to reach out to maximum users. So they decide to launch their apps on most popular platforms. iOS and Android are two most popular platform today.Thats the main reason why organisation simultaneously develop and launch apps on both platforms.&lt;/p&gt;
-
-&lt;p&gt;Now Lets focus on what it means for Mobile Dev and Mobile Test Teams.Dev teams can decide either of the following options:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Start development of iOS and android separately and have two teams do this.&lt;/li&gt;
-&lt;li&gt;Decide to use cross platform app development tools to write only one piece of code and deploy it on both android and iOS.  
-Both options has their own pros and cons but one main benefit of option 2 is, it results in drastically reduced development time and budget. ( Some of you may not agree with this, but this is not the main agenda of this blog)&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;em&gt;&lt;strong&gt;Now can Test Teams also follow option 2&lt;/strong&gt; ???&lt;/em&gt; So that test time and budget required for automating both apps is not 200%. This was the question that was hovering in mind from a long time. So i decided to give it a try to find a solution.&lt;/p&gt;
-
-&lt;p&gt;Lets try to understand whats needed to automate either a website or a mobile app. Irrespective of the tool used, we need to have these two facilities available to us: &lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;How to find an element&lt;/li&gt;
-&lt;li&gt;How to interact with an element 
-So whats the Solution. Solution is to find a tool that can give us both of these for both the platforms. Thus only tool that can be used here is - &lt;em&gt;&lt;strong&gt;&lt;a href=&quot;http://appium.io/&quot;&gt;Appium&lt;/a&gt;&lt;/strong&gt;(No points for guessing)&lt;/em&gt;. The main advantage of Appium is that its supports multiple platforms: Android, iOS and firefox. Our solution lies in to understand how Appium supports multiple platforms. To understand &amp;quot;how Appium supports multiple platforms&amp;quot;, we need to understand Appium&amp;#39;s architecture. Please observe the below image carefully.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;[caption id=&amp;quot;&amp;quot; align=&amp;quot;alignnone&amp;quot; width=&amp;quot;1019&amp;quot;]&lt;img src=&quot;http://unmesh.files.wordpress.com/2013/02/photo-1.jpg&quot; alt=&quot;&quot;&gt; Appium Architecture ( Source: http://unmesh.files.wordpress.com/2013/02/photo-1.jpg)[/caption]&lt;/p&gt;
-
-&lt;p&gt;Let me quote some text from Appium&amp;#39;s Documentation: &lt;em&gt;&amp;quot;Appium is at its heart a webserver that exposes a REST API. It receives connections from a client, listens for commands, executes those commands on a mobile device, and responds with an HTTP response representing the result of the command execution. The fact that we have a client/server architecture opens up a lot of possibilities:&amp;quot;&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;When we start appium, we pass some desired capabilities to appium session, which basically tells appium to start  either android or iOS session. For example, if i pass desired capabilities like &amp;quot;platformName&amp;quot; ==&amp;quot;iOS&amp;quot;, &amp;quot;deviceName&amp;quot;==&amp;quot;iPhone Simulator&amp;quot; or &amp;quot;platformName&amp;quot; ==&amp;quot;Android&amp;quot;, &amp;quot;deviceName&amp;quot;==&amp;quot;Android Emulator&amp;quot; then appium would start iOS and android session respectively.&lt;/p&gt;
-
-&lt;p&gt;Now when we run a test case, depending on which appium session we have started, all the commands passed to Appium Server will be converted to that platform&amp;#39;s UI Automation native commands. This is how multiple platforms are supported.&lt;/p&gt;
-
-&lt;p&gt;Simple!! isn&amp;#39;t it?? :-)&lt;/p&gt;
-
-&lt;p&gt;Now Lets see how Appium helps us in achieving the point 2 mentioned above. Since Appium extends Selenium Webdriver so interaction with elements is independent of the platform. For Example a button will be a button on android and iOS both and the function to interact with a button is .click() irrespective of platform. similarly for textbox, the function is .sendKeys() on both platforms.&lt;/p&gt;
-
-&lt;p&gt;So the only point left is point 1. Here Appium cant help us much because how we find elements is dependent on platform. On iOS, locators used are Name and Xpath and for Android locators used are id and ClassName etc. This issue was resolved with the help of framework where depending on which platform we want to automate, we loaded the required locators at run time.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;&lt;strong&gt;We created two .properties files and all the locators specific to one platform were stored in one property file and specific to other were stored in other property file. Based on for which platform we want to execute the test for, locators from one of the feature files are loaded.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;Lets go through the Framework and understand how we do this. Here is the tech stack for this framework:&lt;/p&gt;
-
-&lt;p&gt;Ant ( Build Tool), Java ( Programming Language), Appium(Automation Tool), TestNG(Test Framework) and Page Objects (Test Design Pattern)&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;In build.xml, apart from defining normal TestNG specific tasks and targets, we have defined two targets run-test-android and run-test-iOS which not only runs android and iOS test suits but also sets the value of variable &amp;quot;Browser&amp;quot; to android and iOS respectively.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/build.xml1_-300x242.png&quot; alt=&quot;build.xml1&quot;&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/build.xml2_-300x158.png&quot; alt=&quot;build.xml2&quot;&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/build.xml3_-300x79.png&quot; alt=&quot;build.xml3&quot;&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;DriverFactory.java, once ant target is executed in command line , as per TestNG, control will come to function tagged with @BeforeSuite. In this function, first i check the value of system property &amp;quot;Browser&amp;quot; that was being set in build.xml. if it is android or iOS, Appium Server server session is started accordingly.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/DriverFactory1-300x145.png&quot; alt=&quot;DriverFactory1&quot;&gt; &lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/DriverFactory2-300x207.png&quot; alt=&quot;DriverFactory2&quot;&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Next Step is Page Objects. We have defined a page object for each page of our mobile app. But there is a twist in the constructor. Here also in the constructor i check the value of system property &amp;quot;Browser&amp;quot; that was being set in build.xml. if it is android or iOS, locators from properties files are loaded accordingly.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/PageObject1-300x269.png&quot; alt=&quot;PageObject1&quot;&gt; &lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/PageObject2-300x116.png&quot; alt=&quot;PageObject2&quot;&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 16 Nov 2014 00:00:00 +0530</pubDate>
-        <link>/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</link>
-        <guid isPermaLink="true">/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</guid>
+        <category>cmis search</category>
+        
+        <category>custom metadata search</category>
         
         
       </item>

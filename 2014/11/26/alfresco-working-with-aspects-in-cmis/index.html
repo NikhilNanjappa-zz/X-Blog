@@ -58,7 +58,20 @@
                   <span class="date">26 November 2014</span>
                 </div>
                 <div class="content">
-                    <h1>Alfresco working with aspects in CMIS</h1>
+                    <h1>Table of Contents</h1>
+
+<ul>
+<li><a href="#Alfresco-working-with-aspects-in-CMIS">Alfresco working with aspects in CMIS.</a></li>
+<li><a href="#What-are-aspects">What are aspects?</a></li>
+<li><a href="#Why-aspects-are-used">Why aspects are used?</a></li>
+<li><a href="#use-cases">Use Cases:</a></li>
+<li><a href="#creating-alfresco-cmis-session">Creating alfresco CMIS session.</a></li>
+<li><a href="#getting-existing-folder-object">Get the existing folder object : It can be AlfrescoFolder or cmis Folder object.</a></li>
+<li><a href="#creating-document-in-existing-folder">Creating document in the existing folder.</a></li>
+<li><a href="#verify">Verify :</a></li>
+</ul>
+
+<h2>Alfresco working with aspects in CMIS. <a id="Alfresco-working-with-aspects-in-CMIS"></a></h2>
 
 <p>Alfresco is one of the most popular and widely used open source content management system.</p>
 
@@ -66,14 +79,13 @@
 
 <p>Before starting with this blog all should be familiar with CMIS and how to use CMIS along with alfresco. For getting started with CMIS with alfresco and other content repository you must first read our blog on<strong><a href="http://blog.xebia.in/2015/02/12/playing-with-alfresco-repository-using-cmis/"> Alfresco working with CMIS (File, Folder and Search operation)</a>. </strong></p>
 
-<p><strong>First of all what is aspects?</strong></p>
+<h2>What are aspects? <a id="What-are-aspects"></a></h2>
 
-<ul>
-<li>Aspects most likely related to content modeling in Alfresco which itself is one of the biggest feature of the alfresco system. Aspects as the like the additional information that we can dynamically attach to any content within the alfresco repository. Aspects scan be linked to the content individually to add aspect properties to the content or can be called within or used within the types in alfresco content model to add the properties that aspect is holding.</li>
-<li>Alfresco comes with many aspects by default we can create our own aspects as per requirement.</li>
-</ul>
+<p>Aspects most likely related to content modeling in Alfresco which itself is one of the biggest feature of the alfresco system. Aspects as the like the additional information that we can dynamically attach to any content within the alfresco repository. Aspects scan be linked to the content individually to add aspect properties to the content or can be called within or used within the types in alfresco content model to add the properties that aspect is holding.</p>
 
-<p><strong>Why aspects are used?</strong></p>
+<p>Alfresco comes with many aspects by default we can create our own aspects as per requirement.</p>
+
+<h2>Why aspects are used? <a id="Why-aspects-are-used"></a></h2>
 
 <p>Aspects basically used to add dynamicity to the content modelling in alfresco means aspects can be dynamically added and removed from the content or folder within the alfresco repository. Aspects are much like the super class in java which are used by its sub classes to add all the functionality that super class holding.</p>
 
@@ -81,19 +93,21 @@
 
 <p>For using alfresco aspects in CMIS we have to use alfresco-opencmis-extension-0.3.jar along with CMIS library for content repository access.</p>
 
-<p><strong>Use Cases :-</strong></p>
+<h2>Use Cases : <a id="use-cases"></a></h2>
 
 <p>*<em>I will take two best use case around the same approach : *</em></p>
 
-<p>1. This approach can be used to create plugin/project in which we have 10 documents of different type mimetype like(application/pdf, image/png, image/jpg, application/text etc) and we have to create these document with different metadata at the time document is uploaded.</p>
+<p><strong>1.</strong> This approach can be used to create plugin/project in which we have 10 documents of different type mimetype like(application/pdf, image/png, image/jpg, application/text etc) and we have to create these document with different metadata at the time document is uploaded.</p>
 
-<p>2. Create project that support cmis approach to link alfresco repository to dynamically assign metadata to each document of different type.</p>
+<p><strong>2.</strong> Create project that support cmis approach to link alfresco repository to dynamically assign metadata to each document of different type.</p>
 
 <p>There can be more use case where you can use same example.</p>
 
 <p>First we have to create session that can be used to access aspects and apply aspects to the new content if not already having that aspect.</p>
 
-<p><strong>1. Creating alfresco CMIS session : </strong></p>
+<h2>Creating alfresco CMIS session. <a id="creating-alfresco-cmis-session"></a></h2>
+
+<p>Below is the code to create CMIS session but by using alfresco factory class (org.alfresco.cmis.client.impl.AlfrescoObjectFactoryImpl) because aspects are related to alfresco.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// default factory implementation</span>
   <span class="n">SessionFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="n">SessionFactoryImpl</span><span class="o">.</span><span class="na">newInstance</span><span class="o">();</span>
 <span class="c1">// map to contain connection parameter any cmis repository using atom pub</span>
@@ -120,7 +134,7 @@
 </code></pre></div>
 <p>to deal with aspects, alfrescoDocument or AlfrescoFolder etc.</p>
 
-<p><strong>2. Get the existing folder object it can be AlfrescoFolder or cmis Folder object.</strong></p>
+<h2>Get the existing folder object : It can be AlfrescoFolder or cmis Folder object. <a id="getting-existing-folder-object"></a></h2>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">try</span><span class="o">{</span>
   <span class="n">OperationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">createOperationContext</span><span class="o">();</span>
   <span class="n">context</span><span class="o">.</span><span class="na">setRenditionFilterString</span><span class="o">(</span><span class="s">&quot;cmis:thumbnail&quot;</span><span class="o">);</span>
@@ -132,7 +146,7 @@
 </code></pre></div>
 <p>Now you can either create the new folder and create new document within that folder or use existing folder for document creation. But make sure that user creating document must have access to that particular folder.</p>
 
-<p><strong>3. Creating document in the existing folder.</strong></p>
+<h2>Creating document in the existing folder. <a id="creating-document-in-existing-folder"></a></h2>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Setting properties for new document to be created within repository</span>
 <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">propertiesDocument</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;();</span> <span class="n">propertiesDocument</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">PropertyIds</span><span class="o">.</span><span class="na">NAME</span><span class="o">,</span> <span class="s">&quot;test_Aspect.pdf&quot;</span><span class="o">);</span> <span class="n">propertiesDocument</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">PropertyIds</span><span class="o">.</span><span class="na">OBJECT_TYPE_ID</span><span class="o">,</span> <span class="s">&quot;cmis:document&quot;</span><span class="o">);</span>
 <span class="n">FileInputStream</span> <span class="n">oInputStream</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">FileInputStream</span><span class="o">(</span><span class="s">&quot;/home/sourabh/Desktop/test_aspects.pdf&quot;</span><span class="o">);</span>
@@ -143,7 +157,7 @@
 </code></pre></div>
 <p>Now new document is uploaded with name test_aspects.pdf in the root directory. You  can get complete detail for the document uploaded from the document object.</p>
 
-<p><strong>4. Check for aspect whether applied to new document or not if no apply custom aspect to document created.</strong></p>
+<h2>Check for aspect whether applied to new document or not if no apply custom aspect to document created. <a id="check-for-aspects-if-applied"></a></h2>
 
 <p>For this we have to first convert CMIS Document to AlfrescoDocument object then we have add aspect for that document.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// converting cmis document to alfresco document</span>
@@ -168,16 +182,29 @@
     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;document already updated&quot;</span><span class="o">);</span>
 <span class="o">}</span>
 </code></pre></div>
-<p>Document is updated with our custom aspect we can add already defined aspects also to the document.</p>
+<p>Document is updated with our custom aspect we can also add already defined aspects to the document in alfresco repository in same way as we did for custom aspect.</p>
 
 <p>In this we have checked whether our custom aspects is already linked with document or not if not then add custom aspect to document and then update custom properties for document.</p>
 
-<p><strong><a href="http://xebee.xebia.in/index.php/tag/alfresco/">For more hacks about alfresco visit</a>..................</strong></p>
+<h2>Verify: <a id="verify"></a></h2>
+
+<p>To verify check document with same nodeId in alfresco repository and verify its metadata. New properties must be added to same document which are linked with aspect.</p>
+
+<p><strong><a href="http://blog.xebia.in/tag/alfresco/">For more hacks about alfresco visit</a>..................</strong></p>
 
                 </div>
             </div>
             <div class="post-tags">
                 <i class="fa fa-tags"></i>
+                
+                <a class="tag_list_link" href="/tag/alfesco">alfesco</a>
+                <span class="seperator">,</span>
+                
+                <a class="tag_list_link" href="/tag/custom aspects">custom aspects</a>
+                <span class="seperator">,</span>
+                
+                <a class="tag_list_link" href="/tag/cmis adding custom aspects">cmis adding custom aspects</a>
+                <span class="seperator">,</span>
                 
             </div>
             <ul class="post-socials">

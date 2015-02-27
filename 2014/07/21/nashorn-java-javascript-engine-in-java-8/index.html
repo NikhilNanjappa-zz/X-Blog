@@ -54,11 +54,20 @@
 
             <div class="post-body">
                 <div class="meta">
-                  <span class="meta">Posted by <a href="/author/SOURABH AGGARWAL">SOURABH AGGARWAL</a> on </span>
+                  <span class="meta">Posted by <a href="/author/Sourabh Aggarwal">Sourabh Aggarwal</a> on </span>
                   <span class="date">21 July 2014</span>
                 </div>
                 <div class="content">
                     <h1>Nashorn (JAVA + Javascript) Engine in Java 8</h1>
+
+<h1>Table of Contents</h1>
+
+<ul>
+<li><a href="#what-is-nashorn">What is Nashorn?</a></li>
+<li><a href="#nashorn-example">Nashorn Example.</a></li>
+</ul>
+
+<h2>What is Nashorn? <a id="what-is-nashorn"></a></h2>
 
 <p>The Nashorn Javascript Engine is part of Java SE 8 and competes with other standalone engines like Mozilla <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino" title="rhino">rhino</a>, <a href="https://code.google.com/p/v8/">Google V8</a> (the engine that powers Google Chrome and <a href="http://nodejs.org/">Node.js</a>)etc.</p>
 
@@ -72,70 +81,90 @@
 
 <p>Nashorn supports the invocation of javaScript functions defined in your script files directly from java code. You can pass java objects as function arguments and return data back from the function to the calling java method.</p>
 
-<p>In order to call a function you first have to cast the script engine to  <strong>Invocable</strong>, The <strong>Invocable</strong> interface is implemented by the <strong>NashornScriptEngine </strong>implementation and defines a method <strong>invokeFunction </strong>to call a javascript function for a given name.</p>
+<p>In order to call a function you first have to cast the script engine to  <strong>Invocable</strong>, The <strong>Invocable</strong> interface is implemented by the <strong>NashornScriptEngine</strong> implementation and defines a method <strong>invokeFunction</strong> to call a javascript function for a given name.</p>
 
-<p>In this post i am going threw the example using eclipse with java 8 installation.</p>
+<h2>Nashorn Example. <a id="nashorn-example"></a></h2>
 
-<p>1. Create new java project with name Nashorn with latest JRE 8 libraries. 2. Create new package with name nashorn. 3. Create new class with name TestNashorn with main method under nashorn. 4. Replace or modify class content with following content.</p>
+<p><strong>1.</strong> Create new java project with name Nashorn with latest JRE 8 libraries.</p>
 
-<p>package nashorn;</p>
+<p><strong>2.</strong> Create new package with name nashorn. 3. Create new class with name TestNashorn with main method under nashorn. 4. Replace or modify class content with following content.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">nashorn</span><span class="o">;</span>
 
-<p>import java.io.FileNotFoundException; import java.io.FileReader;</p>
+<span class="kn">import</span> <span class="nn">java.io.FileNotFoundException</span><span class="o">;</span> <span class="kn">import</span> <span class="nn">java.io.FileReader</span><span class="o">;</span>
 
-<p>import javax.script.Invocable;</p>
+<span class="kn">import</span> <span class="nn">javax.script.Invocable</span><span class="o">;</span>
 
-<p>import javax.script.ScriptEngine; import javax.script.ScriptEngineManager; import javax.script.ScriptException;</p>
+<span class="kn">import</span> <span class="nn">javax.script.ScriptEngine</span><span class="o">;</span> <span class="kn">import</span> <span class="nn">javax.script.ScriptEngineManager</span><span class="o">;</span> <span class="kn">import</span> <span class="nn">javax.script.ScriptException</span><span class="o">;</span>
 
-<p>public class TestNashorn {</p>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestNashorn</span> <span class="o">{</span>
 
-<p>public static void main(String[] args){ ScriptEngine engine = new ScriptEngineManager().getEngineByName(&quot;nashorn&quot;); try { // loading javascript file by script engine engine.eval(new FileReader(&quot;E:/JAVA8/Nashorn/src/nashorn/script.js&quot;));</p>
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span> <span class="n">ScriptEngine</span> <span class="n">engine</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ScriptEngineManager</span><span class="o">().</span><span class="na">getEngineByName</span><span class="o">(</span><span class="s">&quot;nashorn&quot;</span><span class="o">);</span> <span class="k">try</span> <span class="o">{</span> <span class="c1">// loading javascript file by script engine engine.eval(new FileReader(&quot;E:/JAVA8/Nashorn/src/nashorn/script.js&quot;));</span>
 
-<p>// changing engine to Invocable to call methods. Invocable invocable = (Invocable) engine;</p>
+<span class="c1">// changing engine to Invocable to call methods. Invocable invocable = (Invocable) engine;</span>
 
-<p>System.out.println(&quot;Starting String Test................&quot;);</p>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Starting String Test................&quot;</span><span class="o">);</span>
 
-<p>// String array Object[] strings = {&quot;Sourabh Aggarwal&quot;}; //Result Object containing string Object stringResult; try { // invoking javaScript method testString to get string Object stringResult = invocable.invokeFunction(&quot;testString&quot;, strings); // displaying string output returned System.out.println(stringResult); // Type of Object returned System.out.println(stringResult.getClass()); } catch (NoSuchMethodException e) { e.printStackTrace(); }</p>
+<span class="c1">// String array Object[] strings = {&quot;Sourabh Aggarwal&quot;}; //Result Object containing string Object stringResult; try { // invoking javaScript method testString to get string Object stringResult = invocable.invokeFunction(&quot;testString&quot;, strings); // displaying string output returned System.out.println(stringResult); // Type of Object returned System.out.println(stringResult.getClass()); } catch (NoSuchMethodException e) { e.printStackTrace(); }</span>
 
-<p>System.out.println(&quot;Starting Object Test................&quot;);</p>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Starting Object Test................&quot;</span><span class="o">);</span>
 
-<p>// Test Object is a plain POJO with one field name testField1 TestPojo testPojo = new TestPojo(); testPojo.setTestField1(&quot;testFieldData&quot;);</p>
+<span class="c1">// Test Object is a plain POJO with one field name testField1 TestPojo testPojo = new TestPojo(); testPojo.setTestField1(&quot;testFieldData&quot;);</span>
 
-<p>// creating object array Object[] objects = {testPojo}; //Result Object containing object Object ObjectResult; try { // invoking javaScript method testObject to get TestPojo Object ObjectResult = invocable.invokeFunction(&quot;testObject&quot;, objects); // displaying the modified result done by javascript System.out.println(((TestPojo)ObjectResult).getTestField1()); } catch (NoSuchMethodException e) { e.printStackTrace(); }</p>
+<span class="c1">// creating object array Object[] objects = {testPojo}; //Result Object containing object Object ObjectResult; try { // invoking javaScript method testObject to get TestPojo Object ObjectResult = invocable.invokeFunction(&quot;testObject&quot;, objects); // displaying the modified result done by javascript System.out.println(((TestPojo)ObjectResult).getTestField1()); } catch (NoSuchMethodException e) { e.printStackTrace(); }</span>
 
-<p>} catch (FileNotFoundException e) { e.printStackTrace(); } catch (ScriptException e) { e.printStackTrace(); } }</p>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">FileNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span> <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span> <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ScriptException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span> <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span> <span class="o">}</span> <span class="o">}</span>
 
-<p>}</p>
+<span class="o">}</span>
+</code></pre></div>
+<p><strong>5.</strong> Create new javaScript with name javaScript.js in path E:/JAVA8/Nashorn/src/nashorn/ or with  another name and path which you refer in the above class with following content.</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// handling string</span>
+<span class="kd">var</span> <span class="nx">testString</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+<span class="nx">print</span><span class="p">(</span><span class="s2">&quot;In test string mthod of javascript.&quot;</span><span class="p">);</span>
+<span class="k">return</span> <span class="s2">&quot;Hi, &quot;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;. How are you.&quot;</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="c1">// handling object</span>
+<span class="kd">var</span> <span class="nx">testObject</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">object</span><span class="p">)</span> <span class="p">{</span>
+<span class="nx">print</span><span class="p">(</span><span class="nx">object</span><span class="p">.</span><span class="nx">getTestField1</span><span class="p">());</span> <span class="nx">object</span><span class="p">.</span><span class="nx">setTestField1</span><span class="p">(</span><span class="nx">object</span><span class="p">.</span><span class="nx">getTestField1</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; changing object value from javascript.&quot;</span><span class="p">);</span>
+<span class="nx">print</span><span class="p">(</span><span class="s2">&quot;Getting Object type: &quot;</span> <span class="o">+</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">object</span><span class="p">));</span> <span class="k">return</span> <span class="nx">object</span><span class="p">;</span>
+  <span class="p">};</span>
+</code></pre></div>
+<p><strong>6.</strong> Create new POJO class within same package as Nashorn class with name TestPojo and following content.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">nashorn</span><span class="o">;</span>
 
-<p>5. Create new javaScript with name javaScript.js in path E:/JAVA8/Nashorn/src/nashorn/ or with  another name and path which you refer in the above class with following content. </p>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestPojo</span> <span class="o">{</span>
 
-<p>// handling string var testString = function(name) { print(&quot;In test string mthod of javascript.&quot;); return &quot;Hi, &quot; + name + &quot;. How are you.&quot;; };</p>
+<span class="kd">private</span> <span class="n">String</span> <span class="n">testField1</span><span class="o">;</span>
 
-<p>// handling object var testObject = function (object) { print(object.getTestField1()); object.setTestField1(object.getTestField1() + &quot; changing object value from javascript.&quot;); print(&quot;Getting Object type: &quot; + Object.prototype.toString.call(object)); return object; };</p>
+<span class="kd">public</span> <span class="n">String</span> <span class="nf">getTestField1</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">testField1</span><span class="o">;</span> <span class="o">}</span>
 
-<p>6. Create new POJO class within same package as Nashorn class with name TestPojo and following content. </p>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setTestField1</span><span class="o">(</span><span class="n">String</span> <span class="n">testField1</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">testField1</span> <span class="o">=</span> <span class="n">testField1</span><span class="o">;</span> <span class="o">}</span>
 
-<p>package nashorn;</p>
-
-<p>public class TestPojo {</p>
-
-<p>private String testField1; </p>
-
-<p>public String getTestField1() { return testField1; }</p>
-
-<p>public void setTestField1(String testField1) { this.testField1 = testField1; }</p>
-
-<p>}</p>
-
-<p>7. Just run the Nashorn class and see result. </p>
-
-<p>Result:</p>
-
-<p>Starting String Test................ In test string mthod of javascript. Hi, Sourabh Aggarwal. How are you. class java.lang.String Starting Object Test................ testFieldData Getting Object type: [object nashorn.TestPojo] testFieldData changing object value from javascript.</p>
-
+<span class="o">}</span>
+</code></pre></div>
+<p><strong>7.</strong> Just run the Nashorn class and see result.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Result:
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">Starting String Test................
+In test string mthod of javascript.
+Hi, Sourabh Aggarwal. How are you.
+class java.lang.String
+Starting Object Test................
+testFieldData
+Getting Object type: [object nashorn.TestPojo]
+testFieldData changing object value from javascript.
+</code></pre></div>
                 </div>
             </div>
             <div class="post-tags">
                 <i class="fa fa-tags"></i>
+                
+                <a class="tag_list_link" href="/tag/Java">Java</a>
+                <span class="seperator">,</span>
+                
+                <a class="tag_list_link" href="/tag/Nashorn engine in java8">Nashorn engine in java8</a>
+                <span class="seperator">,</span>
+                
+                <a class="tag_list_link" href="/tag/java+javascript">java+javascript</a>
+                <span class="seperator">,</span>
                 
             </div>
             <ul class="post-socials">

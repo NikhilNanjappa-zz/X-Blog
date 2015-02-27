@@ -54,7 +54,7 @@
 
             <div class="post-body">
                 <div class="meta">
-                  <span class="meta">Posted by <a href="/author/SOURABH AGGARWAL">SOURABH AGGARWAL</a> on </span>
+                  <span class="meta">Posted by <a href="/author/Sourabh Aggarwal">Sourabh Aggarwal</a> on </span>
                   <span class="date">29 August 2014</span>
                 </div>
                 <div class="content">
@@ -64,76 +64,349 @@
 
 <p>In this blog I am explaining how we can override the complete alfresco authentication system.</p>
 
+<h1>Table of Contents</h1>
+
+<ul>
+<li><a href="#what-is-alfresco">What is Alfresco?</a></li>
+<li><a href="#alfresco-authentication-system">Alfresco authentication system.</a></li>
+<li><a href="#types-of-authentication">Types of authentication sub-system in Alfresco :</a></li>
+<li><a href="#use-cases">Use Cases:</a></li>
+<li><a href="#overriding-alfresco-authentication">Overriding alfresco authentication.</a></li>
+</ul>
+
+<h2>What is Alfresco? <a id="what-is-alfresco"></a></h2>
+
 <p>Alfresco is the Document Management System and in these type of system document security is one of the key concern of all whose who are working with these type of systems.</p>
 
 <p>In this blog I am not bothering about document Authorization my main concern is about Alfresco authentication system.</p>
+
+<h2>Alfresco authentication system. <a id="alfresco-authentication-system"></a></h2>
 
 <p>Alfresco authentication system is based on modules in which each of the module is the Subsystem for authentication we can use one or more subsystem at one time for authentication within alfresco leave other at same time by defining it within the chain of authentication.</p>
 
 <p>When user try to Login within the Alfresco. Authentication system check for all those subsystem which are configured in the authentication chain of alfresco if user try to Login with credential present in one authentication subsystem but not in another user will be able to Login but if user is not valid in all the subsystem configured in authentication chain then he/she is not able to Login within the Alfresco system.</p>
 
+<h2>Types of authentication sub-system in Alfresco : <a id="types-of-authentication"></a></h2>
+
 <p>In Alfresco we are having many kind of authentication subsystem employed for user authentication.</p>
 
-<p>TYPE
-DESCRIPTION</p>
-
-<p>ALFRESCO NTLM
-This is the default alfresco way of authentication comes with alfresco sometime called Native Alfresco Authentication.</p>
-
-<p>EXTERNAL
-Authentication based on some external authentication mechanism.</p>
-
-<p>LDAP-AD
-This authentication system provide user authentication from LDAP active directory based on LDAP protocol it also allow user export from LDAP active directory.</p>
-
-<p>KERBEROS</p>
-
-<p>Kerberos provide very strong encryption mechanism compared to other. Java Authentication and Authorization Service (JAAS) is used within the Kerberos subsystem to support Kerberos authentication of user name and password.</p>
-
-<p>LDAP
-This authentication system provide user authentication from open LDAP based on LDAP protocol it also allow user export from open LDAP.</p>
-
-<p>PASSTHRU</p>
-
-<p>Thisauthentication system isused to replace the User database in Alfdresco System with a Windows server controller, domain controller, or list of servers to authenticate users.</p>
+<p>| TYPE | DESCRIPTION |
+| ------: | -----------: |
+|ALFRESCO NTLM | This is the default alfresco way of authentication comes with alfresco sometime called Native Alfresco Authentication.|
+|EXTERNAL | Authentication based on some external authentication mechanism.|
+|LDAP-AD | This authentication system provide user authentication from LDAP active directory based on LDAP protocol it also allow user export from LDAP active directory.|
+|KERBEROS | Kerberos provide very strong encryption mechanism compared to other. Java Authentication and Authorization Service (JAAS) is used within the Kerberos subsystem to support Kerberos authentication of user name and password.|
+|LDAP | This authentication system provide user authentication from open LDAP based on LDAP protocol it also allow user export from open LDAP.|
+|PASSTHRU | This authentication system isused to replace the User database in Alfdresco System with a Windows server controller, domain controller, or list of servers to authenticate users.|</p>
 
 <p>We can use more than one authentication system at one time to allow user within alfresco system.</p>
 
 <p>There is authentication chain within alfresco where we can define which all authentication subsystem we want to employ for authentication in alfresco.</p>
 
-<p>Like :- </p>
-
-<p><code>authentication.chain= ldap1:ldap,alfrescoNtlm1:alfrescoNtlm;</code></p>
-
+<p><strong>Like :-</strong></p>
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">`authentication.chain</span><span class="o">=</span> <span class="s">ldap1:ldap,alfrescoNtlm1:alfrescoNtlm;`</span>
+</code></pre></div>
 <p>Here we have used two authentication system one is Open LDAP and another is Alfresco NTLM.</p>
+
+<h2>Overriding alfresco authentication. <a id="overriding-alfresco-authentication"></a></h2>
 
 <p>Here we start how to override the complete alfresco authentication and write our own code for authenticating user.</p>
 
-<p>STEP 1 : Create Folder MyCustomAuthentication in project directory Alfresco_Installation/tomcat/webapps/alfresco/WEB-INF/classes/alfresco/subsystems/Authentication.</p>
+<p><strong>STEP 1 :</strong> Create Folder MyCustomAuthentication in project directory Alfresco_Installation/tomcat/webapps/alfresco/WEB-INF/classes/alfresco/subsystems/Authentication.</p>
 
-<p>STEP 2 : Create file mycustom-authentication.properties within MyCustomAuthentication folder with following content.</p>
+<p><strong>STEP 2 :</strong> Create file mycustom-authentication.properties within MyCustomAuthentication folder with following content.</p>
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">`external.authentication.defaultAdministratorUserNames</span><span class="o">=</span><span class="s">admin`</span>
+</code></pre></div>
+<p><strong>STEP 3:</strong> Create file mycustom-authentication-context.xml within MyCustomAuthentication folder with following content.</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xmlversion=&#39;1.0&#39;encoding=&#39;UTF-8&#39;?&gt;</span>
 
-<p><code>external.authentication.defaultAdministratorUserNames=admin</code></p>
+<span class="cp">&lt;!DOCTYPEbeansPUBLIC&#39;-//SPRING//DTD BEAN//EN&#39;&#39;http://www.springframework.org/dtd/spring-beans.dtd&#39;&gt;</span>
 
-<p>STEP 3: Create file mycustom-authentication-context.xml within MyCustomAuthentication folder with following content.</p>
+<span class="nt">&lt;beans&gt;</span>
 
-<p>&lt;?xmlversion=<em>&#39;1.0&#39;</em>encoding=<em>&#39;UTF-8&#39;</em>?&gt;</p>
+<span class="nt">&lt;beanid</span><span class="err">=&quot;authenticationComponent&quot;</span><span class="na">class=</span><span class="s">&quot;org.alfresco.repo.security.authentication.MyCustomAuthentication.MyCustomAuthenticationImpl&quot;</span>
 
-<p>&lt;!DOCTYPEbeansPUBLIC&#39;-//SPRING//DTD BEAN//EN&#39;&#39;http://www.springframework.org/dtd/spring-beans.dtd&#39;&gt;</p>
+<span class="na">parent=</span><span class="s">&quot;authenticationComponentBase&quot;</span><span class="nt">&gt;</span>
 
-<p><beans></p>
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;nodeService&quot;</span><span class="nt">&gt;</span>
 
-<p>&lt;beanid=<em>&quot;authenticationComponent&quot;</em>class=<em>&quot;org.alfresco.repo.security.authentication.</em><em>MyCustomAuthentication</em><em>.</em><em>My</em><em>CustomAuthenticationImpl&quot;</em></p>
+<span class="nt">&lt;refbean</span><span class="err">=&quot;nodeService&quot;</span><span class="nt">/&gt;</span>
 
-<p>parent=<em>&quot;authenticationComponentBase&quot;</em>&gt;</p>
+<span class="nt">&lt;/property&gt;</span>
 
-<p><propertyname=_"nodeService"_></p>
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;personService&quot;</span><span class="nt">&gt;</span>
 
-<p><refbean=_"nodeService"_/></p>
+<span class="nt">&lt;refbean</span><span class="err">=&quot;personService&quot;</span><span class="nt">/&gt;</span>
 
-<p></property></p>
+<span class="nt">&lt;/property&gt;</span>
 
-<p><propertyname=_"personService"_></p>
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;transactionService&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;refbean</span><span class="err">=&quot;transactionService&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;defaultAdministratorUserNameList&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;value&gt;</span>${external.authentication.defaultAdministratorUserNames}<span class="nt">&lt;/value&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="c">&lt;!-- Wrapped version to be used within subsystem --&gt;</span>
+
+<span class="nt">&lt;beanid</span><span class="err">=&quot;AuthenticationComponent&quot;</span><span class="na">class=</span><span class="s">&quot;org.springframework.transaction.interceptor.TransactionProxyFactoryBean&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;proxyInterfaces&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;list&gt;</span>
+
+<span class="nt">&lt;value&gt;</span>org.alfresco.repo.security.authentication.AuthenticationComponent<span class="nt">&lt;/value&gt;</span>
+
+<span class="nt">&lt;/list&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;transactionManager&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;refbean</span><span class="err">=&quot;transactionManager&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;target&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;refbean</span><span class="err">=&quot;authenticationComponent&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;transactionAttributes&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;props&gt;</span>
+
+<span class="nt">&lt;propkey</span><span class="err">=&quot;*&quot;</span><span class="nt">&gt;</span>${server.transaction.mode.default}<span class="nt">&lt;/prop&gt;</span>
+
+<span class="nt">&lt;/props&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="c">&lt;!-- Authentication service for chaining --&gt;</span>
+
+<span class="nt">&lt;beanid</span><span class="err">=&quot;localAuthenticationService&quot;</span><span class="na">class=</span><span class="s">&quot;org.alfresco.repo.security.authentication.AuthenticationServiceImpl&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;ticketComponent&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;refbean</span><span class="err">=&quot;ticketComponent&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;authenticationComponent&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;refbean</span><span class="err">=&quot;authenticationComponent&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;sysAdminParams&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;refbean</span><span class="err">=&quot;sysAdminParams&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></div>
+<p><strong>STEP 4 :</strong> Create file mycustom-filter.properties within MyCustomAuthentication folder with following content.</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xmlversion=&#39;1.0&#39;encoding=&#39;UTF-8&#39;?&gt;</span>
+
+<span class="cp">&lt;!DOCTYPEbeansPUBLIC&#39;-//SPRING//DTD BEAN//EN&#39;&#39;http://www.springframework.org/dtd/spring-beans.dtd&#39;&gt;</span>
+
+<span class="nt">&lt;beans&gt;</span>
+
+<span class="c">&lt;!-- Enable control over mapping between request and user ID --&gt;</span>
+
+<span class="nt">&lt;beanid</span><span class="err">=&quot;remoteUserMapper&quot;</span><span class="na">class=</span><span class="s">&quot;org.alfresco.web.app.servlet.DefaultRemoteUserMapper&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;proxyUserName&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;value&gt;</span>${external.authentication.proxyUserName}<span class="nt">&lt;/value&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;proxyHeader&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;value&gt;</span>${external.authentication.proxyHeader}<span class="nt">&lt;/value&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;active&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;value&gt;</span>${external.authentication.enabled}<span class="nt">&lt;/value&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;userIdPattern&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;value&gt;</span>${external.authentication.userIdPattern}<span class="nt">&lt;/value&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;personService&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;refbean</span><span class="err">=&quot;PersonService&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="c">&lt;!-- Enable cookie-based handling of webscript logins. We must assume cookie based client authentication when external auth is in the chain. --&gt;</span>
+
+<span class="nt">&lt;beanid</span><span class="err">=&quot;webscriptAuthenticationFilter&quot;</span><span class="na">class=</span><span class="s">&quot;org.alfresco.web.app.servlet.WebScriptSSOAuthenticationFilter&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;active&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;authenticationService&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;refbean</span><span class="err">=&quot;AuthenticationService&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;authenticationComponent&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;refbean</span><span class="err">=&quot;AuthenticationComponent&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;personService&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;refbean</span><span class="err">=&quot;personService&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;nodeService&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;refbean</span><span class="err">=&quot;NodeService&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;transactionService&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;refbean</span><span class="err">=&quot;TransactionService&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;propertyname</span><span class="err">=&quot;container&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;refbean</span><span class="err">=&quot;webscripts.container&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/property&gt;</span>
+
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></div>
+<p><strong>STEP 5 :</strong> Create file mycustom-filter-context.xml within MyCustomAuthentication folder with following content.</p>
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">external.authentication.proxyUserName</span><span class="o">=</span><span class="s">alfresco-system</span>
+
+<span class="na">external.authentication.proxyHeader</span><span class="o">=</span><span class="s">X-Alfresco-Remote-User</span>
+
+<span class="na">external.authentication.enabled</span><span class="o">=</span><span class="s">true</span>
+
+<span class="na">external.authentication.userIdPattern</span><span class="o">=</span>
+</code></pre></div>
+<p><strong>STEP 6 :</strong> Create new Plain Java Project in eclipse with any name.</p>
+
+<p><strong>STEP 7 :</strong> Create new package under src folder in java project with name org.alfresco.repo.security.authentication.MyCustomAuthentication.</p>
+
+<p><strong>STEP 8 :</strong> Create new class under package org.alfresco.repo.security.authentication.MyCustomAuthentication with name MyCustomAuthenticationImpl with content there are some library which need to be imported from tomcat/webapps/alfresco/WEB_INF/lib folder.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">org</span><span class="o">.</span><span class="na">alfresco</span><span class="o">.</span><span class="na">repo</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">authentication</span><span class="o">.</span><span class="na">MyCustomAuthentication</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">net.sf.acegisecurity.Authentication</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.alfresco.repo.security.authentication.AbstractAuthenticationComponent</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.alfresco.repo.security.authentication.AuthenticationException</span><span class="o">;</span>
+
+<span class="n">publicclassMyCustomAuthenticationImplextendsAbstractAuthenticationComponent</span>
+
+<span class="o">{</span>
+
+<span class="n">publicvoid</span> <span class="nf">authenticateImpl</span><span class="o">(</span><span class="n">String</span> <span class="n">userName</span><span class="o">,</span> <span class="kt">char</span><span class="o">[]</span> <span class="n">password</span><span class="o">)</span> <span class="n">throwsAuthenticationException</span>
+
+<span class="o">{</span>
+
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;userName = &quot;</span><span class="o">+</span><span class="n">userName</span> <span class="o">+</span> <span class="s">&quot; ::::::::::::::: password = &quot;</span><span class="o">+</span><span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">password</span><span class="o">));</span>
+
+<span class="c1">// Here you can write your own code for authentication any API call or any other authentication code</span>
+
+<span class="k">if</span><span class="o">(!</span><span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">password</span><span class="o">).</span><span class="na">equals</span><span class="o">(</span><span class="n">userName</span> <span class="o">+</span> <span class="s">&quot;123&quot;</span><span class="o">))</span>
+
+<span class="c1">// when authentication fails</span>
+
+<span class="k">throw</span> <span class="k">new</span> <span class="nf">AuthenticationException</span><span class="o">(</span><span class="s">&quot;Test auth failed...&quot;</span><span class="o">);</span>
+
+<span class="k">else</span>
+
+<span class="c1">// when authentication pass</span>
+
+<span class="n">setCurrentUser</span><span class="o">(</span><span class="n">userName</span><span class="o">);</span>
+
+<span class="o">}</span>
+
+<span class="cm">/**</span>
+
+<span class="cm">* The default is not to support Authentication token base authentication</span>
+
+<span class="cm">*/</span>
+
+<span class="kd">public</span> <span class="n">Authentication</span> <span class="nf">authenticate</span><span class="o">(</span><span class="n">Authenticationtoken</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">AuthenticationException</span>
+
+<span class="o">{</span>
+
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;authenticating vi vi token&quot;</span><span class="o">);</span>
+
+<span class="c1">//throw new AlfrescoRuntimeException(&quot;Authentication via token not supported&quot;);</span>
+
+<span class="n">returntoken</span><span class="o">;</span>
+
+<span class="o">}</span>
+
+<span class="nd">@Override</span>
+
+<span class="n">protectedbooleanimplementationAllowsGuestLogin</span><span class="o">()</span> <span class="o">{</span>
+
+<span class="c1">// TODO Auto-generated method stub</span>
+
+<span class="n">returnfalse</span><span class="o">;</span>
+
+<span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<p><strong>STEP 9 :</strong> Create jar file for your java project using eclipse export and place the jar in alfresco/tomcat/webapps/alfresco/WEB-INF/lib.</p>
+
+<p><strong>STEP 10 :</strong> Open file alfresco/tomcat/webapps/alfresco/WEB-INF/classes/alfresco/repository.properties
+and edit file by replacing authentication.chain field to authentication.chain=MyCustomAuthentication: MyCustomAuthentication.</p>
+
+<p><strong>Step 11 :</strong> At last restart the alfresco server.</p>
+
+<p><strong>Step 12 :</strong> Your custom class MyCustomAuthenticationImpl method authenticateImpl is called with every hit of login url .</p>
+
+<p>By this way you are overriding alfresco custom authentication by your own authentication subsystem class which need to be extended is AbstractAuthenticationComponent .</p>
+
+<p>Here we can get username and password in authenticateImpl method.</p>
+
+<p>We can get token and customizing token based authentication in method authenticate.</p>
+
+<p>Here we can also override the Guest Login using implementationAllowsGuestLogin method.</p>
+
+<p><strong><a href="http://blog.xebia.in/tag/alfresco/">For more hacks about alfresco visit</a></strong></p>
 
 <h2>Comments</h2>
 
@@ -143,6 +416,15 @@ This authentication system provide user authentication from open LDAP based on L
             </div>
             <div class="post-tags">
                 <i class="fa fa-tags"></i>
+                
+                <a class="tag_list_link" href="/tag/alfesco">alfesco</a>
+                <span class="seperator">,</span>
+                
+                <a class="tag_list_link" href="/tag/Custom authentication">Custom authentication</a>
+                <span class="seperator">,</span>
+                
+                <a class="tag_list_link" href="/tag/Overriding alfresco authentication">Overriding alfresco authentication</a>
+                <span class="seperator">,</span>
                 
             </div>
             <ul class="post-socials">
