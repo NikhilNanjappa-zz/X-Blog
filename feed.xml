@@ -5,9 +5,183 @@
     <description>Thoughts on latest technologies</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 20 Feb 2015 19:20:23 +0530</pubDate>
-    <lastBuildDate>Fri, 20 Feb 2015 19:20:23 +0530</lastBuildDate>
+    <pubDate>Fri, 27 Feb 2015 06:23:31 +0530</pubDate>
+    <lastBuildDate>Fri, 27 Feb 2015 06:23:31 +0530</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Performance Testing Using Jmeter Part 2</title>
+        <description>&lt;h1&gt;Performance Testing using JMeter (Part 2)- Login into a website&lt;/h1&gt;
+
+&lt;p&gt;In this blog, I will explain steps needed to create a JMeter workflow for login into a website. I will also cover various components of a JMeter test plan components like &lt;strong&gt;HTTP Cookie Manager, Regular Expression Extractor and Response Assertions.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I will use http://en.wikipedia.org website for demonstrating the login workflow.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Start with adding a new thread group and a new config element &lt;strong&gt;HTTP Request Defaults&lt;/strong&gt; with &lt;strong&gt;Server Name&lt;/strong&gt; as &lt;strong&gt;en.wikipedia.org&lt;/strong&gt; and &lt;strong&gt;Protocol&lt;/strong&gt; as &lt;strong&gt;https&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Login_Workflow/Http_Request_Default.jpg&quot; alt=&quot;Add New HTTP Request Defaults&quot;&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Now for accessing the Login Page, add a new &lt;strong&gt;Sampler&lt;/strong&gt; as &lt;strong&gt;Http Request&lt;/strong&gt; with &lt;strong&gt;Path&lt;/strong&gt; set as &lt;strong&gt;/w/index.php&lt;/strong&gt; and parameter &lt;strong&gt;title&lt;/strong&gt; with value &lt;strong&gt;Special:UserLogin&lt;/strong&gt; and parameter &lt;strong&gt;returnto&lt;/strong&gt; with value &lt;strong&gt;Main Page&lt;/strong&gt; .&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Login_Workflow/login_page_Http_Request.jpg&quot; alt=&quot;Http Request for Login Page&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Make sure to check &lt;strong&gt;Encode&lt;/strong&gt; chekboxes, It will make sure that URL constructed by appending parameters is correct.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Now you will be wondering how to get these &lt;strong&gt;Path&lt;/strong&gt; and &lt;strong&gt;Parameter&lt;/strong&gt; values.
+You can easily get these values using the &lt;strong&gt;Network traffic analyzer (Net)&lt;/strong&gt; provided by &lt;strong&gt;firebug&lt;/strong&gt; plugin of &lt;strong&gt;firefox&lt;/strong&gt; browser.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Open firebug and open &lt;strong&gt;Net&lt;/strong&gt; tab.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Click on the &lt;strong&gt;Log in&lt;/strong&gt; link on Home page of &lt;strong&gt;https://en.wikipedia.org&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Monitor the API calls in the Net tab
+&lt;img src=&quot;/img/JMeter/Login_Workflow/firebug_Login_Page.jpg&quot; alt=&quot;Http Request for Login Page&quot;&gt;&lt;/li&gt;
+&lt;li&gt;Copy the URL and the parameters passed to the URL of the Get API for Login page and paste the same under the Http sampler of Login page in JMeter. The link in blue show the complete URL including all the parameters , that will be send by the browser to the webserver to access the login page.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Looking at the URL of &lt;strong&gt;GET API&lt;/strong&gt;, it can be easily identified that whatever is being specified after the question mark (&lt;strong&gt;?&lt;/strong&gt;) symbol are the parameters passed to the API call and whatever before the question mark (&lt;strong&gt;?&lt;/strong&gt;) symbol is the actual URL of the API.&lt;/p&gt;
+
+&lt;p&gt;Also we can get the parameters of the API from the &lt;strong&gt;Params&lt;/strong&gt; tab, as shown above.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Add a &lt;strong&gt;Response Assertion&lt;/strong&gt; by right clicking on &lt;strong&gt;Sampler (Login Page) -&amp;gt; Add -&amp;gt; Assertions -&amp;gt; Response Assertion&lt;/strong&gt; for verifying whether login page was open successfully or not.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Login_Workflow/new_Response_Assertion.jpg&quot; alt=&quot;Http Request for Login Page&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Add assertions as shown below :-&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Login_Workflow/response_assertion_Login_Page.jpg&quot; alt=&quot;Login Page Assertion Conditions&quot;&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Add a listener by right clicking on &lt;strong&gt;Sampler (Login Page) -&amp;gt; Add -&amp;gt; Listener -&amp;gt; View Results Tree&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Login_Workflow/new_tree_view_listener.jpg&quot; alt=&quot;Add New Login Page Tree View Listener&quot;&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Run the test case and verify the &lt;strong&gt;Request&lt;/strong&gt; and &lt;strong&gt;Response&lt;/strong&gt; in the tree view listener&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Request&lt;/strong&gt; :-
+  &lt;img src=&quot;/img/JMeter/Login_Workflow/login_page_tree_view_request.jpg&quot; alt=&quot;Login Page Tree View Listener - Verify Request&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Response&lt;/strong&gt; :-
+&lt;img src=&quot;/img/JMeter/Login_Workflow/login_page_tree_view_response.jpg&quot; alt=&quot;Login Page Tree View Listener - Verify Response&quot;&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Now for submission of Login form, add one more &lt;strong&gt;HTTP Request&lt;/strong&gt; sampler under the same thread group.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We know that, for submission of any form to the webserver, the web-browser will invoke the &lt;strong&gt;POST&lt;/strong&gt; request with specified paramaters.&lt;/p&gt;
+
+&lt;p&gt;To get the parameters needed by the &lt;strong&gt;POST&lt;/strong&gt; request, use the same method of firebug&amp;#39;s Net plugin , as we used above to get the parameters for &lt;strong&gt;GET&lt;/strong&gt; request.&lt;/p&gt;
+
+&lt;p&gt;Login to the website in firefox browser and get the &lt;strong&gt;API query&lt;/strong&gt; parameters from &lt;strong&gt;Params&lt;/strong&gt; tab and &lt;strong&gt;API POST Reqeust&lt;/strong&gt; parameters from &lt;strong&gt;Post&lt;/strong&gt; tab as shown below:-&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Params&lt;/strong&gt; tab specifying query parameters of POST request for login :-
+  &lt;img src=&quot;/img/JMeter/Login_Workflow/login_page_API_Query_Parameters.jpg&quot; alt=&quot;Login Page Post Request Query parameters&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Post&lt;/strong&gt; tab specifying post parameters of POST request for login :-&lt;br&gt;
+  &lt;img src=&quot;/img/JMeter/Login_Workflow/login_page_API_Post_Parameters.jpg&quot; alt=&quot;Login Page Post Request POST parameters&quot;&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Set the method of Http Request to &lt;strong&gt;POST&lt;/strong&gt; and  specify &lt;strong&gt;Path&lt;/strong&gt; as  URL API and the parameters  as shown below :-&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Login_Workflow/login_submission_Parameters.jpg&quot; alt=&quot;Login Submission Http Request Parameters&quot;&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Add a new &lt;strong&gt;Response Assertion&lt;/strong&gt; under the Http request sampler of &lt;strong&gt;Login form submission&lt;/strong&gt; and add the assertion criteria as below&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Login_Workflow/after_login_assertion.jpg&quot; alt=&quot;Login Submission Assertions&quot;&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Add a new &lt;strong&gt;View Tree Listener&lt;/strong&gt; under the under the Http request sampler of Login form submission and run the test plan.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;But, when we run the program and verify the response, we found that its a failure&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Login_Workflow/login_Failure_Due_to_Cookies.jpg&quot; alt=&quot;Login Failure due to cookies&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;So, the response data clearly shows that the login was not successful and it can be due to disabled cookies.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;So, how to solve this problem. Just add a new config element &lt;strong&gt;HTTP Cookie Manager&lt;/strong&gt; under the thread group &lt;strong&gt;Login Threads&lt;/strong&gt; and again run the test plan.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Login_Workflow/new_Cookie_manager.jpg&quot; alt=&quot;New Cookie Manager&quot;&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Run the test again after making the changes. You will see that the test failed with an error message that &lt;strong&gt;there seems to be a problem with your login session.&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Login_Workflow/login_Failure_due_to_session.jpg&quot; alt=&quot;Login failure due to Session&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;This clearly shows that there is a problem with the session that was established with webserver.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;In the previous step of &lt;strong&gt;POST&lt;/strong&gt; request, we hard-coded the parameter &lt;strong&gt;wpLoginToken&lt;/strong&gt;, but in actual scenrio this session variable is sent by the webserver when we load the &lt;strong&gt;Login Page&lt;/strong&gt;. So, we need to create this parameter value dynamically at run time.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;To get the value of parameter &lt;strong&gt;wpLoginToken&lt;/strong&gt;, add a new &lt;strong&gt;Post Processor - Regular Expression Extractor&lt;/strong&gt; under sampler &lt;strong&gt;LoginPage&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Login_Workflow/new_Regular_Expression_Extractor.jpg&quot; alt=&quot;Add new Regular Expression Extractor&quot;&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Populate following values in fields of &lt;strong&gt;Regular Expression Extractor&lt;/strong&gt; :-&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Reference Name : loginToken&lt;/li&gt;
+&lt;li&gt;Regular Expression : value=&amp;quot;(.+?)&amp;quot; name=&amp;quot;wpLoginToken&amp;quot;&lt;/li&gt;
+&lt;li&gt;Template : $1$&lt;/li&gt;
+&lt;li&gt;Match no : 1&lt;/li&gt;
+&lt;li&gt;Default Value : NOT_FOUND&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Login_Workflow/login_Token_Regular_Expression_Details.jpg&quot; alt=&quot;Regular Expression field details&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Note :- The special characters above in Regular Expression are:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;( and ) - these enclose the portion of the match string to be returned
+
+. - match any character
+
++ - one or more times
+
+? - stop when first match succeeds
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;We can validate the regular expression by using the &lt;strong&gt;Regular Expression Search&lt;/strong&gt; of &lt;strong&gt;Tree View&lt;/strong&gt; of Login Page.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Login_Workflow/validating_Regular_Expression.jpg&quot; alt=&quot;Login failure due to Session&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Make sure that &lt;strong&gt;Regular Exp&lt;/strong&gt; checkbox is checked.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Now update the parameter &lt;strong&gt;wpLoginToken&lt;/strong&gt; with the variable &lt;strong&gt;loginToken&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Login_Workflow/update_Parameter_for_Login_Session.jpg&quot; alt=&quot;Update parameter for Submit Login Post Request&quot;&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Now run the test plan again and validate that login was successful to the website.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So, using the above steps, we were successfully able to login to a website for a single user workflow. In the next blogs, I will cover, how we can get multiple user&amp;#39;s data from a &lt;strong&gt;csv&lt;/strong&gt; file and perform the login workflow for multiple user&amp;#39;s.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 24 Feb 2015 00:00:00 +0530</pubDate>
+        <link>/2015/02/24/Performance-Testing-Using-JMeter-Part-2/</link>
+        <guid isPermaLink="true">/2015/02/24/Performance-Testing-Using-JMeter-Part-2/</guid>
+        
+        <category>Testing</category>
+        
+        <category>Performance Testing</category>
+        
+        <category>JMeter</category>
+        
+        
+      </item>
     
       <item>
         <title>Performance Testing Using Jmeter Part 1</title>
@@ -27,13 +201,13 @@
 &lt;li&gt;  Open Network Tab by clicking on &lt;strong&gt;Advanced-&amp;gt;Network&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/JMeter/firefox_network.jpg&quot; alt=&quot;Firefox Network Settings&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Recording_Workflow/firefox_network.jpg&quot; alt=&quot;Firefox Network Settings&quot;&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;  Click on &lt;strong&gt;Settings&lt;/strong&gt; Button and update proxy setting to &lt;strong&gt;localhost: 8080&lt;/strong&gt;, as shown below: -&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/JMeter/firefox_network_settings.jpg&quot; alt=&quot;HTTP Proxy Settings&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Recording_Workflow/firefox_network_settings.jpg&quot; alt=&quot;HTTP Proxy Settings&quot;&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;  Click &lt;strong&gt;OK&lt;/strong&gt; Button to save all Settings.&lt;/li&gt;
@@ -47,40 +221,45 @@
 &lt;li&gt;  Add a new &lt;strong&gt;Thread Group&lt;/strong&gt; by right clicking on &lt;strong&gt;Test Plan -&amp;gt; Add -&amp;gt; Threads -&amp;gt; Threads Group&lt;/strong&gt;, as shown below: -&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/JMeter/New_ThreadGroup.jpg&quot; alt=&quot;Add New Thread Group&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Recording_Workflow/New_ThreadGroup.jpg&quot; alt=&quot;Add New Thread Group&quot;&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;  Add config element &lt;strong&gt;HTTP Request Defaults&lt;/strong&gt; by right clicking on
 &lt;strong&gt;Thread Group -&amp;gt; Config element -&amp;gt; HTTP Request Defaults&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/JMeter/New_Http_Request_Default.jpg&quot; alt=&quot;Add New HTTP Request Defaults&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Recording_Workflow/New_Http_Request_Default.jpg&quot; alt=&quot;Add New HTTP Request Defaults&quot;&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;  Specify the &lt;strong&gt;Server Name&lt;/strong&gt; (website host name) or &lt;strong&gt;IP&lt;/strong&gt; of the server for which you want to record Http requests&lt;/li&gt;
-&lt;li&gt;  In the Path specify the relative path of the webpage for which you wan to record Http request. If it’s the home page of the , just specify &lt;strong&gt;slash(/)&lt;/strong&gt; in the path, as shown below:-&lt;/li&gt;
+&lt;li&gt;  In the Path specify the relative path of the webpage for which you want to record Http request. If it’s the home page of the , just specify &lt;strong&gt;slash(/)&lt;/strong&gt; in the path, as shown below:-&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/JMeter/Http_Request_Default_Settings.jpg&quot; alt=&quot;Path Settings for Home Page&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Recording_Workflow/Http_Request_Default_Settings.jpg&quot; alt=&quot;Path Settings for Home Page&quot;&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;  Add &lt;strong&gt;Recording Controller&lt;/strong&gt; by right clicking on &lt;strong&gt;Thread Group -&amp;gt; Add -&amp;gt; Logic Controller -&amp;gt; Recording Controller&lt;/strong&gt; as shown below :-&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/JMeter/New_Recording_Controller.jpg&quot; alt=&quot;Add New Recording Controller&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Recording_Workflow/New_Recording_Controller.jpg&quot; alt=&quot;Add New Recording Controller&quot;&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;  Add &lt;strong&gt;HTTP Test Script Recorder&lt;/strong&gt; by right clicking on &lt;strong&gt;WorkBench - &amp;gt; Add -&amp;gt; Non Test Elements -&amp;gt; HTTP(S) Test Script Recorder&lt;/strong&gt; as shown below :-&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/JMeter/New_Http_Test_Script_Recorder.jpg&quot; alt=&quot;Add New HTTP(S) Test Script Recorder&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Recording_Workflow/New_Http_Test_Script_Recorder.jpg&quot; alt=&quot;Add New HTTP(S) Test Script Recorder&quot;&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;  To record HTTP request only for HTML pages, on panel &lt;strong&gt;HTTP(S) Test Script Recorder&lt;/strong&gt; click on &lt;strong&gt;Add suggested Excludes&lt;/strong&gt; . This will add the URL patterns that we want to exclude from recording.&lt;/li&gt;
-&lt;li&gt;Now click on &lt;strong&gt;Add&lt;/strong&gt; Button in &lt;strong&gt;URL Patterns to Include&lt;/strong&gt; section and type &lt;strong&gt;.*\.html&lt;/strong&gt; as shown below :-&lt;/li&gt;
+&lt;li&gt;If you just want to record HTTP requests for HTML pages, then
+
+&lt;ul&gt;
+&lt;li&gt;Click  &lt;strong&gt;Add suggested Excludes&lt;/strong&gt; on &lt;strong&gt;HTTP(S) Test Script Recorder&lt;/strong&gt; panel. This will add the URL patterns that we want to exclude from recording.
+&amp;gt; OR&lt;/li&gt;
+&lt;li&gt;Click on &lt;strong&gt;Add&lt;/strong&gt; Button on &lt;strong&gt;URL Patterns to Include&lt;/strong&gt; section and type &lt;strong&gt;.*\.html&lt;/strong&gt;. This specifies that only HTML samplers should be recorded.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/JMeter/Http_Test_Script_Recorder_Settings.jpg&quot; alt=&quot;Patterns to include and exclude from Recording&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Recording_Workflow/Http_Test_Script_Recorder_Settings.jpg&quot; alt=&quot;Patterns to include and exclude from Recording&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;And now you are ready with all the needed configurations to start recording.&lt;/p&gt;
 
@@ -88,14 +267,14 @@
 &lt;li&gt;  Click on the &lt;strong&gt;Start&lt;/strong&gt; Button on &lt;strong&gt;HTTP(S) Test Script Recorder&lt;/strong&gt; panel. But what, instead of starting recording, JMeter shows a pop-up regarding creation of a certificate as shown below: -&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/JMeter/security_Certificate_Recording.jpg&quot; alt=&quot;JMeter Security Certificate&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Recording_Workflow/security_Certificate_Recording.jpg&quot; alt=&quot;JMeter Security Certificate&quot;&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;  Actually, all HTTPS connections use certificates to authenticate the connection between the browser and the web server. When connecting via HTTPS, the server presents the certificate to the browser. To authenticate the certificate, the browser checks that the server certificate is signed by a Certificate Authority (CA) which is linked to one of its in-built root CAs.
-For versions of JMeter from 2.10 onwards, JMeter will generate its own certificate(s), which can be imported in the browser to enable the trust.&lt;/li&gt;
+&lt;li&gt;  Actually, all HTTPS connections use certificates to authenticate the connection between the browser and the web server. When the communication protocol is &lt;strong&gt;HTTPS&lt;/strong&gt;, the web-server presents the security certificate to the browser. To authenticate this certificate, the browser checks whether the server certificate is signed by a Certificate Authority (CA) or not.&lt;/li&gt;
+&lt;li&gt;For versions of JMeter from 2.10 onwards, JMeter generates its own certificate(s), which can be imported in the browser to enable the trust between proxy server and browser and also to enable recording of HTTPs requests.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;•    So, When a pop-up as above for certificate appears, it will create a file named &lt;strong&gt;“ApacheJMeterTemporaryRootCA.crt”&lt;/strong&gt; in bin directory of JMeter&lt;/p&gt;
+&lt;p&gt;When a pop-up as above for security certificate appears, it will create a file named &lt;strong&gt;“ApacheJMeterTemporaryRootCA.crt”&lt;/strong&gt; in bin directory of JMeter&lt;/p&gt;
 
 &lt;p&gt;Now we need to install this certificate in the browser.&lt;/p&gt;
 
@@ -105,7 +284,7 @@ For versions of JMeter from 2.10 onwards, JMeter will generate its own certifica
 &lt;li&gt;From the &lt;strong&gt;“Certificates”&lt;/strong&gt; tab click on &lt;strong&gt;“View Certificates”&lt;/strong&gt; and import the certificate created in the above step as shown below: -&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/JMeter/firefox_Install_Certificates.jpg&quot; alt=&quot;Importing Security Certificate in Firefox&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Recording_Workflow/firefox_Install_Certificates.jpg&quot; alt=&quot;Importing Security Certificate in Firefox&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;And now we are all set to start recording.&lt;/p&gt;
 
@@ -119,7 +298,7 @@ For versions of JMeter from 2.10 onwards, JMeter will generate its own certifica
 
 &lt;p&gt;You will see that the links that you click in the browser, starts recording as &lt;strong&gt;“Http Request”&lt;/strong&gt; under the &lt;strong&gt;“Recording Controller”&lt;/strong&gt; as shown below :-&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/JMeter/recorded_Http_Requests.jpg&quot; alt=&quot;Recorded Http Samplers&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/JMeter/Recording_Workflow/recorded_Http_Requests.jpg&quot; alt=&quot;Recorded Http Samplers&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;Now, you can use these Http samplers with other components of JMeter to create your full-fledged test plans.&lt;/p&gt;
 
@@ -130,6 +309,12 @@ For versions of JMeter from 2.10 onwards, JMeter will generate its own certifica
         <pubDate>Mon, 16 Feb 2015 00:00:00 +0530</pubDate>
         <link>/2015/02/16/Performance-Testing-Using-JMeter-Part-1/</link>
         <guid isPermaLink="true">/2015/02/16/Performance-Testing-Using-JMeter-Part-1/</guid>
+        
+        <category>Testing</category>
+        
+        <category>Performance Testing</category>
+        
+        <category>JMeter</category>
         
         
       </item>
@@ -583,7 +768,7 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
 
 &lt;p&gt;Alfresco comes in both enterprise and community version. At the time of writing this blog latest version for &lt;strong&gt;Enterprise&lt;/strong&gt; edition is &lt;strong&gt;4.2.3.1&lt;/strong&gt;. At the time of writing this blog latest version for &lt;strong&gt;Community&lt;/strong&gt; edition is &lt;strong&gt;5.0.b&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;p&gt;Before starting with this blog all should be familiar with CMIS and how to use CMIS along with alfresco. For getting started with CMIS with alfresco and other content repository you must first read our blog on&lt;strong&gt;&lt;a href=&quot;http://xebee.xebia.in/?p=19243&amp;amp;preview=true&quot;&gt; Alfresco working with CMIS (File, Folder and Search operation)&lt;/a&gt;. &lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Before starting with this blog all should be familiar with CMIS and how to use CMIS along with alfresco. For getting started with CMIS with alfresco and other content repository you must first read our blog on&lt;strong&gt;&lt;a href=&quot;http://blog.xebia.in/2015/02/12/playing-with-alfresco-repository-using-cmis/&quot;&gt; Alfresco working with CMIS (File, Folder and Search operation)&lt;/a&gt;. &lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;First of all what is aspects?&lt;/strong&gt;&lt;/p&gt;
 
@@ -704,33 +889,61 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
         <title>Alfresco Custom Field Search In Cmis Approach</title>
         <description>&lt;h1&gt;Alfresco custom field search in CMIS approach.&lt;/h1&gt;
 
-&lt;p&gt;Before starting with alfresco custom field search in CMIS I like to tell you about few thing.&lt;/p&gt;
+&lt;p&gt;Before starting with alfresco custom field search using CMIS I would like you to know basic concepts.&lt;/p&gt;
 
-&lt;p&gt;What is cmis? How cmis works? How to create custom model in alfresco? How to make custom field searchable? How to search document in cmis using lucene query?&lt;/p&gt;
+&lt;h1&gt;Table of Contents&lt;/h1&gt;
 
-&lt;p&gt;&lt;strong&gt;1. What is cmis?&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#what-is-cmis&quot;&gt;What is CMIS?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#how-cmis-works&quot;&gt;How CMIS works?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#how-to-create-custom-model-in-alfresco&quot;&gt;How to create custom model in alfresco?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#use-cases&quot;&gt;Use Cases:&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#how-to-make-custom-filed-searchable&quot;&gt;How to make custom field searchable?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#how-to-search-document-using-cmis-query&quot;&gt;How to search document using CMIS query?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#complete-example-of-dyanamic-cmis-query&quot;&gt;Complete example for dynamic CMIS query?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;Cmis stands for content management interoperatibility service. CMIS is an open stands for accessing content repository given by OASIS.&lt;/p&gt;
+&lt;h2&gt;What is CMIS? &lt;a id=&quot;what-is-cmis&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
 
-&lt;p&gt;There are set of rules or restriction enforced by CMIS for accessing CMIS compitable repository.&lt;/p&gt;
+&lt;p&gt;CMIS stands for Content Management Interoperability Service. CMIS is an open standard for accessing content repository given by OASIS.&lt;/p&gt;
 
-&lt;p&gt;Alfresco alfresco support the CMIS standard for accessing the content repository.&lt;/p&gt;
+&lt;p&gt;There are set of rules or restriction enforced by CMIS for accessing CMIS compatible repository.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;2. How cmis works?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Alfresco support the CMIS standard for accessing the content repository.&lt;/p&gt;
 
-&lt;p&gt;There are set of binding that CMIS provide to bind session with CMIS compitable repository. 1. Local session binding. 2. Atom pub binding. 3. Web service binding.&lt;/p&gt;
+&lt;h2&gt;How CMIS works? &lt;a id=&quot;how-cmis-works&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
 
-&lt;p&gt;After getting session using user name and password or user token user can get, upload and manupilate content to which he/she is authorized.&lt;/p&gt;
+&lt;p&gt;These are set of binding that CMIS provide to bind session with CMIS compatible repository.&lt;/p&gt;
 
-&lt;p&gt;User can create new content, upload new content, edit content, delete content, accociate or update metadata with perticular content within the CMIS compitable repository.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Local session binding.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Atom pub binding.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Web service binding.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;There are some limitation when you are working with custom fields and aspects as these are not accessible threw apache cmis librey we have to use alresco open cmis libreary to get additional functionality.&lt;/p&gt;
+&lt;p&gt;After authentication using either username/password or user token, a valid user session is created that a authenticated user can use to perform get, upload, and other manipulation operations.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;3. How to create custom model in alfresco?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;User can create new content, upload new content, edit content, delete content, associate or update metadata with particular content within the CMIS compatible repository.&lt;/p&gt;
 
-&lt;p&gt;Now this is an practicle example to create an custom model within alfresco. For creating custom model in alfresco in community version we need to create two file one is cutom model file and other is context file which contain registory for custom model these two files are mandatory for creating new model there are other files too which are created based on needs.&lt;/p&gt;
+&lt;p&gt;There are some limitations when you are working with custom fields and aspects as these are not accessible threw apache CMIS library we have to use ALFRESCO open CMIS library to get additional functionality.&lt;/p&gt;
 
-&lt;p&gt;There are two ways of creating new model in alfresco one is by using aspects and other is by using types. We are using the aspects for each the new model in alfresco as aspects are dynamic and reusable while types are not resuable component.&lt;/p&gt;
+&lt;h2&gt;How to create custom model in alfresco? &lt;a id=&quot;how-to-create-custom-model-in-alfresco&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Now this is an practical example to create an custom model within alfresco. For creating custom model in alfresco(community version) we need to create two file one is custom model file and other is context file which contain registry for custom model these two files are mandatory for creating new model there are other files also which are created based on requirements.&lt;/p&gt;
+
+&lt;p&gt;There are two ways of creating new model in alfresco one is by using aspects and other is by using types. We are using the aspects for each the new model in alfresco as aspects are dynamic and reusable while types are not reusable component.&lt;/p&gt;
+
+&lt;h2&gt;USE CASES : &lt;a id=&quot;use-cases&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;We take three use cases where same example can be used :&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;1.&lt;/strong&gt; When we have to create our custom field search without using Alfresco default web script search within alfresco share portal.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2.&lt;/strong&gt; When we want to use alfresco document management with independent product where you have to search alfresco document without depending on alfresco web script or default search capability.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3.&lt;/strong&gt; In case you have dynamic MetaData search form for alfresco documents search which could change at run time and you want to search document based on that particular MetaData field on search form. In this case we have to use dynamic CMIS queries as done in last step.&lt;/p&gt;
+
+&lt;p&gt;These are only few use cases there could be many..&lt;/p&gt;
 
 &lt;p&gt;First we will start with creating new model for which we need some files create these files with names:&lt;/p&gt;
 
@@ -834,10 +1047,14 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/config&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;/alfresco-config&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;this file is use to make each field in model searchable can ne used in alfresco advanced search and cmis field search.&lt;/p&gt;
+&lt;p&gt;this file is use to make each field in model searchable can be used in alfresco advanced search and CMIS field search.&lt;/p&gt;
 
 &lt;p&gt;myCustomFields.properties should contain following content:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;my_model.property.my_metadata_custom_serial_number.title=Serial Number my_model.property.my_metadata_custom_status.title=Status my_model.property.my_metadata_custom_id.title=Document ID my_model.property.my_metadata_custom_name.title=Name my_model.property.my_metadata_custom_code.title=Code
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-properties&quot; data-lang=&quot;properties&quot;&gt;&lt;span class=&quot;na&quot;&gt;my_model.property.my_metadata_custom_serial_number.title&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Serial Number&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;my_model.property.my_metadata_custom_status.title&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Status&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;my_model.property.my_metadata_custom_id.title&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Document ID&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;my_model.property.my_metadata_custom_name.title&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Name&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;my_model.property.my_metadata_custom_code.title&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;Code&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;custom-slingshot-application-context.xml should contain following content:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;#39;1.0&amp;#39; encoding=&amp;#39;UTF-8&amp;#39;?&amp;gt;&lt;/span&gt;
@@ -977,24 +1194,94 @@ $scope.customDatepicker = $filter(&amp;#39;date&amp;#39;)($scope.date, &amp;quot
       &lt;span class=&quot;nt&quot;&gt;&amp;lt;/alfresco-config&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;we have created new aspect with name my:cutomfieldsdata for linking aspect dynamically with content.
-We have made these custom field searhable from alfresco share.
-We have made these custom field Inline editable on alfresco share.
+We have made these custom field searchable from alfresco share.
+We have made these custom field inline editable on alfresco share.
 We have made these custom field editable on alfresco share.
 We have made these custom field visible on alfresco share.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;4. How to make custom field searchable?&lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;How to make custom field searchable? &lt;a id=&quot;how-to-make-custom-filed-searchable&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;We have already done these filed searchable while creating new model within alfresco. We have created web-client-config-custom.xml file for searching custom field independently and use &lt;index enabled=&quot;true&quot;&gt; in model file for searcing custom field in full index search.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;5. How to search document in cmis using lucene query?&lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;How to search document using CMIS query? &lt;a id=&quot;how-to-search-document-using-cmis-query&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
 
-&lt;p&gt;We are giving cmis query for searching document using full index search where index is the keyword to search. If you want to get full cmis code for creating session and searching document read our blog of Alfresco CMIS approach for building application within alfresco.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queryForDocument&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;SELECT cmis:objectId FROM cmis:document WHERE cmis:createdBy &amp;lt;&amp;gt; &amp;#39;System&amp;#39; AND CONTAINS(&amp;#39;&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;#39;)&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;p&gt;We are giving CMIS query for searching document using full index search where index is the keyword to search. If you want to get full CMIS code for creating session and searching document read our blog of Alfresco CMIS approach for building application within alfresco.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// full index search for the document using CMIS approach&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queryForDocument&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;SELECT cmis:objectId FROM cmis:document WHERE cmis:createdBy &amp;lt;&amp;gt; &amp;#39;System&amp;#39; AND CONTAINS(&amp;#39;&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;#39;)&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;We are giving cmis query for searching document using Custom Alfresco Document Meta Data search where serial_number is the serial number of document to search. If you want to get full cmis code for creating session and searching document read our blog of Alfresco CMIS approach for building application within alfresco.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;SELECT d.cmis:objectId FROM cmis:document as d join my:cutomfieldsdata as m on d.cmis:objectId = m.cmis:objectId WHERE d.cmis:createdBy &amp;lt;&amp;gt; &amp;#39;System&amp;#39; m.my:metadata_custom_serial_number = &amp;#39;&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;serial_number&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;p&gt;We are giving CMIS query for searching document using Custom Alfresco Document Meta Data search where serial_number is the serial number of document to search. If you want to get full CMIS code for creating session and searching document read our blog of Alfresco CMIS approach for building application within alfresco.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Query to fetch document with custom serial number field we added to meta data of document&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;SELECT d.cmis:objectId FROM cmis:document as d join my:cutomfieldsdata as m on d.cmis:objectId = m.cmis:objectId WHERE d.cmis:createdBy &amp;lt;&amp;gt; &amp;#39;System&amp;#39; m.my:metadata_custom_serial_number = &amp;#39;&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;serial_number&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;this query is to search for serial number only if you want to add more field to search you have to dynamically append it to the query string.&lt;/p&gt;
+
+&lt;h2&gt;Complete example for dynamic CMIS query? &lt;a id=&quot;complete-example-of-dyanamic-cmis-query&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;We are multiple step involved in creating dynamic CMIS query first we have to find out how many search field are there in search form which are not blank(there can be other logic to for same problem).  &lt;/p&gt;
+
+&lt;p&gt;For creating session and other task we have a complete blog on CMIS &lt;strong&gt;&lt;a href=&quot;http://blog.xebia.in/2015/02/12/playing-with-alfresco-repository-using-cmis/&quot;&gt; Playing with Alfresco repository using CMIS&lt;/a&gt;. &lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;SearchParameter Class created to retain search parameter object on dynamic search form. In this example we can have n number of parameter of type SearchParameter on search form.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SearchParameter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getOperator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setOperator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;operator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;operator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Method to create dynamic query based on SearchParameter list. This method return CMIS query string for getting Alfresco document objects from repository.&lt;/p&gt;
+
+&lt;p&gt;One thing to notice is that our custom fields start with metadata_ so there should be way to identify default and custom fields in search form.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt; * Method use to create dynamic CMIS query according to the search form data&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt; * @param parameters&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt; * @return dynamic query string&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt; */&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;createDynamicQuery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SearchParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parameters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;//Initial query string&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;SELECT d.cmis:objectId FROM cmis:document as d join my:cutomfieldsdata as m on d.cmis:objectId = m.cmis:objectId WHERE d.cmis:createdBy &amp;lt;&amp;gt; &amp;#39;System&amp;#39; &amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;// In parameter map we have name and the exact value of the search parameter&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SearchParameter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;searchParameter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parameters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;searchParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;startsWith&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;metadata_&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)){&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;searchParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getOperator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;equalsIgnoreCase&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;like&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot; AND &amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;m.my:&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;searchParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot; like &amp;#39;%&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;searchParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;%&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot; AND &amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;m.my:&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;searchParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot; = &amp;#39;&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;searchParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;searchParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getOperator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;equalsIgnoreCase&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;like&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot; AND &amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;d.cmis:&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;searchParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot; like &amp;#39;%&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;searchParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;%&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot; AND &amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;d.cmis:&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;searchParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot; = &amp;#39;&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;searchParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://xebee.xebia.in/index.php/tag/alfresco/&quot;&gt;For more hacks about alfresco visit&lt;/a&gt;..................&lt;/strong&gt;&lt;/p&gt;
 </description>
         <pubDate>Thu, 20 Nov 2014 00:00:00 +0530</pubDate>
         <link>/2014/11/20/alfresco-custom-field-search-in-cmis-approach/</link>
@@ -1074,129 +1361,6 @@ So whats the Solution. Solution is to find a tool that can give us both of these
         <pubDate>Sun, 16 Nov 2014 00:00:00 +0530</pubDate>
         <link>/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</link>
         <guid isPermaLink="true">/2014/11/16/mobile-app-automation-android-and-ios-app-automation-via-one-test-case-using-appium/</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Robot Framework Ride</title>
-        <description>&lt;h1&gt;ROBOT Framework &amp;amp; RIDE&lt;/h1&gt;
-
-&lt;h2&gt;&lt;strong&gt;What is Robot Framework?&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;•It’s a general test automation framework(open source from Nokia and hosted on Google)&lt;/p&gt;
-
-&lt;p&gt;•Focus of automation is generally on acceptance tests.&lt;/p&gt;
-
-&lt;p&gt;•Uses a Keyword driven automation approach&lt;/p&gt;
-
-&lt;p&gt;•Testing capabilities can be extended using Python or Java&lt;/p&gt;
-
-&lt;p&gt;•Can create tests in natural language for ease of understanding. &lt;/p&gt;
-
-&lt;h2&gt;&lt;strong&gt;Keyword Driven approach&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;•Higher-level keywords: Those are really testing a concrete aspect of the business logic of the system under test.&lt;/p&gt;
-
-&lt;p&gt;•Lower-level keywords: To keep the implementation of the higher-level keywords at a decent size one is often breaking down the required functionality to several lower-level keywords.&lt;/p&gt;
-
-&lt;p&gt;[caption id=&amp;quot;attachment_19124&amp;quot; align=&amp;quot;aligncenter&amp;quot; width=&amp;quot;453&amp;quot;]&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/RF_Keyword_Approach.png&quot; alt=&quot;Keyword Approach&quot;&gt; RF Keyword Approach[/caption] &lt;/p&gt;
-
-&lt;h2&gt;&lt;strong&gt;Architecture&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://xebee.xebia.in/wp-content/uploads/2014/11/RF_Architecture.png&quot; alt=&quot;RF_Architecture&quot;&gt;&lt;/p&gt;
-
-&lt;h2&gt;&lt;strong&gt;Installation- Steps&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Installation step of Python&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;1.Install Python 2.x using the windows MSI installer:&lt;a href=&quot;http://www.python.org/download/&quot;&gt;http://www.python.org/download/&lt;/a&gt; (because Robot Framework only support python 2.x version. Robot Framework is currently not compatible with Python 3.x versions)&lt;/p&gt;
-
-&lt;p&gt;2.After installation check in the Environment settings for “path”. If python script path not exists then append the following path&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Open Start &amp;gt; Settings &amp;gt; Control Panel &amp;gt; System &amp;gt; Advanced &amp;gt; Environment Variables. There are User variables and System variables and the difference between them is that User variables affect only the current users, whereas System variables affect all users.&lt;/li&gt;
-&lt;li&gt;To edit existing PATH, select Edit and add ;&lt;InterpreterInstallationDir&gt;;&lt;InterpreterInstallationDir&gt;\Scripts\ at the end of the value. Note that the leading colon (;) is important, as it separates different entries. To add a new value, select New and provide both the name and the value, this time without the leading colon.  &lt;/li&gt;
-&lt;li&gt;Start a new command prompt for the changes to effect. 
-&lt;strong&gt;Installation step of Robot Framework&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;1.Using PIP:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Install PIP: download the “get-pip.py” file from&lt;a href=&quot;https://bootstrap.pypa.io/get-pip.py&quot;&gt;https://bootstrap.pypa.io/get-pip.py&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Open command prompt go to the directory where the #a file downloaded. E.g. cd c:\main\downloads&lt;/li&gt;
-&lt;li&gt;After that hit the command: python get-pip.py&lt;/li&gt;
-&lt;li&gt;After pip installation hit the following command in cmd to install robot framework:&lt;/li&gt;
-&lt;li&gt;“&lt;em&gt;pip install robotframework&lt;/em&gt;”&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;2 .Another way is to get the Robot Framework source code by downloading the source distribution from following location:&lt;a href=&quot;https://pypi.python.org/pypi/robotframework&quot;&gt;https://pypi.python.org/pypi/robotframework&lt;/a&gt;   or&lt;a href=&quot;https://github.com/robotframework/robotframework&quot;&gt;https://github.com/robotframework/robotframework&lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;First download the source code &lt;/li&gt;
-&lt;li&gt;Open command prompt go to the directory where the #a file downloaded. E.g. cd c:\main\downloads &lt;/li&gt;
-&lt;li&gt;After that hit the command: python setup.py install
-&lt;strong&gt;Installation step of RIDE:&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;****To install RIDE below things should installed before” &lt;/p&gt;
-
-&lt;p&gt;1.Python&lt;/p&gt;
-
-&lt;p&gt;2.Wxpython&lt;/p&gt;
-
-&lt;p&gt;3.Robot Framework&lt;/p&gt;
-
-&lt;p&gt;Steps for Python and Robot Framework are already present in the document and for Wxpython follow the below steps:&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Installation of wxpython&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;For windows: &lt;a href=&quot;http://sourceforge.net/projects/wxpython/files/wxPython/2.8.12.1/&quot;&gt;http&lt;/a&gt;&lt;a href=&quot;http://sourceforge.net/projects/wxpython/files/wxPython/2.8.12.1/&quot;&gt;://sourceforge.net/projects/wxpython/files/wxPython/2.8.12.1/&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;strong&gt;Installation Instruction for RIDE:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;On windows download the executable site from &lt;a href=&quot;https://code.google.com/p/robotframework-ride/downloads/list&quot;&gt;https&lt;/a&gt;&lt;a href=&quot;https://code.google.com/p/robotframework-ride/downloads/list&quot;&gt;://code.google.com/p/robotframework-ride/downloads/list&lt;/a&gt;   and install it&lt;/li&gt;
-&lt;li&gt;Alternative way to install using the pip command : “pip install robotframework-ride” &lt;/li&gt;
-&lt;li&gt;Another way is to download the source code from :&lt;a href=&quot;https://pypi.python.org/pypi/robotframework-ride&quot;&gt;https://pypi.python.org/pypi/robotframework-ride&lt;/a&gt;   and use the command : python setup.py install&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;To open the Ride just open the cmd and hit the command “ride.py” or just call the same command on run(win+r). &lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Introduction To RIDE&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The Robot Framework IDE (RIDE) is the integrated development environment to implement automated tests for the Robot Framework. &lt;em&gt;How to open RIDE&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Type ride.py in start menu of system and press enter&lt;/li&gt;
-&lt;li&gt;Double click on RIDE shortcut(if created while installation)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2&gt;&lt;strong&gt;Test Libraries&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;Test libraries contain those lowest-level keywords, often called library keywords, which actually interact with the system under test. All test cases always use keywords from some library, often through higher-level user keywords.&lt;/p&gt;
-
-&lt;p&gt;Different Types of Libraries available &lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Standard Libraries&lt;/li&gt;
-&lt;li&gt;External Libraries
-&lt;em&gt;&lt;strong&gt;Standard Libraries&lt;/strong&gt;&lt;/em&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Some test libraries are distributed with Robot Framework and these libraries are called standard libraries. These are the available standard libraries: &lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://robotframework.googlecode.com/hg/doc/userguide/RobotFrameworkUserGuide.html?r=2.7.6#builtin-library&quot;&gt;BuiltIn&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://robotframework.googlecode.com/hg/doc/userguide/RobotFrameworkUserGuide.html?r=2.7.6#operatingsystem-library&quot;&gt;OperatingSystem&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Tue, 11 Nov 2014 00:00:00 +0530</pubDate>
-        <link>/2014/11/11/robot-framework-ride/</link>
-        <guid isPermaLink="true">/2014/11/11/robot-framework-ride/</guid>
         
         
       </item>

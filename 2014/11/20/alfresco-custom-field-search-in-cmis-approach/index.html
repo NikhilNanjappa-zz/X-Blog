@@ -54,39 +54,67 @@
 
             <div class="post-body">
                 <div class="meta">
-                  <span class="meta">Posted by <a href="/author/SOURABH AGGARWAL">SOURABH AGGARWAL</a> on </span>
+                  <span class="meta">Posted by <a href="/author/Sourabh Aggarwal">Sourabh Aggarwal</a> on </span>
                   <span class="date">20 November 2014</span>
                 </div>
                 <div class="content">
                     <h1>Alfresco custom field search in CMIS approach.</h1>
 
-<p>Before starting with alfresco custom field search in CMIS I like to tell you about few thing.</p>
+<p>Before starting with alfresco custom field search using CMIS I would like you to know basic concepts.</p>
 
-<p>What is cmis? How cmis works? How to create custom model in alfresco? How to make custom field searchable? How to search document in cmis using lucene query?</p>
+<h1>Table of Contents</h1>
 
-<p><strong>1. What is cmis?</strong></p>
+<ul>
+<li><a href="#what-is-cmis">What is CMIS?</a></li>
+<li><a href="#how-cmis-works">How CMIS works?</a></li>
+<li><a href="#how-to-create-custom-model-in-alfresco">How to create custom model in alfresco?</a></li>
+<li><a href="#use-cases">Use Cases:</a></li>
+<li><a href="#how-to-make-custom-filed-searchable">How to make custom field searchable?</a></li>
+<li><a href="#how-to-search-document-using-cmis-query">How to search document using CMIS query?</a></li>
+<li><a href="#complete-example-of-dyanamic-cmis-query">Complete example for dynamic CMIS query?</a></li>
+</ul>
 
-<p>Cmis stands for content management interoperatibility service. CMIS is an open stands for accessing content repository given by OASIS.</p>
+<h2>What is CMIS? <a id="what-is-cmis"></a></h2>
 
-<p>There are set of rules or restriction enforced by CMIS for accessing CMIS compitable repository.</p>
+<p>CMIS stands for Content Management Interoperability Service. CMIS is an open standard for accessing content repository given by OASIS.</p>
 
-<p>Alfresco alfresco support the CMIS standard for accessing the content repository.</p>
+<p>There are set of rules or restriction enforced by CMIS for accessing CMIS compatible repository.</p>
 
-<p><strong>2. How cmis works?</strong></p>
+<p>Alfresco support the CMIS standard for accessing the content repository.</p>
 
-<p>There are set of binding that CMIS provide to bind session with CMIS compitable repository. 1. Local session binding. 2. Atom pub binding. 3. Web service binding.</p>
+<h2>How CMIS works? <a id="how-cmis-works"></a></h2>
 
-<p>After getting session using user name and password or user token user can get, upload and manupilate content to which he/she is authorized.</p>
+<p>These are set of binding that CMIS provide to bind session with CMIS compatible repository.</p>
 
-<p>User can create new content, upload new content, edit content, delete content, accociate or update metadata with perticular content within the CMIS compitable repository.</p>
+<ul>
+<li><p>Local session binding.</p></li>
+<li><p>Atom pub binding.</p></li>
+<li><p>Web service binding.</p></li>
+</ul>
 
-<p>There are some limitation when you are working with custom fields and aspects as these are not accessible threw apache cmis librey we have to use alresco open cmis libreary to get additional functionality.</p>
+<p>After authentication using either username/password or user token, a valid user session is created that a authenticated user can use to perform get, upload, and other manipulation operations.</p>
 
-<p><strong>3. How to create custom model in alfresco?</strong></p>
+<p>User can create new content, upload new content, edit content, delete content, associate or update metadata with particular content within the CMIS compatible repository.</p>
 
-<p>Now this is an practicle example to create an custom model within alfresco. For creating custom model in alfresco in community version we need to create two file one is cutom model file and other is context file which contain registory for custom model these two files are mandatory for creating new model there are other files too which are created based on needs.</p>
+<p>There are some limitations when you are working with custom fields and aspects as these are not accessible threw apache CMIS library we have to use ALFRESCO open CMIS library to get additional functionality.</p>
 
-<p>There are two ways of creating new model in alfresco one is by using aspects and other is by using types. We are using the aspects for each the new model in alfresco as aspects are dynamic and reusable while types are not resuable component.</p>
+<h2>How to create custom model in alfresco? <a id="how-to-create-custom-model-in-alfresco"></a></h2>
+
+<p>Now this is an practical example to create an custom model within alfresco. For creating custom model in alfresco(community version) we need to create two file one is custom model file and other is context file which contain registry for custom model these two files are mandatory for creating new model there are other files also which are created based on requirements.</p>
+
+<p>There are two ways of creating new model in alfresco one is by using aspects and other is by using types. We are using the aspects for each the new model in alfresco as aspects are dynamic and reusable while types are not reusable component.</p>
+
+<h2>USE CASES : <a id="use-cases"></a></h2>
+
+<p>We take three use cases where same example can be used :</p>
+
+<p><strong>1.</strong> When we have to create our custom field search without using Alfresco default web script search within alfresco share portal.</p>
+
+<p><strong>2.</strong> When we want to use alfresco document management with independent product where you have to search alfresco document without depending on alfresco web script or default search capability.</p>
+
+<p><strong>3.</strong> In case you have dynamic MetaData search form for alfresco documents search which could change at run time and you want to search document based on that particular MetaData field on search form. In this case we have to use dynamic CMIS queries as done in last step.</p>
+
+<p>These are only few use cases there could be many..</p>
 
 <p>First we will start with creating new model for which we need some files create these files with names:</p>
 
@@ -190,10 +218,14 @@
      <span class="nt">&lt;/config&gt;</span>
 <span class="nt">&lt;/alfresco-config&gt;</span>
 </code></pre></div>
-<p>this file is use to make each field in model searchable can ne used in alfresco advanced search and cmis field search.</p>
+<p>this file is use to make each field in model searchable can be used in alfresco advanced search and CMIS field search.</p>
 
 <p>myCustomFields.properties should contain following content:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">my_model.property.my_metadata_custom_serial_number.title=Serial Number my_model.property.my_metadata_custom_status.title=Status my_model.property.my_metadata_custom_id.title=Document ID my_model.property.my_metadata_custom_name.title=Name my_model.property.my_metadata_custom_code.title=Code
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">my_model.property.my_metadata_custom_serial_number.title</span><span class="o">=</span><span class="s">Serial Number</span>
+<span class="na">my_model.property.my_metadata_custom_status.title</span><span class="o">=</span><span class="s">Status</span>
+<span class="na">my_model.property.my_metadata_custom_id.title</span><span class="o">=</span><span class="s">Document ID</span>
+<span class="na">my_model.property.my_metadata_custom_name.title</span><span class="o">=</span><span class="s">Name</span>
+<span class="na">my_model.property.my_metadata_custom_code.title</span><span class="o">=</span><span class="s">Code</span>
 </code></pre></div>
 <p>custom-slingshot-application-context.xml should contain following content:</p>
 <div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;</span>
@@ -333,24 +365,94 @@
       <span class="nt">&lt;/alfresco-config&gt;</span>
 </code></pre></div>
 <p>we have created new aspect with name my:cutomfieldsdata for linking aspect dynamically with content.
-We have made these custom field searhable from alfresco share.
-We have made these custom field Inline editable on alfresco share.
+We have made these custom field searchable from alfresco share.
+We have made these custom field inline editable on alfresco share.
 We have made these custom field editable on alfresco share.
 We have made these custom field visible on alfresco share.</p>
 
-<p><strong>4. How to make custom field searchable?</strong></p>
+<h2>How to make custom field searchable? <a id="how-to-make-custom-filed-searchable"></a></h2>
 
 <p>We have already done these filed searchable while creating new model within alfresco. We have created web-client-config-custom.xml file for searching custom field independently and use <index enabled="true"> in model file for searcing custom field in full index search.</p>
 
-<p><strong>5. How to search document in cmis using lucene query?</strong></p>
+<h2>How to search document using CMIS query? <a id="how-to-search-document-using-cmis-query"></a></h2>
 
-<p>We are giving cmis query for searching document using full index search where index is the keyword to search. If you want to get full cmis code for creating session and searching document read our blog of Alfresco CMIS approach for building application within alfresco.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">queryForDocument</span> <span class="o">=</span> <span class="s">&quot;SELECT cmis:objectId FROM cmis:document WHERE cmis:createdBy &lt;&gt; &#39;System&#39; AND CONTAINS(&#39;&quot;</span> <span class="o">+</span> <span class="n">index</span> <span class="o">+</span> <span class="s">&quot;&#39;)&quot;</span><span class="o">;</span>
+<p>We are giving CMIS query for searching document using full index search where index is the keyword to search. If you want to get full CMIS code for creating session and searching document read our blog of Alfresco CMIS approach for building application within alfresco.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// full index search for the document using CMIS approach</span>
+<span class="n">String</span> <span class="n">queryForDocument</span> <span class="o">=</span> <span class="s">&quot;SELECT cmis:objectId FROM cmis:document WHERE cmis:createdBy &lt;&gt; &#39;System&#39; AND CONTAINS(&#39;&quot;</span> <span class="o">+</span> <span class="n">index</span> <span class="o">+</span> <span class="s">&quot;&#39;)&quot;</span><span class="o">;</span>
 </code></pre></div>
-<p>We are giving cmis query for searching document using Custom Alfresco Document Meta Data search where serial_number is the serial number of document to search. If you want to get full cmis code for creating session and searching document read our blog of Alfresco CMIS approach for building application within alfresco.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;SELECT d.cmis:objectId FROM cmis:document as d join my:cutomfieldsdata as m on d.cmis:objectId = m.cmis:objectId WHERE d.cmis:createdBy &lt;&gt; &#39;System&#39; m.my:metadata_custom_serial_number = &#39;&quot;</span> <span class="o">+</span> <span class="n">serial_number</span> <span class="o">+</span> <span class="s">&quot;&#39;&quot;</span><span class="o">;</span>
+<p>We are giving CMIS query for searching document using Custom Alfresco Document Meta Data search where serial_number is the serial number of document to search. If you want to get full CMIS code for creating session and searching document read our blog of Alfresco CMIS approach for building application within alfresco.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Query to fetch document with custom serial number field we added to meta data of document</span>
+<span class="n">String</span> <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;SELECT d.cmis:objectId FROM cmis:document as d join my:cutomfieldsdata as m on d.cmis:objectId = m.cmis:objectId WHERE d.cmis:createdBy &lt;&gt; &#39;System&#39; m.my:metadata_custom_serial_number = &#39;&quot;</span> <span class="o">+</span> <span class="n">serial_number</span> <span class="o">+</span> <span class="s">&quot;&#39;&quot;</span><span class="o">;</span>
 </code></pre></div>
 <p>this query is to search for serial number only if you want to add more field to search you have to dynamically append it to the query string.</p>
+
+<h2>Complete example for dynamic CMIS query? <a id="complete-example-of-dyanamic-cmis-query"></a></h2>
+
+<p>We are multiple step involved in creating dynamic CMIS query first we have to find out how many search field are there in search form which are not blank(there can be other logic to for same problem).  </p>
+
+<p>For creating session and other task we have a complete blog on CMIS <strong><a href="http://blog.xebia.in/2015/02/12/playing-with-alfresco-repository-using-cmis/"> Playing with Alfresco repository using CMIS</a>. </strong></p>
+
+<p>SearchParameter Class created to retain search parameter object on dynamic search form. In this example we can have n number of parameter of type SearchParameter on search form.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SearchParameter</span> <span class="o">{</span>
+
+  <span class="kd">private</span> <span class="n">String</span> <span class="n">operator</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="n">String</span> <span class="n">key</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="n">String</span> <span class="n">value</span><span class="o">;</span>
+
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getOperator</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">operator</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setOperator</span><span class="o">(</span><span class="n">String</span> <span class="n">operator</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">operator</span> <span class="o">=</span> <span class="n">operator</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getKey</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">key</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setKey</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getValue</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setValue</span><span class="o">(</span><span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+  <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<p>Method to create dynamic query based on SearchParameter list. This method return CMIS query string for getting Alfresco document objects from repository.</p>
+
+<p>One thing to notice is that our custom fields start with metadata_ so there should be way to identify default and custom fields in search form.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/**</span>
+<span class="cm"> * Method use to create dynamic CMIS query according to the search form data</span>
+<span class="cm"> * @param parameters</span>
+<span class="cm"> * @return dynamic query string</span>
+<span class="cm"> */</span>
+<span class="kd">public</span> <span class="n">String</span> <span class="nf">createDynamicQuery</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">SearchParameter</span><span class="o">&gt;</span> <span class="n">parameters</span><span class="o">){</span>
+
+<span class="c1">//Initial query string</span>
+  <span class="n">String</span> <span class="n">query</span> <span class="o">=</span> <span class="s">&quot;SELECT d.cmis:objectId FROM cmis:document as d join my:cutomfieldsdata as m on d.cmis:objectId = m.cmis:objectId WHERE d.cmis:createdBy &lt;&gt; &#39;System&#39; &quot;</span><span class="o">;</span>
+
+  <span class="c1">// In parameter map we have name and the exact value of the search parameter</span>
+  <span class="k">for</span> <span class="o">(</span><span class="n">SearchParameter</span> <span class="n">searchParameter</span> <span class="o">:</span> <span class="n">parameters</span><span class="o">)</span>
+  <span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="n">searchParameter</span><span class="o">.</span><span class="na">getKey</span><span class="o">().</span><span class="na">startsWith</span><span class="o">(</span><span class="s">&quot;metadata_&quot;</span><span class="o">)){</span>
+      <span class="k">if</span><span class="o">(</span><span class="n">searchParameter</span><span class="o">.</span><span class="na">getOperator</span><span class="o">().</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="s">&quot;like&quot;</span><span class="o">))</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">query</span> <span class="o">+</span> <span class="s">&quot; AND &quot;</span> <span class="o">+</span><span class="s">&quot;m.my:&quot;</span> <span class="o">+</span> <span class="n">searchParameter</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; like &#39;%&quot;</span> <span class="o">+</span> <span class="n">searchParameter</span><span class="o">.</span><span class="na">getValue</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot;%&#39;&quot;</span><span class="o">;</span>
+      <span class="k">else</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">query</span> <span class="o">+</span> <span class="s">&quot; AND &quot;</span> <span class="o">+</span><span class="s">&quot;m.my:&quot;</span> <span class="o">+</span> <span class="n">searchParameter</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; = &#39;&quot;</span> <span class="o">+</span> <span class="n">searchParameter</span><span class="o">.</span><span class="na">getValue</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot;&#39;&quot;</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span><span class="o">{</span>
+      <span class="k">if</span><span class="o">(</span><span class="n">searchParameter</span><span class="o">.</span><span class="na">getOperator</span><span class="o">().</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="s">&quot;like&quot;</span><span class="o">))</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">query</span> <span class="o">+</span> <span class="s">&quot; AND &quot;</span> <span class="o">+</span> <span class="s">&quot;d.cmis:&quot;</span> <span class="o">+</span> <span class="n">searchParameter</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; like &#39;%&quot;</span> <span class="o">+</span> <span class="n">searchParameter</span><span class="o">.</span><span class="na">getValue</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot;%&#39;&quot;</span><span class="o">;</span>
+      <span class="k">else</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">query</span> <span class="o">+</span> <span class="s">&quot; AND &quot;</span> <span class="o">+</span> <span class="s">&quot;d.cmis:&quot;</span> <span class="o">+</span> <span class="n">searchParameter</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; = &#39;&quot;</span> <span class="o">+</span> <span class="n">searchParameter</span><span class="o">.</span><span class="na">getValue</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot;&#39;&quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="k">return</span> <span class="n">query</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div>
+<p><strong><a href="http://xebee.xebia.in/index.php/tag/alfresco/">For more hacks about alfresco visit</a>..................</strong></p>
 
                 </div>
             </div>

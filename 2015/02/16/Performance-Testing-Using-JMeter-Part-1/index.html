@@ -74,13 +74,13 @@
 <li>  Open Network Tab by clicking on <strong>Advanced-&gt;Network</strong></li>
 </ul>
 
-<p><img src="/img/JMeter/firefox_network.jpg" alt="Firefox Network Settings"></p>
+<p><img src="/img/JMeter/Recording_Workflow/firefox_network.jpg" alt="Firefox Network Settings"></p>
 
 <ul>
 <li>  Click on <strong>Settings</strong> Button and update proxy setting to <strong>localhost: 8080</strong>, as shown below: -</li>
 </ul>
 
-<p><img src="/img/JMeter/firefox_network_settings.jpg" alt="HTTP Proxy Settings"></p>
+<p><img src="/img/JMeter/Recording_Workflow/firefox_network_settings.jpg" alt="HTTP Proxy Settings"></p>
 
 <ul>
 <li>  Click <strong>OK</strong> Button to save all Settings.</li>
@@ -94,40 +94,45 @@
 <li>  Add a new <strong>Thread Group</strong> by right clicking on <strong>Test Plan -&gt; Add -&gt; Threads -&gt; Threads Group</strong>, as shown below: -</li>
 </ul>
 
-<p><img src="/img/JMeter/New_ThreadGroup.jpg" alt="Add New Thread Group"></p>
+<p><img src="/img/JMeter/Recording_Workflow/New_ThreadGroup.jpg" alt="Add New Thread Group"></p>
 
 <ul>
 <li>  Add config element <strong>HTTP Request Defaults</strong> by right clicking on
 <strong>Thread Group -&gt; Config element -&gt; HTTP Request Defaults</strong></li>
 </ul>
 
-<p><img src="/img/JMeter/New_Http_Request_Default.jpg" alt="Add New HTTP Request Defaults"></p>
+<p><img src="/img/JMeter/Recording_Workflow/New_Http_Request_Default.jpg" alt="Add New HTTP Request Defaults"></p>
 
 <ul>
 <li>  Specify the <strong>Server Name</strong> (website host name) or <strong>IP</strong> of the server for which you want to record Http requests</li>
-<li>  In the Path specify the relative path of the webpage for which you wan to record Http request. If it’s the home page of the , just specify <strong>slash(/)</strong> in the path, as shown below:-</li>
+<li>  In the Path specify the relative path of the webpage for which you want to record Http request. If it’s the home page of the , just specify <strong>slash(/)</strong> in the path, as shown below:-</li>
 </ul>
 
-<p><img src="/img/JMeter/Http_Request_Default_Settings.jpg" alt="Path Settings for Home Page"></p>
+<p><img src="/img/JMeter/Recording_Workflow/Http_Request_Default_Settings.jpg" alt="Path Settings for Home Page"></p>
 
 <ul>
 <li>  Add <strong>Recording Controller</strong> by right clicking on <strong>Thread Group -&gt; Add -&gt; Logic Controller -&gt; Recording Controller</strong> as shown below :-</li>
 </ul>
 
-<p><img src="/img/JMeter/New_Recording_Controller.jpg" alt="Add New Recording Controller"></p>
+<p><img src="/img/JMeter/Recording_Workflow/New_Recording_Controller.jpg" alt="Add New Recording Controller"></p>
 
 <ul>
 <li>  Add <strong>HTTP Test Script Recorder</strong> by right clicking on <strong>WorkBench - &gt; Add -&gt; Non Test Elements -&gt; HTTP(S) Test Script Recorder</strong> as shown below :-</li>
 </ul>
 
-<p><img src="/img/JMeter/New_Http_Test_Script_Recorder.jpg" alt="Add New HTTP(S) Test Script Recorder"></p>
+<p><img src="/img/JMeter/Recording_Workflow/New_Http_Test_Script_Recorder.jpg" alt="Add New HTTP(S) Test Script Recorder"></p>
 
 <ul>
-<li>  To record HTTP request only for HTML pages, on panel <strong>HTTP(S) Test Script Recorder</strong> click on <strong>Add suggested Excludes</strong> . This will add the URL patterns that we want to exclude from recording.</li>
-<li>Now click on <strong>Add</strong> Button in <strong>URL Patterns to Include</strong> section and type <strong>.*\.html</strong> as shown below :-</li>
+<li>If you just want to record HTTP requests for HTML pages, then
+
+<ul>
+<li>Click  <strong>Add suggested Excludes</strong> on <strong>HTTP(S) Test Script Recorder</strong> panel. This will add the URL patterns that we want to exclude from recording.
+&gt; OR</li>
+<li>Click on <strong>Add</strong> Button on <strong>URL Patterns to Include</strong> section and type <strong>.*\.html</strong>. This specifies that only HTML samplers should be recorded.</li>
+</ul></li>
 </ul>
 
-<p><img src="/img/JMeter/Http_Test_Script_Recorder_Settings.jpg" alt="Patterns to include and exclude from Recording"></p>
+<p><img src="/img/JMeter/Recording_Workflow/Http_Test_Script_Recorder_Settings.jpg" alt="Patterns to include and exclude from Recording"></p>
 
 <p>And now you are ready with all the needed configurations to start recording.</p>
 
@@ -135,14 +140,14 @@
 <li>  Click on the <strong>Start</strong> Button on <strong>HTTP(S) Test Script Recorder</strong> panel. But what, instead of starting recording, JMeter shows a pop-up regarding creation of a certificate as shown below: -</li>
 </ul>
 
-<p><img src="/img/JMeter/security_Certificate_Recording.jpg" alt="JMeter Security Certificate"></p>
+<p><img src="/img/JMeter/Recording_Workflow/security_Certificate_Recording.jpg" alt="JMeter Security Certificate"></p>
 
 <ul>
-<li>  Actually, all HTTPS connections use certificates to authenticate the connection between the browser and the web server. When connecting via HTTPS, the server presents the certificate to the browser. To authenticate the certificate, the browser checks that the server certificate is signed by a Certificate Authority (CA) which is linked to one of its in-built root CAs.
-For versions of JMeter from 2.10 onwards, JMeter will generate its own certificate(s), which can be imported in the browser to enable the trust.</li>
+<li>  Actually, all HTTPS connections use certificates to authenticate the connection between the browser and the web server. When the communication protocol is <strong>HTTPS</strong>, the web-server presents the security certificate to the browser. To authenticate this certificate, the browser checks whether the server certificate is signed by a Certificate Authority (CA) or not.</li>
+<li>For versions of JMeter from 2.10 onwards, JMeter generates its own certificate(s), which can be imported in the browser to enable the trust between proxy server and browser and also to enable recording of HTTPs requests.</li>
 </ul>
 
-<p>•    So, When a pop-up as above for certificate appears, it will create a file named <strong>“ApacheJMeterTemporaryRootCA.crt”</strong> in bin directory of JMeter</p>
+<p>When a pop-up as above for security certificate appears, it will create a file named <strong>“ApacheJMeterTemporaryRootCA.crt”</strong> in bin directory of JMeter</p>
 
 <p>Now we need to install this certificate in the browser.</p>
 
@@ -152,7 +157,7 @@ For versions of JMeter from 2.10 onwards, JMeter will generate its own certifica
 <li>From the <strong>“Certificates”</strong> tab click on <strong>“View Certificates”</strong> and import the certificate created in the above step as shown below: -</li>
 </ul>
 
-<p><img src="/img/JMeter/firefox_Install_Certificates.jpg" alt="Importing Security Certificate in Firefox"></p>
+<p><img src="/img/JMeter/Recording_Workflow/firefox_Install_Certificates.jpg" alt="Importing Security Certificate in Firefox"></p>
 
 <p>And now we are all set to start recording.</p>
 
@@ -166,7 +171,7 @@ For versions of JMeter from 2.10 onwards, JMeter will generate its own certifica
 
 <p>You will see that the links that you click in the browser, starts recording as <strong>“Http Request”</strong> under the <strong>“Recording Controller”</strong> as shown below :-</p>
 
-<p><img src="/img/JMeter/recorded_Http_Requests.jpg" alt="Recorded Http Samplers"></p>
+<p><img src="/img/JMeter/Recording_Workflow/recorded_Http_Requests.jpg" alt="Recorded Http Samplers"></p>
 
 <p>Now, you can use these Http samplers with other components of JMeter to create your full-fledged test plans.</p>
 
@@ -178,6 +183,15 @@ For versions of JMeter from 2.10 onwards, JMeter will generate its own certifica
             </div>
             <div class="post-tags">
                 <i class="fa fa-tags"></i>
+                
+                <a class="tag_list_link" href="/tag/Testing">Testing</a>
+                <span class="seperator">,</span>
+                
+                <a class="tag_list_link" href="/tag/Performance Testing">Performance Testing</a>
+                <span class="seperator">,</span>
+                
+                <a class="tag_list_link" href="/tag/JMeter">JMeter</a>
+                <span class="seperator">,</span>
                 
             </div>
             <ul class="post-socials">
@@ -195,6 +209,8 @@ For versions of JMeter from 2.10 onwards, JMeter will generate its own certifica
             
             <li class="separator"></li>
             
+            
+            <li class="next"><a href="/2015/02/24/Performance-Testing-Using-JMeter-Part-2/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
             
         </ul>
     </div>
