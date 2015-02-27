@@ -1,0 +1,186 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Hadoop Streaming</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/vgupta">vgupta</a> on </span>
+                  <span class="date">25 June 2012</span>
+                </div>
+                <div class="content">
+                    <h1>Hadoop Streaming</h1>
+
+<p>A basic template for writing a Hadoop job using Java is </p>
+
+<ol>
+<li>Write a Mapper class.</li>
+<li>Write a Reducer class.</li>
+<li>Write a Driver code to configure and run the job.</li>
+</ol>
+
+<p>However, logic (mapper and reducer logic) for some jobs can be programmed using unix commands. Hadoop streaming, a contrib package provides a way to use unix commands as mappers and reducers. In this blog, I will demonstrate running a Hadoop job using Hadoop streaming.</p>
+
+<p><strong>Hadoop Streaming</strong></p>
+
+<p>Streaming API of Hadoop is an API to write map and reduce functions in languages other than Java. It uses Unix standard streams as the interface between Hadoop and your program, so you can use any language that can read standard input and write to standard output.</p>
+
+<p>Map input data is passed over standard input to your map function, which processes it line by line and writes lines to standard output. A map output key-value pair is written as a single tab-delimited line.  The reduce function reads lines from standard input, which the framework guarantees are sorted by key, and writes its results to standard output.</p>
+
+<p>Apart from standard unix commands, we can also use languages like Ruby and Python to program map and reduce functions.</p>
+
+<p><strong>Example</strong></p>
+
+<p>The prerequisite for running this example are</p>
+
+<ol>
+<li><a href="http://hadoop.apache.org/common/docs/r0.20.2/quickstart.html#Installing+Software">Hadoop installation</a></li>
+<li>Data set, which can be downloaded from <a href="http://www.nber.org/patents/">National Bureau of Economic Research</a>. The file that needs to be downloaded is <a href="http://data.nber.org/patents/Cite75_99.zip">Pairwise Citations</a>. This file includes all US patent citations for utility patents granted in the period 1-Jan-75 to 31-Dec-99. More information about the data set is available at <a href="http://data.nber.org/patents/Cite75_99.txt">http://data.nber.org/patents/Cite75_99.txt</a>.</li>
+</ol>
+
+<p>The two commands that we will use in this example are <strong>cut *<em>and *</em>uniq</strong>. <a href="http://www.computerhope.com/unix/ucut.htm">Cut </a>command is used to cut out specified fields of a line, whereas <a href="http://www.computerhope.com/unix/uuniq.htm">Uniq</a> command is used for filtering out repeated lines from a file.</p>
+
+<p>Hadoop job that we will execute will give a list of all the unique cited patent ids. To run the job, please execute the following command from the hadoop distribution folder</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">bin/hadoop jar contrib/streaming/hadoop-*-streaming.jar -input &lt;input path&gt; -output &lt;output path&gt; -mapper <span class="s1">&#39;cut -f 2 -d ,&#39;</span> -reducer <span class="s1">&#39;uniq&#39;</span>
+</code></pre></div>
+<p>Let&#39;s discuss the above command in detail. Since, Hadoop Streaming is a contrib package, it&#39;s jar placed in the contrib folder of the Hadoop distribution. -input and -output are standard hadoop attributes to specify the locations of input and output locations. In case of Hadoop streaming, mapper and reducer are unix commands which operate on each line of input.</p>
+
+<p>The mapper expression will split each line of input based on comma(,) and pick the second element of the splitted result. So, the output of the mapper is cited patent id in each line. Now, the job of the reducer is to simply remove the duplicates and getting us the desired output. </p>
+
+<p><strong>Conclusion</strong></p>
+
+<p>As seen from the above example, with Hadoop Streaming we need not write and maintain the code for Mappers and Reducers. It combines the powers of scripting languages and parallel processing capabilities of Hadoop infrastructure to deliver jobs without having to write Java programs, thus, resulting in quicker response to the ad-hoc queries and requirements of the business.</p>
+
+<hr>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2012/06/25/hadoop-streaming/&t=Hadoop Streaming" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2012/06/25/hadoop-streaming/&text=Hadoop Streaming&url=http://blog.xebia.in/2012/06/25/hadoop-streaming/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2012/06/25/hadoop-streaming/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2012/06/17/liferay-service-builder-finders/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2012/06/27/groovy-adding-property-in-a-class-by-ast-transformation/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

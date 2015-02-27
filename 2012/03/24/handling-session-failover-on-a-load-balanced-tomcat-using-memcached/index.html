@@ -1,0 +1,307 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Handling Session Failover On A Load Balanced Tomcat Using Memcached</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/vrawat">vrawat</a> on </span>
+                  <span class="date">24 March 2012</span>
+                </div>
+                <div class="content">
+                    <h1>Handling Session Failover on a Load Balanced Tomcat using Memcached</h1>
+
+<h2>The problem:</h2>
+
+<p>In our project we use four load-balanced tomcat nodes(with Sticky-Session enabled). Everything works fine but there is just one thing that bugs me. Whenever we do a production deployment, we remove one node, deploy on that and, if everything works fine, we remove second node from the load-balancer and deploy on that and so on. The problem is that whenever we remove a node during deployment, a session expired is thrown to all the users working on the node we just removed, as he/she is redirected to another node.</p>
+
+<p>It is not a huge problem in our case. But this could be serious in e-commerce domain. For example if a user is filling his/her shopping cart and the session expires for no reason. </p>
+
+<h2>The configuration:</h2>
+
+<p>I deployed a simple Spring App in two Tomcat instances. <a href="http://httpd.apache.org/">Apache Webserver</a> as the load balancer. <a href="http://tomcat.apache.org/tomcat-3.3-doc/mod_jk-howto.html">Apache&#39;s mod_jk</a> is used for load balancing using sticky-sessions. A single <a href="http://memcached.org/">Memcached Server</a> is used as an external key value server for storing sessions. I used <a href="http://code.google.com/p/xmemcached/">xMemcachedClient</a> to interact with Memcahed Server, because it is easily available as a pom dependency and is provided by Google.</p>
+
+<h2>The solution:</h2>
+
+<h3>Load-Balancing:</h3>
+
+<p>I used this <a href="http://docs.redhat.com/docs/en-US/JBoss_Enterprise_Web_Server/1.0/html/HTTP_Connectors_Load_Balancing_Guide/Apache_HTTP_Configure.html">guide </a>to load-balance my application using Apache Webserver and mod_jk. Below is my config:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> LoadModule jk_module modules/mod_jk.so JkWorkersFile conf/jkworkers.properties JkLogFile logs/mod_jk.log JkLogLevel &quot;info&quot; JkLogStampFormat &quot;[%a %b %d %H:%M:%S %Y]&quot; JkMount /app* loadbalancer 
+</code></pre></div>
+<p>And below is the content of my jkworkers.properties file: ``` </p>
+
+<h1>Define list of workers that will be used for mapping requests</h1>
+
+<p>worker.list=loadbalancer,status</p>
+
+<h1>Define Node1</h1>
+
+<h1>modify the host as your host IP or DNS name.</h1>
+
+<p>worker.node1.port=8009 worker.node1.host=localhost worker.node1.type=ajp13 worker.node2.ping_mode=A worker.node1.lbfactor=1 </p>
+
+<h1>Define Node2</h1>
+
+<h1>modify the host as your host IP or DNS name.</h1>
+
+<p>worker.node2.port=7009 worker.node2.host=localhost worker.node2.type=ajp13 worker.node2.ping_mode=A worker.node2.lbfactor=1</p>
+
+<h1>Load-balancing behavior</h1>
+
+<p>worker.loadbalancer.type=lb worker.loadbalancer.balance<em>workers=node1,node2 worker.loadbalancer.sticky</em>session=1</p>
+
+<h1>Status worker for managing load balancer</h1>
+
+<p>worker.status.type=status 
+ ```</p>
+
+<h3>Managing Sessions:</h3>
+
+<p>To manage session failover I used the following approach: </p>
+
+<ul>
+<li>Both the tomcats hold sessions locally on their respective jvm. </li>
+<li>Additionally all the sessions(of both tomcats) are stored in Memcached server.(Cache expiry in memcached can be configured, I have configured it to be 1day) </li>
+<li>Suppose a user is browsing on <strong>node1</strong>. In general, he will be directed to node1 as sticky-sessions are enabled and his session can be fetched from the local memory. In case of <strong>node1</strong> fails, the next request will go to the other tomcat instance i.e. <strong>node2</strong>. <strong>node2</strong> is asked for a session he does not know. So, <strong>node2</strong> will fetch the session from the Memcached Server and store it in its local jvm. Now, node2 is responsible for this session. </li>
+</ul>
+
+<p>Now lets see some code. [code language=&quot;java&quot; highlight=&quot;14,15,22&quot;] package in.xebia.vijay.controllers; //import statements @Controller public class HomeController {</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">private static final String SEPARATOR = &amp;quot;|&amp;quot;;
+private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+@Resource
+private SessionService sessionService;
+
+@RequestMapping(value = &amp;quot;/login&amp;quot;, method = RequestMethod.POST)
+public String home(Model model, User user,HttpSession session, @CookieValue(&amp;quot;JSESSIONID&amp;quot;) String jsessionId) {
+    logger.info(&amp;quot;In home!&amp;quot;);
+    sessionService.set(session.getId()+SEPARATOR+&amp;quot;user&amp;quot;, user, session);
+    User userFromSession = (User) sessionService.get(jsessionId+SEPARATOR+&amp;quot;user&amp;quot;, session);
+    model.addAttribute(&amp;quot;userName&amp;quot;, userFromSession.getUserName());
+    return &amp;quot;home&amp;quot;;
+}
+@RequestMapping(value = &amp;quot;/check&amp;quot;, method = RequestMethod.GET)
+public String check(Model model, HttpSession session, @CookieValue(&amp;quot;JSESSIONID&amp;quot;) String jsessionId) {
+    logger.info(&amp;quot;In Check!&amp;quot;);
+    User userFromSession = (User) sessionService.get(jsessionId+SEPARATOR+&amp;quot;user&amp;quot;, session);
+    model.addAttribute(&amp;quot;userName&amp;quot;, userFromSession.getUserName());
+    return &amp;quot;check&amp;quot;;
+}
+@RequestMapping(value = &amp;quot;/&amp;quot;, method = RequestMethod.GET)
+public String login() {
+    logger.info(&amp;quot;In login!&amp;quot;);
+    return &amp;quot;login&amp;quot;;
+}
+</code></pre></div>
+<p>} 
+ ```</p>
+
+<p>The lines to note in above code are <strong>14,15 and 22</strong>: </p>
+
+<ul>
+<li>In line <strong>14</strong>, I am adding the current user to session using <strong>SessionService</strong>. Point to note is that instead of doing something like : <code>
+sessionService.set(&quot;user&quot;, user, session);
+</code> I have written : <code>
+sessionService.set(session.getId()+SEPARATOR+&quot;user&quot;, user, session);
+</code> I am &quot;deliberately&quot; appending the SessionId just to ensure that if a particular tomcat node fails, the other tomcat can retrieve failed node&#39;s sessions using the cookie <strong>JSESSIONID</strong> stored in the client header. </li>
+<li>And that is the reason, in lines <strong>15</strong> as well as <strong>22</strong>, I am fetching session attribute from the <strong>SessionService *<em>using the *</em>JSESSIONID</strong> retrieved from the cookie. </li>
+</ul>
+
+<p>All the other code is quite self explanatory. Now lets have a look at the <strong>SessionServiceImpl.java</strong> ``` 
+ package in.xebia.vijay.impl; //import statements @Service public class SessionServiceImpl implements SessionService {</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">@Autowired
+private MemcachedClient memcachedClient;
+private static int EXPIRY = 24 * 60 * 60;
+
+@Override
+public &amp;lt;T&amp;gt; void set(String key, T value, HttpSession session) {
+    try {
+        session.setAttribute(key, value);
+        memcachedClient.set(key,EXPIRY,value);
+    } catch (TimeoutException e) {
+        e.printStackTrace();
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    } catch (MemcachedException e) {
+        e.printStackTrace();
+    }
+}
+
+@SuppressWarnings(&amp;quot;unchecked&amp;quot;)
+@Override
+public &amp;lt;T&amp;gt; T get(String key, HttpSession session) {
+    try {
+        if(session.getAttribute(key)!=null)
+            return (T) session.getAttribute(key);
+        else if(memcachedClient.get(key)!=null){
+            String[] keyPart = key.split(&amp;quot;|&amp;quot;);
+            String newKey = session.getId()+&amp;quot;|&amp;quot;+keyPart[1];
+            session.setAttribute(newKey, memcachedClient.get(key));
+            memcachedClient.set(newKey, EXPIRY, memcachedClient.get(key));
+            memcachedClient.delete(key);
+            return memcachedClient.get(newKey);
+        }
+        else
+            return null;
+    } catch (TimeoutException e) {
+        e.printStackTrace();
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    } catch (MemcachedException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+</code></pre></div>
+<p>} 
+ ``` Points to be noted : </p>
+
+<ul>
+<li>In the implementation of method <code>
+public void set(String key, T value, HttpSession session); 
+</code> we add the attribute to HttpSession as well as the Memcahced Server, so that in case of any node failure the other node can fetch the values from Memcached Server. </li>
+<li>In the implementation of method <code>
+public T get(String key, HttpSession session); 
+</code></li>
+</ul>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#8040" title="2012-03-26 11:29:57">Mukesh Shah</a>:</strong> Very nice blog. Well explained problem and its solution. Keep blogging.</p>
+
+<p><strong><a href="#8109" title="2012-03-29 03:35:59">Martin Grotzke</a>:</strong> Btw, there&#39;s memcached-session-manager that target the same problem, it can handle both sticky and non-sticky sessions: http://code.google.com/p/memcached-session-manager/ Cheers, Martin</p>
+
+<p><strong><a href="#9135" title="2012-07-06 11:36:30">Manish Agarwal</a>:</strong> Hey I run this one on my eclipse and deployed the war on jetty server. I also change port to 8080 in the code. But when I ran the jetty server, it&#39;s giving errors and not connecting to the locaclhost. Please help me out regarding this issue.</p>
+
+<p><strong><a href="#8112" title="2012-03-29 09:21:52">Vijay Rawat</a>:</strong> Hi Martin, Yea its a nice solution. Thanks for adding it in the comment. :)</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2012/03/24/handling-session-failover-on-a-load-balanced-tomcat-using-memcached/&t=Handling Session Failover On A Load Balanced Tomcat Using Memcached" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2012/03/24/handling-session-failover-on-a-load-balanced-tomcat-using-memcached/&text=Handling Session Failover On A Load Balanced Tomcat Using Memcached&url=http://blog.xebia.in/2012/03/24/handling-session-failover-on-a-load-balanced-tomcat-using-memcached/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2012/03/24/handling-session-failover-on-a-load-balanced-tomcat-using-memcached/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2012/03/23/write-code-that-writes-code/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2012/03/26/java-robot-replacing-human-intervention-for-capturing-screenshots/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

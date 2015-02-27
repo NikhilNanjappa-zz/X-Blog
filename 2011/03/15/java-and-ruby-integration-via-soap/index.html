@@ -1,0 +1,248 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Java And Ruby Integration Via Soap</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/rjaiswal">rjaiswal</a> on </span>
+                  <span class="date">15 March 2011</span>
+                </div>
+                <div class="content">
+                    <h1>Java and Ruby integration via SOAP</h1>
+
+<p>In my last blog we talked about Ruby and Java integration via JRuby. Since JRuby runs on JVM, bytecode can be shared but in case you do not want a JVM level integration then SOAP is usually your next level of support.</p>
+
+<p>Imagine a scenario where you want to call a SOAP server written in Java from Ruby, this is quite common as most enterprises have their middleware written in Java and new application can be written quickly in Ruby/Rails. Here is how you can go about integrating the two -</p>
+
+<p><strong>The Java Server</strong></p>
+
+<p>I am not going to cover this in detail here but for new deployments Apache CXF is quite popular. You can integrate it with Spring as given <a href="https://cwiki.apache.org/CXF20DOC/writing-a-service-with-spring.html">here</a>. The Maven dependencies are as follows -</p>
+
+<p>[code language=&quot;xml&quot;] <properties> <cxf.version>2.3.3</cxf.version> <spring.version>3.0.4.RELEASE</spring.version> </properties></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&amp;lt;dependencies&amp;gt;
+    &amp;lt;!-- CXF dependencies --&amp;gt;
+    &amp;lt;dependency&amp;gt;
+        &amp;lt;groupId&amp;gt;org.apache.cxf&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;cxf-rt-frontend-jaxws&amp;lt;/artifactId&amp;gt;
+        &amp;lt;version&amp;gt;${cxf.version}&amp;lt;/version&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+    &amp;lt;dependency&amp;gt;
+        &amp;lt;groupId&amp;gt;org.apache.cxf&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;cxf-rt-transports-http&amp;lt;/artifactId&amp;gt;
+        &amp;lt;version&amp;gt;${cxf.version}&amp;lt;/version&amp;gt;
+    &amp;lt;/dependency&amp;gt;
+    &amp;lt;!-- End CXF dependencies --&amp;gt;
+
+    &amp;lt;!-- Spring dependencies --&amp;gt;
+    &amp;lt;!-- add other dependencies --&amp;gt;
+&amp;lt;/dependencies&amp;gt;
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">The Java code looks like -
+</code></pre></div>
+<p>@WebService public interface EmployeeService {</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">Employee findEmployeeByID(@WebParam(name = &amp;quot;employeeID&amp;quot;)long empID);
+boolean storeEmployee(@WebParam(name = &amp;quot;employee&amp;quot;)Employee emp);
+</code></pre></div>
+<p>} 
+ ```</p>
+
+<p>And the Implementation looks like -</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> @Component(&quot;employeeService&quot;) @WebService(endpointInterface = &quot;in.mysoapserver.services.EmployeeService&quot;) public class EmployeeServiceImpl implements EmployeeService {
+
+
+    @Override
+    public Employee findEmployeeByID(long empID) {
+        Employee employee = new Employee();
+        employee.setEmpID(101);
+        employee.setName(&amp;quot;Rocky&amp;quot;);
+        employee.setAge(32);
+        return employee;
+    }
+
+    @Override
+    public boolean storeEmployee(Employee emp) {
+        //Store Employee
+        return true;
+    }
+
+
+} 
+</code></pre></div>
+<p>After deploying the project in Tomcat you can get the WSDL from a link like - <strong>http://localhost:8080/mysoapserver/soap?wsdl</strong></p>
+
+<p>Once you have the WSDL you should use SoapUI for some testing to check if the SOAP requests are working.</p>
+
+<p><strong>The Ruby Client</strong> Now we are ready to create the SOAP client in Ruby. Please note the instructions below are same for Ruby or JRuby.</p>
+
+<p>First install soap4r gem - <strong>gem install soap4r</strong></p>
+
+<p>Download (and unpack) the soap4r binary .tar.gz also from <a href="http://dev.ctor.org/soap4r">here</a></p>
+
+<p>Now, just to organize things create a folder say &quot;ruby<em>soap</em>client&quot; and copy the WSDL of the SOAP services we created there.</p>
+
+<p>Got to the folder where the WSDL is copied and run - <strong>~/01rocky/02apps/soap4r-1.5.8/bin/wsdl2ruby.rb --type client --wsdl mysoapserver.wsdl</strong></p>
+
+<ul>
+<li>Change the path to wsdl2ruby.rb as per your setup.</li>
+</ul>
+
+<p>This will create a set of Ruby scripts and also create an example client. Since we will make our own client you can safely delete the _Client.rb and _Driver.rb scripts.</p>
+
+<p>Now let us create our own Ruby client -</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> require &#39;soap/wsdlDriver&#39; require &#39;EmployeeServiceImplService.rb&#39;
+
+wsdl = &quot;mysoapserver.wsdl&quot;
+
+employee_service = SOAP::WSDLDriverFactory.new(wsdl).create_rpc_driver
+
+response = employee_service.findEmployeeByID(FindEmployeeByID.new(10)) puts response.return.name puts response.return.age
+
+response = employee_service.storeEmployee(StoreEmployee.new(Employee.new(30,102,&quot;Tushar&quot;))) puts response.return 
+</code></pre></div>
+<p>Lets examine each line in detail. Line 1 - Just loading the required libraries for soap4r Line 2 - The 3rd file that wsdl2ruby.rb script generated. We&#39;ll look at it in a minute. Line 4 - Just a variable for the wsdl file name. Change it according to your setup. Line 6 - We create a SOAP RPC driver using the wsdl we saved earlier. Line 8/12 - Next we make the SOAP call. But wait a minute, what is being passed as a parameter here?</p>
+
+<p>The answer to this can be found if we look at the SOAP request we made from SoapUI -</p>
+
+<p>[code language=&quot;xml&quot;] <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.mysoapserver.in/"> <a href="soapenv:Header/">soapenv:Header/</a> <a href="soapenv:Body">soapenv:Body</a> <a href="ser:findEmployeeByID">ser:findEmployeeByID</a> <employeeID>10</employeeID> <a href="/ser:findEmployeeByID">/ser:findEmployeeByID</a> <a href="/soapenv:Body">/soapenv:Body</a> <a href="/soapenv:Envelope">/soapenv:Envelope</a> 
+ ```</p>
+
+<p>And for storeEmployee call -</p>
+
+<p>[code language=&quot;xml&quot;] <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.mysoapserver.in/"> <a href="soapenv:Header/">soapenv:Header/</a> <a href="soapenv:Body">soapenv:Body</a> <a href="ser:storeEmployee">ser:storeEmployee</a> <employee> <age>30</age> <empID>102</empID> <name>Tushar</name> </employee> <a href="/ser:storeEmployee">/ser:storeEmployee</a> <a href="/soapenv:Body">/soapenv:Body</a> <a href="/soapenv:Envelope">/soapenv:Envelope</a> 
+ ```</p>
+
+<p>If we ignore the XML namespaces, our request is wrapped in a &quot;findEmployeeByID&quot; tag (for the findEmployeeByID call). Therefore, when we gave the wsdl2ruby.rb scpirt our WSDL reference, it created the equivalent Ruby classes for all wrappers, request and response types and stored it in a file which we referenced at Line 2.</p>
+
+<p>So looking at the sample requests in SoapUI we can create wrapper and request objects and similarly parse the response received. Its as simple as that. In case you are stuck, you can look at all the classes created by the wsdl2ruby script by having a look at the generated file (EmployeeServiceImplService.rb in our case).</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2011/03/15/java-and-ruby-integration-via-soap/&t=Java And Ruby Integration Via Soap" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2011/03/15/java-and-ruby-integration-via-soap/&text=Java And Ruby Integration Via Soap&url=http://blog.xebia.in/2011/03/15/java-and-ruby-integration-via-soap/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2011/03/15/java-and-ruby-integration-via-soap/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2011/02/28/maven-lucene-plugin/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2011/03/24/flex-composite-charts-with-multiple-series-axes/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

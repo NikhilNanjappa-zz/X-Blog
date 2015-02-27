@@ -1,0 +1,252 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Neo4j Vs Rdbms Handling Access Control In Document Management System</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/gagrawal">gagrawal</a> on </span>
+                  <span class="date">24 August 2013</span>
+                </div>
+                <div class="content">
+                    <h1>Neo4j vs RDBMS : Handling Access Control in Document Management System</h1>
+
+<p><a href="http://en.wikipedia.org/wiki/Graph_database">Graph Databases</a> are great at storing connected data. In this blog post I am going to cover how <a href="http://www.neo4j.org/">Neo4j</a>, most widely used graph database, can be used in Document Management System. The most complex part of document management system is the Access Control Management. When a user logs in, he/she should be able to view only folders/document that they have access for. Also if a user searches for documents, he  should be shown only those documents for which he has access. I will first start with RDBMS and show how complex it is to model this requirement in RDBMS. And then will move to Graph Database modeling for same requirement and we will see how easy and effortless it is to implement this with Neo4j and <a href="http://docs.neo4j.org/chunked/stable/cypher-query-lang.html">Cypher</a> Query Langague.</p>
+
+<p>Let&#39;s take a scenario and create it&#39;s model in RDBMS. Say we have 2 users, &quot;User1&quot; and &quot;User2&quot;. Both are respectively mapped to roles &quot;Role1&quot; and &quot;Role2&quot;. Suppose we have following hierarchy of folders and documents</p>
+
+<p><em>Project1 -&gt; Requirements Doc1 -&gt; Doc1.pdf</em></p>
+
+<p><em>Project2 -&gt; Requirements Doc2 -&gt; Doc2.pdf</em></p>
+
+<p>Let&#39;s say, all users with role &quot;Role1&quot; has access to view folder &quot;Project1&quot; and it&#39;s sub-folders/documents. And say all users with &quot;Role2&quot; will have access to view folders &quot;Project1&quot; and &quot;Project2&quot; and it&#39;s sub-folders/documents. We also assume that if a user with a role has access to a folder, then they will also have access to all it&#39;s sub-folders and documents unless a specific configuration restricts a user to access it. We can represent this requirement in following diagram.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2013/08/user-access-1.jpg" alt="user access \(1\)"></p>
+
+<p>According to this requirement, when &quot;User1&quot; performs a search for documents, he should be able to view only &quot;Doc1.pdf&quot;. However when &quot;User2&quot; performs similar search, he should be able to view both &quot;Doc1.pdf&quot; and &quot;Doc2.pdf&quot;. Now let&#39;s try to create RDBMS model for this requirement. In RDBMS world, we normally map entities to tables. So for this particular requirement, we have entities like User, Role and Document (file or folder). Accordingly we will end up with following tables.</p>
+
+<p><strong>User</strong> : To store user ids and their details</p>
+
+<p><strong>Role</strong> : To store role details</p>
+
+<p>*<em>Document *</em>: To store file and folder details and has reference to their parent for hierarchy in which they can be navigated. Here we will only keep reference of immediate parent.</p>
+
+<p>*<em>User_Role *</em>: To assign Roles to Users</p>
+
+<p><strong>Document_Role</strong> : To configure what all Roles can access a Document (file or folder).</p>
+
+<p>Here is the sample data to represent our requirement. </p>
+
+<p><strong>Table : User</strong></p>
+
+<p><strong>id</strong>
+<strong>name</strong></p>
+
+<p>1
+User1</p>
+
+<p>2
+User2</p>
+
+<p><strong>Table : Role</strong></p>
+
+<p><strong>id</strong>
+<strong>name</strong></p>
+
+<p>1
+Role1</p>
+
+<p>2
+Role2</p>
+
+<p><strong>Table : Document</strong></p>
+
+<p><strong>id</strong>
+<strong>name</strong>
+<strong>type</strong>
+<strong>parent_id</strong></p>
+
+<p>1
+Project1
+FOLDER</p>
+
+<p>2
+Requirement Docs1
+FOLDER
+1</p>
+
+<p>3
+Doc1.pdf
+FILE
+2</p>
+
+<p>4
+Project2
+FOLDER</p>
+
+<p>5
+Requirement Docs2
+FOLDER
+4</p>
+
+<p>6
+Doc2.pdf
+FILE
+5</p>
+
+<p><strong>Table : User_Role</strong></p>
+
+<p><strong>user_id</strong>
+<strong>role_id</strong></p>
+
+<p>1
+1</p>
+
+<p>2
+1</p>
+
+<p>2
+2</p>
+
+<p><strong>Table : Document_Role</strong></p>
+
+<p><strong>document_id</strong>
+<strong>role_id</strong></p>
+
+<p>1
+1</p>
+
+<p>4
+2</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2013/08/24/neo4j-vs-rdbms-handling-access-control-in-document-management-system/&t=Neo4j Vs Rdbms Handling Access Control In Document Management System" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2013/08/24/neo4j-vs-rdbms-handling-access-control-in-document-management-system/&text=Neo4j Vs Rdbms Handling Access Control In Document Management System&url=http://blog.xebia.in/2013/08/24/neo4j-vs-rdbms-handling-access-control-in-document-management-system/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2013/08/24/neo4j-vs-rdbms-handling-access-control-in-document-management-system/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2013/08/24/http-caching-using-jax-rs/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2013/08/25/build-your-own-recommendation-engine/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

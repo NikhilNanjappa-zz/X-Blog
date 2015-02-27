@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Content And Metadata Extraction With Apache Tika</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/rsharma">rsharma</a> on </span>
+                  <span class="date">13 August 2010</span>
+                </div>
+                <div class="content">
+                    <h1>Content and Metadata Extraction with Apache Tika</h1>
+
+<p>Often we  have the requirement of reading different types of files e.g. CSV, PDF, XLS files and there can be  many more types need to be read in an application.</p>
+
+<p>One way, we try to implement such a requirement is by using separate readers for all of them and  may use different frameworks for analyzing each of them e.g. if our application requires PDF, XML and XLS file parsing, we can create a FileReader interface. Then we can  have different implementations of this interface for each of the types and use PDFBox for reading PDF files, Apache POI for XLS files and SAX for XML  files.</p>
+
+<p>// Read PDF using PDFBox PDDocument pdDoc = new PDDocument(cosDoc); PDFTextStripper stripper = new PDFTextStripper(); String docText = stripper.getText(pdDoc); ....... //Read XLS using POI POIFSFileSystem fileSystem = new POIFSFileSystem(is); HSSFWorkbook workBook = new HSSFWorkbook(fileSystem); ....<code>// Read XML using SAX SAXParserFactory spf = SAXParserFactory.newInstance(); SAXParser parser = spf.newSAXParser(); 
+</code>``</p>
+
+<p>This poses additional set of issues like : </p>
+
+<ul>
+<li>We must configure each and every type separately.</li>
+<li>We may be using different APIs for reading different types, this poses additional challenge of learning and configuring separate APIs for each of types.
+As the list of types that your application needs to handle grows, these two issues become more and more visible. </li>
+</ul>
+
+<h3>Solution : <a href="http://tika.apache.org/">Apache Tika</a></h3>
+
+<p><a href="http://tika.apache.org/">Apache Tika</a> is one project that can assist in reducing, if not eliminating, these pains. The projects site suggests :</p>
+
+<p>&quot;<em>Apache Tika as toolkit for detecting and extracting meta-data and structured text content from various documents using existing parser libraries</em>&quot;</p>
+
+<p>Basically the Tika API is a single shot API to read data from multiple types, internally it configures and uses the various existing libraries for reading the data eg. POI for Excel stuff.</p>
+
+<h4><strong>The Parser API</strong></h4>
+
+<p>The <a href="http://tika.apache.org/0.7/api/org/apache/tika/parser/Parser.html">Parser</a> interface is the key component of  Tika library, that can be used to parse data . You need to create an instance of  <a href="http://tika.apache.org/0.7/api/org/apache/tika/parser/Parser.html">Parser</a> and call the parse API to get the required data. The project currently supports around 14 different formats e.g. text, pdf,  audio, video, image, archives, ms-office, xmls, emails etc. For each of the  supported format the package has a <a href="http://tika.apache.org/0.7/api/org/apache/tika/parser/Parser.html">Parser </a>which it employs to read the format. You can either use each of these different parsers for reading different types of data or the API also provides a <a href="http://tika.apache.org/0.7/api/org/apache/tika/parser/AutoDetectParser.html">AutoDetectParser</a> that can detect the type of stream and  use the corresponding parser.</p>
+
+<p>The Parser.parse method takes the stream, related meta-data as input and a few more arguments, and outputs the results and extra meta-data. The API is not concerned about the specs of the stream i.e. how it is opened etc. The code using the Parser should take care of the stream maintenance i.e opening and closing.</p>
+
+<p>@Test public void testPDFParser() throws Exception { String resourceLocation = &quot;Tika.pdf&quot;; InputStream input = this.getClass().getClassLoader().getResourceAsStream(resourceLocation); ContentHandler textHandler = new BodyContentHandler(); Metadata metadata = new Metadata(); PDFParser parser = new PDFParser(); parser.parse(input, textHandler, metadata, new ParseContext()); input.close(); System.out.println(&quot;Title: &quot; + metadata.get(&quot;title&quot;)); System.out.println(&quot;Author: &quot; + metadata.get(&quot;Author&quot;)); System.out.println(&quot;format: &quot; + metadata.get(&quot;source&quot;)); System.out.println(&quot;content: &quot; + textHandler.toString()); } @Test public void testAutoDetectParser() throws Exception { InputStream input = this.getClass().getResourceAsStream(&quot;TestTikaAPI.class&quot;); ContentHandler textHandler = new BodyContentHandler(); Metadata metadata = new Metadata(); Parser parser = new AutoDetectParser(); parser.parse(input, textHandler, metadata, new ParseContext()); input.close(); System.out.println(&quot;Title: &quot; + metadata.get(&quot;title&quot;)); System.out.println(&quot;Author: &quot; + metadata.get(&quot;Author&quot;)); } 
+``` </p>
+
+<h4>The Value-Adds</h4>
+
+<p>The Parser API gives back meta data that confirms to various metadata formats like <a href="http://dublincore.org/">Dublin core</a> and <a href="http://creativecommons.org/">Creative commons</a>. If you are not concerned with the meta-data then you can use the simpler <a href="http://tika.apache.org/0.7/api/org/apache/tika/utils/ParseUtils.html">ParseUtils </a>API for extracting only text.</p>
+
+<p>@Test public void testTikaParserUtils() throws Exception { String resourceLocation = &quot;target/test-classes/Tika_EN.txt&quot;; String content = ParseUtils.getStringContent(new File(resourceLocation), new TikaConfig()); System.out.println(content); } 
+``` </p>
+
+<p>The API also provides a bunch of value add APIs like  language detection, stream detection etc.</p>
+
+<p>@Test public void testTypeDetector() throws Exception { String resourceLocation = &quot;Tika.pdf&quot;; InputStream input = this.getClass().getClassLoader().getResourceAsStream(resourceLocation); Detector detector = new TypeDetector(); MediaType media = detector.detect(input, new Metadata()); System.out.println(&quot;Extact Type: &quot; + media.getType()); System.out.println(&quot;Sub Type: &quot; + media.getBaseType()); }</p>
+
+<p>@Test public void testLanguageIdentifier() throws Exception { String resourceLocation = &quot;Tika_EN.txt&quot;; InputStream input = this.getClass().getClassLoader().getResourceAsStream(resourceLocation); ContentHandler textHandler = new BodyContentHandler(); Metadata metadata = new Metadata(); Parser parser = new AutoDetectParser(); parser.parse(input, textHandler, metadata, new ParseContext()); input.close(); LanguageIdentifier languageIdentifier = new LanguageIdentifier(textHandler.toString()); System.out.println(&quot;found language :&quot;+ languageIdentifier.getLanguage() + &quot; certainity : &quot; + languageIdentifier.isReasonablyCertain()); } 
+```</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2010/08/13/content-and-metadata-extraction-with-apache-tika/&t=Content And Metadata Extraction With Apache Tika" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2010/08/13/content-and-metadata-extraction-with-apache-tika/&text=Content And Metadata Extraction With Apache Tika&url=http://blog.xebia.in/2010/08/13/content-and-metadata-extraction-with-apache-tika/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2010/08/13/content-and-metadata-extraction-with-apache-tika/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2010/08/11/xml-communication-between-tapestry-and-flex/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2010/08/16/database-implementation-in-android/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

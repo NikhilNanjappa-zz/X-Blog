@@ -1,0 +1,267 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Component Instrumentation With Riatest Part 2</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/Amit Sharma">Amit Sharma</a> on </span>
+                  <span class="date">28 July 2011</span>
+                </div>
+                <div class="content">
+                    <h1>Component Instrumentation with RIATest (Part-2)</h1>
+
+<p>In the first part of this series <a href="http://xebee.xebia.in/2011/07/27/component-instrumentation-with-ria-test-part-1/#more-9326">http://xebee.xebia.in/2011/07/27/component-instrumentation-with-ria-test-part-1/#more-9326</a> , we discussed how RIATest has a default support for automation of TabNavigator component. Now lets apply our learnings and try to automate a third party component SuperTabNavigator(STN) which is a part of FlexLib components. The SuperTabNavigator is an extension of the TabNavigator navigation container and it functions exactly like the TabNavigator, but adds some functionality. Added functionality includes: 1. Draggable, re-orderable tabs 2. Closable tabs 3. Scrolling tab bar if too many tabs are open 4. Drop-down list of tabs.</p>
+
+<p>By looking at the code of SuperTabNavigator, found at <a href="http://code.google.com/p/flexlib/source/browse/trunk/src/flexlib/containers/SuperTabNavigator.as?r=212">http://code.google.com/p/flexlib/source/browse/trunk/src/flexlib/containers/SuperTabNavigator.as?r=212</a> , it becomes evident (hardly any surprises here) that it extends TabNavigator component. Also notice from the code that SuperTabNavigator component dispatches two events namely &#39;tabClose&#39; and &#39;tabReordered&#39;. In this part, we will only focus on the &#39;tabClose&#39; event and the &#39;tabReader&#39; automation is left for the reader as an exercise. The &#39;tabClose&#39; event is dispatched whenever a user clicks the close icon present on the tab. Without automating the STN, we wont be able to record and replay this Event with RIATest. Ok so what do we have to do in order to automate SuperTabNavigator component&#39;s &#39;tabClose&#39; event? Basically we have to perform following three steps in order to enable automation for STN. These are :- 1. Create a SuperTabNavigatorClassInfo.xml containing the ClassInfo details like events to be automated and properties to be verified. You need to create this xml inside a specific folder named &#39;classinfo&#39; inside your RIAtest project Folder.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;AllClasses&gt;  
+&lt;ClassInfo Name=&quot;SuperTabNavigator&quot; Extends=&quot;FlexTabNavigator&quot;&gt;  
+&lt;Internal Class=&quot;flexlib.containers.SuperTabNavigator&quot;/&gt; &lt;Events&gt; &lt;Event Name=&quot;tabClose&quot;&gt; &lt;Internal Class=&quot;flexlib.events::SuperTabEvent&quot; Type=&quot;tabClose&quot;/&gt; &lt;Property Name=&quot;tabIndex&quot;&gt; &lt;PropertyType Type=&quot;Number&quot;/&gt; &lt;/Property&gt; &lt;/Event&gt; &lt;/Events&gt; &lt;Properties&gt; &lt;Property Name=&quot;popUpButtonPolicy&quot; Verify=&quot;true&quot;&gt; &lt;PropertyType Type=&quot;String&quot; /&gt; &lt;/Property&gt; &lt;Property Name=&quot;dragEnabled&quot; Verify=&quot;true&quot;&gt; &lt;PropertyType Type=&quot;Boolean&quot; /&gt; &lt;/Property&gt; &lt;Property Name=&quot;dropEnabled&quot; Verify=&quot;true&quot;&gt; &lt;PropertyType Type=&quot;Boolean&quot; /&gt; &lt;/Property&gt; &lt;Property Name=&quot;closePolicy&quot; Verify=&quot;true&quot;&gt; &lt;PropertyType Type=&quot;String&quot; /&gt; &lt;/Property&gt; &lt;/Properties&gt;
+
+&lt;/ClassInfo&gt;  
+&lt;/AllClasses&gt;
+</code></pre></div>
+<p>In the classInfo above, the logical name of the STN is &#39;SuperTabNavigator&#39; which will be used by RIATest engine. It extends &#39;FlexTabNavigator&#39; (understandably so) which is defined in the flex_classes.xml in RIATest installation. The fully qualified name of the SuperTabNavagator is flexlib.containers.SuperTabNavigator. The event we want to automate is of type &#39;tabClose&#39; while the fully qualified name of the Event is flexlib.events::SuperTabEvent. The logical name of the event to be used by RIATest for automation is &#39;tabClose&#39;. The SuperTabEvent (have a look at the code found in automation.swc) needs the tab index as a parameter. So we have a property with name &#39;tabIndex&#39; and type &#39;Number&#39; for the &#39;Event&#39; tag in classInfo. Also we have some properties of the SuperTabNavigator to be verified in the RIATest scripts.</p>
+
+<ol>
+<li>Create a SuperTabNavigatorAutomationImpl class in your Flex Project source which should have the necessary methods overridden for record and replay of the events advertised in its classInfo.</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> package com.xebialabs.deployit.riatestdelegates { import flash.display.DisplayObject; import flash.events.Event;
+
+
+    import flexlib.containers.SuperTabNavigator;
+    import flexlib.controls.SuperTabBar;
+    import flexlib.controls.tabBarClasses.SuperTab;
+    import flexlib.events.SuperTabEvent;
+
+    import mx.automation.Automation;
+    import mx.automation.IAutomationObject;
+    import mx.automation.IAutomationObjectHelper;
+    import mx.automation.delegates.containers.TabNavigatorAutomationImpl;
+    import mx.controls.Button;
+    import mx.core.mx_internal;
+
+    use namespace mx_internal;
+
+    [Mixin]
+    public class SuperTabNavigatorAutomationImpl extends TabNavigatorAutomationImpl
+    {
+
+        private var superTabNavigator:SuperTabNavigator;
+
+        //--------------------------------------------------------------------------
+        //
+        //  Class methods
+        //
+        //--------------------------------------------------------------------------
+
+        /**
+         *  Registers the delegate class for a component class with automation manager.
+         *
+         *  @param root The SystemManger of the application.
+         */
+        public static function init(root:DisplayObject):void
+        {
+            Automation.registerDelegateClass(SuperTabNavigator, SuperTabNavigatorAutomationImpl);
+        }
+
+        public function SuperTabNavigatorAutomationImpl(obj:SuperTabNavigator)
+        {
+            superTabNavigator = obj;
+            super(obj);
+
+        }
+
+        //--------------------------------------------------------------------------
+        //
+        //  Event handlers
+        //
+        //--------------------------------------------------------------------------
+
+        /**
+         *  Method which gets called after the component has been initialized.
+         *  This can be used to access any sub-components and act on the component.
+         */
+        override protected function componentInitialized():void
+        {
+            super.componentInitialized();
+            superTabNavigator.addEventListener(SuperTabEvent.TAB_CLOSE, tabCloseHandler, false, 0, true);
+        }
+
+        private function tabCloseHandler(superTabEvent:SuperTabEvent):void {
+            recordAutomatableEvent(superTabEvent);
+        }
+
+        /**
+         *  Replays SuperTabEvents by dispatching a MouseEvent to the item that was
+         *  clicked. In case of ItemClickEvent it is passed on to the super class to handle.
+         *
+         *  @param interaction The event to replay.
+         *
+         *  @return &amp;lt;code&amp;gt;true&amp;lt;/code&amp;gt; if the replay was successful. Otherwise, returns &amp;lt;code&amp;gt;false&amp;lt;/code&amp;gt;.
+         */
+        override public function replayAutomatableEvent(interaction:Event):Boolean
+        {
+            if(interaction is SuperTabEvent) {
+                var tabCloseEvent:SuperTabEvent = interaction as SuperTabEvent;
+                var help:IAutomationObjectHelper = Automation.automationObjectHelper;
+
+                var replayer:IAutomationObject = superTabNavigator.getTabBar() as IAutomationObject;
+                var superTab:Button = superTabNavigator.getTabAt(tabCloseEvent.tabIndex);
+                var closeButton:DisplayObject;
+                for(var i:int = 0; i&amp;lt; superTab.numChildren; i++) {
+                    closeButton = superTab.getChildAt(i);
+                    if(closeButton is Button) {
+                        break;
+                    }
+                }
+                help.replayClick(closeButton);
+                return true;
+            }else {
+                return super.replayAutomatableEvent(interaction);
+            }
+        }
+    }
+
+
+} 
+</code></pre></div>
+<p>Since SuperTabNavigator extends TabNavigator, the SuperTabNavigatorAutomationImpl extends TabNavigatorAutomationImpl. We register this class as the automation delegate for the SuperTabNavigator component in the static method init. Notice that we have a [Mixin] metadata tag just above our class. When you put the [Mixin] metadata just above your class definition and add a static init function to the class, like we have in our class, the static init function will be called as soon as your application loads (assuming this class is referenced somewhere in the app). This is useful if you have some code that you want to run before any of the other code in the class.</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#5879" title="2011-08-25 12:20:42">Amar Deep Singh</a>:</strong> Hi Amit, Nice blog, i liked it.</p>
+
+<p><strong><a href="#5880" title="2011-08-25 12:24:28">Amar Deep Singh</a>:</strong> Hi Amit, it was really very interesting and helpful blog</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2011/07/28/component-instrumentation-with-riatest-part-2/&t=Component Instrumentation With Riatest Part 2" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2011/07/28/component-instrumentation-with-riatest-part-2/&text=Component Instrumentation With Riatest Part 2&url=http://blog.xebia.in/2011/07/28/component-instrumentation-with-riatest-part-2/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2011/07/28/component-instrumentation-with-riatest-part-2/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2011/07/27/component-instrumentation-with-ria-test-part-1/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2011/07/28/xpressions-iphoneipod-app/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

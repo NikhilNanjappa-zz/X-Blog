@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Migration Strategies</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/rahulagrawal">rahulagrawal</a> on </span>
+                  <span class="date">14 December 2009</span>
+                </div>
+                <div class="content">
+                    <h1>Migration Strategies</h1>
+
+<p>After we did the migration of a sample application, jmsconsole to JBoss, I was thinking about the strategy for such migrations. Some of my thoughts on how to attack the migration of applications.</p>
+
+<h4>Deploy Test and Solve</h4>
+
+<p>This kind of approach can be used in simple, well coded, or in almost migrated applications (J2EE complaint). It consists of deploying the application, testing it , finding errors, going back to the application, fixing the problems, and deploying the application again. It is can be a good way to start for some one doing the migration for the first time.</p>
+
+<h4>Test Driven Approach</h4>
+
+<p>It is not hard to guess that we need to test the migrated application as quickly as possible to unearth the non obvious issues and to validate the changes done. Hence the order of migrating the modules could be based upon the order of testability. The aim is to migrate the application in incremental steps that can be tested. For example, to start with , the deployment unit , ear/war may just have the migrated module and not the whole application along with a few test classes. As the migration of the various modules progresses, the deployment unit keeps growing.</p>
+
+<p>One order in which we can start the migration could be the following: </p>
+
+<h5>Utility classes:</h5>
+
+<p>Since these classes generally don’t use much of the application server specific code, it should be easy to migrate and test them first. </p>
+
+<h5>Integration points:</h5>
+
+<p>Persistence layer, messaging layer, integration with other products, etc.</p>
+
+<p>The various integration points need to be clearly identified in the assessment phase of the migration. If the existing design is loosely coupled then testing these layers independently is easy. And if we have a spaghetti code then it gives you an opportunity to re factor it, so that the new design can be layered and testable. This can often pave the path for further migrations. For example, if an application uses some proprietary rule engine , then with the above approach one could attempt to think of moving to another rule engine, if the business needs demand so.</p>
+
+<p>To achieve the above , one may need to write few test programs. These test programs would not be bothered about the business logic. They would focus on the basic interactions of the layers with the J2EE container, and the interaction among the layers if that is container dependent. </p>
+
+<h5>Web layer:</h5>
+
+<p>Utility classes are ready, the business layer is ready, the last piece left is the presentation layer.</p>
+
+<p>Conclusion: The second approach forces us to figure out the container dependencies in a more structured manner. And if the container dependencies are scattered all along the code, then that is exposed early and it helps to prepare yourself for the same.</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2009/12/14/migration-strategies/&t=Migration Strategies" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2009/12/14/migration-strategies/&text=Migration Strategies&url=http://blog.xebia.in/2009/12/14/migration-strategies/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2009/12/14/migration-strategies/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2009/12/14/4th-indicthreads-conference/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2009/12/17/domain-driven-design-aggregates/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Angularjs Role Based Access On Gui</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/jpuri">jpuri</a> on </span>
+                  <span class="date">02 August 2014</span>
+                </div>
+                <div class="content">
+                    <h1>AngularJS – Role based access on GUI</h1>
+
+<p>These days we are busy in coding for frontend in our application and we are primarily using angular for that. A recent requirement was for role based access on GUI. A person can have multiple roles assigned to him and it was needed that a he should be able to access only that portions of GUI for which he is authorized.</p>
+
+<p>We approached to solve the issue by restricting the access of the application&#39;s GUI at mainly 2 levels:</p>
+
+<ol>
+<li><p>A person should be able access only those pages (or we can say routes) for which he is authorized.</p></li>
+<li><p>On a page a person should see only those portions for which he is authorized.</p></li>
+</ol>
+
+<p>To address 1 above we captured <strong>route change event</strong> and on every route change we will check if user is authorized for next route, in case he is not we will show him access denied page.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$rootScope.$on(&quot;$routeChangeStart&quot;, function(event, next, current) {
+    if(!authService.isUrlAccessibleForUser(next.originalPath))
+    $location.path(&#39;/authError&#39;);
+});
+</code></pre></div>
+<p><strong>authService</strong> above is a service we have created which has list of the roles user has and the routes each role is authorized for. The function <strong>isUrlAccessibleForUser()</strong> will check if any of the various roles user is assigned can access the given route and will return true or false.</p>
+
+<p>The service will obtain the list of roles for user from the backend and the details of route accessible to each role will be saved a map in the service itself (these details can also be saved in the db and fetched from backend instead).</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">app.factory(&#39;authService&#39;, function ($http) {
+
+
+
+
+
+var userRole = []; // obtained from backend
+var userRoleRouteMap = {
+    &#39;ROLE_ADMIN&#39;: [ &#39;/dashboard&#39;, &#39;/about-us&#39;, &#39;/authError&#39; ],
+    &#39;ROLE_USER&#39;: [ &#39;/usersettings&#39;, &#39;/usersettings/personal&#39;, &#39;/authError&#39;]
+};
+
+return {
+
+    userHasRole: function (role) {
+        for (var j = 0; j &amp;lt; userRole.length; j++) {
+            if (role == userRole[j]) {
+                return true;
+            }
+        }
+        return false;
+    },
+
+    isUrlAccessibleForUser: function (route) {
+        for (var i = 0; i &amp;lt; userRole.length; i++) {
+            var role = userRole[i];
+            var validUrlsForRole = userRoleRouteMap[role];
+            if (validUrlsForRole) {
+                for (var j = 0; j &amp;lt; validUrlsForRole.length; j++) {
+                    if (validUrlsForRole[j] == route)
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+};
+</code></pre></div>
+<p>});</p>
+
+<p>This will address point 1 above, to address point 2 we created a directive. The directive was used something like:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;div my-access=”ROLE_ADMIN”&gt;......&lt;/div&gt;
+</code></pre></div>
+<p>The html tag above will be rendered on the page only if the user has ROLE_ADMIN else this html fragment will be removed from the page. The code for the directive is:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">.directive(&#39;myAccess&#39;, [&#39;authService&#39;, &#39;removeElement&#39;, function (authService, removeElement) {
+    return{
+        restrict: &#39;A&#39;,
+        link: function (scope, element, attributes) {
+
+            var hasAccess = false;
+            var allowedAccess = attributes.myAccess.split(&quot; &quot;);
+            for (i = 0; i &lt; allowedAccess.length; i++) {
+                if (authService.userHasRole(allowedAccess[i])) {
+                    hasAccess = true;
+                    break;
+                }
+            }
+
+            if (!hasAccess) {
+                angular.forEach(element.children(), function (child) {
+                    removeElement(child);
+                });
+                removeElement(element);
+            }
+
+        }
+    }
+}]).constant(&#39;removeElement&#39;, function(element){
+    element &amp;&amp; element.remove &amp;&amp; element.remove();
+});
+</code></pre></div>
+<p>The fix and approach was very clean and we had authorization neatly implemented on the GUI. A possible issue here could be if the UI renders before you obtain details of user roles from backend, all the portions of html with directive will get removed from html. This did not troubled us as we were getting details of user roles as soon as login is done. But if this troubles you, a solution could be that if user roles are not yet fetch only hide the html elements and remove them only after you get list of roles. Also please note that a restricted access of GUI does not eliminates the need to a solid security implementation at backend.</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2014/08/02/angularjs-role-based-access-on-gui/&t=Angularjs Role Based Access On Gui" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2014/08/02/angularjs-role-based-access-on-gui/&text=Angularjs Role Based Access On Gui&url=http://blog.xebia.in/2014/08/02/angularjs-role-based-access-on-gui/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2014/08/02/angularjs-role-based-access-on-gui/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2014/07/31/selenium-builder-future-for-code-less-testing/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2014/08/25/devops-with-my-experience/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

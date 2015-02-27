@@ -1,0 +1,247 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Beginning With Chef Part 2</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/anirudh.xebia">anirudh.xebia</a> on </span>
+                  <span class="date">12 July 2014</span>
+                </div>
+                <div class="content">
+                    <h1>Beginning with Chef - Part 2</h1>
+
+<p>Lets recap what all we have done in the last blog :</p>
+
+<p>1.) Setup workstation and chef-repo.<br>
+2.) Registered on chef to use hosted chef as the chef-server.<br>
+3.) Bootstrapped a node to be managed by the chef-server.<br>
+4.) Downloaded the &quot;apache&quot; cookbook in our chef-repo.<br>
+5.) Uploaded the &quot;apache&quot; cookbook to the chef-server.<br>
+6.) Added the recipe[apache] in the run-list of the node.<br>
+7.) Ran the chef-client on the client to apply the cookbook.</p>
+
+<p>Now lets continue, and try to understand some more concepts around chef and see them in action.  </p>
+
+<p><strong>Node Object</strong><br>
+The beauty of chef is that it gives an object oriented approach to the entire configuration management.<br>
+The Node Object as the name suggests is an object of the class Node (http://rubydoc.info/gems/chef/Chef/Node).<br>
+The node object consists of the run-list and node attributes, which is a JSON file that is stored on the Chef server. The chef-client gets a copy of the node object from the Chef server and maintains the state of a node.</p>
+
+<p><strong>Attributes:</strong> :<br>
+An attribute is a specific detail about a node, such as an IP address, a host name, a list of loaded kernel modules, etc.</p>
+
+<p><strong>Data-bags:</strong><br>
+Data bags are JSON files used to store the data essential across all nodes and not relative to particular cookbooks.<br>
+They can be accessed inside the cookbooks, attribute files using search. example: user profiles, groups, users, etc. Used by roles and environments, a persistence available across all the nodes.</p>
+
+<p>Now, lets explore the node object and see the attributes and databags. We will also see how we can modify and set them.<br>
+First lets see what all nodes are registered with chef-server:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;br /&gt; Anirudhs-MacBook-Pro:chef-repo anirudh$ knife node list&lt;br /&gt; aws-linux-node&lt;br /&gt; aws-node-ubuntu&lt;br /&gt; awsnode&lt;br /&gt; 
+</code></pre></div>
+<p>Now lets see the details of the node awsnode.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;br /&gt; Anirudhs-MacBook-Pro:chef-repo anirudh$ knife node show awsnode&lt;br /&gt; Node Name: awsnode&lt;br /&gt; Environment: _default&lt;br /&gt; FQDN: ip-172-31-36-73.us-west-2.compute.internal&lt;br /&gt; IP: 172.31.36.73&lt;br /&gt; Run List: recipe[apache]&lt;br /&gt; Roles:&lt;br /&gt; Recipes: apache, apache::default&lt;br /&gt; Platform: redhat 7.0&lt;br /&gt; Tags:&lt;br /&gt; 
+</code></pre></div>
+<p><strong>Finding specific attributes</strong> : You can find the fqdn of the aws node.<br>
+<code>
+&lt;br /&gt; Anirudhs-MacBook-Pro:chef-repo anirudh$ knife node show awsnode -a fqdn&lt;br /&gt; awsnode:&lt;br /&gt; fqdn: ip-172-31-36-73.us-west-2.compute.internal&lt;br /&gt; 
+</code></p>
+
+<p><strong>Search</strong> : Search is one of the best features of chef, &#39;Search&#39;. Chef Server uses <a href="http://lucene.apache.org/solr/">Solr</a> for searching the node objects. So we can provide Solr style queries to search the Json node object attributes and data-bags.</p>
+
+<p>Lets see how we can search all the nodes and see their fqdn (fully qualiifed domain name)<br>
+<code>
+&lt;br /&gt; Anirudhs-MacBook-Pro:chef-repo anirudh$ knife search node &amp;quot;_:_&amp;quot; -a fqdn&lt;br /&gt; 2 items found&lt;/p&gt; &lt;p&gt;node1:&lt;br /&gt; fqdn: centos63.example.com&lt;/p&gt; &lt;p&gt;awsnode:&lt;br /&gt; fqdn: ip-172-31-36-73.us-west-2.compute.internal&lt;/p&gt; &lt;p&gt;
+</code></p>
+
+<p><strong>Changing the defaults using attributes</strong><br>
+Lets try to change some defaults in our apache cookbook using the attributes.</p>
+
+<p>In the /chef-repo/cookbooks/apache/attributes folder we can find the file default.rb (create if not)<br>
+Add the following :<br>
+<code>
+&lt;br /&gt; default[&amp;quot;apache&amp;quot;][&amp;quot;indexfile&amp;quot;]=&amp;quot;index1.html&amp;quot;&lt;br /&gt; 
+</code><br>
+Now go to the folder cookbooks/apache/files/default and make a file index1.html<br>
+<code>
+&lt;br /&gt; &amp;lt;html&amp;gt;&lt;br /&gt; &amp;lt;body&amp;gt;&lt;br /&gt; &amp;lt;h1&amp;gt; Dude!! This is index1.html, it has been changed by chef!&amp;lt;/h1&amp;gt;&lt;br /&gt; &amp;lt;/body&amp;gt;&lt;br /&gt; &amp;lt;/html&amp;gt;&lt;br /&gt; 
+</code> </p>
+
+<p>The last thing we need to do get this working is change the recipe and tell it to pick the default index file from the node attribute &#39;indexfile&#39; which we have just set.<br>
+So, open the file &#39;cookbooks/apache/recipes/default.rb&#39; and append this:<br>
+<code>
+&lt;br /&gt; cookbook_file &amp;quot;/var/www/index.html&amp;quot; do&lt;br /&gt; source node[&amp;quot;apache&amp;quot;][&amp;quot;indexfile&amp;quot;]&lt;br /&gt; mode &amp;quot;0644&amp;quot;&lt;br /&gt; end&lt;br /&gt; 
+</code><br>
+Now upload the cookbook to the chef server using the command :<br>
+<code>
+&lt;br /&gt; Anirudhs-MacBook-Pro:chef-repo anirudh$ knife cookbook upload apache&lt;br /&gt; 
+</code><br>
+And then go to the node, and run the chef-client<br>
+<code>
+&lt;br /&gt; opscode@awsnode:~$ sudo chef-client&lt;br /&gt; 
+</code></p>
+
+<p>Now, hit the external IP of the node in the browser, and we can see the change.<br>
+So, we just now used the attribute to change the default index page of the apache server.</p>
+
+<p>An important thing to note here is the precedence of setting attributes.<br>
+defaults in recipe take a precedence over the attributes, and Role takes precedence over the recipes.<br>
+The order of precedence is as follows:<br>
+<code>
+&lt;br /&gt; Ohai &amp;gt; Role &amp;gt; Environment &amp;gt; Recipe &amp;gt; Attribute&lt;br /&gt; 
+</code></p>
+
+<p><strong>Roles:</strong><br>
+A Role tell us what a particular node is acting as, the type of the node, is it a &quot;web server&quot;, a &quot;database&quot; etc. The use of this feature is that we can associate the run<em>list with it.<br>
+So, instead of providing recipies as run</em>list to the node, We will associate the run_lists with a role and then apply this role to a node.</p>
+
+<p><strong>Creating a role:</strong><br>
+<code>
+&lt;br /&gt; knife create role webserver&lt;br /&gt; 
+</code><br>
+Check if role is created:<br>
+<code>
+&lt;br /&gt; Anirudhs-MacBook-Pro:chef-repo anirudh$ knife role show webserver&lt;br /&gt; chef_type: role&lt;br /&gt; default_attributes:&lt;br /&gt; apache:&lt;br /&gt; sites:&lt;br /&gt; admin:&lt;br /&gt; port: 8000&lt;br /&gt; description: Web Server&lt;br /&gt; env_run_lists:&lt;br /&gt; json_class: Chef::Role&lt;br /&gt; name: webserver&lt;br /&gt; override_attributes:&lt;br /&gt; run_list: recipe[apache]&lt;br /&gt; 
+</code><br>
+This role we just created has added apache recipe in the run_list.</p>
+
+<p><strong>Assign this role to the node &quot;awsnode&quot;</strong><br>
+<code>
+&lt;br /&gt; Anirudhs-MacBook-Pro:chef-repo anirudh$ knife node run_list add awsnode &#39;role[webserver]&#39;&lt;br /&gt; awsnode:&lt;br /&gt; run_list:&lt;br /&gt; recipe[apache]&lt;br /&gt; role[webserver]&lt;br /&gt; 
+</code></p>
+
+<p><strong>Upload this role to the chef-server:</strong><br>
+```
+<br /> Anirudhs-MacBook-Pro:chef-repo anirudh$ knife role from file webserver.rb<br /> [/sourcecode</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2014/07/12/beginning-with-chef-part-2/&t=Beginning With Chef Part 2" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2014/07/12/beginning-with-chef-part-2/&text=Beginning With Chef Part 2&url=http://blog.xebia.in/2014/07/12/beginning-with-chef-part-2/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2014/07/12/beginning-with-chef-part-2/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2014/07/09/jsonpath-like-navigation-in-r-for-json-data/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2014/07/14/hybrid-automation-framework-for-windows-file-systems-testing-using-vbscript/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

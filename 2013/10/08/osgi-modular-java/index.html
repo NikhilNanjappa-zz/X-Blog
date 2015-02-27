@@ -1,0 +1,271 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Osgi Modular Java</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/vagrawal">vagrawal</a> on </span>
+                  <span class="date">08 October 2013</span>
+                </div>
+                <div class="content">
+                    <h1>OSGi : Modular Java</h1>
+
+<p><strong>What is OSGI ?</strong></p>
+
+<p>Open Source Gateway Initiative (OSGi) service platform is a technology which enables the complex Java applications to be modularized easily and effectively. OSGi also known as Dynamic Module System for Java, helps to divide an application into different layers (bundles) ensuring separation of concerns is met effectively. As a continuation of its modularity support, it introduces service-oriented programming model (SOA), to help you clearly separate the interface from implementation. The OSGi Service Platform is essentially an industry standard defined to specifically address the lack of support for modularity in the Java platform.</p>
+
+<p><strong>What do we mean by lack of modularity support in Java?</strong></p>
+
+<p>Let’s first understand what we mean by modularity, modularity is more or less dividing an application into logical parts representing separate concerns. Although Java provides various access modifiers to control visibility (such as public, protected, private and package), but these modifiers can control only very low level object-oriented encapsulation and not logical system partitioning. Java also has a concept of package which is typically used for partitioning code. For code to be visible from one package to another it must be declared public (or protected if using inheritance). But this means any dependencies among the packages must be exposed as public, which makes them accessible to everyone else too.</p>
+
+<p>Let’s understand this problem with a simple example</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> A)
+
+package com.vinsworld.jungle;
+
+public interface Animal { public void makeSomeNoise();
+
+}
+
+B) package com.vinsworld.jungle.impl;
+
+import com.vinsworld.jungle.Animal;
+
+public class Lion implements Animal {
+
+
+    public void makeSomeNoise() {
+        System.out.println(&amp;quot;Ghrrrrrrr&amp;quot;);
+    }
+
+
+} C) package com.vinsworld.jungle.test;
+
+import com.vinsworld.jungle.Animal; import com.vinsworld.jungle.impl.Lion;
+
+public class AnimalTest {
+
+
+    public static void main (String []args){
+
+        Lion lion = new Lion();
+        animal.makeSomeNoise();
+    }
+
+
+} 
+</code></pre></div>
+<p>Now here if such a code(A and B) is a part of some API then author will always want the client (C) to interact with the application via Animal interface, but nothing is stopping client from creating a new Lion object using its public constructor as is done in (C).</p>
+
+<p>We can argue here that this could have been achieved in a better way by creating a protected constructor and then using factory pattern etc in (B) or by even not having the unnecessary packaged structure, all this can be very well true in this trivial example. But in the real world application package structure together with the access modifier turns out to be very basic tool for ensuring API coherency. Because supposedly private implementation details can be accessed by third-party developers, we need to worry about changes to private implementation signatures as well as to public interfaces when making updates. This means in Java we will always be forced to decide between two of the followings</p>
+
+<p>1)       Club unrelated classes in a same package to avoid exposing non-public APIs.</p>
+
+<p>2)       Create logical structure properly by using multiple packages at the expense of exposing non-public APIs so they can be accessed by classes in different packages.</p>
+
+<p>Another big problem which impacts Java modularity is maintaining the versions of the jars and dependencies amongst them. The main culprit for this is class path concept. For ex: - if multiple version of same jar is present in the class path, class path will not pay any attention to the version; it will just return whatever it finds first. This may lead to errors like NoSuchMethodError.</p>
+
+<p>Also there is no way in Java to maintain the modules at runtime for ex: - If you have a modularized application with the DAO layer and now if we want to update the DAO layer, we have to bring down the complete application and then only it can be updated.</p>
+
+<p><strong>How OSGi can help ?</strong></p>
+
+<p>The answer lies in OSGi container. OSGi container is the set of services and contracts build using OSGi specification. Some of the popular opensource OSGi containers available are</p>
+
+<p>Equinox</p>
+
+<p>Knopflerfish</p>
+
+<p>Apache Felix</p>
+
+<p>Let’s see how OSGi container helps to overcome Java modularization hurdles effectively, by using a sample HelloWorld sort of application.</p>
+
+<p>I will be using Eclipse Equinox to create this module (bundle).In OSGi, software is distributed in the form of a bundle. Bundle is a physical unit of modularity in the form of jar containing code, resources and metadata. In this sample application we will create two bundles Helloworld and DateService. To create a Bundle using Eclipse please follow these steps.</p>
+
+<p>1)       File &gt; New &gt; Plug-in Project</p>
+
+<p>2)       In the Plug-in project dialog box</p>
+
+<p>Keep Project Name as follows: com.sample.helloworld</p>
+
+<p>Keep target platform as “an OSGI framework” standard.</p>
+
+<p>3)       Click <em>next</em> and for everything else just keep the default values.</p>
+
+<p>As soon as wizard will be over, Eclipse will create two files Activator and manifest.mf.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> com.sample.helloworld.Activator.java package com.sample.date;
+
+import org.osgi.framework.BundleActivator; import org.osgi.framework.BundleContext;
+
+public class Activator implements BundleActivator {
+
+public void start(BundleContext context) throws Exception { System.out.println(&quot;Hello World!!&quot;); }
+
+public void stop(BundleContext context) throws Exception { System.out.println(&quot;Goodbye World!!&quot;); } } 
+</code></pre></div>
+<p>If we want the bundle to be notified when the bundle is started or stopped by a container we need to implement BundleActivator interface.</p>
+
+<p>Please make sure these guide lines are followed while implementing the same</p>
+
+<p>a)       BundleActivator class must have a public constructor that takes no parameter. OSGi container may need to create the object of the BundleActivator by using Class.newInstance().</p>
+
+<p>b)      Start and stop method will be called by the container during the start and stop of the bundle. Developer can use this opportunity to initialize/destroy the resource objects to be used by bundle for ex:- Database connection.</p>
+
+<p><strong>Manifest.mf</strong></p>
+
+<p>The MANIFEST.MF file acts as deployment descriptor for your bundle. The format for this file is the same as that of a normal JAR file, so it consists of a set of headers with values. The OSGi specification defines a set of headers that you can use to describe your bundle to the OSGi container. The typical Manifest.mf will look as follows.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> Manifest-Version: 1.0 Bundle-ManifestVersion: 2 Bundle-Name: Helloworld Bundle-SymbolicName: com.sample.helloworld Bundle-Version: 1.0.0.qualifier Bundle-Activator: com.sample.helloworld.Activator Bundle-Vendor: SAMPLE Import-Package: org.osgi.framework;version=&quot;1.3.0&quot; 
+</code></pre></div>
+<p>Let’s take a closer look on each of these headers</p>
+
+<p>*<em>Bundle-ManifestVersion: *</em> Tells OSGi container that this bundle follows the rules of the OSGi specification. A value of 2 means that the bundle is compliant with OSGi specification Release 4; a value of 1 means that it is compliant with Release 3 or earlier.</p>
+
+<p><strong>Bundle-Name:</strong> Defines a short, human-readable name for the bundle.</p>
+
+<p>*<em>Bundle-SymbolicName: *</em>Specifies a unique, non-localizable name for the bundle. This is the name you will use while referring a given bundle from other bundles.</p>
+
+<p><strong>Bundle-Version</strong>: Specifies the version of the bundle.</p>
+
+<p><strong>Bundle-Activator</strong>: Specifies the name of the optional listener class to be notified of bundle start and stop events. In the above example the value of this header is com.javaworld.sample.Activator.</p>
+
+<p>*<em>Bundle-Vendor: *</em>Contains a human-readable description of the bundle vendor.</p>
+
+<p><strong>Import-Package:</strong> Defines imported packages for the bundle. This is the header which helps to attain dependency management. We will see more about this as we proceed further.</p>
+
+<p>Let’s run our first bundle using OSGi container of eclipse. Here are the steps</p>
+
+<p>1)       Click on Run &gt; Run configuration</p>
+
+<p>2)       In “Create, Manage and Run configuration window” dialog box name the configuration as something meaningful.</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2013/10/08/osgi-modular-java/&t=Osgi Modular Java" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2013/10/08/osgi-modular-java/&text=Osgi Modular Java&url=http://blog.xebia.in/2013/10/08/osgi-modular-java/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2013/10/08/osgi-modular-java/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2013/09/30/iphone5s-fingerprint-scanner-a-failed-mechanism/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2013/10/12/javascripts-promise/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

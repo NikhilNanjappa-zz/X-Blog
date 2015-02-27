@@ -1,0 +1,216 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Processing Custom Annotations</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/jdhingra">jdhingra</a> on </span>
+                  <span class="date">09 August 2010</span>
+                </div>
+                <div class="content">
+                    <h1>Processing Custom Annotations</h1>
+
+<p><strong>How to write custom annotations using APT?</strong>   </p>
+
+<p>Annotations provide data about a program that is not part of the program itself. The more advanced uses of annotations include writing an annotation processor that can read a Java program and take actions based on its annotations. To facilitate this task, release 5.0 of the JDK includes an annotation processing tool, called apt. In release 6 of the JDK, the functionality of apt is a standard part of the Java compiler. </p>
+
+<p><strong>Using APT-Annotation Processing Tool</strong></p>
+
+<ol>
+<li>JDK tool for processing source annotations</li>
+<li>cleaner model of source and types than doclet</li>
+<li>support recursive processing of generated files</li>
+<li>Multiple processors (vs single doclet)</li>
+</ol>
+
+<p>Each processor implements the <em>AnnotationProcessor</em> interface in the package com.sun.mirror.apt. This interface has one method i.e. process used by the apt tool to invoke the processor. A processor will &quot;process&quot; one or more annotation types. A processor instance is returned by its corresponding factory - an <em>AnnotationProcessorFactory</em>. The apt tool calls the factory&#39;s <em>getProcessorFor</em> method to get hold of the processor. During this call, the tool provides an <em>AnnotationProcessorEnvironment</em>. In the environment the processor will find everything it needs to get started, including references to the program structure on which it is operating, and the means to communicate and cooperate with the apt tool by creating new files and passing on warning and error messages.</p>
+
+<p><strong>Steps for creating a custom processor</strong></p>
+
+<ol>
+<li>Write an annotation processor, extends <em>AbstractProcessor</em>
+
+<ul>
+<li>Provide implementation for _process _method-public void process();</li>
+<li>Implement the annotation processing logic</li>
+<li>Use environment from <em>AnnotationProcessorFactory</em>; iterate through types being processed</li>
+</ul></li>
+<li>add tools.jar to classpath</li>
+<li>Invoke apt</li>
+<li><p>Use Mirror packages for representing types and processing declaration and types.
+<strong>APT Configuration</strong></p></li>
+<li><p>Configuration is done by creating text file containing fully qualified name of the AP under file META-INF/services/javax.annotation.processing.Processor. Sample file content is shown below: com.abc.ConstructorWithoutArgsProcessor
+<code>
+2. Jar the AP classes and META-INF
+jar cvMif myProcessor.jar -C com/_ META-INF/services/_ 
+</code>  <strong>Sample Annotation Processor Source Code</strong></p></li>
+</ol>
+
+<p>public class MyCustomProcessor extends AbstractProcessor { public boolean process(Set annotations, RoundEnvironment env) { for (TypeElement type : annotations) { doProcess(env, type); } return true; } 
+<code>Let&#39;s write a sample annotation  @Inherited @Documented @Retention(RetentionPolicy.SOURCE) @Target(ElementType.TYPE) public @interface ConstructorWithoutArgs { } 
+</code> Here is the code of custom processor:  @SupportedAnnotationTypes(&quot;com.abc.ConstructorWithoutArgs&quot;) @SupportedSourceVersion(SourceVersion.RELEASE_6) public class ConstructorWithoutArgsProcessor extends AbstractProcessor { public boolean process(Set&lt;? extends TypeElement&gt; annotations, RoundEnvironment env) { for (TypeElement type : annotations) { processClassesWithoutConstructorArgs(env, type); } return true; }</p>
+
+<p>private void processClassesWithoutConstructorArgs(RoundEnvironment env, TypeElement type) { for (Element element : env.getElementsAnnotatedWith(type)) { processClass(element); } }</p>
+
+<p>private void processClass(Element element) { if (!doesClassContainConstructorWithoutArgs(element)) { processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, &quot;Class &quot; + element + &quot; needs a No-Args Constructor&quot;); } }</p>
+
+<p>private boolean doesClassContainConstructorWithoutArgs(Element el) { for (Element subelement : el.getEnclosedElements()) { if (subelement.getKind() == ElementKind.CONSTRUCTOR &amp;&amp; subelement.getModifiers().contains(Modifier.PUBLIC)) { TypeMirror mirror = subelement.asType(); if (mirror.accept(noArgsVisitor, null)) return true; } } return false; }</p>
+
+<p>private static final TypeVisitor<Boolean, Void> noArgsVisitor = new SimpleTypeVisitor6<Boolean, Void>() { public Boolean visitExecutable(ExecutableType t, Void v) { return t.getParameterTypes().isEmpty(); } }; } 
+``` In the doesClassContainConstructorWithoutArgs() method, we iterate through all of the class elements and pick out the public constructors. A class that does not have any will automatically fail the test. Note that when we do not specify any constructor, Java automatically adds a default no-args constructor. </p>
+
+<p>Once we have found our constructor element, we visit it with to determine whether the argument list is empty. Using the Visitor pattern in this case helps us to avoid a downcast. Once we have all these files packaged in a jar file, let&#39;s call it myProcessor.jar, we can add a processing parameter to our call to javac:  javac -classpath .;myProcessor.jar -processorpath myProcessor.jar com/*.java 
+```</p>
+
+<p>Let&#39;s test this with few test cases:  @ConstructorWithoutArgs public abstract class SuperClassWithoutArgs { public SuperClassWithoutArgs() { } }</p>
+
+<p>// Passes public class PublicConstructorWithoutArgs extends SuperClassWithoutArgs { public PublicConstructorWithoutArgs() { } }</p>
+
+<p>// Fails public class NonPublicConstructor extends SuperClassWithoutArgs { NonPublicConstructor() { } }</p>
+
+<p>// Fails public class WrongConstructor extends SuperClassWithoutArgs { public WrongConstructor(String aString) { } } 
+``` When we compile these classes with the ConstructorWithoutArgsProcessor, we see the following compiler errors: </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">error: Class NonPublicConstructor needs a No-Args Constructor
+error: Class WrongConstructor needs a No-Args Constructor
+2 errors
+</code></pre></div>
+<p><strong>Limitations of APT</strong></p>
+
+<ol>
+<li>no processing of local variable annotations</li>
+<li>no inheritance of annotations
+In this way, we can write custom annotations which may require specific logic for any certain business needs like persistence, auditing etc. In Java SE 6, annotations can be written only on method parameters and the declarations of packages, classes, methods, fields, and local variables. <a href="http://types.cs.washington.edu/jsr308/">JSR 308</a> extends Java to allow annotations on nearly any use of a type, and on type parameter declarations. JSR 308 uses a simple prefix syntax for type annotations, with a special case for receiver types and for constructor results. The <a href="http://types.cs.washington.edu/checker-framework/">Checker Framework</a> is one way to create plug-ins that do pluggable type-checking for the type qualifiers. A pluggable type-checker enables you to detect certain bugs in your code, or to prove that they are not present and this verification happens at compile time. The Checker Framework enhances Java’s type system to make it more powerful and useful. This lets software developers detect and prevent errors in their Java programs. </li>
+</ol>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2010/08/09/processing-custom-annotations/&t=Processing Custom Annotations" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2010/08/09/processing-custom-annotations/&text=Processing Custom Annotations&url=http://blog.xebia.in/2010/08/09/processing-custom-annotations/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2010/08/09/processing-custom-annotations/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2010/08/04/flex-exploiting-data-bindings-for-crud-based-applications/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2010/08/11/xml-communication-between-tapestry-and-flex/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

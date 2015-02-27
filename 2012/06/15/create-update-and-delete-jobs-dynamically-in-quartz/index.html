@@ -1,0 +1,260 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Create Update And Delete Jobs Dynamically In Quartz</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/vrawat">vrawat</a> on </span>
+                  <span class="date">15 June 2012</span>
+                </div>
+                <div class="content">
+                    <h1>Create, Update and Delete Jobs Dynamically in Quartz</h1>
+
+<p><strong>Problem</strong> I was recently working on a poc(proof of concept). The requirements were, to be able to dynamically schedule jobs using Qaurtz. After looking examples on the web I found most of the examples were of static scheduling (where we provide the jobs in a xml beforehand). But I can only find design strategies related to my requirements, no concrete implementation. So basically I will be providing a concrete implementation of the given problem in this blog.  <strong>Design Strategy</strong></p>
+
+<ul>
+<li>Create a simple web interface for creating, updating and deleting information related to Jobs(<a href="https://github.com/vijayrawatsan/QuartzDynamicScheduling/blob/master/src/main/java/in/xebia/domain/JobData.java">JobData</a>) in database.(I will not be showing this part)</li>
+<li>Create a <strong>PersistentJobSchedulerJob</strong> which will schedule all the jobs stored in the database with a repeat interval. Basically the PersistentJobSchedulerJob is itself a job which will execute at regular intervals.</li>
+</ul>
+
+<p><strong>The Code</strong> Here is the link to the complete project <a href="https://github.com/vijayrawatsan/QuartzDynamicScheduling">GituHub Repo</a></p>
+
+<p><strong>Solution</strong> Lets start with the <strong>PersistentJobSchedulerJob.java</strong> which is the most important class.</p>
+
+<p>[code language=&quot;java&quot; highlight=&quot;13&quot;] @Service public class PersistentJobSchedulerJob {</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">private static Logger logger = Logger.getLogger(&amp;quot;PersistentJobSchedulerJob&amp;quot;);
+
+@Autowired
+private JobRepository jobRepository;
+
+@Autowired
+private MailService mailService;
+
+@SuppressWarnings({ &amp;quot;rawtypes&amp;quot;, &amp;quot;unchecked&amp;quot; })
+@Scheduled(fixedRate=30000)
+public void schedulePersistentJobs(){
+    List&amp;lt;JobData&amp;gt; jobsData= jobRepository.findAll();
+    logger.info(&amp;quot;Retriving Jobs from Database and Scheduling One by One | Total Number of Jobs: &amp;quot;+jobsData.size());
+    try{
+        Scheduler scheduler = new StdSchedulerFactory().getScheduler(); 
+        scheduler.start();  
+        for(JobData jobData: jobsData){
+            JobDetail job = newJob(MailSenderJob.class)
+                            .withIdentity(jobData.getJobName())
+                            .usingJobData(getJobDataMap(jobData))
+                            .build();
+            if(!jobData.getActive()){
+                logger.info(&amp;quot;Deleting a Job&amp;quot;);
+                scheduler.deleteJob(new JobKey(jobData.getJobName()));
+                continue;
+            }
+            if(scheduler.checkExists(new JobKey(jobData.getJobName()))){
+                logger.info(&amp;quot;Rescheduling the Job&amp;quot;);
+                Trigger oldTrigger = scheduler.getTrigger(new TriggerKey(jobData.getJobName()+&amp;quot;Trigger&amp;quot;));
+                TriggerBuilder tb = oldTrigger.getTriggerBuilder();
+                Trigger newTrigger = tb.withSchedule(simpleSchedule()
+                          .withIntervalInMilliseconds(jobData.getRepeatInterval()).
+                          repeatForever())
+                          .build();
+
+                scheduler.rescheduleJob(oldTrigger.getKey(), newTrigger);
+            }else{
+                logger.info(&amp;quot;Scheduling the Job&amp;quot;);
+                scheduler.scheduleJob(job,getTrigger(jobData));
+            }
+        }
+    }catch (SchedulerException e) {
+        logger.error(&amp;quot;Scheduler Exception : &amp;quot;+e.getMessage());    
+    }
+}
+
+private JobDataMap getJobDataMap(JobData jobData) {
+    JobDataMap jobDataMap =  new JobDataMap();
+    jobDataMap.put(&amp;quot;recipients&amp;quot;, jobData.getRecipients());
+    jobDataMap.put(&amp;quot;mailService&amp;quot;, mailService);
+    return jobDataMap;
+}
+
+private Trigger getTrigger(JobData jobData){
+    SimpleTrigger simpleTrigger = newTrigger().withIdentity(jobData.getJobName()+&amp;quot;Trigger&amp;quot;)
+                                    .startAt(jobData.getStartDateTime())
+                                    .withSchedule(simpleSchedule()
+                                      .withIntervalInMilliseconds(jobData.getRepeatInterval()).
+                                      repeatForever())
+                                      .build();
+    return simpleTrigger;
+}
+</code></pre></div>
+<p>} 
+ ```</p>
+
+<p>The above job is triggered using Spring&#39;s TaskScheduling framework(<a href="https://github.com/vijayrawatsan/QuartzDynamicScheduling/blob/master/src/main/resources/applicationContext.xml">applicationContext.xml</a>). You can see in <strong>line 13</strong> I&#39;m providing the interval in which job should be repeated. From lines <strong>15 through 43</strong> I&#39;m first reading all the jobs data from database. Then for each job&#39;s data a Quartz Job is created with a corresponding trigger. Now there are three cases, </p>
+
+<ul>
+<li>If the job is not active(that means its deleted, so when you design your CRUD application make sure for a delete operation you just turn the field active to false, do not delete the row) , check if it exists in scheduler delete it. Move to the next job.</li>
+<li>If job is active, check if it exists and if it does, simply update the trigger and reschedule the job.</li>
+<li>If job is active, check if it exists and if it does not, simply schedule the job.</li>
+</ul>
+
+<p>Lets see the code for <strong>MailSenderJob.java</strong> ``` 
+ public class MailSenderJob implements Job {</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">private static Logger logger = Logger.getLogger(&amp;quot;MailSenderJob&amp;quot;);
+
+@SuppressWarnings(&amp;quot;rawtypes&amp;quot;)
+public void execute(JobExecutionContext context)
+        throws JobExecutionException {
+    logger.info(&amp;quot;In MailSenderJob&amp;quot;);
+    MailService mailService = (MailService)context.getJobDetail().getJobDataMap().get(&amp;quot;mailService&amp;quot;);;
+    Map dataMap = context.getJobDetail().getJobDataMap();
+    String recipients = (String) dataMap.get(&amp;quot;recipients&amp;quot;);
+    logger.info(&amp;quot;Sending mails to : &amp;quot;+recipients);
+    mailService.send(recipients);
+}
+</code></pre></div>
+<p>} 
+ ```</p>
+
+<p>This is a pretty straight forward Quartz Job nothing new here. I am simply using the mailService and calling the send method. You can obviously run any logic you want.</p>
+
+<p><strong>Conclusion</strong> In this blog we learned how we can dynamically create, update and delete jobs using Quartz Scheduler.</p>
+
+<p>Happy Reading.</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#9305" title="2012-12-14 15:32:26">viswabe1</a>:</strong> It&#39;s a great job.Thanks. Will u pls send me the complete project. My mail id is viswanathan@pointelsolutions.com</p>
+
+<p><strong><a href="#9306" title="2012-12-17 19:24:49">Vijay Rawat</a>:</strong> Hi Viswanathan, I have shared the Github repo in the blog. https://github.com/vijayrawatsan/QuartzDynamicScheduling</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2012/06/15/create-update-and-delete-jobs-dynamically-in-quartz/&t=Create Update And Delete Jobs Dynamically In Quartz" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2012/06/15/create-update-and-delete-jobs-dynamically-in-quartz/&text=Create Update And Delete Jobs Dynamically In Quartz&url=http://blog.xebia.in/2012/06/15/create-update-and-delete-jobs-dynamically-in-quartz/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2012/06/15/create-update-and-delete-jobs-dynamically-in-quartz/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2012/06/12/rich-ui-interactions-the-easy-way-backbone-js/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2012/06/15/simplified-wrapper-and-interface-generator/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

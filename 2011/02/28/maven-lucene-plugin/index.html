@@ -1,0 +1,284 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Maven Lucene Plugin</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/pranjan">pranjan</a> on </span>
+                  <span class="date">28 February 2011</span>
+                </div>
+                <div class="content">
+                    <!--Maven Lucene Plugin is an open source maven plugin for Apache Lucene developed by Paritosh Ranjan of  Xebia India IT Architects Ltd . The project is hosted on SourceForge and can be found here. It is released under GNU General Public License (GPL).
+
+-->
+
+<h1>Maven Lucene Plugin 1.0 : Documentation and Usage</h1>
+
+<h2><strong>Maven Lucene Plugin</strong></h2>
+
+<p>Maven Lucene Plugin is an open source maven plugin for Apache Lucene developed by<a href="http://www.xebiaindia.com/" title="Xebia India"> Xebia India IT Architects Ltd</a> . The project is hosted on SourceForge and can be found <a href="https://sourceforge.net/projects/lucene-plugin/" title="Maven Lucene Plugin">here</a>. It is released under GNU General Public License (GPL).</p>
+
+<p>The artifact is uploaded at Central Maven Repository <a href="http://repo1.maven.org/maven2/com/xebia/">http://repo1.maven.org/maven2/com/xebia/</a>. You can browse the artifact <a href="https://oss.sonatype.org/index.html#nexus-search;quick%7Emaven-lucene-plugin" title="OSS Sonatype Repository">here</a>.</p>
+
+<p><strong>maven-lucene-plugin</strong> creates a Lucene index from a file source. The structure of the lucene index i.e. fields, analyzers, indexLocation, fileSourceLocation, store etc can be configured in a configuration file lucene.xml.</p>
+
+<p><strong>lucene.xml</strong> contains all information regarding the lucene index and the data source (from which the index is created). The Maven Lucene Plugin looks for lucene.xml file in the project root directory (adjacent to pom.xml) and creates the lucene index from the file source mentioned in lucene.xml based on the index configuration provided.</p>
+
+<p>Apache Lucene Version</p>
+
+<p>The maven-lucene-plugin uses Lucene version 3.0.3. The index can be opened using Luke 1.0.1. Luke can be downloaded from <a href="http://luke.googlecode.com/files/lukeall-1.0.1.jar" title="Download Luke">here</a>.</p>
+
+<h3><strong>Configuring plugin in pom.xml</strong></h3>
+
+<p>Configuring the <strong>maven-lucene-plugin</strong> in <strong>pom.xml</strong> is very simple. All information about index configuration needs to be written in <strong>lucene.xml</strong>. Index can be created by running “<strong>createIndex</strong>” goal in the plugin. It can be done by running the goal during any phase as shown in the example plugin configuration. OR it can be called by executing “<strong>createIndex</strong>” goal from command line by “<strong>mvn lucene:createIndex</strong>”.</p>
+
+<p>The “<strong>createIndex</strong>” goal looks for a file “<strong>lucene.xml</strong>” in the project root directory (adjacent to pom.xml). The <strong>lucene.xml</strong> file needs to have all the information related to the configuration of index. </p>
+
+<h4>Example pom.xml is shown below:</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">**&lt;build&gt;
+ &lt;plugins&gt;
+  &lt;plugin&gt;
+    &lt;groupId&gt;com.xebia&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-lucene-plugin&lt;/artifactId&gt;
+    &lt;version&gt;1.0&lt;/version&gt;
+    &lt;executions&gt;
+     &lt;execution&gt;
+      &lt;phase&gt;install&lt;/phase&gt;
+      &lt;goals&gt;
+       &lt;goal&gt;createIndex&lt;/goal&gt;
+      &lt;/goals&gt;
+     &lt;/execution&gt;
+    &lt;/executions&gt;
+  &lt;/plugin&gt;
+ &lt;/plugins&gt;
+&lt;/build&gt;**
+</code></pre></div>
+<h3>Example lucene.xml</h3>
+
+<p><strong>maven-lucene-plugin</strong> looks for a file <strong>lucene.xml</strong> in the project root directory (adjacent to pom.xml). The <strong>maven-lucene-plugin</strong> will not work without <strong>lucene.xml</strong>. lucene.xml contains all the information about the lucene index.</p>
+
+<h4>Example lucene.xml is provided below and each tag is explained in detail after that:</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text">**&lt;index&gt;
+  &lt;indexLocation&gt;C:\\index&lt;/indexLocation&gt;
+  &lt;sourceFileLocation&gt;C:\\file\\data.txt&lt;/sourceFileLocation&gt;
+  &lt;overWrite&gt;true&lt;/overWrite&gt;
+  &lt;separator&gt;;&lt;/separator&gt;
+  &lt;field&gt;
+    &lt;name&gt;names&lt;/name&gt;
+    &lt;type&gt;string&lt;/type&gt;
+    &lt;analyzer&gt;WhiteSpaceAnalyzer&lt;/analyzer&gt;
+    &lt;store&gt;true&lt;/store&gt;
+  &lt;/field&gt;
+  &lt;field&gt;
+    &lt;name&gt;hobby&lt;/name&gt;
+    &lt;type&gt;string&lt;/type&gt;
+    &lt;analyzer&gt;SimpleAnalyzer&lt;/analyzer&gt;
+    &lt;store&gt;true&lt;/store&gt;
+  &lt;/field&gt;
+&lt;/index&gt;**
+</code></pre></div>
+<p>The parent tag is index. All other information is encapsulated inside it. </p>
+
+<ol>
+<li>    <strong><indexLocation>C:\index</indexLocation></strong></li>
+</ol>
+
+<p>indexLocation tag points to the directory on your disk where the index will be created after the goal:createIndex is executed.
+  2.     <strong><sourceFileLocation>C:\file\data.txt</sourceFileLocation></strong></p>
+
+<p>sourceFileLocation tag points to the file on your disk which will be indexed.
+  3.     <strong><overWrite>true</overWrite></strong></p>
+
+<p>overWrite tag specifies whether the existing index present at the indexLocation (if any) should be deleted or should be overWritten
+  4.     <strong><separator>;</separator></strong></p>
+
+<p>separator tag specifies the delimiter between the field names and the data to be indexed in it. The default separator is ; (Please refer to Sample File Source Format described in the next section for more detailed information).
+  5.     <strong><field>
+     <name>names</name>
+     <type>string</type>
+     <analyzer>WhiteSpaceAnalyzer</analyzer>
+     <store>true</store>
+    </field></strong></p>
+
+<p>A <field> specifies a Lucene Field. <index/> can have one or many <field/>.</p>
+
+<p>A <field> should contain the following tags :</p>
+
+<p>Following analyzers are supported by maven-lucene-plugin in release 1.0. The default is the WhitespaceAnalyzer. </p>
+
+<ul>
+<li>** &quot;WhitespaceAnalyzer&quot;**</li>
+<li>** &quot;SimpleAnalyzer&quot;**</li>
+<li>** &quot;KeyWordAnalyzer&quot;**</li>
+<li>** &quot;StopAnalyzer&quot;**</li>
+<li>** &quot;StandardAnalyzer&quot;**
+6. <store> specifies whether this field will be stored in the index or not. </li>
+</ul>
+
+<h3>Source File Format</h3>
+
+<p>This is an example of file source ( file containing data to be indexed). The data in the file source should be written in the format explained below. </p>
+
+<ul>
+<li>The top row represents the field names separated by the separator.</li>
+<li>The separator is the defined in lucene.xml.</li>
+<li>The default separator is “;”.</li>
+<li>The rows other than the top row contains values for the field.</li>
+<li>The field name should be same as that specified in the <field><name>fieldName</name></field> tag in lucene.xml.
+The source file can be seen as a set of columns with the element at the top as the field name. Technically, each row other than the top row (name of fields) is considered as a lucene document.</li>
+</ul>
+
+<p>For eg. in the example file data shown below, names and hobby are the field names.</p>
+
+<p>“names” field has values “albert einstein” and “Leonardo da Vinci”. “hobby” field has values “invention and discovery” and “Writing Painting”Example File </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">**names;hobby
+albert einstein;invention and discovery
+Leonardo da Vinci;Writing Painting**
+</code></pre></div>
+<h2>Maven Lucene Search</h2>
+
+<p>maven-lucene-search is a dependency which can be used to search lucene indexes without doing any Lucene specific coding.</p>
+
+<p>It can be added by using dependency </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">**&lt;dependency&gt;
+ &lt;groupId&gt;com.xebia&lt;/groupId&gt;
+ &lt;artifactId&gt;maven-lucene-search&lt;/artifactId&gt;
+ &lt;version&gt;1.0&lt;/version&gt;
+&lt;/dependency&gt;**
+</code></pre></div>
+<h2>Comments</h2>
+
+<p><strong><a href="#5327" title="2011-03-01 08:02:11">Abhinav Kumar</a>:</strong> Great. Well Done.</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2011/02/28/maven-lucene-plugin/&t=Maven Lucene Plugin" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2011/02/28/maven-lucene-plugin/&text=Maven Lucene Plugin&url=http://blog.xebia.in/2011/02/28/maven-lucene-plugin/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2011/02/28/maven-lucene-plugin/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2011/02/28/html5-meetup-at-delhi/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2011/03/15/java-and-ruby-integration-via-soap/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

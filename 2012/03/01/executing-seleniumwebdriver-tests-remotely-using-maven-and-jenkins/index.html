@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Executing Seleniumwebdriver Tests Remotely Using Maven And Jenkins</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/rnamta">rnamta</a> on </span>
+                  <span class="date">01 March 2012</span>
+                </div>
+                <div class="content">
+                    <h1>Executing Selenium/WebDriver tests remotely using Maven and Jenkins</h1>
+
+<p>Recently our team created a nifty selenium test suite for testing a salesforce.com app we developed. We used <a href="http://testng.org/doc/index.html">TestNG </a> framework for writing tests along with the latest and greatest selenium available out there which is <a href="http://code.google.com/p/selenium/wiki/GettingStarted">WebDriver</a>. In case you want to know why we chose web driver over RC,read <a href="http://xebee.xebia.in/2012/02/07/selenium-web-driver-or-rc-decide-yourself/">this</a>. Since we planned to execute the tests on a remote windows machine triggered from our Jenkins machine (linux), we leveraged the capabilities of <a href="http://code.google.com/p/selenium/wiki/RemoteWebDriver">RemoteWebdriver</a>. Eventually we wanted to be able to run the tests with our Continuous Integration environment which meant that the tests are build on Jenkins (linux) with maven and executed on dedicated windows machine remotely.  Following are the key objectives that we identified to make it happen:</p>
+
+<ol>
+<li><p>Configure/trigger the tests in way so that we can put them into the Jenkins machines as build jobs.</p></li>
+<li><p>Use maven targets to be able to force a browser type at build time (for example: mvn integration-test -DBrowserType=chrome). Using this we can create multiple Jenkins jobs for execution of selenium tests against each browser.</p></li>
+<li><p>Make remote execution capability configurable along with the location (IP and port) of the selenium server (if Remote Execution is true) so that we can easily switch server (if required) or use multiple servers simultaneously executing test against different browsers.</p></li>
+<li><p>Run the tests on multiple browsers like FF,IE and chrome.</p></li>
+</ol>
+
+<p>With the help of this blog I intend to share the way we set about to achieve our objectives. Here I am assuming that the reader is aware of basic concepts of selenium and maven.</p>
+
+<p>As a first step we created a maven project for the test suite and added the required dependencies to the POM file. We prepared a remote windows virtual machine with all the required browsers and downloaded the selenium-server-standalone-{VERSION}.jar on it.</p>
+
+<p>In our framework, we added a few system properties in our BaseTest.java (A helper class used by all tests to instantiate a WebDriver/RemoteWebDriver instance).</p>
+
+<p><code>String BrowserType = System.getProperty(&quot;BrowserType&quot;); String RemoteExecution = System.getProperty(&quot;RemoteExecution&quot;); String RemoteUrl = System.getProperty(&quot;RemoteUrl&quot;);</code></p>
+
+<p>Next, we made the invocation of a browser type and remote execution capability dependent on these property values in our BaseTest.java.</p>
+
+<p><code>if(!**RemoteExecution**.equals(&quot;true&quot;)) // remote execution is false</code> <code>{</code> <code>if(**BrowserType**.equals(&quot;firefox&quot;))</code> <code>{</code> <code>WebDriver driver = new FirefoxDriver(); // Create a new instance of firefox driver</code> <code>} else if { code for ie and chrome goes here } else                               //remote execution is true</code> if(<strong>BrowserType</strong>.equals(&quot;firefox&quot;))<code>{ WebDriver driver = new RemoteWebDriver(newURL(**RemoteUrl**+&quot;/wd/hub&quot;),DesiredCapabilities.firefox()); //Create a new instance of RemoteWebDriver with the remote server url } else if { code for ie and chrome goes here }</code></p>
+
+<p>Finally, we configured the maven-surefire-plugin to run the tests in integration-test phase. In the plugin execution we added the parameter &#39;systemPropertyVariables&#39; to pass values for the system properties defined above at build time.</p>
+
+<p><plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId> <configuration> <skip>true</skip> </configuration> <executions> <execution> <phase>integration-test</phase> <goals> <goal>test</goal> </goals> <configuration> <skip>false</skip> ** <systemPropertyVariables>** ** <BrowserType>firefox</BrowserType>** ** <RemoteExecution>false</RemoteExecution>** ** <RemoteUrl>http://127.0.0.1:4444</RemoteUrl>** ** </systemPropertyVariables>** <suiteXmlFiles> <suiteXmlFile>${project.build.directory}/test-classes/testng.xml</suiteXmlFile> </suiteXmlFiles> </configuration> </execution> </executions> </plugin></p>
+
+<p>Now once we had the server running on the remote VM (using java -jar selenium-server-standalone-{VERSION}.jar) we were able to build and execute our tests using the following maven command. <code>mvn integration-test -DBrowserType=firefox -DRemoteExecution=true -DRemoteUrl=http://xyz.com:4444</code> Now we already achieved our objective 1,2 and 3 but not 4. We ran into issues while running the tests on chrome remotely. We encountered an exception with the message &#39;The path to the chrome driver executable must be set by the webdriver.chrome.driver system property&#39;. The solution to this is already discussed on <a href="http://stackoverflow.com/questions/6921170/how-to-build-remote-webdriver-for-chrome">stackoverflow</a>. In nutshell, you need to have the chromedriver.exe on the remote machine (where the selenium server is hosted) and run the selenium server on the remote machine with the following argument <code>java -Dwebdriver.chrome.driver=&quot;path-to-chromedriver.exe&quot; -jar selenium-server-standalone.jar</code> That&#39;s it. This enabled us to run our tests on any remote machine against a specific browser with ease in continuous integration environment. It would be great to hear what alternative approaches you have used to solve something similar.</p>
+
+<h2>Comments</h2>
+
+<p><strong><a href="#7864" title="2012-03-06 01:16:00">Priyank</a>:</strong> Good summarization. Like it.</p>
+
+<p><strong><a href="#9126" title="2012-07-03 21:37:29">Viva</a>:</strong> Hi Rajneesh, Could you please provide example to test through Android Webdriver instead of RemoteWebDriver? We found that through remoteWedriver test are running slow. Thanks, Viva</p>
+
+<p><strong><a href="#8306" title="2012-04-05 00:22:07">Rayan</a>:</strong> can you put your BaseTest class here ?</p>
+
+<p><strong><a href="#9310" title="2013-01-19 11:13:45">Ramesh palloli</a>:</strong> Good post....Thank u so much ...it is very helpful to me...i started jenkins...can u please provide me Base Test Class.....</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2012/03/01/executing-seleniumwebdriver-tests-remotely-using-maven-and-jenkins/&t=Executing Seleniumwebdriver Tests Remotely Using Maven And Jenkins" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2012/03/01/executing-seleniumwebdriver-tests-remotely-using-maven-and-jenkins/&text=Executing Seleniumwebdriver Tests Remotely Using Maven And Jenkins&url=http://blog.xebia.in/2012/03/01/executing-seleniumwebdriver-tests-remotely-using-maven-and-jenkins/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2012/03/01/executing-seleniumwebdriver-tests-remotely-using-maven-and-jenkins/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2012/02/29/distributed-pomodoro/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2012/03/01/nfc-in-android/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

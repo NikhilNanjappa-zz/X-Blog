@@ -1,0 +1,224 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Recommendation Engine In Python Using Pearson Correlation Similarity</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/gagrawal">gagrawal</a> on </span>
+                  <span class="date">10 February 2014</span>
+                </div>
+                <div class="content">
+                    <h1>Recommendation Engine in Python using Pearson Correlation Similarity</h1>
+
+<p>Recommendation Engine is a tool with which an application can recommend items to it’s users. There are various strategies to develop a recommendation engine depending upon the use case, but “Collaborative Filtering” is the most popular and widely used technique. With collaborative filtering, an application can find people with similar taste and can look at things they like and combine them to create a ranked list of suggestions which is known as user based recommendation. Or can also find items which are similar to each other and then suggest the items to users based on their past purchases which is known as item based recommendation. The first step in this technique is to find users with similar tastes or items which share similarity. There are various similarity models like Cosine Similarity, Pearson Correlation Similarity, Euclidean Distance Similarity etc. which can be used to find similarity between users or items. In this blog post I am going to discuss an example of how one can develop a basic recommendation engine in Python using Pearson Correlation Similarity.</p>
+
+<p><strong>&gt;&gt; MovieLens Data</strong></p>
+
+<p>There are ample sample data sets available on net to do experiments. I will be using MovieLens data set available from <a href="http://grouplens.org/datasets">http://grouplens.org/datasets</a> which contains movies and ratings given by users to these movies. Using this dataset, I will write a python program to give movie recommendations to users. There are two datasets available. I will be using 100,000 dataset in this blog post. After you download and unzip the dataset there are two files u.item and u.data which contain following data </p>
+
+<ul>
+<li><strong>u.item</strong> – Contains a list of movie IDs, titles and other details which we are not much concerned with. 
+
+<ul>
+<li>e.g. 
+
+<ul>
+<li>1|Toy Story (1995)|01-Jan-1995|..</li>
+<li>2|GoldenEye (1995)|01-Jan-1995|..</li>
+<li>3|Four Rooms (1995)|01-Jan-1995|..</li>
+</ul></li>
+</ul></li>
+<li> <strong>u.data</strong> – Contains actual ratings given by user to these movies in the format user ID, movie ID, rating and timestamp. 
+
+<ul>
+<li>e.g. 
+
+<ul>
+<li>196         242         3              881250949</li>
+<li>186         302         3              891717742</li>
+<li>22           377         1              878887116
+With this data set available, let’s first write a function in Python which will parse movie and user ratings file and using Pearson Correlation Similarity find similar movies.</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p><strong>&gt;&gt; Python Program - movieRecommendations.py</strong></p>
+
+<p>Create a python file movieRecommendations.py and write loadMoviesRatings function which is responsible for parsing movie and user ratings file and creating a dictionary:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> def loadMovieRatings(): movies={} for line in open(&quot;data/ml-100k/u.item&quot;): (id,movie)=line.split(&quot;|&quot;)[0:2] movies[id]=movie movieRatings={} for line in open(&quot;data/ml-100k/u.data&quot;): (userId, movieId, rating, ts) = line.split(&quot;\t&quot;) movieRatings.setdefault(userId,{}) movieRatings[userId][movies[movieId]]=float(rating) return movieRatings
+</code></pre></div>
+<p>Now let’s execute this function on python command line to see what is the output.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &gt;&gt;&gt;import movieRecommendations &gt;&gt;&gt;movieRatings=movieRecommendations.loadMovieRatings() &gt;&gt;&gt;movieRatings 
+</code></pre></div>
+<p>This returns a dictionary in following format where key is user ID and value is movie name and rating given by respective user:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> { 1 : { &#39;Doom Generation, The (1995)&#39;: 2.0, &#39;Twelve Monkeys (1995)&#39;: 4.0, &#39;Mask, The (1994)&#39;: 4.0, &#39;To Wong Foo, Thanks for Everything! Julie Newmar (1995)&#39;: 3.0 … }, 2 : { &#39;River Wild, The (1994)&#39;: 3.0, &#39;Sabrina (1995)&#39;: 3.0, &#39;Evita (1996)&#39;: 3.0, &#39;Richard III (1995)&#39;: 2.0, &#39;Postino, Il (1994)&#39;: 4.0, &#39;Donnie Brasco (1997)&#39;: 4.0 … } } 
+</code></pre></div>
+<p><strong>&gt;&gt; Finding users with similar taste : Pearson Correlation Similarity</strong></p>
+
+<p>Once we have above data structure we can now write a function to find users with similar taste. We will use Pearson correlation similarity in this case. The correlation coefficient is a measure of how well two sets of data fit on a straight line. It tends to give better result in situations where data is not normalized. In this case it is possible that some users rate movies more harshly as compared to other users. However it doesn’t mean they are not similar. Pearson correlation score normalizes such data and finds out similar users.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> def calculatePearsonSimilarity(movieRatings,u1,u2): movies={} for movie in movieRatings[u1]: if movie in movieRatings[u2]: movies[movie]=1 noOfMovies=len(movies)
+
+
+        if noOfMovies==0: return 0
+        sum1=sum([movieRatings[u1][movie] for movie in movies])
+        sum2=sum([movieRatings[u2][movie] for movie in movies])
+
+        sum1Sq=sum([pow(movieRatings[u1][movie],2) for movie in movies])
+        sum2Sq=sum([pow(movieRatings[u2][movie],2) for movie in movies])
+
+        pSum=sum([movieRatings[u1][movie]*movieRatings[u2][movie] for movie in movies])
+
+        # Calculate Pearson score
+        num=pSum-(sum1*sum2/noOfMovies)
+        den=sqrt((sum1Sq-pow(sum1,2)/noOfMovies)*(sum2Sq-pow(sum2,2)/noOfMovies))
+        if den==0: return 0
+        r=num/den
+        return r
+</code></pre></div>
+<p>Above function returns value between -1 and 1. A value of 1 means two users have exactly same ratings for every movie. Let’s now try this function with 2 users and see how similar they are –</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"> &gt;&gt;&gt;import imp &gt;&gt;&gt;imp.reload(movieRecommendations) &gt;&gt;&gt;movieRecommendations.calculatePearsonSimilarity(movieRatings, ‘1’,’2’) 0.16084123285437085 
+</code></pre></div>
+<p>Here the output is 0.16 which means user ‘1’ and ‘2’ are not very similar in terms of their ratings for movies.</p>
+
+<p><strong>&gt;&gt; Weighted Similarity Score</strong></p>
+
+<p>Now let’s say we want movie recommendations for user with id ‘43’.  What we need is to find top n users who have given similar ratings as compared to user ‘43’. And then find the movies which they have rated good and user ‘43’ has still not rated, so that we can recommend the same to user ‘43’. However it is possible that top n users might have given different ratings to same movies that user ’43’ has not watched. Also it is possible that not all users would have watched the same movie. So we need to give weighted score to movies by considering ratings from all top n users and rank them to give correct recommendation to user ‘43’.</p>
+
+<p>Following table illustrates how this can be done. First column contains user IDs and second column contains their similarity with user ‘43’. Now suppose that there are 3 movies i.e. Start Kid, Visitors, The (Visisteurs, Les) and Saint of Fort Washington that user ‘43’ has not rated. We can multiply their respective ratings given by users in first column  with their similarity with user ‘43’ as in second column and then take total of this product and divide by sum of all similarities. This gives us weighted score for all 3 movies as mentioned in last row “Total/Similarity Total” </p>
+
+<p><strong>Users</strong>
+<strong>Similarity</strong>
+<strong>Star Kid (1979)</strong></p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2014/02/10/recommendation-engine-in-python-using-pearson-correlation-similarity/&t=Recommendation Engine In Python Using Pearson Correlation Similarity" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2014/02/10/recommendation-engine-in-python-using-pearson-correlation-similarity/&text=Recommendation Engine In Python Using Pearson Correlation Similarity&url=http://blog.xebia.in/2014/02/10/recommendation-engine-in-python-using-pearson-correlation-similarity/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2014/02/10/recommendation-engine-in-python-using-pearson-correlation-similarity/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2014/01/23/facebook-album-explorer/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2014/02/20/can-introverts-be-good-scrum-masters/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

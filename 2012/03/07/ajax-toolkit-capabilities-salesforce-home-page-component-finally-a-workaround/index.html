@@ -1,0 +1,257 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Ajax Toolkit Capabilities Salesforce Home Page Component Finally A Workaround</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/KaranNangru">KaranNangru</a> on </span>
+                  <span class="date">07 March 2012</span>
+                </div>
+                <div class="content">
+                    <h1>Ajax Toolkit capabilities @ Salesforce Home Page Component   ...finally a workaround</h1>
+
+<p>_Astonishing but true - You cannot select/create a Visualforce page as your Salesforce Home Page Component. The component creation dialog only enables creating custom Links, Image/Logo or HTML Area as a Home Page component. _</p>
+
+<p>To get a glimpse of what Salesforce developers desire, check this out : <a href="http://success.salesforce.com/ideaview?id=08730000000Brk4AAC">http://success.salesforce.com/ideaview?id=08730000000Brk4AAC</a> . </p>
+
+<p><em><strong>Why would you anyway want to include a VisualForce page in your home page component?</strong></em></p>
+
+<ul>
+<li>If not a visualforce page, compromise on the data binding capabilities that Force.com provides.</li>
+<li>Not a UI designer? Its easier for you to create a UI page with the visualforce UI component kit.</li>
+<li><em><strong>Here&#39;s the most critical one:</strong></em><strong>_ _</strong>You cannot use the Ajax Toolkit for accessing user&#39;s contextual Salesforce information. This toolkit enables you to make Ajax SOAP calls from your salesforce page that query and retrieve user account specific data that could then be rendered on the page. <em>There is no straightforward mechanism to use this toolkit from an HTML Area type Home Page Component - the component that you would use to create a HTML user interface. Lets analyse why.....</em>
+<strong>There are 3 core steps that you need to perform while working with the Ajax toolkit :</strong></li>
+</ul>
+
+<ol>
+<li><em>Connect to the API : _If you want to use the toolkit from the home page component, _this is where the problem occurs.</em></li>
+<li><em>Embed API calls in Java Script :</em> Once the connection is established, you just need to embed the api call in the js to get the result. For example : &quot;<strong>result = sforce.connection.query(&quot;Select Name, Id from User&quot;)</strong>&quot; should fetch the Name and Id from the table User</li>
+<li>Process Results : One the results are retrieved, display them on the page.
+<strong>Connecting to the API ..... problem Analysis</strong></li>
+</ol>
+
+<p>** ** Had it been a VisualForce page, you would have just needed the following JS include in your page :</p>
+
+<p>[xml] <a href="apex:page">apex:page</a> <script type="text/javascript">&lt;!--mce:0--&gt;</script> ... <a href="/apex:page">/apex:page</a> [/xml]</p>
+
+<p>...this loads the toolkit and creates a global object <strong>sforce.connection</strong>. This object contains all the toolkit APIs, and also manages the Session ID. <em>No other session management is needed while you are working on a Visualforce page. _ Since a Visual Force Page option is not available for a Home Page Component, you are left with no other option but to use a _HTML Area</em> type Home Page Component for creating Home Page UI widgets or for executing your custom JS on each Salesforce page load.</p>
+
+<p>Trying to use the Ajax toolkit in this HTML Area Home Page component by including the connection.js as you do on a visualforce page, i.e.</p>
+
+<p>[xml] <script type="text/javascript">&lt;!--mce:1--&gt;</script> [/xml]</p>
+
+<p>is no success. Despite the fact that the above include statement loads all the api&#39;s available to the global object salesforce.connect, a query call like <em><strong>sforce.connection.query(&quot;Select Name, Id from User&quot;)</strong></em> does not work.</p>
+
+<p>The reason behind this issue is the fact that the implicit session management that is available on a Visualforce page is not available on this HTML Area component. Since the Ajax toolit&#39;s managed session id is not available, you cannot use the Ajax toolkit.</p>
+
+<p>_ What this essentially means is that if your business use case evolves around fetching user&#39;s contextual information in the Home Page Component, so that on every page load, the home page component displays some user&#39;s context specific stuff, then there is no clean, straightforward solution available !! _</p>
+
+<p><em>*<em>The possible workarounds..... *</em></em></p>
+
+<ul>
+<li><strong>Iframes :</strong> Create a visualforce page and load this page in the HTML Home page component using an IFrame  ... you can use this approach till the time there is no inteded interaction between the content that is delivered in the IFrame and the containing HTML component. Getting the content of an IFrame to interact with the container can be really cumbersome given the cross domain limitations that an IFrame is viable to.
+_ If you have global javascript variables in your HTML home component that need to be assigned values read using the Ajax Toolkit APIs, then IFrame&#39;s wont work. So what else could be tried...? _</li>
+</ul>
+
+<p><em>*<em>Food for thought.... *</em></em></p>
+
+<p>Apart from Visual Force pages, the Ajax toolkit is also accessible to <em>custom onclick JavaScript links/buttons.</em> All you need to do in a custom onclick link is to specify a login call to salesforce API :</p>
+
+<p>[xml]</p>
+
+<p>{!requireScript(&quot;/soap/ajax/23.0/connection.js&quot;)} sforce.connection.login(&quot;username&quot;, &quot;password&quot;); ...</p>
+
+<p>[/xml]</p>
+
+<p>This way, the Ajax toolkit picks up the endpoint and manages the session ID.</p>
+
+<p>_(Looking at the script above, you might assume that the same login mechanism should work from javascript of a HTML Area type home page component. Surprisingly it doesn&#39;t!!) _</p>
+
+<p><em><strong>Finally the workaround that works....</strong></em></p>
+
+<p>If you noticed earlier, then the Home Page Component types that Salesforce provides has 3 options : </p>
+
+<ul>
+<li>Images</li>
+<li>HTML Area</li>
+<li>Custom Links_ _
+_ _</li>
+</ul>
+
+<p>_ _</p>
+
+<p>_ _</p>
+
+<p>_ _</p>
+
+<p>_ _</p>
+
+<p>_ _</p>
+
+<p>_ _</p>
+
+<p>_</p>
+
+<p>[caption id=&quot;attachment_12554&quot; align=&quot;aligncenter&quot; width=&quot;300&quot; caption=&quot;Home Page Component Types&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2012/03/TypesOfHPC2-300x178.png" alt="Home Page Component Types" title="Home Page Component Types">[/caption]</p>
+
+<p>_</p>
+
+<p>_ _</p>
+
+<p>_ _</p>
+
+<p>_ _</p>
+
+<p>_ _</p>
+
+<p>_ _</p>
+
+<p>_ _</p>
+
+<p>_ _</p>
+
+<p><em>(By this time you should have connected the dots.....) _**.....</em> you have Custom Links as a Home Page Component type!!_**</p>
+
+<p>** Here&#39;s what could be done now.....**_ _</p>
+
+<ul>
+<li><p><em>Create an Execute JavaScript type custom link that OnClick, sets the API&#39;s session id into windows session.</em>
+[caption id=&quot;attachment_12557&quot; align=&quot;aligncenter&quot; width=&quot;300&quot; caption=&quot;Execute JavaScript Type Custom Link - Home Page Component&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2012/03/CustomLink-300x178.png" alt="Execute JavaScript Type Custom Link - Home Page Component" title="Execute JavaScript Type Custom Link - Home Page Component">[/caption] </p></li>
+<li><p><em>Create a HTML Area type Home Page Component, that, on every page load, fires the custom link created above (so that the Ajax toolkit&#39;s managed session is available in the browser&#39; session) on page load. _
+[caption id=&quot;attachment</em>12558&quot; align=&quot;aligncenter&quot; width=&quot;300&quot; caption=&quot;HTML Area Home Page Component&quot;]<img src="http://xebee.xebia.in/wp-content/uploads/2012/03/HTMLAreaHomePageComponent-300x136.png" alt="HTML Area Home Page Component - The Code" title="HTML Area Home Page Component - The Code">[/caption]</p></li>
+</ul>
+
+<p><em><strong>The Home Page Component Code</strong></em>... </p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2012/03/07/ajax-toolkit-capabilities-salesforce-home-page-component-finally-a-workaround/&t=Ajax Toolkit Capabilities Salesforce Home Page Component Finally A Workaround" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2012/03/07/ajax-toolkit-capabilities-salesforce-home-page-component-finally-a-workaround/&text=Ajax Toolkit Capabilities Salesforce Home Page Component Finally A Workaround&url=http://blog.xebia.in/2012/03/07/ajax-toolkit-capabilities-salesforce-home-page-component-finally-a-workaround/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2012/03/07/ajax-toolkit-capabilities-salesforce-home-page-component-finally-a-workaround/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2012/03/02/five-best-practices-for-effective-mobile-qa/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2012/03/09/e-sign-solutions-in-ios/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

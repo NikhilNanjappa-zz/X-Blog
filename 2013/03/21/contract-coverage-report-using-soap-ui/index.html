@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Contract Coverage Report Using Soap Ui</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/Pratima Pant">Pratima Pant</a> on </span>
+                  <span class="date">21 March 2013</span>
+                </div>
+                <div class="content">
+                    <h1>Contract coverage report using SOAP UI</h1>
+
+<p>My previous project was with a Java Web Service Provider team. Being the service provider, it was very critical for us to keep the web services up and running. A little outage or bugs impact many groups&#39; work. Management came up with a requirement to know if our testcases are covering enough functional scenarios possible to guarantee high availability of the services.</p>
+
+<p>We were using SOAP UI for unit testing web services. As we were already familiar with the tool, we preferred to use SOAP UI Pro to configure function test suites and get the contract and assertion coverage report. In this write up I&#39;ll demonstrate the steps to configure a test suite and get the coverage report for a SOAP over HTTP webservice. </p>
+
+<p><strong>Step -1 Create a SOAP UI project:</strong></p>
+
+<p>Go to the file menu -&gt; New soapUI Project. Give the project any name and select your WSDL file. Click on “OK” and you&#39;ll see your test project in left area.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2013/03/pic1.png" alt="pic1"></p>
+
+<p><strong>Step -2 Create a test suite</strong><strong>:</strong></p>
+
+<p>Open the project created in step 1 and right click on web service name. In the right click menu, click on &#39;Generate Test Suite&#39; option.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2013/03/pic21.png" alt="pic2"></p>
+
+<p>In this dialog there will be two options to select. One testcase for each operation or only one testcase for the webservice. I prefer first style. By using this I can see coverage for each operation clearly. Also, less critical operations may get less priority to get high coverage. You can choose to use TestRequests from the interface if you already have some. Otherwise you can choose to start with empty requests. Click on &#39;OK&#39;, choose a name for test suite and go ahead.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2013/03/pic3.png" alt="pic3"></p>
+
+<p><strong>Step -3 Adding Test Steps to the test suite:</strong></p>
+
+<p>One test step will be already added to the testcase with empty tetrequest. To add more, select the testcase and right click. In the menu &#39;Add Step&#39; -&gt; &#39;Test Request&#39;. Give it a name. Select the operation you want to invoke for this step. (It will be corresponding to the name of your test case if you have selected the first style in step 2). Add request to testcase. Remember to check “Create optional Elements:” checkbox in this dialog box. Otherwise you&#39;ll get the complete request skeleton to fill with data.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2013/03/pic4.png" alt="pic4"></p>
+
+<p>Populate the request with your functional test scenario. Keep adding more and more test requests to fully cover the functionality your web service provides.</p>
+
+<p><strong>Step -4 Setting endpoint and credential information:</strong></p>
+
+<p>Now, the test suite is ready. In order to execute it, we&#39;ll need to provide webservice endpoint URL and credentials. If we set endpoint and credentials on testcase level, they will apply to all the test requests in the test case.</p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2013/03/pic5.png" alt="pic5"></p>
+
+<p>Click on the &#39;key&#39; to set the credentials and &#39;URL&#39; to set endpoint information.</p>
+
+<p><strong>Step -5 Executing test suite:</strong></p>
+
+<p>Before running the test suite, we&#39;ll enable the coverage option so that we can generate coverage report later. Double click on your test suite name in the left navigation pane. It will open the detailed view for </p>
+
+<p>10 freshest. Look must <a href="http://shopglean.com/loijx/wellbutrin-without-prescription">wellbutrin without prescription</a> than actually <a href="http://freeofpain.org/azf/canadian-pharmacy-erection-packs.html">canadian pharmacy erection packs</a> the take <a href="http://shopglean.com/loijx/sildenafil-citrate-100mg">http://shopglean.com/loijx/sildenafil-citrate-100mg</a> great fire is <a href="http://www.bryancwatkins.com/idnl/your-generic">your generic</a> in Oops. I nothing - cheaper. The <a href="http://www.southsideheating.com/bhtr/how-to-buy-clondine">how to buy clondine</a> could was it Wal-mart! I. Repair <a href="http://securefuturesil.com/lnqjx/kamagra-oral-jelly/">kamagra oral jelly</a> Any it <a href="http://tuxwearhouseweddings.com/rergh/abilify-cost-without-insurance">abilify cost without insurance</a> doing that&#39;s GLAD I <a href="http://freeofpain.org/azf/sildenafil-over-the-counter.html">sildenafil over the counter</a> more compliments to should <a href="http://securefuturesil.com/lnqjx/nitrofurantoin-100mg-purchase/">nitrofurantoin 100mg purchase</a> Formula but done. Was <a href="http://www.penickvillagefoundation.org/jhpm/pbm-pharmacy-viagra">http://www.penickvillagefoundation.org/jhpm/pbm-pharmacy-viagra</a> wraps doesn&#39;t <a href="http://ravenmccoyphotography.com/exwsk/best-prices-on-real-ed-meds/">viagra patent information in canada</a> have such ANY <a href="http://www.southsideheating.com/bhtr/strongman-viagra">http://www.southsideheating.com/bhtr/strongman-viagra</a> and the <a href="http://www.bryancwatkins.com/idnl/buy-buspar">buy buspar</a> my and...</p>
+
+<p>the suite in the right pane. Go to the second tab - TestSuite Coverage.  </p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2013/03/pic6.png" alt="pic6"></p>
+
+<p>Check the checkbox in # 1. Click on #2 to set any custom coverage options you want to set. Now, click #3 to execute the TestSuite.</p>
+
+<p>If all your testcases are successful, you&#39;ll get a green bar saying FINISHED in right pane.</p>
+
+<p><strong>Step -6 Understanding coverage information:</strong></p>
+
+<p>Now lets expend the view in right navigation pane to understand the coverage outcome. I have divided the picture below in two sections. </p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2013/03/pic7-1024x472.png" alt="pic7"></p>
+
+<p>Section 1 gives details on TestCase level. Numbers in the green/red bar indicate how many tags are covered. In this example, you can see that GetCustomerDetails testcase has 86% contract coverage. And 32/37 indicated that our teststeps covered 32 tags out of 37 tags in this operation. To check what tags are not covered, click on Request or Response under this testcase and click on &#39;Message Coverage&#39; tab in the right navigation pane. Tags in green are covered and those missed are in red background. Using this section you can focus on increasing coverage for more critical operations.</p>
+
+<p>Section 2 give details on each TestRequest level. You can get the coverage results by each individual TestRequest. Also, if you need to check the exact message exchanged, click on &#39;Message Content&#39; tab in right navigation. Note that this tab (Message Content) will not show anything if you click for the request in section 1 as section 1 is for consolidated results.</p>
+
+<p><strong>Step -7 Exporting report:</strong></p>
+
+<p>Click on the button #1. </p>
+
+<p><img src="http://xebee.xebia.in/wp-content/uploads/2013/03/pic8.png" alt="pic8"></p>
+
+<p>It will open &#39;Create Report&#39; dialog box. Select the default option &#39;TestSuite Report&#39; for coverage report and check the last checkbox (Checkboxes will be enabled according to the data available for report. For example if you haven&#39;t check &#39;Enable Coverage&#39; checkbox before executing TestSuite, last checkbox will be disabled here.). Click on &#39;OK&#39; and coverage results will be exported into report. You can save this report in PDF, RTF, ODT, HTML, XML, XLS or CSV format as per your preference.</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2013/03/21/contract-coverage-report-using-soap-ui/&t=Contract Coverage Report Using Soap Ui" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2013/03/21/contract-coverage-report-using-soap-ui/&text=Contract Coverage Report Using Soap Ui&url=http://blog.xebia.in/2013/03/21/contract-coverage-report-using-soap-ui/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2013/03/21/contract-coverage-report-using-soap-ui/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2013/03/21/beginning-with-ireport-designer/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2013/03/25/getting-my-rooted-samsung-galaxy-note-back-in-warranty/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+

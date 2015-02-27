@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Quick Steps Have A Kafka Cluster Up Running In 3 Minutes</title>
+
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="/css/google.css">
+        <link rel="stylesheet" href="/css/base.css">
+
+    </head>
+    <body>
+       <header>
+         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 pull-right">
+             <form class="navbar-form navbar-right" role="search">
+             <script>
+  (function() {
+    var cx = '006895008187340762068:8j3g16d5zty';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+             </form>
+           </div>
+            <div id="logo">
+                <!-- <img src="/img/xebia.jpg" alt=""> -->
+            </div>
+            <div id="site-heading">
+                <h2 class="title">Xebia Blog</h2>
+                <h3 class="subtitle">Thoughts on latest technologies</h3>
+            </div>
+            <ul id="nav">
+                 <li class=""><a href="/">Blog</a></li>
+                 <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
+            </ul>
+       </header>
+       <div id="main-contents">
+
+<div class="single-post">
+    <div class="container">
+        <div class="post-item">
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=shekhargulati" async="async"></script>
+
+            <div class="post-body">
+                <div class="meta">
+                  <span class="meta">Posted by <a href="/author/manisha">manisha</a> on </span>
+                  <span class="date">03 December 2014</span>
+                </div>
+                <div class="content">
+                    <h1>Quick steps : Have a Kafka Cluster Up &amp; Running in 3 minutes</h1>
+
+<h1>Introduction</h1>
+
+<p>For beginners to understand, kafka is nothing but a messaging system which is distributed and partitioned across brokers, having its data replicated, so as to provide the scalability and fault tolerance. For advanced configuration and tools to manage data load , please read <a href="http://xebee.xebia.in/index.php/2014/12/04/how-to-manage-and-balance-huge-data-load-for-big-kafka-clusters/">How to manage and balance “Huge Data Load” for Big Kafka Clusters</a>. </p>
+
+<h2>Terminology</h2>
+
+<ol>
+<li><strong>Topic</strong>: Category associated with each message, known as &quot;Topic&quot; </li>
+<li><strong>Broker</strong>: Cluster has servers, known as &quot;Brokers&quot;. </li>
+<li><strong>Producer</strong>: Processes which publish message to brokers. </li>
+<li><strong>Consumer</strong>: Processes which are subscribed to topics in the cluster and process the published messages.</li>
+</ol>
+
+<h1>Steps</h1>
+
+<h5>1.  Download the kafka and untar it. (Latest stable release is 0.8.1.1 and 0.8.2 is in beta)</h5>
+
+<p>Click to <a href="https://www.apache.org/dyn/closer.cgi?path=/kafka/0.8.1.1/kafka_2.9.2-0.8.1.1.tgz" title="Download">Download</a> from mirror sites.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ tar -xzf kafka_2.9.2-0.8.1.1.tgz
+
+$ cd kafka_2.9.2-0.8.1.1
+</code></pre></div>
+<h5>2.  Start zookeeper server.</h5>
+
+<p>Here we are starting the zookeeper which comes bundled with kafka. you may also use a  standalone zookeeper cluster with odd number of nodes and then point the kafka brokers to this zookeeper cluster. For production environment , do not use the bundled zookeeper.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ bin/zookeeper-server-start.sh config/zookeeper.properties
+</code></pre></div>
+<h5>3.  Start the kafka servers(brokers).</h5>
+
+<p>Here we are setting up 3 broker cluster. so we will be having 3 different server.properties files corresponding to each broker.</p>
+
+<p>you can copy the server.properties file and change the broker ids, log directory and port in the copied files. These 3 configuration properties must be unique to all the brokers which are on same machine. When you are using multiple machines and having one broker on one machine. you need to have only &quot;broker.id&quot; as unique. Ports and log directory need not be unique then. On same machine, if these parameters are same, overriding will happen. </p>
+
+<h6>      A. Copy the server.properties files</h6>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ cp config/server.properties config/server-1.properties cp config/server.properties config/server-2.properties
+</code></pre></div>
+<p>For server.properties, we already have :</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ broker.id=0 port=9092 log.dir=/tmp/kafka-logs
+</code></pre></div>
+<h6>      B. Edit the two new files :</h6>
+
+<p>config/server-1.properties:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ broker.id=1 port=9093 log.dir=/tmp/kafka-logs-1
+</code></pre></div>
+<p>config/server-2.properties:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ broker.id=2 port=9094 log.dir=/tmp/kafka-logs-2
+</code></pre></div>
+<h6>        C. Start all 3 brokers.</h6>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ bin/kafka-server-start.sh config/server.properties &amp; bin/kafka-server-start.sh config/server-1.properties &amp; bin/kafka-server-start.sh config/server-2.properties &amp; 
+</code></pre></div>
+<h5>4. Create a topic</h5>
+
+<p>You may specify replication factor and partitions per topic, else default values from properties file will be used. Topic name must be there in creation command. Once topic is created as per requirements of partitioning and replication , cluster is ready to receive and send the messages from producers and consumers.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 9 --topic test
+</code></pre></div>
+<p>Here we have specified 9 partitions , it will create 9 directories 0-8 numbered on each broker , as replication factor is 3. </p>
+
+<h5>5. Produce sample messages from command Line</h5>
+
+<h6>        A. Run Producer</h6>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
+</code></pre></div>
+<p>Here we have specified the one broker , which will be contacted first and further zookeeper will co-ordinate to find out on which broker to put the message , as it has complete list of brokers registered to it. </p>
+
+<h6>     B. Send Some messages</h6>
+
+<p>This is message 1 on test topic.</p>
+
+<p>This is message 2 on test topic.</p>
+
+<p>We have sent the messages to the broker, which will be stored in partitions for the test topic. </p>
+
+<h5>6. Consume the sample messages.</h5>
+
+<h6>      A. Run the Consumer.</h6>
+
+<p><strong>Note</strong> : Use different terminal for producer and consumer so as to get better understanding.</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$ bin/kafka-console-consumer.sh --zookeeper localhost:2181 --from-beginning --topic test
+</code></pre></div>
+<p>As and when command executes, it consumes messages from test topic , from beginning . If we do not specify &quot;--from-beginning&quot; parameter, consumer will consume only the messages produced after the consumer is running.</p>
+
+<p>Here Response is the list of messages on the broker. </p>
+
+<h6>      B. Response</h6>
+
+<p>This is message 1 on test topic.</p>
+
+<p>This is message 2 on test topic</p>
+
+<p><strong>Note</strong> : You have to kill the consumer(^C) yourself , else it will keep running and waiting for the messages to be consumed. You can verify it by sending new messages if you have producer open in other terminal.</p>
+
+                </div>
+            </div>
+            <div class="post-tags">
+                <i class="fa fa-tags"></i>
+                
+            </div>
+            <ul class="post-socials">
+              <li><a href="https://www.facebook.com/sharer/sharer.php?u=http://blog.xebia.in/2014/12/03/quick-steps-have-a-kafka-cluster-up-running-in-3-minutes/&t=Quick Steps Have A Kafka Cluster Up Running In 3 Minutes" target="_blank"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="https://twitter.com/intent/tweet?original_referer=http://blog.xebia.in/2014/12/03/quick-steps-have-a-kafka-cluster-up-running-in-3-minutes/&text=Quick Steps Have A Kafka Cluster Up Running In 3 Minutes&url=http://blog.xebia.in/2014/12/03/quick-steps-have-a-kafka-cluster-up-running-in-3-minutes/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="https://plus.google.com/share?url=http://blog.xebia.in/2014/12/03/quick-steps-have-a-kafka-cluster-up-running-in-3-minutes/" target="_blank"><i class="fa fa-google-plus"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog-pagination">
+        <ul>
+        	
+            <li class="prev"><a href="/2014/11/26/customizing-angular-directives/"><i class="fa fa-angle-left"></i><span>Prev</span></a></li>
+            
+            
+            <li class="separator"></li>
+            
+            
+            <li class="next"><a href="/2014/12/04/how-to-manage-and-balance-huge-data-load-for-big-kafka-clusters/"><span>Next</span><i class="fa fa-angle-right"></i></a></li>
+            
+        </ul>
+    </div>
+
+    <hr>
+    <div id="disqus_thread"></div>
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = 'xebiaww'; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    <hr>
+</div>
+
+ </div>
+       <footer>
+            <div id="footer-quote">
+                <div class="container">
+                    <div class="contents">
+
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                <div class="container">
+                    <ul id="social-icons">
+                        <li><a href="https://www.facebook.com/XebiaIndia" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/XebiaIndia" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/company/xebia" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="https://github.com/xebiaww" target="_blank"><i class="fa fa-github"></i></a></li>
+                    </ul>
+                    <div id="copyright">© COPYRIGHT 2015 @Xebia.  ALL RIGHTS RESERVED</div>
+                    <a id="home-circle" href=""><i class="fa fa-home"></i></a>
+                </div>
+            </div>
+       </footer>
+       <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-58958750-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+       <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+       <script type="text/javascript" src="/js/custom.js"></script>
+    </body>
+</html>
+
