@@ -1,0 +1,236 @@
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300; 
+}
+.content {
+  padding: 10%;
+}
+.content {
+  padding-left: 5rem;
+  padding-left: 80px; 
+}
+.content {
+  height: 100%;
+  background: #ecf0f1;
+  color: #222;
+  overflow: auto; 
+}
+.posts h1 {
+  margin: 0; 
+}
+.posts li {
+  list-style: none;
+  margin-bottom: 2rem;
+  margin-bottom: 32px; 
+}
+.posts li:last-child {
+  margin-bottom: 0; 
+}
+@media only screen and (max-width: 640px) {
+  .content {
+    height: auto;
+    width: 100%;
+    float: none;
+    position: static; }
+
+  .content {
+    margin-left: 0; 
+  } 
+}
+
+h1,
+h2,
+h3 {
+  font-weight: normal;
+  margin: 0; }
+
+/**
+ * Component: Card
+ * --------------------------------------------------
+ */
+.c-card {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 34%;
+  border-radius: 1vw;
+  background-color: #fff; 
+}
+
+/**
+ * Image copyright: Adam Osinski
+ * https://www.facebook.com/plywanie
+ */
+.c-card__header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+  padding-bottom: 19.25%;
+  background-color: #6c1d5f;
+}
+.c-card__header:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.35); 
+}
+.c-card__header:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 150%;
+  height: 100%;
+  background-color: #fff;
+  transform: rotate(-5deg);
+  transform-origin: 0 0; 
+}
+.c-card__title {
+  font-size: 2vw;
+  font-weight: 300;
+  line-height: 1;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 4.25%;
+  width: 90%;
+  padding-top: 4%;
+  color: #fff;
+  text-transform: uppercase;
+  transform-origin: 0 0; 
+}
+.c-card__content {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding-bottom: 25.75%; 
+}
+.c-card__details {
+  position: absolute;
+  top: 65%;
+  right: 6.25%;
+  left: 6.25%;
+  margin: 0;
+  transform: translateY(-50%); 
+}
+.c-card__description {
+  font-size: 1.2vw;
+  font-weight: 300;
+  line-height: 1;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 4.25%;
+  width: 75%;
+  padding-top: 10%;
+  color: #fff;
+}
+.c-card__amount {
+  font-size: 1.3vw;
+  font-weight: 300;
+  line-height: 1;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 4.25%;
+  width: 75%;
+  padding-top: 13%;
+  color: #fff;
+}
+/**
+ * Component: Button
+ * --------------------------------------------------
+ */
+.c-button {
+  -webkit-appearance: none;
+  margin: 0;
+  border: 0;
+  overflow: visible;
+  font: inherit;
+  text-transform: none;
+  display: inline-block;
+  vertical-align: middle;
+  text-decoration: none;
+  text-align: center;
+  user-select: none; 
+}
+.c-button:hover, .c-button:focus {
+  outline: none;
+  text-decoration: none; 
+}
+.c-button:not(:disabled) {
+  cursor: pointer; 
+}
+
+/**
+ * Component: Button
+ * Modifier: Dropdown
+ * --------------------------------------------------
+ */
+.c-button--join {
+  position: absolute;
+  right: 6.25%;
+  bottom: 28%;
+  z-index: 10;
+  background-color: #00a99d;
+  padding: 1vw 2vw;
+  color: #E6E9ED;
+  font-size: 1vw;
+  font-weight: 600;
+  line-height: 1;
+  border-radius: 0.5vw;
+  transition: background-color .2s linear;
+  transform: rotate(-5deg);
+  transform-origin: 0 0; 
+}
+.c-button--join:hover {
+  background-color: #00ba8b; 
+}
+/**
+ * NavBar styles
+ * --------------------------------------------------
+ */
+ .navbar-inner li {
+  line-height: 40px;
+  letter-spacing: 2px; 
+}
+.nav-link {
+  border-top: 4px solid white;
+  transition: border-top .3s; 
+}
+.nav-link:hover {
+  border-top: 4px solid #6c1d5f; 
+}
+.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a {
+  background-image: none;
+  background-color: #6c1d5f; 
+}
+.navbar-brand {
+  line-height: inherit;
+}
+.brand {
+  letter-spacing: 4px;
+  border-top: 4px solid white;
+  transition: border-top .3s; 
+}
+.brand:hover {
+  border-top: 4px solid #6c1d5f; 
+}
+.brand:hover {
+  border-top: 4px solid #6c1d5f; 
+}
+.header {
+  background-color: rgba(255, 255, 255, 0.90);
+  background-image: none !important;
+  border-bottom: 2px solid #6c1d5f !important;
+  line-height: 40px !important;
+  box-shadow: 0 12px 6px -6px rgba(0, 0, 0, 0.2) !important; 
+}
+.nav>li>a:hover {
+  background-color: transparent;
+}
+
