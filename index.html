@@ -18,22 +18,56 @@
 
 <div class="navbar navbar-fixed-top">
   <nav class="navbar-inner header">
-    <div class="container">
-      <div class="navbar-brand">
-        Xebia Blog <i class="fa fa-cloud" style="text-shadow: 1px 1px white, -1px -1px #666;"></i>
+
+  <script>
+    (function() {
+      var cx = '006895008187340762068:8j3g16d5zty';
+      var gcse = document.createElement('script');
+      gcse.type = 'text/javascript';
+      gcse.async = true;
+      gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+          '//www.google.com/cse/cse.js?cx=' + cx;
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="navbar-brand">
+            <img src="img/xebia.jpg">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="blog-search">
+            <gcse:searchresults-only></gcse:searchresults-only>
+            <form action="" method="GET">
+              <!-- <input class="input" name="q" placeholder="Search..."> -->
+              <div class="box">
+                <div class="container-1">
+                    <span class="icon"><i class="fa fa-search"></i></span>
+                    <input class="input" name="q" type="search" id="search" placeholder="Search the Blog" />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <ul class="nav">
+            <li class="pull-right">
+              <a class="nav-link">
+                Blog
+              </a>
+            </li>
+            <li class="pull-right">
+              <a class="nav-link">
+                Xebia
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <ul class="nav">
-        <li class="pull-right">
-          <a class="nav-link">
-            Blog
-          </a>
-        </li>
-        <li class="pull-right">
-          <a class="nav-link">
-            Xebia
-          </a>
-        </li>
-      </ul>
     </div>
   </nav>
 </div>
@@ -67,7 +101,6 @@
                  <li><a href="https://xebia.com/" target="_blank">Xebia</a></li>
             </ul>
        </header> -->
-
 <div class="content">
   <ul class="posts">
     <li>
