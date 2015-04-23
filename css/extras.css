@@ -2,15 +2,15 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 300; 
 }
 html {
-  background: #ecf0f1;
+  background: #f7f7f7;
 }
 .content {
-  padding: 0 10% 0 10%;
-  margin-top: 12%;
+  padding: 0 5% 5% 5%;
+  margin-top: 10%;
   height: 100%;
-  background: #ecf0f1;
   color: #222;
-  overflow: auto; 
+  overflow: auto;
+  background: #f7f7f7;
 }
 .posts {
   padding-left: 0px;
@@ -52,22 +52,22 @@ h3 {
   position: relative;
   overflow: hidden;
   padding-bottom: 34%;
-  border-radius: 1vw;
-  background-color: #fff; 
+  /*border-radius: 1vw;*/
+  background-color: #fff;
+  box-shadow: 0 12px 6px -6px rgba(0, 0, 0, 0.2) !important;
+  border-bottom: 2px solid #d1d1d2;
 }
 
-/**
- * Image copyright: Adam Osinski
- * https://www.facebook.com/plywanie
- */
 .c-card__header {
   position: absolute;
   top: 0;
   right: 0;
   left: 0;
   overflow: hidden;
-  padding-bottom: 19.25%;
-  background-color: #6c1d5f;
+  padding-bottom: 17.25%;
+  background: #fb3c2d;
+/*  background: url('/img/JS_logo.png');
+  background-size: cover;*/
 }
 .c-card__header:before {
   content: "";
@@ -86,7 +86,7 @@ h3 {
   width: 150%;
   height: 100%;
   background-color: #fff;
-  transform: rotate(-5deg);
+  transform: rotate(-3.5deg);
   transform-origin: 0 0; 
 }
 .c-card__title {
@@ -175,9 +175,9 @@ h3 {
 .c-button--join {
   position: absolute;
   right: 6.25%;
-  bottom: 28%;
+  bottom: 15%;
   z-index: 10;
-  background-color: #00a99d;
+  background-color: #2e3639;
   padding: 1vw 2vw;
   color: #E6E9ED;
   font-size: 1vw;
@@ -185,11 +185,11 @@ h3 {
   line-height: 1;
   border-radius: 0.5vw;
   transition: background-color .2s linear;
-  transform: rotate(-5deg);
+  transform: rotate(-3.5deg);
   transform-origin: 0 0; 
 }
 .c-button--join:hover {
-  background-color: #00ba8b; 
+  background-color: #000; 
 }
 /**
  * NavBar styles
@@ -230,7 +230,7 @@ h3 {
   background-image: none !important;
   border-bottom: 2px solid #6c1d5f !important;
   line-height: 40px !important;
-  box-shadow: 0 12px 6px -6px rgba(0, 0, 0, 0.2) !important; 
+  box-shadow: 0 12px 6px -6px rgba(0, 0, 0, 0.2) !important;
 }
 .nav>li>a:hover {
   background-color: transparent;
@@ -296,11 +296,73 @@ h3 {
   z-index: 1;
   color: #4f5b66;
 }
-.texture-overlay {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  background-image: url(../img/grid.png);
+
+
+/* initially hide animatable objects */
+.animatable {
+  visibility: hidden;
+  -webkit-animation-play-state: paused;        
+  -moz-animation-play-state: paused;        
+  animation-play-state: paused; 
+}
+
+/* show objects being animated */
+.animated {
+  visibility: visible;
+  
+  -webkit-animation-fill-mode: both;
+  -moz-animation-fill-mode: both;
+  -ms-animation-fill-mode: both;
+  -o-animation-fill-mode: both;
+  animation-fill-mode: both;
+  
+  -webkit-animation-duration: 5s;
+  -moz-animation-duration: 1s;
+  -ms-animation-duration: 1s;
+  -o-animation-duration: 1s;
+  animation-duration: 1s;
+}
+
+@-webkit-keyframes bounceInRight {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(2000px);
+  }
+
+  60% {
+    -webkit-transform: translateX(-20px);
+  }
+
+  80% {
+    -webkit-transform: translateX(5px);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: translateX(0);
+  }
+}
+
+@-webkit-keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(120px);
+  } 100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+  }
+}
+
+.animated.bounceInRight {
+  -webkit-animation-name: bounceInRight;
+  -moz-animation-name: bounceInRight;
+  -o-animation-name: bounceInRight;
+  animation-name: bounceInRight;
+}
+
+.animated.fadeInUp {
+  -webkit-animation-name: fadeInUp;
+  -moz-animation-name: fadeInUp;
+  -o-animation-name: fadeInUp;
+  animation-name: fadeInUp;
 }
