@@ -41,16 +41,19 @@
           </div>
         </div>
         <div class="col-md-6">
-<!--      <div class="blog-search">
-            <form action="" method="GET">
-              <div class="box">
-                <div class="container-1">
-                    <span class="icon"><i class="fa fa-search"></i></span>
+          <div id="searching">
+            <div class="wrapper">
+              <div id="searchThis">
+                <div class="wrapper">
+                  <form action="" method="GET">
                     <input class="input" name="q" type="search" id="search" placeholder="Search the Blog" />
+                    <div id="closeSearch">X</div>
+                  </form>
                 </div>
               </div>
-            </form>
-          </div> -->
+              <div id="searchResults"></div>
+            </div>
+          </div>
         </div> 
         <div class="col-md-3">
           <ul class="nav">
@@ -62,6 +65,11 @@
             <li class="pull-right">
               <a class="nav-link">
                 Xebia
+              </a>
+            </li>
+            <li class="pull-right">
+              <a class="nav-link">
+                <i class="fa fa-search link search"></i>
               </a>
             </li>
           </ul>
@@ -103,7 +111,7 @@
 
     <div class="content">
       <div class="row">
-  <div class="col-md-9">
+       <div class="col-md-9">
       <ul class="posts">
         <li>
           <div class="c-card">
@@ -111,7 +119,7 @@
               <h2 class="c-card__title">Performance Testing Using Jmeter Part 2</h2>
                 <span class="c-card__description">Ravinder Singh</span>
                 <span class="c-card__amount">24 Feb 2015</span>
-              <button class="c-button c-button--join" type="button">Read more</button>
+              <button class="c-button c-button--join" type="button"><img src="/img/pic.jpeg"></button>
             </div>
             <div class="c-card__content">
               <p class="c-card__details">
@@ -143,7 +151,7 @@
         <h2 class="c-card__title">Playing With Alfresco Repository Using Cmis</h2>
           <span class="c-card__description">Sourabh Aggarwal</span>
           <span class="c-card__amount">12 Feb 2015</span>
-        <button class="c-button c-button--join" type="button">Read more</button>
+        <button class="c-button c-button--join" type="button"><img src="/img/pic.jpeg"></button>
       </div>
       <div class="c-card__content">
         <p class="c-card__details">
@@ -269,87 +277,101 @@
       </ul>
   </div>
   <div class="col-md-3">
-    <aside>
-      <div class="section">
-      <h3>Popular Posts</h3>
-      <ul class="list">
+<aside class="accordion">
+  <h1>Recent Blogs</h1>
+  <div>
+    <h2>News Item #1</h2>
+    <div>
+      <h3>News Item #1a</h3>
+      <div>
+        <h4>News Subitem 1</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        
+        <h4>News Subitem 2</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        
+        <h4>News Subitem 3</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      </div>
       
-        <li class="flex">
-          <aside>
-            <a href="/blog/91/easy-html-5-css-3-navigation-menu/" title="View Post"></a>
-          </aside>
-          <a href="/blog/91/easy-html-5-css-3-navigation-menu/" title="View Post">Easy HTML 5 &amp; CSS 3 Navigation Menu</a>
-        </li>
+      <h3>News Item #1b</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
       
-        <li class="flex">
-          <aside>
-            <a href="/blog/103/html-5-vertical-navigation-menu/" title="View Post"></a>
-          </aside>
-          <a href="/blog/103/html-5-vertical-navigation-menu/" title="View Post">HTML 5 Vertical Navigation Menu</a>
-        </li>
-      
-        <li class="flex">
-          <aside>
-            <a href="/blog/108/html-5-css-jquery-login-registration-popup-box/" title="View Post"></a>
-          </aside>
-          <a href="/blog/108/html-5-css-jquery-login-registration-popup-box/" title="View Post">HTML 5 and CSS jQuery Log-in and Registration Popup Box</a>
-        </li>
-      
-        <li class="flex">
-          <aside>
-            <a href="/blog/98/easy-html-5-css-3-login-form-validation-rules/" title="View Post"></a>
-          </aside>
-          <a href="/blog/98/easy-html-5-css-3-login-form-validation-rules/" title="View Post">Easy HTML 5 and CSS 3 Login Form with HTML Validation Rules</a>
-        </li>
-      
-        <li class="flex">
-          <aside>
-            <a href="/blog/100/responsive-html-5-css-3-flexbox-dropdown-menu/" title="View Post"></a>
-          </aside>
-          <a href="/blog/100/responsive-html-5-css-3-flexbox-dropdown-menu/" title="View Post">Responsive HTML 5 and CSS 3 Flexbox Dropdown Menu</a>
-        </li>
-      
-        <li class="flex">
-          <aside>
-            <a href="/blog/96/simple-html-5-css-3-responsive-layout/" title="View Post"></a>
-          </aside>
-          <a href="/blog/96/simple-html-5-css-3-responsive-layout/" title="View Post">Simple HTML 5 &amp; CSS 3 Responsive Layout</a>
-        </li>
-      
-        <li class="flex">
-          <aside>
-            <a href="/blog/109/facebook-style-php-chat-shoutbox-jquery/" title="View Post"></a>
-          </aside>
-          <a href="/blog/109/facebook-style-php-chat-shoutbox-jquery/" title="View Post">Facebook Style PHP Chat and Shoutbox with jQuery</a>
-        </li>
-      
-        <li class="flex">
-          <aside>
-            <a href="/blog/107/simple-css-alignments-flexbox/" title="View Post"></a>
-          </aside>
-          <a href="/blog/107/simple-css-alignments-flexbox/" title="View Post">Simple CSS Alignments with Flexbox</a>
-        </li>
-      
-        <li class="flex">
-          <aside>
-            <a href="/blog/89/simple-jquery-social-share-buttons/" title="View Post"></a>
-          </aside>
-          <a href="/blog/89/simple-jquery-social-share-buttons/" title="View Post">Simple jQuery Social Share Buttons</a>
-        </li>
-      
-        <li class="flex">
-          <aside>
-            <a href="/blog/86/simple-css-3-buttons/" title="View Post"></a>
-          </aside>
-          <a href="/blog/86/simple-css-3-buttons/" title="View Post">Simple CSS 3 buttons</a>
-        </li>
-      </ul>
+      <h3>News Item #1c</h3>
+      <div class="opened-for-codepen">
+        <h4>News Subitem 1</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        
+        <h4>News Subitem 2</h4>
+        <p class="opened-for-codepen">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      </div>
     </div>
-    </aside>
+    
+    <h2>News Item #2</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    
+    <h2>News Item #3</h2>
+    <div>
+      <h3>News Item #3a</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      
+      <h3>News Item #3b</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+  </div>
+  
+  <h1>Popular Blogs</h1>
+  <div>
+    <h2>Update #1</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+  
+    <h2>Update #2</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    
+    <h2>Update #3</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      
+    <h2>Update #4</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+  </div>
+  
+  <h1>Miscellaneous</h1>
+  <div>
+    <h2>Misc. #1</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+  
+    <h2>Misc. #2</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    
+    <h2>Misc. #3</h2>
+    <div>
+      <h3>Misc. Item #1a</h3>
+      <div>
+        <h4>Misc. Subitem 1</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        
+        <h4>Misc. Subitem 2</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        
+        <h4>Misc. Subitem 3</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      </div>
+      <h3>Misc. Item #2a</h3>
+      <div>
+        <h4>Misc. Subitem 1</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        
+        <h4>Misc. Subitem 2</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      </div>
+    </div>
+  </div>
+</aside>
+
+
   </div>
 </div>
 </div>
-
 
 <!--        <div id="main-contents">
 

@@ -53,3 +53,43 @@ azee - Minimal Blog theme for Jekyll  main JS file
   $(window).trigger('scroll');
 
 });
+
+// Accordion
+ var headers = ["H1","H2","H3","H4","H5","H6"];
+
+$(".accordion").click(function(e) {
+  var target = e.target,
+      name = target.nodeName.toUpperCase();
+  
+  if($.inArray(name,headers) > -1) {
+    var subItem = $(target).next();
+    
+    //slideUp all elements (except target) at current depth or greater
+    var depth = $(subItem).parents().length;
+    var allAtDepth = $(".accordion p, .accordion div").filter(function() {
+      if($(this).parents().length >= depth && this !== subItem.get(0)) {
+        return true; 
+      }
+    });
+    $(allAtDepth).slideUp("fast");
+    
+    //slideToggle target content and adjust bottom border if necessary
+    subItem.slideToggle("fast",function() {
+        $(".accordion :visible:last");
+    });
+    $(target).css({"border-bottom-right-radius":"0", "border-bottom-left-radius":"0"});
+  }
+});
+
+// Search
+$('.link.search').click(function(){
+    $('#searching').addClass('active');
+    $('#searchThis input').focus();
+});
+
+$('#closeSearch').click(function(){
+    $('#searching').removeClass('active');
+    $('#searchThis input').blur();
+    $('#searchThis input').val('');
+    $('#searchResults').empty();
+});
